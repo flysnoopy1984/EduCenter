@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EduCenterWeb", "EduCenterWeb\EduCenterWeb.csproj", "{2DBE3697-F59C-4FE1-A1F6-A78C9F22BDBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduCenterCore", "EduCenterCore\EduCenterCore.csproj", "{08AFCFE8-D26F-4BAE-B8A9-2F255642DE41}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Document", "Document", "{DD57EAE8-98F5-45EB-B4F1-70EA89BF4B8A}"
+	ProjectSection(SolutionItems) = preProject
+		Document\BK.png = Document\BK.png
+		Document\EduSys.rp = Document\EduSys.rp
+		Document\培训教育系统.xlsx = Document\培训教育系统.xlsx
+		Document\系统流程图.vsdx = Document\系统流程图.vsdx
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2DBE3697-F59C-4FE1-A1F6-A78C9F22BDBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DBE3697-F59C-4FE1-A1F6-A78C9F22BDBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DBE3697-F59C-4FE1-A1F6-A78C9F22BDBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DBE3697-F59C-4FE1-A1F6-A78C9F22BDBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08AFCFE8-D26F-4BAE-B8A9-2F255642DE41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08AFCFE8-D26F-4BAE-B8A9-2F255642DE41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08AFCFE8-D26F-4BAE-B8A9-2F255642DE41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08AFCFE8-D26F-4BAE-B8A9-2F255642DE41}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C90735E5-84EB-4454-A9DC-AEBA62F7912C}
+	EndGlobalSection
+EndGlobal
