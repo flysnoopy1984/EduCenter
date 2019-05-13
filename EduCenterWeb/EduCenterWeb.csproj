@@ -7,6 +7,20 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.8" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\User\" />
+    <Folder Include="Pages\Teacher\" />
+    <Folder Include="Pages\Sales\" />
+    <Folder Include="Pages\Reception\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EduCenterCore\EduCenterCore.csproj" />
+    <ProjectReference Include="..\EduCenterModel\EduCenterModel.csproj" />
   </ItemGroup>
 
 </Project>
