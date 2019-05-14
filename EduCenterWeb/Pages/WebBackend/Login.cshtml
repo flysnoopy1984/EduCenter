@@ -1,0 +1,64 @@
+﻿@page
+@model EduCenterWeb.Pages.WebBackend.LoginModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>登陆云艺书院</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/animate.css" rel="stylesheet" />
+    <link href="~/css/Login.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery.placeholder.min.js"></script>
+    <script src="~/lib/jquery.waypoints.min.js"></script>
+    <script src="~/js/Login.js"></script>
+</head>
+<body>
+    <div class="container">
+        @*<div class="row">
+            <div class="col-md-12 text-center">
+                <ul class="menu">
+                    <li class="active"><a href="index.html">Style 1</a></li>
+                    <li><a href="index2.html">Style 2</a></li>
+                    <li><a href="index3.html">Style 3</a></li>
+                </ul>
+            </div>
+        </div>*@
+        @*<div class="copyrights">Collect from <a href="http://www.cssmoban.com/" title="网站模板">网站模板</a></div>*@
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+
+
+                <!-- Start Sign In Form -->
+                <form action="#" class="fh5co-form animate-box" data-animate-effect="fadeIn">
+                    <h2>登陆</h2>
+                    <div class="form-group">
+                        <label for="username" class="sr-only">Username</label>
+                        <input type="text" class="form-control" id="username" placeholder="用户名" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="sr-only">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="密码" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="remember"><input type="checkbox" id="remember"> 记住密码</label>
+                    </div> 
+                    <div class="form-group">
+                        <input type="submit" value="登陆" class="btn btn-primary">
+                    </div>
+                </form>
+                <!-- END Sign In Form -->
+
+            </div>
+        </div>
+        <div class="row" style="padding-top: 60px; clear: both;">
+            <div class="col-md-12 text-center"><p><small>云艺书院&copy; All Rights Reserved. </small></p></div>
+        </div>
+    </div>
+</body>
+</html>

@@ -22,5 +22,7 @@ namespace EduCenterWeb.DataBase
          //   optionsBuilder.UseSqlServer(Configuration.GetConnectionString("EduCenterDB")))
         }
         public DbSet<EUserInfo> DBUserInfo { get; set; }
+
+        public DbSet<EUserInfoBackEnd> DBUserInfoBackEnd { get; set; }
     }
 }

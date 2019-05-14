@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EduCenterCore.EduFramework;
 using EduCenterWeb.DataBase;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,7 +39,7 @@ namespace EduCenterWeb
 
             services.AddDbContext<EduDbContext>(op => op.UseSqlServer(Configuration.GetConnectionString("EduCenterDB")));
 
-            
+          //  services.Configure<EduConfig>(Configuration.GetSection("EduConfig"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

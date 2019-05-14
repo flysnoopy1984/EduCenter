@@ -4,24 +4,24 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace EduCenterModel.User
+namespace EduCenterModel.Teacher
 {
-    /// <summary>
-    /// 用户孩子
-    /// </summary>
-    [Table("UserInfo")]
-    public class EUserChild:ECBaseModel
+    public class ETecInfo: ECBaseModel
     {
        
-        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [MaxLength(20)]
+        [Key]
+        [MaxLength(32)]
+        public string UserOpenId { get; set; }
+
         public string Name { get; set; }
 
         public int Sex { get; set; }
 
-        public int Age { get; set; }
+        public DateTime JoinDateTime { get; set; }
+
+
     }
 }

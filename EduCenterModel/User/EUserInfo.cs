@@ -7,6 +7,9 @@ using System.Text;
 
 namespace EduCenterModel.User
 {
+    /// <summary>
+    /// 用户基础信息表
+    /// </summary>
     [Table("UserInfo")]
     public class EUserInfo: ECBaseModel
     {
