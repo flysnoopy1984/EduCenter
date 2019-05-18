@@ -170,17 +170,17 @@ h1 { font-size: 24px; }
 
 /* 8. Bootstrap overrides
 ----------------------------------------------*/
-.nav-pills>li>a, .nav-tabs>li>a, .alert, .progress, .panel, .btn, .panel-group .panel, .form-control, .modal-content, .breadcrumb {
+.nav-pills>li>a, .nav-tabs>li>a {
     border-radius: 0;
 }
-.list-group-item:first-child, .panel-heading {
+/*.list-group-item:first-child, .panel-heading {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
 .list-group-item:last-child {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
-}
+}*/
 .form-control-feedback { right: 15px; }
 
 /* 9. Maps

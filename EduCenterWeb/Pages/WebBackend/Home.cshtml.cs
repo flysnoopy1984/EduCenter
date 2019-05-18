@@ -18,7 +18,7 @@ namespace EduCenterWeb.Pages.WebBackend
         //    _EduConfig = eduConfig;
         //}
 
-        public string Msg = "TestMsg";
+       
         public void OnGet()
         {
            

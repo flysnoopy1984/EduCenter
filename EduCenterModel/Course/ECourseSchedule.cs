@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EduCenterModel.BaseEnum;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -22,9 +23,6 @@ namespace EduCenterModel.Course
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        /// <summary>
-        /// 课程代号
-        /// </summary>
         [MaxLength(20)]
         public string CourseCode { get; set; }
 
@@ -39,6 +37,8 @@ namespace EduCenterModel.Course
         public DateTime StartTime { get; set; }
 
         public DateTime EndTime { get; set; }
+
+        public CourseScheduleStatus CourseScheduleStatus { get; set; }
 
     }
 }

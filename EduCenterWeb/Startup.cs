@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EduCenterCore.EduFramework;
-using EduCenterWeb.DataBase;
+using EduCenterSrv;
+using EduCenterSrv.DataBase;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -37,9 +39,16 @@ namespace EduCenterWeb
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddDbContext<EduDbContext>(op => op.UseSqlServer(Configuration.GetConnectionString("EduCenterDB")));
+            services.AddDbContext<EduDbContext>(
+                op => op.UseSqlServer(Configuration.GetConnectionString("EduCenterDB"), 
+                c => c.MigrationsAssembly("EduCenterWeb")
+                ));
 
-          //  services.Configure<EduConfig>(Configuration.GetSection("EduConfig"));
+            services.AddTransient<CourseSrv>();
+
+            //c => c.MigrationsAssembly("EduCenterWeb")
+
+            //  services.Configure<EduConfig>(Configuration.GetSection("EduConfig"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

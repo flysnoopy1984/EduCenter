@@ -11,11 +11,11 @@ namespace EduCenterModel.User
     /// 用户基础信息表
     /// </summary>
     [Table("UserInfo")]
-    public class EUserInfo: ECBaseModel
+    public class EUserInfo: ECMasterDataModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [MaxLength(32)]
         public string OpenId { get; set; }
@@ -29,6 +29,9 @@ namespace EduCenterModel.User
         public UserRole UserRole { get; set; }
 
         /*冗余字段*/
+        [MaxLength(10)]
         public string ChildName { get; set; }
+
+    
     }
 }

@@ -1,35 +1,21 @@
-﻿using EduCenterModel.BaseEnum;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace EduCenterModel.Teacher
+namespace EduCenterModel.School
 {
-    [Table("TecInfo")]
-    public class ETecInfo: ECMasterDataModel
+    [Table("SchoolInfo")]
+    public class ESchoolInfo
     {
-       
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
-
         [Key]
         [MaxLength(20)]
-        public string TecCode { get; set; }
+        public string Code { get; set; }
 
-       
-        [MaxLength(32)]
-        public string UserOpenId { get; set; }
-
+        [MaxLength(40)]
         public string Name { get; set; }
-
-        public int Sex { get; set; }
-
-  
-
-       
-
-
     }
 }
