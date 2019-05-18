@@ -1,28 +1,29 @@
-﻿using EduCenterModel.BaseEnum;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace EduCenterModel.Teacher
+namespace EduCenterModel.Common
 {
-    [Table("TeaSkill")]
-    public class ETeaSkill : ECBaseModel
+    [Table("DicInfo")]
+    public class EDicInfo
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        public string TecCode { get; set; }
-
-        public string CourseCode { get; set; }
+        public string DicType { get; set; } 
 
         /// <summary>
-        /// 熟练程度
+        /// 0则没有父亲
         /// </summary>
-        public SkillLevel SkillLevel { get; set; }
+        public long pId { get; set; }
 
+        public string Name { get; set; }
 
+        public string Value { get; set; }
+
+        
     }
 }

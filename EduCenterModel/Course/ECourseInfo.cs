@@ -8,11 +8,11 @@ using System.Text;
 namespace EduCenterModel.Course
 {
     [Table("CourseInfo")]
-    public class ECourseInfo: ECBaseModel
+    public class ECourseInfo: ECMasterDataModel
     {
         
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// 课程代号
@@ -24,13 +24,10 @@ namespace EduCenterModel.Course
         /// 课程名
         /// </summary>
         [MaxLength(20)]
-        public string Name { get; set; }
+        public string TypeName { get; set; }
 
-        public CourseType CourseType { get; set; }
+    
 
-        /// <summary>
-        /// 课时长
-        /// </summary>
-        public double CourseHours { get; set; }
+  
     }
 }

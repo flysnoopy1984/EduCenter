@@ -1,0 +1,91 @@
+﻿@page
+@model EduCenterWeb.Pages.WebBackend.Tec.ManagerModel
+@{
+    ViewData["Title"] = "Manager";
+    Layout = "~/Pages/Shared/_EduMainPCWeb.cshtml";
+}
+@section navBar{
+    <li><a href="/Home">主页</a></li>
+}
+<style type="text/css">
+    .MainContainer{
+        display:flex;
+    }
+    .MainContainer .LeftList{
+        width:220px;
+        height:400px;
+        /*border:solid 1px #808080;*/
+        overflow-y:scroll;
+    }
+    .MainContainer .LeftList ul{
+        width:200px;
+    }
+    .MainContainer .LeftList ul li{
+        width:200px;
+        cursor:pointer;
+    }
+
+    .TitleBar{
+        display:flex;
+        justify-content:space-between;
+        margin-bottom:10px;
+        width:90%;
+    }
+    .Title{
+        font-size:22px;
+    }
+
+    .MainContainer .RightDetail{
+        display:flex;
+    }
+</style>
+<div class="TitleBar">
+    <div class="Title">教师管理</div>
+    <div><input type="button" class="btn btn-danger" value="新增教师" /></div>
+</div>
+<div class="MainContainer">
+    <div class="LeftList">
+        <a href="#" class="list-group-item">老师1</a>
+        <a href="#" class="list-group-item">老师1</a>
+        <a href="#" class="list-group-item">老师1</a>
+        <a href="#" class="list-group-item">老师1</a>
+        <a href="#" class="list-group-item">老师1</a>
+        <a href="#" class="list-group-item">老师1</a>
+        <a href="#" class="list-group-item">老师1</a>
+        <a href="#" class="list-group-item">老师1</a>
+        <a href="#" class="list-group-item">老师1</a>
+        <a href="#" class="list-group-item">老师1</a>
+        <a href="#" class="list-group-item">老师1</a>
+        <a href="#" class="list-group-item">老师1</a>
+        <a href="#" class="list-group-item">老师1</a>
+        <a href="#" class="list-group-item">老师1</a>
+        @*<ul class="list-group">
+        <li class="list-group-item active">老师1</li>
+        <li class="list-group-item">老师1</li>
+        <li class="list-group-item">老师1</li>
+        <li class="list-group-item">老师1</li>
+        @*<li class="list-group-item">老师1</li>
+        <li class="list-group-item">老师1</li>
+        <li class="list-group-item">老师1</li>
+        <li class="list-group-item">老师1</li>
+        <li class="list-group-item">老师1</li>
+        <li class="list-group-item">老师1</li>
+        <li class="list-group-item">老师1</li>
+        <li class="list-group-item">老师1</li>
+        <li class="list-group-item">老师1</li>
+        <li class="list-group-item">老师1</li>
+        <li class="list-group-item">老师1</li>
+        </ul>*@
+    </div>
+    <div class="RightDetail">
+        <div class="RTecInfo">
+         
+            <div>姓名:</div>
+            <div>姓名:</div>
+        </div>
+        <div class="RTecSkill"></div>
+        <div class="RTecLeave"></div>
+    </div>
+   
+</div>
+
