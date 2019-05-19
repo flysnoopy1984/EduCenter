@@ -31,4 +31,10 @@ width: 200px;
 
 .MainContainer .RightDetail {
     display: flex;
+    flex-direction:column;
+}
+
+.BtnBottomList{
+    text-align:center;
+    margin-top:20px;
 }

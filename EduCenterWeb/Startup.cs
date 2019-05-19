@@ -37,14 +37,23 @@ namespace EduCenterWeb
             });
 
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                 .AddJsonOptions(opt => {
+                     opt.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
+                     });
 
+       /*              DefaultContractResolver 是原样输出，后台属性怎么写的，返回的 json 就是怎样的。
+                        CamelCasePropertyNamesContractResolver ：驼峰命名法，首字母小写。如果变量全为大写，比如：NAME，返回的是 name
+
+    */
             services.AddDbContext<EduDbContext>(
                 op => op.UseSqlServer(Configuration.GetConnectionString("EduCenterDB"), 
                 c => c.MigrationsAssembly("EduCenterWeb")
                 ));
 
             services.AddTransient<CourseSrv>();
+
+            services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
             //c => c.MigrationsAssembly("EduCenterWeb")
 
@@ -63,6 +72,9 @@ namespace EduCenterWeb
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+         
+            EduConfigReader.SetConfiguration(Configuration);
+         
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

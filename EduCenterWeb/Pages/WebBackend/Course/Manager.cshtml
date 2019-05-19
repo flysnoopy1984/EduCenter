@@ -1,5 +1,6 @@
 ﻿@page
 @model EduCenterWeb.Pages.WebBackend.Course.ManangerModel
+@Html.AntiForgeryToken()
 @{
     ViewData["Title"] = "Mananger";
     Layout = "~/Pages/Shared/_EduMainPCWeb.cshtml";
@@ -8,28 +9,37 @@
     <li><a href="/Home">主页</a></li>
 }
 <link href="~/css/Layouts/ManagerStyle.css" rel="stylesheet" />
+<link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
+<script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="~/js/EduLib/EditHelper.js"></script>
+<script src="~/js/WebBackEnd/Course/Manager.js"></script>
+
 <style type="text/css">
-    .FormFields{
-        display:flex;
-        flex-direction:column;
-        width:600px;
-        margin:10px;
+    .FormFields {
+        display: flex;
+        flex-direction: column;
+        width: 600px;
+        margin: 10px;
     }
-    .FieldRow{
-        display:flex;
+
+    .FieldRow {
+        display: flex;
         /*justify-content:space-between;*/
-        margin:8px;
-        height:35px;
-        line-height:35px;
+        margin: 8px;
+        height: 35px;
+        line-height: 35px;
     }
-    .FieldLabel{
-        width:25%;
-        text-align:center;
+
+    .FieldLabel {
+        width: 25%;
+        text-align: center;
     }
-    .FieldValue{
-        width:50%;
+
+    .FieldValue {
+        width: 50%;
     }
 </style>
+
 <div class="TitleBar">
     <div class="Title">课类管理</div>
     <div><input type="button" class="btn btn-danger" value="新增课类" /></div>
@@ -38,41 +48,21 @@
     <div class="LeftList">
         @foreach (var obj in Model.CourseList)
         {
-          <a href="#" class="list-group-item">@obj.Code+"_"+@obj.TypeName</a>
-        };
-        
-       
-        @*<a href="#" class="list-group-item">课类1</a>
-        <a href="#" class="list-group-item">课类1</a>
-        <a href="#" class="list-group-item">课类1</a>*@
-
-        @*<ul class="list-group">
-        <li class="list-group-item active">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        @*<li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        </ul>*@
+            <a href="#" class="list-group-item">@string.Format("{0}_{1}",obj.Code,obj.TypeName)</a>
+        }
     </div>
     <div class="RightDetail">
         <div class="FormFields">
             <div class="FieldRow">
-                <div class="FieldLabel">Code</div><div class="FieldValue"><input type="text" class="form-control" /></div>
+                <div class="FieldLabel">Code</div><div class="FieldValue"><input id="vCode" type="text" class="form-control" /></div>
             </div>
             <div class="FieldRow">
-                <div class="FieldLabel">课类名</div><div class="FieldValue"><input type="text" class="form-control" /></div>
+                <div class="FieldLabel">课类名</div><div class="FieldValue"><input id="vTypeName" type="text" class="form-control" /></div>
             </div>
-        </div> 
+        </div>
+        <div class="BtnBottomList">
+            <input type="button" value="保存" onclick="Save()" ; class="btn btn-success" />
+        </div>
     </div>
 
 </div>

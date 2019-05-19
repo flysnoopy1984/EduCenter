@@ -19,5 +19,11 @@ namespace EduCenterSrv
         {
            return _dbContext.DBCourseInfo.ToList();
         }
+
+        public void Add(ECourseInfo newObj)
+        {
+            _dbContext.Add(newObj);
+            _dbContext.SaveChanges();
+        }
     }
 }

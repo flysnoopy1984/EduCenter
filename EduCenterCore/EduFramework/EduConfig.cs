@@ -4,8 +4,13 @@ using System.Text;
 
 namespace EduCenterCore.EduFramework
 {
-    public class EduConfig
+
+    public static class EduConfig
     {
-        public string EduOrg { get; set; }
+        
+
+        public static string EduOrg { get; set; }
+
+        public static string Version { get; set; }
     }
 }

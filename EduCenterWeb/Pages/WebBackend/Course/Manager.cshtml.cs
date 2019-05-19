@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterSrv;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,21 @@ namespace EduCenterWeb.Pages.WebBackend.Course
         public  void OnGet()
         {
             CourseList = _CourseSrv.GetAllList();
+        }
+
+        public  IActionResult OnPostSave(ECourseInfo newObj)
+        {
+            ResultNormal result = new ResultNormal();
+            try
+            {
+                _CourseSrv.Add(newObj);
+            }
+            catch(Exception ex)
+            {
+                result.ErrorMsg = ex.Message;
+            }
+            
+            return new JsonResult(result);
         }
     }
 }
