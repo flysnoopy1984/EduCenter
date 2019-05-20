@@ -15,8 +15,7 @@ namespace EduCenterWeb.Migrations
                     RecordStatus = table.Column<int>(nullable: false),
                     CreatedDateTime = table.Column<DateTime>(nullable: false),
                     UpdatedDateTime = table.Column<DateTime>(nullable: false),
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<long>(nullable: false),
                     Code = table.Column<string>(maxLength: 20, nullable: false),
                     TypeName = table.Column<string>(maxLength: 20, nullable: true)
                 },
@@ -87,12 +86,12 @@ namespace EduCenterWeb.Migrations
                     RecordStatus = table.Column<int>(nullable: false),
                     CreatedDateTime = table.Column<DateTime>(nullable: false),
                     UpdatedDateTime = table.Column<DateTime>(nullable: false),
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<long>(nullable: false),
                     TecCode = table.Column<string>(maxLength: 20, nullable: false),
                     UserOpenId = table.Column<string>(maxLength: 32, nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Sex = table.Column<int>(nullable: false)
+                    Name = table.Column<string>(maxLength: 10, nullable: true),
+                    Sex = table.Column<int>(nullable: false),
+                    WxName = table.Column<string>(maxLength: 40, nullable: true)
                 },
                 constraints: table =>
                 {

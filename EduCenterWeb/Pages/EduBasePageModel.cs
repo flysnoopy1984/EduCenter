@@ -10,7 +10,6 @@ namespace EduCenterWeb.Pages
 {
     public class EduBasePageModel: PageModel
     {
-        protected EduDbContext _context;
        
     }
 }

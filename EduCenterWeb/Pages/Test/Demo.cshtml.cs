@@ -11,6 +11,7 @@ namespace EduCenterWeb.Pages.Test
 {
     public class DemoModel : EduBasePageModel
     {
+        private EduDbContext _context;
         public DemoModel(EduDbContext context)
         {
             _context = context;

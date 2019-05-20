@@ -14,7 +14,7 @@ namespace EduCenterSrv.DataBase
 
         public EduDbContext(DbContextOptions options):base(options)
         {
-
+            
         }
      
         public DbSet<EUserInfo> DBUserInfo { get; set; }

@@ -11,7 +11,7 @@ namespace EduCenterModel.Teacher
     public class ETecInfo: ECMasterDataModel
     {
        
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public long Id { get; set; }
 
         [Key]
@@ -22,9 +22,13 @@ namespace EduCenterModel.Teacher
         [MaxLength(32)]
         public string UserOpenId { get; set; }
 
+        [MaxLength(10)]
         public string Name { get; set; }
 
         public int Sex { get; set; }
+
+        [MaxLength(40)]
+        public string WxName { get; set; }
 
   
 

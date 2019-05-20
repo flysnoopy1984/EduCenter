@@ -15,29 +15,15 @@
 <script src="~/js/EduLib/EditHelper.js"></script>
 
 <style type="text/css">
-    .FormFields {
-        display: flex;
-        flex-direction: column;
-        width: 600px;
-        margin: 10px;
-    }
-
-    .FieldRow {
-        display: flex;
-        /*justify-content:space-between;*/
-        margin: 8px;
-        height: 35px;
-        line-height: 35px;
-    }
-
-    .FieldLabel {
-        width: 25%;
-        text-align: center;
-    }
-
-    .FieldValue {
-        width: 50%;
-    }
+.FormFields{
+    width:800px!important;
+}
+  .FieldValue {
+    width: 30% !important;
+}
+  .FieldLabel{
+      width:15% !important;
+  }
 </style>
 
 <div class="TitleBar">
@@ -46,43 +32,28 @@
 </div>
 <div class="MainContainer">
     <div class="LeftList">
-        <a href="#" class="list-group-item">老师1</a>
-        <a href="#" class="list-group-item">老师1</a>
-        <a href="#" class="list-group-item">老师1</a>
-        <a href="#" class="list-group-item">老师1</a>
-        <a href="#" class="list-group-item">老师1</a>
-        <a href="#" class="list-group-item">老师1</a>
-        <a href="#" class="list-group-item">老师1</a>
-        <a href="#" class="list-group-item">老师1</a>
-        <a href="#" class="list-group-item">老师1</a>
-        <a href="#" class="list-group-item">老师1</a>
-        <a href="#" class="list-group-item">老师1</a>
-        <a href="#" class="list-group-item">老师1</a>
-        <a href="#" class="list-group-item">老师1</a>
-        <a href="#" class="list-group-item">老师1</a>
-        @*<ul class="list-group">
-            <li class="list-group-item active">老师1</li>
-            <li class="list-group-item">老师1</li>
-            <li class="list-group-item">老师1</li>
-            <li class="list-group-item">老师1</li>
-            @*<li class="list-group-item">老师1</li>
-            <li class="list-group-item">老师1</li>
-            <li class="list-group-item">老师1</li>
-            <li class="list-group-item">老师1</li>
-            <li class="list-group-item">老师1</li>
-            <li class="list-group-item">老师1</li>
-            <li class="list-group-item">老师1</li>
-            <li class="list-group-item">老师1</li>
-            <li class="list-group-item">老师1</li>
-            <li class="list-group-item">老师1</li>
-            <li class="list-group-item">老师1</li>
-            </ul>*@
+        @foreach (var obj in Model.TecList)
+        {
+            <a href="javascript:SelTec('@obj.Code');" id="cItem_@obj.Code"  Key="@obj.Code" class="list-group-item">@string.Format("{0}_{1}", obj.Code, obj.Name)</a>
+        }
     </div>
     <div class="RightDetail">
         <div class="RTecInfo">
 
-            <div>姓名:</div>
-            <div>姓名:</div>
+            <div class="FormFields" id="FormFields">
+                <div class="FieldRow">
+                    <div class="FieldLabel">编号:</div><div class="FieldValue"><input id="vCode" type="text" class="form-control" /></div>
+                    <div class="FieldLabel">名称:</div><div class="FieldValue"><input id="vTypeName" type="text" class="form-control" /></div>
+                </div>
+                <div class="FieldRow">
+                    <div class="FieldLabel">微信昵称:</div><div class="FieldValue"><input id="vCode" type="text" class="form-control" /></div>
+                    <div class="FieldLabel">手机号:</div><div class="FieldValue"><input id="vTypeName" type="text" class="form-control" /></div>
+                </div>
+                <div class="FieldRow">
+                    <div class="FieldLabel">性别:</div><div class="FieldValue"><input id="vCode" type="text" class="form-control" /></div>
+                    <div class="FieldLabel">加入时间:</div><div class="FieldValue"><input id="vCode" type="text" class="form-control" /></div>
+                </div>
+            </div>
         </div>
         <div class="RTecSkill"></div>
         <div class="RTecLeave"></div>

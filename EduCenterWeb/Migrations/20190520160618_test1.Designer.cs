@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduCenterWeb.Migrations
 {
     [DbContext(typeof(EduDbContext))]
-    [Migration("20190517090323_DbInit")]
-    partial class DbInit
+    [Migration("20190520160618_test1")]
+    partial class test1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,10 +30,11 @@ namespace EduCenterWeb.Migrations
                     b.Property<DateTime>("CreatedDateTime");
 
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.Property<int>("RecordStatus");
+
+                    b.Property<int>("Test");
 
                     b.Property<string>("TypeName")
                         .HasMaxLength(20);
@@ -128,10 +129,10 @@ namespace EduCenterWeb.Migrations
                     b.Property<DateTime>("CreatedDateTime");
 
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(10);
 
                     b.Property<int>("RecordStatus");
 
@@ -141,6 +142,9 @@ namespace EduCenterWeb.Migrations
 
                     b.Property<string>("UserOpenId")
                         .HasMaxLength(32);
+
+                    b.Property<string>("WxName")
+                        .HasMaxLength(40);
 
                     b.HasKey("TecCode");
 

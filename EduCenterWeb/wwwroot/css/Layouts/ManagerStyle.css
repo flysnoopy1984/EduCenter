@@ -39,3 +39,30 @@ width: 200px;
     margin-top:20px;
 }
 a{cursor:pointer;}
+
+
+/* Form Begin */
+.FormFields {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    margin: 5px;
+}
+
+.FieldRow {
+    display: flex;
+    /*justify-content:space-between;*/
+    margin: 4px;
+    height: 35px;
+    line-height: 35px;
+}
+
+.FieldLabel {
+    width: 25%;
+    text-align: center;
+}
+
+.FieldValue {
+    width: 40%;
+}
+/* Form End*/

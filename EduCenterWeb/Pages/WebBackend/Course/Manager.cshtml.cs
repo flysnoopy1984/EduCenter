@@ -10,14 +10,18 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EduCenterWeb.Pages.WebBackend.Course
 {
-    public class ManangerModel : PageModel
+    public class ManangerModel : EduBasePageModel
     {
         private CourseSrv _CourseSrv;
+       
         public ManangerModel(CourseSrv courseSrv)
         {
             _CourseSrv = courseSrv;
         }
+
         public List<ECourseInfo> CourseList;
+
+
         public void OnGet()
         {
             CourseList = _CourseSrv.GetAllList();
