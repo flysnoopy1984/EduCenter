@@ -11,7 +11,7 @@ namespace EduCenterModel.Course
     public class ECourseInfo: ECMasterDataModel
     {
         
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public long Id { get; set; }
 
         /// <summary>

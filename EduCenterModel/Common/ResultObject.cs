@@ -4,13 +4,15 @@ using System.Text;
 
 namespace EduCenterModel.Common
 {
-    public class ResultNormal
+    public class ResultObject<T> where T : class
     {
-        public ResultNormal()
+        public ResultObject()
         {
             IsSuccess = true;
             SuccessMsg = "成功";
         }
+
+        public T Entity { get; set; }
 
         public bool IsSuccess { get; set; }
 
@@ -28,6 +30,7 @@ namespace EduCenterModel.Common
 
         public string SuccessMsg { get; set; }
 
-        public long IntMsg { get; set; }
+
+        public int IntMsg { get; set; }
     }
 }

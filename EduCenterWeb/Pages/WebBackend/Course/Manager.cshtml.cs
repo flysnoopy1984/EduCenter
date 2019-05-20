@@ -18,23 +18,57 @@ namespace EduCenterWeb.Pages.WebBackend.Course
             _CourseSrv = courseSrv;
         }
         public List<ECourseInfo> CourseList;
-        public  void OnGet()
+        public void OnGet()
         {
             CourseList = _CourseSrv.GetAllList();
         }
 
-        public  IActionResult OnPostSave(ECourseInfo newObj)
+        public IActionResult OnPostGet(string code)
+        {
+            ResultObject<ECourseInfo> result = new ResultObject<ECourseInfo>();
+            try
+            {
+                result.Entity =  _CourseSrv.Get(code);
+            }
+            catch (Exception ex)
+            {
+                result.ErrorMsg = ex.Message;
+            }
+
+            return new JsonResult(result);
+        }
+
+        public  IActionResult OnPostSave(ECourseInfo obj)
         {
             ResultNormal result = new ResultNormal();
             try
             {
-                _CourseSrv.Add(newObj);
+                if (obj.Id > 0)
+                    _CourseSrv.Update(obj);
+                else
+                    _CourseSrv.Add(obj);
+                result.IntMsg = obj.Id;
             }
             catch(Exception ex)
             {
                 result.ErrorMsg = ex.Message;
             }
             
+            return new JsonResult(result);
+        }
+
+        public IActionResult OnPostDelete(string delCode)
+        {
+            ResultNormal result = new ResultNormal();
+            try
+            {
+                _CourseSrv.Delete(delCode);
+            }
+            catch (Exception ex)
+            {
+                result.ErrorMsg = ex.Message;
+            }
+
             return new JsonResult(result);
         }
     }

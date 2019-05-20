@@ -52,6 +52,7 @@ namespace EduCenterWeb
                 ));
 
             services.AddTransient<CourseSrv>();
+            services.AddTransient<TecSrv>();
 
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 

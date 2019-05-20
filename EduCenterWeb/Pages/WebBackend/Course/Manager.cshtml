@@ -11,7 +11,10 @@
 <link href="~/css/Layouts/ManagerStyle.css" rel="stylesheet" />
 <link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
 <script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
+<link href="~/css/Plugs/LoadingIcon.css" rel="stylesheet" />
 <script src="~/js/EduLib/EditHelper.js"></script>
+
 <script src="~/js/WebBackEnd/Course/Manager.js"></script>
 
 <style type="text/css">
@@ -42,17 +45,19 @@
 
 <div class="TitleBar">
     <div class="Title">课类管理</div>
-    <div><input type="button" class="btn btn-danger" value="新增课类" /></div>
+    <div><input type="button" class="btn btn-info" id="btnNew" value="新增课类" />
+         <input type="button" class="btn btn-danger" id="bntDelete" value="删除" />
+    </div>
 </div>
 <div class="MainContainer">
     <div class="LeftList">
         @foreach (var obj in Model.CourseList)
         {
-            <a href="#" class="list-group-item">@string.Format("{0}_{1}",obj.Code,obj.TypeName)</a>
+            <a href="javascript:SelectCourse('cItem_@obj.Code','@obj.Code');" id="cItem_@obj.Code" cId="@obj.Id" Key="@obj.Code" class="list-group-item">@string.Format("{0}_{1}",obj.Code,obj.TypeName)</a>
         }
     </div>
     <div class="RightDetail">
-        <div class="FormFields">
+        <div class="FormFields" id="FormFields">
             <div class="FieldRow">
                 <div class="FieldLabel">Code</div><div class="FieldValue"><input id="vCode" type="text" class="form-control" /></div>
             </div>
@@ -61,9 +66,10 @@
             </div>
         </div>
         <div class="BtnBottomList">
-            <input type="button" value="保存" onclick="Save()" ; class="btn btn-success" />
+            <input type="button" id="btnSave" value="保存" class="btn btn-success" />
         </div>
     </div>
-
 </div>
+
+
 
