@@ -12,6 +12,8 @@ namespace EduCenterWeb.Pages.Test
     public class DemoModel : EduBasePageModel
     {
         private EduDbContext _context;
+
+        public string Msg = "";
         public DemoModel(EduDbContext context)
         {
             _context = context;
@@ -19,14 +21,19 @@ namespace EduCenterWeb.Pages.Test
         public void OnGet()
         {
            
-            EUserInfo ui = new EUserInfo
-            {
-                Name = "Test",
-                OpenId = "xxxxxx",
+            //EUserInfo ui = new EUserInfo
+            //{
+            //    Name = "Test",
+            //    OpenId = "xxxxxx",
 
-            };
-            _context.DBUserInfo.Add(ui);
-            _context.SaveChanges();
+            //};
+            //_context.DBUserInfo.Add(ui);
+            //_context.SaveChanges();
+        }
+
+        public void OnPostCreateTecQR()
+        {
+            Msg = "创建成功！";
         }
     }
 }

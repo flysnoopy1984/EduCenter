@@ -13,22 +13,11 @@
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-    <ul class="list-group">
-        <li class="list-group-item active">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        @*<li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>
-        <li class="list-group-item">老师1</li>*@
-    </ul>
+   <div>
+       <div>@Model.Msg</div>
+       <form method="post" >
+           <input type="submit" value="创建老师邀请码" asp-page-handler="CreateTecQR" />
+       </form>
+   </div>
 </body>
 </html>

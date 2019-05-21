@@ -19,6 +19,8 @@ namespace EduCenterCore.EduFramework
         {
             EduConfig.Version = _Configuration["EduConfig:Version"];
             EduConfig.EduOrg = _Configuration["EduConfig:EduOrg"];
+            //EduConfig.WXAppId = _Configuration["EduConfig:WXAppId"];
+            //EduConfig.WXSecret = _Configuration["EduConfig:WXSecret"];
         }
        
     }
