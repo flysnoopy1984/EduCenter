@@ -4,14 +4,12 @@ using System.Text;
 
 namespace EduCenterModel.BaseEnum
 {
-    public enum SkillLevel
+    public enum InviteQRType
     {
-        Main = 100,
+        UserInvite =1,
 
-        Greate = 80,
-        Good = 60,
-       
-        None = -1,
+        TecInvite = 2,
 
+        SalesInvite = 3
     }
 }

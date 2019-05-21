@@ -1,4 +1,6 @@
-﻿using EduCenterModel.Teacher;
+﻿using EduCenterModel.Common;
+using EduCenterModel.Course;
+using EduCenterModel.Teacher;
 using EduCenterModel.Teacher.Result;
 using EduCenterSrv.DataBase;
 using System;
@@ -10,10 +12,20 @@ namespace EduCenterSrv
 {
     public class TecSrv : BaseSrvMasterData<ETecInfo>
     {
+        
         public TecSrv(EduDbContext dbContext):base(dbContext)
         {
            
         }
+
+       
+
+        public List<SiKsV> GetSkillLevelList()
+        {
+            BaseEnumSrv BaseEnumSrv = new BaseEnumSrv();
+            return BaseEnumSrv.GetSkillLevel();
+        }
+
         public List<STec> GetSimpleList()
         {
 
@@ -23,5 +35,7 @@ namespace EduCenterSrv
                 Name = a.Name
             }).ToList();
         }
+
+        
     }
 }

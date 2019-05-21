@@ -1,4 +1,5 @@
 ﻿using EduCenterModel.Course;
+using EduCenterModel.Course.Result;
 using EduCenterSrv.DataBase;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,16 @@ namespace EduCenterSrv
         {
            return  _dbContext.Set<ECourseInfo>().ToList();
         
+        }
+
+        public List<SCourse> GetSimpleList()
+        {
+
+            return _dbContext.DBCourseInfo.Select(a => new SCourse
+            {
+                Code = a.Code,
+                Name = a.TypeName,
+            }).ToList();
         }
 
         public ECourseInfo Get(string pk)
