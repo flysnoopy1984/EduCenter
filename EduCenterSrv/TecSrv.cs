@@ -36,6 +36,11 @@ namespace EduCenterSrv
             }).ToList();
         }
 
+        public void NewTecFromWX()
+        {
+
+        }
+
         
     }
 }

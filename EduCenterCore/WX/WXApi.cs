@@ -63,7 +63,7 @@ namespace EduCenterCore.WX
             return resObj;
         }
 
-        public static AccessToken getToken()
+        public static AccessToken getAccessToken()
         {
             string tokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={0}&secret={1}";
             tokenUrl = string.Format(tokenUrl, WxConfig.APPID, WxConfig.APPSECRET);
@@ -73,7 +73,7 @@ namespace EduCenterCore.WX
         }
 
         /// <summary>
-        /// 下载微信二维码
+        /// 根据二维码Ticket,下载微信二维码
         /// </summary>
         /// <param name="qrTicket"></param>
         /// <param name="saveFullFilePath"></param>
@@ -94,6 +94,17 @@ namespace EduCenterCore.WX
             img.Save(saveFullFilePath);
 
 
+        }
+
+        public static WXUserInfo GetWXUserInfo(string OpenId)
+        {
+            AccessToken accessToken = getAccessToken();
+            string url_userInfo = string.Format("https://api.weixin.qq.com/cgi-bin/user/info?access_token={0}&openid={1}",
+            accessToken.access_token, OpenId);
+            //   log.log("newUserSubscribe url:" + url_userInfo);
+
+            WXUserInfo wxUser = HttpHelper.Get<WXUserInfo>(url_userInfo);
+            return wxUser;
         }
     }
 }

@@ -39,13 +39,18 @@ namespace EduCenterWeb
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                  .AddJsonOptions(opt => {
+                     /*DefaultContractResolver 是原样输出，后台属性怎么写的，返回的 json 就是怎样的。
+                       CamelCasePropertyNamesContractResolver ：驼峰命名法，首字母小写。如果变量全为大写，比如：NAME，返回的是 name */
                      opt.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
-                     });
+                     })
+                .AddRazorPagesOptions(options =>
+                     {
+                         options.RootDirectory = "/Pages";//默认目录
+                                                          //options.Conventions.AddPageRoute("/pages", "/1");//重写URL
+                          options.Conventions.AddPageRoute("/WebBackEnd/Login", "");//默认主页
+                     }); ;
 
-       /*              DefaultContractResolver 是原样输出，后台属性怎么写的，返回的 json 就是怎样的。
-                        CamelCasePropertyNamesContractResolver ：驼峰命名法，首字母小写。如果变量全为大写，比如：NAME，返回的是 name
-
-    */
+      
             services.AddDbContext<EduDbContext>(
                 op => op.UseSqlServer(Configuration.GetConnectionString("EduCenterDB"), 
                 c => c.MigrationsAssembly("EduCenterWeb")
@@ -55,7 +60,7 @@ namespace EduCenterWeb
             services.AddTransient<TecSrv>();
 
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
-
+            
             //c => c.MigrationsAssembly("EduCenterWeb")
 
             //  services.Configure<EduConfig>(Configuration.GetSection("EduConfig"));
@@ -75,7 +80,11 @@ namespace EduCenterWeb
             }
          
             EduConfigReader.SetConfiguration(Configuration);
-         
+            EduEnviroment.SetEnviroment(env);
+
+            //DefaultFilesOptions options = new DefaultFilesOptions();
+            //options.DefaultFileNames.Add("/WebBackEnd/Login");    
+            //app.UseDefaultFiles(options);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

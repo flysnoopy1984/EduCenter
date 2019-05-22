@@ -53,5 +53,11 @@ namespace EduCenterCore.WX
         /* 日志等级，0.不输出日志；1.只输出错误信息; 2.输出错误和正常信息; 3.输出错误信息、正常信息和调试信息
         */
         public const int LOG_LEVENL = 0;
+
+        /*自定义配置*/
+        public const string QR_Invite = "QRInvite";
+        public const string QR_Invite_TecPre = QR_Invite+"_Tec";
+
+       
     }
 }
