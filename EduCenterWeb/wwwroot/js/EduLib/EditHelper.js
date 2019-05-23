@@ -2,8 +2,6 @@
 
     var _jc = null;
 
-
-
     ShowError = function (msg) {
         if (_jc != null && _jc != undefined)
             _jc.close();

@@ -13,6 +13,7 @@
         $(".RightDetail").hide();
 
         $("#btnSave").on("click", Save);
+        $("#btnNew").on("click", NewTec);
     };
 
     SelectSkillLevel = function (obj) {
@@ -50,10 +51,12 @@
         callAjax_Query(getUrl, { "Code": selCode }, HandlerGet);
     };
 
-   
-
     Save = function () {
 
+        if (selCode == "") {
+            ShowError("没有选择任何老师！");
+            return;
+        }
         var phone = $("#vPhone").val();
         var Name = $("#vName").val();
         var tecInfo = {
@@ -68,6 +71,29 @@
      
         callAjax(saveUrl, data, HandlerSave, "保存成功！");
     };
+
+    NewTec = function () {
+       
+        var html = '<div id="InviteTecQR" style="text-align:center;">'
+            html += '<img src="/Files/QR/InviteTec/WXInvite.png" />'
+        html += '</div>';
+
+        $.confirm({
+            title:"请让老师扫描",
+            content: html,
+            buttons: {
+                close: {
+                    btnClass: 'btn-warning',
+                    text: "关闭",
+                    action: function () {
+                        window.location.reload();
+                    },
+                },
+            },
+          
+            type: 'red',
+        });
+    }
 
     HandlerSave = function () {
 
