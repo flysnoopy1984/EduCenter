@@ -26,10 +26,10 @@ namespace EduCenterWeb.Pages.WX
 
 
 
-         public WXController(TecSrv TecSrv, UserSrv UserSrv)
+         public WXController(TecSrv TecSrv,UserSrv userSrv)
         {
             _TecSrv = TecSrv;
-            _UserSrv = UserSrv;
+            _UserSrv = userSrv;
         }
         // GET: api/<controller>
         [HttpGet]
@@ -39,6 +39,7 @@ namespace EduCenterWeb.Pages.WX
             {
               
                 string echostr = Request.Query["echostr"].FirstOrDefault();
+
                 NLogHelper.InfoTxt($"echoStr:{echostr}");
              
                 return echostr;
@@ -100,12 +101,12 @@ namespace EduCenterWeb.Pages.WX
                                 SubscribeHandler();
                                 break;
                             default:
-                                return _wxMessage.toText("有问题请留言，我们会尽快回复！");
+                                return _wxMessage.toText(WXReplyContent.DefaultMsessage());
+                              //  return _wxMessage.toText(WXReplyContent.NewTec("宋"));
 
                         }
                     }
                    
-               
                 }
             
             }
@@ -128,14 +129,16 @@ namespace EduCenterWeb.Pages.WX
                 if (_EventKey.StartsWith(WxConfig.QR_Invite_TecPre))
                 {
                     var wxUser = WXApi.GetWXUserInfo(_wxMessage.FromUserName);
+                    var user = _UserSrv.AddOrUpdateFromWXUser(wxUser);
+                    _TecSrv.NewTecFromUser(user);
+                    _ResultMsg = _wxMessage.toText(WXReplyContent.NewTec(user.Name));
                 }
+              
             }
             catch(Exception ex)
             {
                 NLogHelper.ErrorTxt($"[InviteQRHandler]:{ex.Message}");
-            }
-            
-            
+            } 
         }
 
         /// <summary>

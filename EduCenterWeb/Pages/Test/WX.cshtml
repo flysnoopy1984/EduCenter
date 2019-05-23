@@ -1,0 +1,22 @@
+﻿@page
+@model EduCenterWeb.Pages.Test.WXModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>WX</title>
+</head>
+<body>
+    <div>
+        <div>@Model.Msg</div>
+        <form method="post">
+            <input type="submit" value="测试老师邀请" asp-page-handler="InviteTec" />
+        </form>
+    </div>
+</body>
+</html>

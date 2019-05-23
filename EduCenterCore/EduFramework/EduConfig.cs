@@ -7,7 +7,7 @@ namespace EduCenterCore.EduFramework
 
     public static class EduConfig
     {
-        
+        public static string AppMainSite { get; set; }
 
         public static string EduOrg { get; set; }
 

@@ -13,11 +13,18 @@
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-   <div>
-       <div>@Model.Msg</div>
-       <form method="post" >
-           <input type="submit" value="创建老师邀请码" asp-page-handler="CreateTecQR" />
-       </form>
-   </div>
+    <div>
+        <div>@Model.Msg</div>
+        <form method="post">
+            <input type="submit" value="创建老师邀请码" asp-page-handler="CreateTecQR" />
+        </form>
+    </div>
+    <hr />
+    <div>
+        <div>@Model.DbTest</div>
+        <form method="post">
+            <input type="submit" value="DbTest" asp-page-handler="TestDb" />
+        </form>
+    </div>
 </body>
 </html>

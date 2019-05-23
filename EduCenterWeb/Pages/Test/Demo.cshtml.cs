@@ -12,6 +12,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using EduCenterCore.Common.Helper;
 using EduCenterCore.EduFramework;
+using Microsoft.EntityFrameworkCore;
 
 namespace EduCenterWeb.Pages.Test
 {
@@ -21,6 +22,7 @@ namespace EduCenterWeb.Pages.Test
       
 
         public string Msg = "";
+        public string DbTest = "";
         public DemoModel(EduDbContext context)
         {
             _context = context;
@@ -38,6 +40,14 @@ namespace EduCenterWeb.Pages.Test
             //};
             //_context.DBUserInfo.Add(ui);
             //_context.SaveChanges();
+        }
+
+        public void OnPostTestDb()
+        {
+            DbTest = "Done";
+            DbTest =  EduCodeGenerator.GetTecCode(1);
+           // _context.DBCourseInfo.Count(a=>a.RecordStatus=1)
+        //    DbTest =  $"{_context.DBCourseInfo("select count(1) from CourseInfo")}";
         }
 
         public void OnPostCreateTecQR()
@@ -58,8 +68,6 @@ namespace EduCenterWeb.Pages.Test
             {
                 Msg = ex.Message;
             }
-          
-
         }
     }
 }

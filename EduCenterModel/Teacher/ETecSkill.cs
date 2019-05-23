@@ -7,13 +7,14 @@ using System.Text;
 
 namespace EduCenterModel.Teacher
 {
-    [Table("TeaSkill")]
-    public class ETeaSkill : ECBaseModel
+    [Table("TecSkill")]
+    public class ETecSkill : ECBaseModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
+       
         public string TecCode { get; set; }
 
         public string CourseCode { get; set; }

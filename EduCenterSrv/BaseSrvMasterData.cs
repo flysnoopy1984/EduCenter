@@ -41,6 +41,12 @@ namespace EduCenterSrv
             return true;
         }
 
+        public void SaveChanges()
+        {
+            _dbContext.SaveChanges();
+
+        }
+
         
     }
 }

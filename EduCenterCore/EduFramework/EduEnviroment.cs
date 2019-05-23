@@ -7,7 +7,7 @@ namespace EduCenterCore.EduFramework
 {
     public static class EduEnviroment
     {
-        private static IHostingEnvironment _Enviroment;
+        public  static IHostingEnvironment _Enviroment;
         public static void SetEnviroment(IHostingEnvironment Enviroment)
         {
             _Enviroment = Enviroment;

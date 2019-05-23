@@ -1,6 +1,7 @@
 ﻿using EduCenterModel.BaseEnum;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace EduCenterModel
@@ -18,5 +19,22 @@ namespace EduCenterModel
         public DateTime CreatedDateTime { get; set; }
 
         public DateTime UpdatedDateTime { get; set; }
+
+        [NotMapped()]
+        public string CreatedDateTimeStr
+        {
+            get {
+                return CreatedDateTime.ToString("yyyy-MM-dd hh:mm:ss");
+            }
+        }
+
+        [NotMapped()]
+        public string UpdatedDateTimeStr
+        {
+            get
+            {
+                return UpdatedDateTime.ToString("yyyy-MM-dd hh:mm:ss");
+            }
+        }
     }
 }

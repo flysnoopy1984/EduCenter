@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EduCenterWeb.Pages.Teacher
 {
-    public class TecReqModel : PageModel
+    public class ReqModel : PageModel
     {
         public void OnGet()
         {

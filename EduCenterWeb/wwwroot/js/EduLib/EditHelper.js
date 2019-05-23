@@ -68,9 +68,9 @@
 
     };
 
-    callAjax = function (url, data, handler, msg) {
+    callAjaxOrig = function (url, data, handler, msg, beforeEvt, doneEvt, errEvt) {
 
-        SaveProcess();
+        if (beforeEvt) beforeEvt();
         $.ajax({
             type: "post",
             url: url,
@@ -83,22 +83,54 @@
             success: function (res) {
 
                 if (res.IsSuccess) {
-                    if (handler != null)
+                    if (handler)
                         handler(res);
-                    SaveDone(msg);
+                    if (doneEvt)doneEvt(msg);
                 }
                 else {
-                    ShowError(res.ErrorMsg);
-                    //  SaveDone(res.ErrorMsg, true);
-
+                    if (errEvt) errEvt(res.ErrorMsg);
                 }
             },
             error: function (xhr, type) {
-                ShowError("系统错误");
-                // SaveDone("", true);
+                if (errEvt) errEvt("系统错误"); 
+                
             }
 
         });
+    }
+
+    callAjax = function (url, data, handler, msg){
+
+        callAjaxOrig(url, data, handler, msg, SaveProcess, SaveDone, ShowError);
+        //SaveProcess();
+        //$.ajax({
+        //    type: "post",
+        //    url: url,
+        //    beforeSend: function (xhr) {
+        //        xhr.setRequestHeader("XSRF-TOKEN",
+        //            $('input:hidden[name="__RequestVerificationToken"]').val());
+        //    },
+        //    data: data,
+
+        //    success: function (res) {
+
+        //        if (res.IsSuccess) {
+        //            if (handler != null)
+        //                handler(res);
+        //            SaveDone(msg);
+        //        }
+        //        else {
+        //            ShowError(res.ErrorMsg);
+        //            //  SaveDone(res.ErrorMsg, true);
+
+        //        }
+        //    },
+        //    error: function (xhr, type) {
+        //        ShowError("系统错误");
+        //        // SaveDone("", true);
+        //    }
+
+        //});
     };
 
     callAjax_Query = function (url,data,handler) {

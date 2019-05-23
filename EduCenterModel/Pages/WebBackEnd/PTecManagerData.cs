@@ -17,7 +17,7 @@ namespace EduCenterModel.Pages.WebBackEnd
         public List<SCourse> CourseList { get; set; }
         // public List<>
 
-        //public List<ETeaSkill> TecSkill { get; set; }
+     //   public List<ETecSkill> TecSkill { get; set; }
 
         //public List<ETecLeave> TecLeave { get; set; }
     }

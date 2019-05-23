@@ -9,5 +9,7 @@ namespace EduCenterModel.Common
         public int Key { get; set; }
 
         public string Value { get; set; }
+
+       
     }
 }

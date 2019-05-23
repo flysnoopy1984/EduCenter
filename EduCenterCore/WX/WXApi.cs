@@ -101,9 +101,8 @@ namespace EduCenterCore.WX
             AccessToken accessToken = getAccessToken();
             string url_userInfo = string.Format("https://api.weixin.qq.com/cgi-bin/user/info?access_token={0}&openid={1}",
             accessToken.access_token, OpenId);
-            //   log.log("newUserSubscribe url:" + url_userInfo);
-
-            WXUserInfo wxUser = HttpHelper.Get<WXUserInfo>(url_userInfo);
+          
+            WXUserInfo wxUser = HttpHelper.Get<WXUserInfo>(url_userInfo,true);
             return wxUser;
         }
     }

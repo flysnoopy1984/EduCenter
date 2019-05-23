@@ -16,9 +16,12 @@ namespace EduCenterModel.Teacher
 
         [Key]
         [MaxLength(20)]
-        public string TecCode { get; set; }
+        public string Code { get; set; }
 
-       
+        [MaxLength(15)]
+        public string Phone { get; set; }
+
+
         [MaxLength(32)]
         public string UserOpenId { get; set; }
 

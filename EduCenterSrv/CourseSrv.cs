@@ -1,4 +1,5 @@
-﻿using EduCenterModel.Course;
+﻿using EduCenterModel.BaseEnum;
+using EduCenterModel.Course;
 using EduCenterModel.Course.Result;
 using EduCenterSrv.DataBase;
 using System;
@@ -16,20 +17,29 @@ namespace EduCenterSrv
             
         }
 
+        /// <summary>
+        /// 主数据调用
+        /// </summary>
+        /// <returns></returns>
         public List<ECourseInfo> GetAllList()
         {
            return  _dbContext.Set<ECourseInfo>().ToList();
         
         }
 
+        /// <summary>
+        /// 老师技能列表
+        /// </summary>
+        /// <returns></returns>
         public List<SCourse> GetSimpleList()
         {
-
             return _dbContext.DBCourseInfo.Select(a => new SCourse
             {
                 Code = a.Code,
                 Name = a.TypeName,
-            }).ToList();
+                RecordStatus = a.RecordStatus,
+
+            }).Where(a=>a.RecordStatus == RecordStatus.Normal).ToList();
         }
 
         public ECourseInfo Get(string pk)

@@ -6,7 +6,7 @@
     width: 220px;
     height: 400px;
     /*border:solid 1px #808080;*/
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .MainContainer .LeftList ul {
@@ -17,14 +17,23 @@ width: 200px;
     width: 200px;
     cursor: pointer;
 }
-
+/*标题行*/
 .TitleBar {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
     width: 90%;
 }
+.TitleBarButtonList {
+    display: flex;
+    justify-content: space-around;
+    width: 18%;
+}
 
+.TitleBar .TitleBarButtonList .btn {
+   width:80px;
+}
+/*标题字*/
 .Title {
     font-size: 22px;
 }

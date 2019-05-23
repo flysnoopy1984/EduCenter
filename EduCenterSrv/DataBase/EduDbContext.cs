@@ -25,7 +25,7 @@ namespace EduCenterSrv.DataBase
 
         public DbSet<ETecLeave> DBTecLeave { get; set; }
 
-        public DbSet<ETeaSkill> DBTecSill { get; set; }
+        public DbSet<ETecSkill> DBTecSkill { get; set; }
 
         public DbSet<ECourseInfo> DBCourseInfo { get; set; }
 

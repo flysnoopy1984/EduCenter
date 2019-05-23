@@ -28,10 +28,25 @@ namespace EduCenterModel.User
 
         public UserRole UserRole { get; set; }
 
+        public int Sex { get; set; }
+
         /*冗余字段*/
         [MaxLength(10)]
         public string ChildName { get; set; }
 
-    
+        [MaxLength]
+        public string wx_Name { get; set; }
+
+        [MaxLength(20)]
+        public string wx_city { get; set; }
+        [MaxLength(20)]
+        public string wx_province { get; set; }
+        [MaxLength(20)]
+        public string wx_country { get; set; }
+
+        [MaxLength(256)]
+        public string wx_headimgurl { get; set; }
+
+
     }
 }
