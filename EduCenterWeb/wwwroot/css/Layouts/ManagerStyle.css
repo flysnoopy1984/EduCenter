@@ -55,7 +55,7 @@ a{cursor:pointer;}
 .FormFields {
     display: flex;
     flex-direction: column;
-    width: 600px;
+    width: 800px;
     margin: 5px;
 }
 

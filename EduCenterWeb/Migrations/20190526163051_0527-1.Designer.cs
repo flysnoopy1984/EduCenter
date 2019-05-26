@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduCenterWeb.Migrations
 {
     [DbContext(typeof(EduDbContext))]
-    [Migration("20190523072653_0523-3")]
-    partial class _05233
+    [Migration("20190526163051_0527-1")]
+    partial class _05271
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,15 +27,17 @@ namespace EduCenterWeb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(20);
 
+                    b.Property<int>("CourseType");
+
                     b.Property<DateTime>("CreatedDateTime");
 
                     b.Property<long>("Id")
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<int>("RecordStatus");
-
-                    b.Property<string>("TypeName")
+                    b.Property<string>("Name")
                         .HasMaxLength(20);
+
+                    b.Property<int>("RecordStatus");
 
                     b.Property<DateTime>("UpdatedDateTime");
 
@@ -101,23 +103,6 @@ namespace EduCenterWeb.Migrations
                     b.ToTable("CourseTrying");
                 });
 
-            modelBuilder.Entity("EduCenterModel.Teacher.ETeaSkill", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CourseCode");
-
-                    b.Property<int>("SkillLevel");
-
-                    b.Property<string>("TecCode");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TeaSkill");
-                });
-
             modelBuilder.Entity("EduCenterModel.Teacher.ETecInfo", b =>
                 {
                     b.Property<string>("Code")
@@ -170,6 +155,23 @@ namespace EduCenterWeb.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TecLeave");
+                });
+
+            modelBuilder.Entity("EduCenterModel.Teacher.ETecSkill", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CourseCode");
+
+                    b.Property<int>("SkillLevel");
+
+                    b.Property<string>("TecCode");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TecSkill");
                 });
 
             modelBuilder.Entity("EduCenterModel.User.EUserInfo", b =>

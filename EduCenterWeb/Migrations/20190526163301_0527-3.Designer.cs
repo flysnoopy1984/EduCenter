@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduCenterWeb.Migrations
 {
     [DbContext(typeof(EduDbContext))]
-    [Migration("20190523074830_0523-4")]
-    partial class _05234
+    [Migration("20190526163301_0527-3")]
+    partial class _05273
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,15 +27,19 @@ namespace EduCenterWeb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(20);
 
+                    b.Property<int>("CourseType");
+
                     b.Property<DateTime>("CreatedDateTime");
 
                     b.Property<long>("Id")
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<int>("RecordStatus");
+                    b.Property<int>("Level");
 
-                    b.Property<string>("TypeName")
+                    b.Property<string>("Name")
                         .HasMaxLength(20);
+
+                    b.Property<int>("RecordStatus");
 
                     b.Property<DateTime>("UpdatedDateTime");
 

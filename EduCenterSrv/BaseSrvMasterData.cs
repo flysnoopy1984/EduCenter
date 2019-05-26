@@ -14,10 +14,11 @@ namespace EduCenterSrv
             _dbContext = dbContext;
         }
 
-        public void Add(T newObj)
+        public void Add(T newObj,bool saveNow = true)
         {
             _dbContext.Add<T>(newObj);
-            _dbContext.SaveChanges();
+            if(saveNow)
+                _dbContext.SaveChanges();
         }
 
         public void Update(T Obj)

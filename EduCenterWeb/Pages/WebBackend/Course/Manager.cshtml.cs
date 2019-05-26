@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterSrv;
@@ -14,25 +15,28 @@ namespace EduCenterWeb.Pages.WebBackend.Course
     {
         private CourseSrv _CourseSrv;
        
+       
         public ManangerModel(CourseSrv courseSrv)
         {
             _CourseSrv = courseSrv;
         }
 
-        public List<ECourseInfo> CourseList;
+        public List<ECourseInfo> CourseList { get; set; }
+        public List<SiKsV> CourseType { get; set; }
 
+       public void OnGet()
+       {
+          //  CourseList = _CourseSrv.GetAllList();
 
-        public void OnGet()
-        {
-            CourseList = _CourseSrv.GetAllList();
+            CourseType = _CourseSrv.GetCourseType();
         }
 
-        public IActionResult OnPostGet(string code)
+        public IActionResult OnPostGet(CourseType courseType)
         {
-            ResultObject<ECourseInfo> result = new ResultObject<ECourseInfo>();
+            ResultList<ECourseInfo> result = new ResultList<ECourseInfo>();
             try
             {
-                result.Entity =  _CourseSrv.Get(code);
+                result.List =  _CourseSrv.GetAllByType(courseType);
             }
             catch (Exception ex)
             {
@@ -42,16 +46,33 @@ namespace EduCenterWeb.Pages.WebBackend.Course
             return new JsonResult(result);
         }
 
-        public  IActionResult OnPostSave(ECourseInfo obj)
+        public  IActionResult OnPostSave(List<ECourseInfo> list)
         {
-            ResultNormal result = new ResultNormal();
+
+            ResultList<SlKiV> result = new ResultList<SlKiV>();
             try
             {
-                if (obj.Id > 0)
-                    _CourseSrv.Update(obj);
-                else
-                    _CourseSrv.Add(obj);
-                result.IntMsg = obj.Id;
+
+                result.List = new List<SlKiV>();
+                if(list.Count>0)
+                {
+                    _CourseSrv.DelByType(list[0].CourseType);
+                    foreach (var obj in list)
+                    {
+
+                        _CourseSrv.Add(obj, false);
+
+                        result.List.Add(new SlKiV
+                        {
+                            Key = obj.Id,
+                            Value = obj.Level
+                        });
+                    }
+                    _CourseSrv.SaveChanges();
+                }
+              
+            
+              //  result.IntMsg = obj.Id;
             }
             catch(Exception ex)
             {

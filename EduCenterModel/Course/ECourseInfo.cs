@@ -24,12 +24,13 @@ namespace EduCenterModel.Course
         /// 课程名
         /// </summary>
         [MaxLength(20)]
-        public string TypeName { get; set; }
+        public string Name { get; set; }
 
-       
+        public CourseType CourseType { get; set; }
 
-    
+      
+        public int Level { get; set; }
+        
 
-  
     }
 }

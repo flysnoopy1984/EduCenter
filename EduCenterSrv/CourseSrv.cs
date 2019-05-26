@@ -1,4 +1,5 @@
 ﻿using EduCenterModel.BaseEnum;
+using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterModel.Course.Result;
 using EduCenterSrv.DataBase;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace EduCenterSrv
 {
@@ -15,6 +17,20 @@ namespace EduCenterSrv
         public CourseSrv(EduDbContext dbContext):base(dbContext)
         {
             
+        }
+
+        #region SQL
+        public static string sql_DeleteCourseByType(CourseType type)
+        {
+            string sql = $"delete from CourseInfo where CourseType={(int)type}";
+            return sql;
+        }
+        #endregion
+
+        public List<SiKsV> GetCourseType()
+        {
+            BaseEnumSrv baseSrv = new BaseEnumSrv();
+           return baseSrv.GetCourseType();
         }
 
         /// <summary>
@@ -27,6 +43,16 @@ namespace EduCenterSrv
         
         }
 
+        public List<ECourseInfo> GetAllByType(CourseType courseType)
+        {
+            return _dbContext.Set<ECourseInfo>().Where(a => a.CourseType == courseType).ToList();
+        }
+
+        public void DelByType(CourseType courseType)
+        {
+            _dbContext.Database.ExecuteSqlCommand(sql_DeleteCourseByType(courseType));
+        }
+
         /// <summary>
         /// 老师技能列表
         /// </summary>
@@ -36,7 +62,7 @@ namespace EduCenterSrv
             return _dbContext.DBCourseInfo.Select(a => new SCourse
             {
                 Code = a.Code,
-                Name = a.TypeName,
+                Name = a.Name,
                 RecordStatus = a.RecordStatus,
 
             }).Where(a=>a.RecordStatus == RecordStatus.Normal).ToList();

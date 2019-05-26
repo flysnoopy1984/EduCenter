@@ -25,15 +25,19 @@ namespace EduCenterWeb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(20);
 
+                    b.Property<int>("CourseType");
+
                     b.Property<DateTime>("CreatedDateTime");
 
                     b.Property<long>("Id")
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<int>("RecordStatus");
+                    b.Property<int>("Level");
 
-                    b.Property<string>("TypeName")
+                    b.Property<string>("Name")
                         .HasMaxLength(20);
+
+                    b.Property<int>("RecordStatus");
 
                     b.Property<DateTime>("UpdatedDateTime");
 
