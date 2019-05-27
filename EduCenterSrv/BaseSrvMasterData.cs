@@ -20,6 +20,7 @@ namespace EduCenterSrv
             if(saveNow)
                 _dbContext.SaveChanges();
         }
+       
 
         public void Update(T Obj)
         {
@@ -48,6 +49,23 @@ namespace EduCenterSrv
 
         }
 
-        
+        public void BeginTrans()
+        {
+            _dbContext.Database.BeginTransaction();
+        }
+
+        public void CommitTrans()
+        {
+            _dbContext.Database.CommitTransaction();
+            
+        }
+
+        public void RollBackTrans()
+        {
+            _dbContext.Database.RollbackTransaction();
+
+        }
+
+
     }
 }

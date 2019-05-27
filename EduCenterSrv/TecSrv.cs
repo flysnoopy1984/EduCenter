@@ -126,10 +126,18 @@ namespace EduCenterSrv
             return BaseEnumSrv.GetSkillLevel();
         }
 
-        public List<ETecSkill> GetTecSkillList(string tecCode)
+        public List<ETecSkill> GetTecSkillList(string tecCode = null)
         {
            
-            return _dbContext.DBTecSkill.Where(s => s.TecCode == tecCode).ToList();
+            if(tecCode!=null)
+                return _dbContext.DBTecSkill.Where(s => s.TecCode == tecCode).ToList();
+            else
+                return _dbContext.DBTecSkill.ToList();
+        }
+
+        public List<ETecSkill> GetTecAvaliableSkill()
+        {
+            return _dbContext.DBTecSkill.Where(s => s.SkillLevel != SkillLevel.None).ToList();
         }
 
         public void UpdateTecSkillLevel(ETecSkill tecSkill,bool needSave = true)

@@ -89,11 +89,25 @@ namespace EduCenterSrv
 
             this.Delete(delObj);
         }
+        #region CoureseSchedule
 
-        /*排课*/
-        public void OnPostCoursePlanCreate(List<ECourseSchedule> planList)
+        public void DeleteCourseSchduleByYear(int year)
         {
-
+            _dbContext.Database.ExecuteSqlCommand(sql_DeleteCourseSchedule(year));
         }
+
+        public void AddRange(List<ECourseSchedule> list)
+        {
+            _dbContext.DbCourseSchedule.AddRange(list);
+        }
+
+        public List<ECourseSchedule> GetCourseScheduleByYear(int year)
+        {
+            return _dbContext.DbCourseSchedule.Where(a => a.Year == year).ToList();
+        }
+
+        #endregion
+
+
     }
 }

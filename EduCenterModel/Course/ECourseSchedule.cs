@@ -37,13 +37,17 @@ namespace EduCenterModel.Course
 
         public int Day { get; set; }
 
-        public string StartTime { get; set; }
+        public int Lesson { get; set; }
 
-        public string EndTime { get; set; }
+      
 
-        public CourseScheduleType Type { get; set; }
+        public CourseScheduleType CourseScheduleType { get; set; }
 
-       // public CourseScheduleStatus Status { get; set; }
+        // public CourseScheduleStatus Status { get; set; }
+
+        //public string StartTime { get; set; }
+
+        //public string EndTime { get; set; }
 
     }
 }
