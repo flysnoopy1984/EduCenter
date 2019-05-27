@@ -1,9 +1,9 @@
 ﻿$(function () {
-    var saveUrl = "Manager?handler=Save";
-    var delUrl = "Manager?handler=Delete";
-    var getUrl = "Manager?handler=Get";
+    var saveUrl = "Tec?handler=Save";
+    var delUrl = "Tec?handler=Delete";
+    var getUrl = "Tec?handler=Get";
 
-    var saveSkillLevelUrl = "Manager?handler=SaveSkillLevel";
+    var saveSkillLevelUrl = "Tec?handler=SaveSkillLevel";
     var selCode = "";
 
     Init = function () {
@@ -21,13 +21,13 @@
         var SkillName = sk.text();
         sk.closest(".btn-group").find(".skillText").text(SkillName);
 
-        var curCode = sk.attr("curCode");
+        var curType = sk.attr("curType");
         var skl = sk.attr("skl");
         var tsId = sk.attr("tsId");
 
         var data = {
             "TecCode": selCode,
-            "CourseCode": curCode,
+            "CourseType": curType,
             "SkillLevel": skl,
             "Id": tsId,
         };
@@ -117,12 +117,12 @@
             var ts = tecSkill[i];
             var tsId = ts.Id;
             var TecCode = ts.TecCode;
-            var CourseCode = ts.CourseCode;
+            var CourseType = ts.CourseType;
             var SkillLevel = ts.SkillLevel;
 
 
             //和页面约定
-            var levelList = $("#skCouse_" + CourseCode).find("li a");
+            var levelList = $("#skCouse_" + CourseType).find("li a");
             $.each(levelList, function () {
                 var itemLevel = $(this).attr("skl");
                 if (itemLevel == SkillLevel) {

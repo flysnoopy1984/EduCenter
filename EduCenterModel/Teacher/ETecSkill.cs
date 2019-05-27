@@ -14,10 +14,10 @@ namespace EduCenterModel.Teacher
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-       
+        [MaxLength(20)]
         public string TecCode { get; set; }
 
-        public string CourseCode { get; set; }
+        public CourseType CourseType { get; set; }
 
         /// <summary>
         /// 熟练程度

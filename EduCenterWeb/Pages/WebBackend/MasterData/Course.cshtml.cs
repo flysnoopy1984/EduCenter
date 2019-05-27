@@ -9,14 +9,14 @@ using EduCenterSrv;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace EduCenterWeb.Pages.WebBackend.Course
+namespace EduCenterWeb.Pages.WebBackend.MasterData
 {
-    public class ManangerModel : EduBasePageModel
+    public class CourseModel : EduBasePageModel
     {
         private CourseSrv _CourseSrv;
-       
-       
-        public ManangerModel(CourseSrv courseSrv)
+
+
+        public CourseModel(CourseSrv courseSrv)
         {
             _CourseSrv = courseSrv;
         }
@@ -24,9 +24,9 @@ namespace EduCenterWeb.Pages.WebBackend.Course
         public List<ECourseInfo> CourseList { get; set; }
         public List<SiKsV> CourseType { get; set; }
 
-       public void OnGet()
-       {
-          //  CourseList = _CourseSrv.GetAllList();
+        public void OnGet()
+        {
+            //  CourseList = _CourseSrv.GetAllList();
 
             CourseType = _CourseSrv.GetCourseType();
         }
@@ -36,7 +36,7 @@ namespace EduCenterWeb.Pages.WebBackend.Course
             ResultList<ECourseInfo> result = new ResultList<ECourseInfo>();
             try
             {
-                result.List =  _CourseSrv.GetAllByType(courseType);
+                result.List = _CourseSrv.GetAllByType(courseType);
             }
             catch (Exception ex)
             {
@@ -46,7 +46,7 @@ namespace EduCenterWeb.Pages.WebBackend.Course
             return new JsonResult(result);
         }
 
-        public  IActionResult OnPostSave(List<ECourseInfo> list)
+        public IActionResult OnPostSave(List<ECourseInfo> list)
         {
 
             ResultList<SlKiV> result = new ResultList<SlKiV>();
@@ -54,7 +54,7 @@ namespace EduCenterWeb.Pages.WebBackend.Course
             {
 
                 result.List = new List<SlKiV>();
-                if(list.Count>0)
+                if (list.Count > 0)
                 {
                     _CourseSrv.DelByType(list[0].CourseType);
                     foreach (var obj in list)
@@ -70,15 +70,15 @@ namespace EduCenterWeb.Pages.WebBackend.Course
                     }
                     _CourseSrv.SaveChanges();
                 }
-              
-            
-              //  result.IntMsg = obj.Id;
+
+
+                //  result.IntMsg = obj.Id;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result.ErrorMsg = ex.Message;
             }
-            
+
             return new JsonResult(result);
         }
 

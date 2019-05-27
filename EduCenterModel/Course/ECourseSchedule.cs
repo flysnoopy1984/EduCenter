@@ -15,9 +15,8 @@ namespace EduCenterModel.Course
     {
         public ECourseSchedule()
         {
-            Date = DateTime.MinValue;
-            StartTime = DateTime.MinValue;
-            EndTime = DateTime.MinValue;
+         
+          
         }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -26,19 +25,25 @@ namespace EduCenterModel.Course
         [MaxLength(20)]
         public string CourseCode { get; set; }
 
+        public CourseType CourseType { get; set; }
+
         [MaxLength(20)]
         public string CourseName { get; set; }
 
-        [MaxLength(32)]
-        public string TeaOpenId { get; set; }
+        [MaxLength(20)]
+        public string TecCode { get; set; }
 
-        public DateTime Date { get; set; }
+        public int Year { get; set; }
 
-        public DateTime StartTime { get; set; }
+        public int Day { get; set; }
 
-        public DateTime EndTime { get; set; }
+        public string StartTime { get; set; }
 
-        public CourseScheduleStatus CourseScheduleStatus { get; set; }
+        public string EndTime { get; set; }
+
+        public CourseScheduleType Type { get; set; }
+
+       // public CourseScheduleStatus Status { get; set; }
 
     }
 }

@@ -1,7 +1,7 @@
 ﻿$(function () {
-    var saveUrl = "Manager?handler=Save";
-    var delUrl = "Manager?handler=Delete";
-    var getUrl = "Manager?handler=Get";
+    var saveUrl = "Course?handler=Save";
+    var delUrl = "Course?handler=Delete";
+    var getUrl = "Course?handler=Get";
     var selType = 0;
 
     Init = function () {
@@ -21,7 +21,7 @@
         $(".LeftList").children().removeClass("active");
         $(obj).addClass("active");
 
-        $("#selCourseType").val(selType);
+      //  $("#selCourseType").val(selType);
         //$("#vCode").attr("readonly", true);
 
         callAjax_Query(getUrl, { "courseType": selType }, HandlerGet);
@@ -36,7 +36,7 @@
 
     Save = function () {
       
-        var courseType = $("#selCourseType").val();
+        var courseType = selType;
         if (courseType == 0) {
             ShowError("请选择课类型");
             return;

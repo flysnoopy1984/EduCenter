@@ -1,13 +1,14 @@
 ﻿@page
-@model EduCenterWeb.Pages.WebBackend.Tec.ManagerModel
-@Html.AntiForgeryToken()
+@model EduCenterWeb.Pages.WebBackend.MasterData.TecModel
 @{
-    ViewData["Title"] = "Manager";
+    ViewData["Title"] = "Tec";
     Layout = "~/Pages/Shared/_EduMainPCWeb.cshtml";
 }
+
 @section navBar{
     <li><a href="/Home">主页</a></li>
 }
+@Html.AntiForgeryToken()
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 <link href="~/css/Layouts/ManagerStyle.css" rel="stylesheet" />
 <link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
@@ -15,9 +16,9 @@
 <script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
 <link href="~/css/Plugs/LoadingIcon.css" rel="stylesheet" />
 @*<link href="~/lib/laydate/theme/default/laydate.css" rel="stylesheet" />
-<script src="~/lib/laydate/laydate.js"></script>*@
+    <script src="~/lib/laydate/laydate.js"></script>*@
 <script src="~/js/EduLib/EditHelper.js"></script>
-<script src="~/js/WebBackEnd/Teacher/Manager.js"></script>
+<script src="~/js/WebBackEnd/MasterData/Tec.js"></script>
 <style type="text/css">
     .FormFields {
         width: 800px !important;
@@ -37,19 +38,19 @@
         margin-top: 15px;
     }
 
-    #SkillGrid tr th {
-        border: solid 1px #808080;
-        text-align: center;
-        height: 30px;
-        line-height: 30px;
-    }
+        #SkillGrid tr th {
+            border: solid 1px #808080;
+            text-align: center;
+            height: 30px;
+            line-height: 30px;
+        }
 
-    #SkillGrid tr td {
-        border: solid 1px #808080;
-        text-align: center;
-        height: 40px;
-        line-height: 40px;
-    }
+        #SkillGrid tr td {
+            border: solid 1px #808080;
+            text-align: center;
+            height: 40px;
+            line-height: 40px;
+        }
     /*Sill Table End*/
 
     .TabTitleLine {
@@ -57,42 +58,40 @@
         height: 30px;
     }
 
-    .TabTitleLine span {
-        padding-left: 20px;
-    }
+        .TabTitleLine span {
+            padding-left: 20px;
+        }
 
     .btn-group {
         width: 100%;
     }
 
-    .btn-group .btn {
-        width: 100%;
-        border-radius: 0px;
-        border:none;
-    }
+        .btn-group .btn {
+            width: 100%;
+            border-radius: 0px;
+            border: none;
+        }
 
     .sexSpan {
         padding-left: 8px;
         padding-right: 8px;
     }
-
-   
 </style>
 
 <div class="TitleBar">
     <div class="Title">教师管理</div>
 
     <div class="TitleBarButtonList">
-       <input type="button" class="btn btn-info" id="btnNew" value="邀请教师" />
-       <input type="button" class="btn btn-success" id="btnSave" value="保存" />
+        <input type="button" class="btn btn-info" id="btnNew" value="邀请教师" />
+        <input type="button" class="btn btn-success" id="btnSave" value="保存" />
     </div>
-    
+
 </div>
 <div class="MainContainer">
     <div class="LeftList">
         @foreach (var obj in Model.PData.TecList)
         {
-        <a onclick="SelectTec(this);" Key="@obj.Code" class="list-group-item">@string.Format("{0}_{1}", obj.Code, obj.Name)</a>
+            <a onclick="SelectTec(this);" Key="@obj.Code" class="list-group-item">@string.Format("{0}_{1}", obj.Code, obj.Name)</a>
         }
     </div>
     <div class="RightDetail">
@@ -126,24 +125,24 @@
                     <th style="width:65%">技能</th>
                     <th>熟练度</th>
                 </tr>
-                @foreach (var s in Model.PData.CourseList)
+                @foreach (var s in Model.PData.CourseType)
                 {
-                <tr>
-                    <td>@s.Name</td>
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="skillText">无</span> <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" id="skCouse_@s.Code">
-                                @foreach (var sk in Model.PData.SkillLevelList)
-                                 {
-                                <li><a onclick="SelectSkillLevel(this);" curCode="@s.Code" skl="@sk.Key" tsId="" >@sk.Value</a></li>
-                                 }
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>@s.Value</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="skillText">无</span> <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" id="skCouse_@s.Key">
+                                    @foreach (var sk in Model.PData.SkillLevelList)
+                                    {
+                                        <li><a onclick="SelectSkillLevel(this);" curType="@s.Key" skl="@sk.Key" tsId="">@sk.Value</a></li>
+                                    }
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
                 }
 
             </table>
@@ -154,5 +153,4 @@
             </div>*@
     </div>
 </div>
-
 

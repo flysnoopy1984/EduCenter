@@ -11,6 +11,8 @@ namespace EduCenterModel.Course.Result
 
         public string Name { get; set; }
 
+      
+
         public RecordStatus RecordStatus { get; set; }
     }
 }

@@ -25,6 +25,11 @@ namespace EduCenterSrv
             string sql = $"delete from CourseInfo where CourseType={(int)type}";
             return sql;
         }
+        public static string sql_DeleteCourseSchedule(int year)
+        {
+            string sql = $"delete from CourseSchedule where Year={(int)year}";
+            return sql;
+        }
         #endregion
 
         public List<SiKsV> GetCourseType()
@@ -39,7 +44,7 @@ namespace EduCenterSrv
         /// <returns></returns>
         public List<ECourseInfo> GetAllList()
         {
-           return  _dbContext.Set<ECourseInfo>().ToList();
+           return  _dbContext.Set<ECourseInfo>().OrderBy(a=>a.CourseType).ToList();
         
         }
 
@@ -83,7 +88,12 @@ namespace EduCenterSrv
             };
 
             this.Delete(delObj);
-            
+        }
+
+        /*排课*/
+        public void OnPostCoursePlanCreate(List<ECourseSchedule> planList)
+        {
+
         }
     }
 }

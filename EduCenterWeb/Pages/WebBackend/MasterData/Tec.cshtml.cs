@@ -10,28 +10,28 @@ using EduCenterSrv;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace EduCenterWeb.Pages.WebBackend.Tec
+namespace EduCenterWeb.Pages.WebBackend.MasterData
 {
-    public class ManagerModel : EduBasePageModel
+    public class TecModel : EduBasePageModel
     {
         private TecSrv _TecSrv;
         private CourseSrv _CourseSrv;
         public PTecManagerData PData;
 
-        public ManagerModel(TecSrv tecSrv, CourseSrv courseSrv)
+        public TecModel(TecSrv tecSrv, CourseSrv courseSrv)
         {
             _TecSrv = tecSrv;
             _CourseSrv = courseSrv;
 
         }
-   
+
         public void OnGet()
         {
             PData = new PTecManagerData();
             PData.TecList = _TecSrv.GetSimpleList();
             PData.SkillLevelList = _TecSrv.GetSkillLevelList();
-            PData.CourseList = _CourseSrv.GetSimpleList();
-           // PData.TecSkill = _TecSrv.GetTecSkillList()
+            PData.CourseType = _CourseSrv.GetCourseType();
+            // PData.TecSkill = _TecSrv.GetTecSkillList()
         }
 
         public IActionResult OnPostGet(string code)
@@ -54,16 +54,16 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
             ResultNormal result = new ResultNormal();
             try
             {
-              
+
                 _TecSrv.UpdatePartTecInfo(obj.TecInfo, false);
-                if(obj.TecSkillList!=null)
+                if (obj.TecSkillList != null)
                 {
                     foreach (var sk in obj.TecSkillList)
                     {
                         _TecSrv.UpdateTecSkillLevel(sk, false);
                     }
                 }
-               
+
                 _TecSrv.SaveChanges();
 
             }
@@ -80,7 +80,7 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
             ResultNormal result = new ResultNormal();
             try
             {
-                _TecSrv.UpdateTecSkillLevel(sk);    
+                _TecSrv.UpdateTecSkillLevel(sk);
             }
             catch (Exception ex)
             {

@@ -14,10 +14,12 @@ namespace EduCenterModel.Pages.WebBackEnd
 
         public List<SiKsV> SkillLevelList { get; set; }
 
-        public List<SCourse> CourseList { get; set; }
+        public List<SiKsV> CourseType { get; set; }
+
+        //  public List<SCourse> CourseList { get; set; }
         // public List<>
 
-     //   public List<ETecSkill> TecSkill { get; set; }
+        //   public List<ETecSkill> TecSkill { get; set; }
 
         //public List<ETecLeave> TecLeave { get; set; }
     }

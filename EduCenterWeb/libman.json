@@ -9,6 +9,13 @@
     {
       "library": "jquery-confirm@3.3.4",
       "destination": "wwwroot/lib/jquery-confirm/"
+    },
+    {
+      "library": "jqueryui@1.12.1",
+      "destination": "wwwroot/lib/jqueryui/",
+      "files": [
+        "jquery-ui.min.js"
+      ]
     }
   ]
 }

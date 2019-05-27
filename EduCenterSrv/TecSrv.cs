@@ -97,12 +97,12 @@ namespace EduCenterSrv
                 _dbContext.Database.ExecuteSqlCommand(TecSrv.sql_DeleteALLTecSkill(tec.Code));
 
                 CourseSrv courseSrv = new CourseSrv(this._dbContext);
-                var courseList =  courseSrv.GetSimpleList();
+                var courseList =  courseSrv.GetCourseType();
                 foreach(var course in courseList)
                 {
                     ETecSkill ts = new ETecSkill
                     {
-                        CourseCode = course.Code,
+                        CourseType = (CourseType)course.Key,
                         SkillLevel = SkillLevel.None,
                         TecCode = tec.Code,
                     };

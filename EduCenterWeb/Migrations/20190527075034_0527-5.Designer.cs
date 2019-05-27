@@ -4,14 +4,16 @@ using EduCenterSrv.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EduCenterWeb.Migrations
 {
     [DbContext(typeof(EduDbContext))]
-    partial class EduDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190527075034_0527-5")]
+    partial class _05275
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,20 +60,18 @@ namespace EduCenterWeb.Migrations
                     b.Property<string>("CourseName")
                         .HasMaxLength(20);
 
-                    b.Property<int>("CourseType");
+                    b.Property<int>("CourseScheduleStatus");
 
-                    b.Property<int>("Day");
+                    b.Property<int>("CourseScheduleType");
 
-                    b.Property<string>("EndTime");
+                    b.Property<DateTime>("Date");
 
-                    b.Property<string>("StartTime");
+                    b.Property<DateTime>("EndTime");
 
-                    b.Property<string>("TecCode")
+                    b.Property<DateTime>("StartTime");
+
+                    b.Property<string>("TeaCode")
                         .HasMaxLength(20);
-
-                    b.Property<int>("Type");
-
-                    b.Property<int>("Year");
 
                     b.HasKey("Id");
 

@@ -30,17 +30,22 @@ h1 { font-size: 24px; }
     font-size: 24px;
     margin: 10px 15px;
 }
-.templatemo-content-wrapper {
-    float: left;
+.template-page-wrapper {
+    display: flex;
+    /*overflow: auto;*/
     width: 100%;
 }
+.templatemo-content-wrapper {
+    /*float: left;*/
+    width: 85%;
+}
 .templatemo-content {
-    margin-left: 235px;
+    /*margin-left: 235px;*/
     margin-top: 0px;
-    min-height: 800px;
+    min-height: 100%;
     padding: 25px 20px 0 20px;
     background-color: white;
-    overflow-x: hidden;
+    /*overflow-x: hidden;*/
 }
 .templatemo-footer {
     clear: both;
@@ -108,10 +113,11 @@ h1 { font-size: 24px; }
 .templatemo-sidebar-menu li.sub .templatemo-submenu { display: none; }
 .templatemo-sidebar-menu li.sub.open .templatemo-submenu { display: block; }
 .templatemo-submenu { padding-left: 0; }
-.templatemo-submenu li {
-    list-style: none;
-    background-color: #DFDFDF;
-}
+    .templatemo-submenu li {
+        list-style: none;
+        /*background-color: #DFDFDF;*/
+        background-color: #fffad6;
+    }
 .templatemo-submenu li a {
     display: block;
     padding: 20px 15px;
@@ -120,11 +126,11 @@ h1 { font-size: 24px; }
 .templatemo-sidebar-menu > li.sub.open > a {
     background-color: rgba(145,145,145,0.3);
 }
-.templatemo-sidebar .templatemo-sidebar-menu >li.active, .templatemo-sidebar .templatemo-sidebar-menu>li>a:hover {
-    background-color: rgb(191, 232, 167);
+.templatemo-sidebar .templatemo-sidebar-menu > li.active, .templatemo-sidebar .templatemo-sidebar-menu > li > a:hover {
+    background-color: rgb(137, 182, 239);
 }
 .templatemo-submenu li > a:hover {
-    background-color: rgb(228,228,228);
+    background-color: rgb(247, 198, 82);
 }
 .templatemo-sidebar .templatemo-sidebar-menu > li > a > i {
     font-size: 16px;
@@ -195,10 +201,10 @@ h1 { font-size: 24px; }
 ------------------------------------------------------*/
 @media screen and (min-width: 992px) {
     .templatemo-sidebar {
-        width: 235px;
-        float: left;
+        width: 15%;
+        /*float: left;
         position: relative;
-        margin-right: -100%;
+        margin-right: -100%;*/
     }
 }
 @media screen and (max-width: 991px) {

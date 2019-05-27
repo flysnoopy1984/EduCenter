@@ -36,26 +36,29 @@
             </form>
         </li>*@
 
-                <li class="active"><a href="#"><i class="fa fa-home"></i>首页</a></li>
-                <li><a href="/WebBackEnd/Tec/Manager"><i class="fa fa-users"></i>教师管理</a></li>
-                <li><a href="/WebBackEnd/Course/Manager"><i class="fa fa-cubes"></i>课程安排</a></li>
-                @*<li class="sub open">
-            <a href="javascript:;" onclick="SwitchMenu(this);">
-                <i class="fa fa-database"></i> Nested Menu <div class="pull-right"><span class="caret"></span></div>
-            </a>
-            <ul class="templatemo-submenu">
-                <li><a href="#">Aenean</a></li>
-                <li><a href="#">Pellentesque</a></li>
-                <li><a href="#">Congue</a></li>
-                <li><a href="#">Interdum</a></li>
-                <li><a href="#">Facilisi</a></li>
-            </ul>
-        </li>*@
-                @*<li><a href="data-visualization.html"><i class="fa fa-cubes"></i><span class="badge pull-right">9</span>Data Visualization</a></li>
-        <li><a href="maps.html"><i class="fa fa-map-marker"></i><span class="badge pull-right">42</span>Maps</a></li>
-        <li><a href="tables.html"><i class="fa fa-users"></i><span class="badge pull-right">NEW</span>Manage Users</a></li>
-        <li><a href="preferences.html"><i class="fa fa-cog"></i>Preferences</a></li>
-        <li><a href="javascript:;" data-toggle="modal" data-target="#confirmModal"><i class="fa fa-sign-out"></i>Sign Out</a></li>*@
+                <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+
+                <li class="sub open active">
+                    <a href="javascript:;" onclick="SwitchMenu(this);">
+                        <i class="fa fa-database"></i> 主数据 <div class="pull-right"><span class="caret"></span></div>
+                    </a>
+                    <ul class="templatemo-submenu">
+                        <li><a href="/WebBackEnd/MasterData/Tec"><i class="fa fa-users"></i>教师管理</a></li>
+                        <li><a href="/WebBackEnd/MasterData/Course"><i class="fa fa-users"></i>课程管理</a></li>
+                    </ul>
+                </li>
+                <li class="sub open active">
+                    <a href="javascript:;" onclick="SwitchMenu(this);">
+                        <i class="fa fa-database"></i> 安排课程 <div class="pull-right"><span class="caret"></span></div>
+                    </a>
+                    <ul class="templatemo-submenu">
+                        <li><a href="/WebBackEnd/Course/Stand"><i class="fa fa-users"></i>标准课</a></li>
+                        <li><a href="/WebBackEnd/Course/Summer"><i class="fa fa-users"></i>暑假课 </a></li>
+                        <li><a href="/WebBackEnd/Course/Winter"><i class="fa fa-users"></i>寒假课 </a></li>
+                        <li><a href="/WebBackEnd/Course/PlanCreator"><i class="fa fa-users"></i>排课模板</a></li>
+                    </ul>
+                </li>
+
 
             </ul>
         </div>
