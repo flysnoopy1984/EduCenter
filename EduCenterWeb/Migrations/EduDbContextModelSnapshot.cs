@@ -48,9 +48,11 @@ namespace EduCenterWeb.Migrations
 
             modelBuilder.Entity("EduCenterModel.Course.ECourseSchedule", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("LessonCode")
                         .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasMaxLength(50);
+
+                    b.Property<int>("ApplyNum");
 
                     b.Property<string>("CourseCode")
                         .HasMaxLength(20);
@@ -64,14 +66,16 @@ namespace EduCenterWeb.Migrations
 
                     b.Property<int>("Day");
 
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAddOrUpdate();
+
                     b.Property<int>("Lesson");
 
-                    b.Property<string>("TecCode")
-                        .HasMaxLength(20);
+                    b.Property<int>("LessonNo");
 
                     b.Property<int>("Year");
 
-                    b.HasKey("Id");
+                    b.HasKey("LessonCode");
 
                     b.ToTable("CourseSchedule");
                 });

@@ -34,8 +34,8 @@ namespace EduCenterSrv
 
         public List<SiKsV> GetCourseType()
         {
-            BaseEnumSrv baseSrv = new BaseEnumSrv();
-           return baseSrv.GetCourseType();
+            
+           return BaseEnumSrv.CourseTypeList;
         }
 
         /// <summary>
@@ -78,7 +78,10 @@ namespace EduCenterSrv
             return _dbContext.DBCourseInfo.Where<ECourseInfo>(a => a.Code == pk).FirstOrDefault();
         }
 
-      
+        public List<ECourseSchedule> GetCourseScheduleByYear(int year, CourseScheduleType scheduleType)
+        {
+            throw new NotImplementedException();
+        }
 
         public void Delete(string Code)
         {
@@ -101,9 +104,9 @@ namespace EduCenterSrv
             _dbContext.DbCourseSchedule.AddRange(list);
         }
 
-        public List<ECourseSchedule> GetCourseScheduleByYear(int year)
+        public List<ECourseSchedule> GetCourseScheduleByYearType(int year, CourseScheduleType scheduleType)
         {
-            return _dbContext.DbCourseSchedule.Where(a => a.Year == year).ToList();
+            return _dbContext.DbCourseSchedule.Where(a => a.Year == year && a.CourseScheduleType == scheduleType).ToList();
         }
 
         #endregion

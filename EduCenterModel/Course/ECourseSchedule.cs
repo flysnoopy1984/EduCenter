@@ -15,12 +15,12 @@ namespace EduCenterModel.Course
     {
         public ECourseSchedule()
         {
-         
-          
+
+
         }
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public long Id { get; set; }
 
         [MaxLength(20)]
         public string CourseCode { get; set; }
@@ -30,14 +30,24 @@ namespace EduCenterModel.Course
         [MaxLength(20)]
         public string CourseName { get; set; }
 
-        [MaxLength(20)]
-        public string TecCode { get; set; }
+
+        [Key]
+        [MaxLength(50)]
+        public string LessonCode { get; set; }
+
+
+        /// <summary>
+        /// 同一个课在同一个时间段出现，区分1班2班
+        /// </summary>
+        public int LessonNo { get; set; }
 
         public int Year { get; set; }
 
         public int Day { get; set; }
 
         public int Lesson { get; set; }
+
+        public int ApplyNum { get; set; }
 
       
 

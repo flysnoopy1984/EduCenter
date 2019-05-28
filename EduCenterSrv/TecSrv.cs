@@ -122,8 +122,8 @@ namespace EduCenterSrv
         #region 技能
         public List<SiKsV> GetSkillLevelList()
         {
-            BaseEnumSrv BaseEnumSrv = new BaseEnumSrv();
-            return BaseEnumSrv.GetSkillLevel();
+          
+            return BaseEnumSrv.SkillLevelList;
         }
 
         public List<ETecSkill> GetTecSkillList(string tecCode = null)

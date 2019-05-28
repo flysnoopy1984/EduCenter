@@ -2,22 +2,22 @@
 
 namespace EduCenterWeb.Migrations
 {
-    public partial class _05276 : Migration
+    public partial class _05281 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "TeaCode",
-                table: "CourseSchedule",
-                newName: "TecCode");
+            migrationBuilder.DropColumn(
+                name: "Id",
+                table: "CourseSchedule");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "TecCode",
+            migrationBuilder.AddColumn<long>(
+                name: "Id",
                 table: "CourseSchedule",
-                newName: "TeaCode");
+                nullable: false,
+                defaultValue: 0L);
         }
     }
 }

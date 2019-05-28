@@ -2,7 +2,7 @@
 
 namespace EduCenterWeb.Migrations
 {
-    public partial class _05272 : Migration
+    public partial class _05282 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduCenterWeb.Migrations
 {
     [DbContext(typeof(EduDbContext))]
-    [Migration("20190526163301_0527-3")]
-    partial class _05273
+    [Migration("20190528060815_0528-3")]
+    partial class _05283
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,9 +50,11 @@ namespace EduCenterWeb.Migrations
 
             modelBuilder.Entity("EduCenterModel.Course.ECourseSchedule", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("LessonCode")
                         .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasMaxLength(50);
+
+                    b.Property<int>("ApplyNum");
 
                     b.Property<string>("CourseCode")
                         .HasMaxLength(20);
@@ -60,18 +62,17 @@ namespace EduCenterWeb.Migrations
                     b.Property<string>("CourseName")
                         .HasMaxLength(20);
 
-                    b.Property<int>("CourseScheduleStatus");
+                    b.Property<int>("CourseScheduleType");
 
-                    b.Property<DateTime>("Date");
+                    b.Property<int>("CourseType");
 
-                    b.Property<DateTime>("EndTime");
+                    b.Property<int>("Day");
 
-                    b.Property<DateTime>("StartTime");
+                    b.Property<int>("Lesson");
 
-                    b.Property<string>("TeaOpenId")
-                        .HasMaxLength(32);
+                    b.Property<int>("Year");
 
-                    b.HasKey("Id");
+                    b.HasKey("LessonCode");
 
                     b.ToTable("CourseSchedule");
                 });
@@ -165,11 +166,12 @@ namespace EduCenterWeb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CourseCode");
+                    b.Property<int>("CourseType");
 
                     b.Property<int>("SkillLevel");
 
-                    b.Property<string>("TecCode");
+                    b.Property<string>("TecCode")
+                        .HasMaxLength(20);
 
                     b.HasKey("Id");
 

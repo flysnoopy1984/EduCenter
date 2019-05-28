@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace EduCenterWeb.Pages.WebBackend.Course
+namespace EduCenterWeb.Pages.User
 {
-    public class PlanWinterModel : PageModel
+    public class ApplyModel : EduBaseAppPageModel
     {
         public void OnGet()
         {

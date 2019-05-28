@@ -8,7 +8,40 @@ namespace EduCenterSrv
 {
     public class BaseEnumSrv
     {
-        public List<SiKsV> GetSkillLevel()
+        public static List<SiKsV> _SkillLevelList;
+        public static  List<SiKsV> SkillLevelList
+        {
+            get
+            {
+                if (_SkillLevelList == null)
+                    _SkillLevelList = GetSkillLevel();
+                return _SkillLevelList;
+            }
+        }
+
+        public static List<SiKsV> _CourseTypeList;
+        public static List<SiKsV> CourseTypeList
+        {
+            get
+            {
+                if (_CourseTypeList == null)
+                    _CourseTypeList = GetCourseType();
+                return _CourseTypeList;
+            }
+        }
+
+        public static List<SiKsV> _CourseScheduleTypeList;
+        public static List<SiKsV> CourseScheduleTypeList
+        {
+            get
+            {
+                if (_CourseScheduleTypeList == null)
+                    _CourseScheduleTypeList = GetCourseScheduleType();
+                return _CourseScheduleTypeList;
+            }
+        }
+
+        private static List<SiKsV> GetSkillLevel()
         {
             List<SiKsV> r = new List<SiKsV>();
             foreach(SkillLevel sk in Enum.GetValues(typeof(SkillLevel)) )
@@ -40,7 +73,7 @@ namespace EduCenterSrv
             return r;
         }
 
-        public List<SiKsV> GetCourseType()
+        private static List<SiKsV> GetCourseType()
         {
             List<SiKsV> r = new List<SiKsV>();
             foreach (CourseType ct in Enum.GetValues(typeof(CourseType)))
@@ -62,6 +95,33 @@ namespace EduCenterSrv
                         break;
 
 
+                }
+                r.Add(new SiKsV
+                {
+                    Key = (int)ct,
+                    Value = v,
+                });
+            }
+            return r;
+        }
+
+        private static List<SiKsV> GetCourseScheduleType()
+        {
+            List<SiKsV> r = new List<SiKsV>();
+            foreach (CourseScheduleType ct in Enum.GetValues(typeof(CourseScheduleType)))
+            {
+                string v = "";
+                switch (ct)
+                {
+                    case CourseScheduleType.Standard:
+                        v = "标准课程";
+                        break;
+                    case CourseScheduleType.Summer:
+                        v = "暑假班";
+                        break;
+                    case CourseScheduleType.Winter:
+                        v = "寒假班";
+                        break;
                 }
                 r.Add(new SiKsV
                 {

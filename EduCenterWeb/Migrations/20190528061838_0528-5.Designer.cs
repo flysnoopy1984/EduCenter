@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduCenterWeb.Migrations
 {
     [DbContext(typeof(EduDbContext))]
-    [Migration("20190527160413_0528-1")]
-    partial class _05281
+    [Migration("20190528061838_0528-5")]
+    partial class _05285
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,9 +50,11 @@ namespace EduCenterWeb.Migrations
 
             modelBuilder.Entity("EduCenterModel.Course.ECourseSchedule", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("LessonCode")
                         .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasMaxLength(50);
+
+                    b.Property<int>("ApplyNum");
 
                     b.Property<string>("CourseCode")
                         .HasMaxLength(20);
@@ -66,14 +68,16 @@ namespace EduCenterWeb.Migrations
 
                     b.Property<int>("Day");
 
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAddOrUpdate();
+
                     b.Property<int>("Lesson");
 
-                    b.Property<string>("TecCode")
-                        .HasMaxLength(20);
+                    b.Property<int>("LessonNo");
 
                     b.Property<int>("Year");
 
-                    b.HasKey("Id");
+                    b.HasKey("LessonCode");
 
                     b.ToTable("CourseSchedule");
                 });

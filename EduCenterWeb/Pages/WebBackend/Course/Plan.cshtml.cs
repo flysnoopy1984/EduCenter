@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterModel.Pages.WebBackEnd;
@@ -12,18 +13,25 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EduCenterWeb.Pages.WebBackend.Course
 {
-    public class PlanCreatorModel : EduBasePageModel
+    public class PlanModel : EduBasePageModel
     {
+        /// <summary>
+        /// 课时9:00-10:30
+        /// </summary>
         public List<ECourseTime> CourseTimes { get; set; }
 
+       
+        /// <summary>
+        /// 课程列表 拖拽使用
+        /// </summary>
         public List<ECourseInfo> CourseList { get; set; }
-
-        public List<ETecSkill> TecSkillList { get; set; }
+        
+        public List<SiKsV> CourseScheduleType { get; set; } 
 
         private CourseSrv _CourseSrv;
         private TecSrv _TecSrv;
 
-        public PlanCreatorModel(CourseSrv courseSrv, TecSrv tecSrv)
+        public PlanModel(CourseSrv courseSrv, TecSrv tecSrv)
         {
             _CourseSrv = courseSrv;
             _TecSrv = tecSrv;
@@ -35,8 +43,7 @@ namespace EduCenterWeb.Pages.WebBackend.Course
             
             CourseList = _CourseSrv.GetAllList();
 
-            
-            
+            CourseScheduleType = BaseEnumSrv.CourseScheduleTypeList;
         }
 
         public IActionResult OnPostSave(List<ECourseSchedule> list)
@@ -62,14 +69,14 @@ namespace EduCenterWeb.Pages.WebBackend.Course
             return new JsonResult(result);
         }
 
-        public IActionResult OnPostGet(int year,bool needSkill = true)
+        public IActionResult OnPostGet(int year,CourseScheduleType scheduleType)
         {
-            ResultObject<PPlanCreatorData> result = new ResultObject<PPlanCreatorData>();
+            ResultList<ECourseSchedule> result = new ResultList<ECourseSchedule>();
+        
             try
             {
-                if (needSkill)
-                    result.Entity.TecSkillList = _TecSrv.GetTecAvaliableSkill();
-                result.Entity.ScheduleList = _CourseSrv.GetCourseScheduleByYear(year);
+               
+                result.List = _CourseSrv.GetCourseScheduleByYearType(year,scheduleType);
             }
             catch (Exception ex)
             {

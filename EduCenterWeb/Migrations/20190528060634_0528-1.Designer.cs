@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduCenterWeb.Migrations
 {
     [DbContext(typeof(EduDbContext))]
-    [Migration("20190527022956_0527-4")]
-    partial class _05274
+    [Migration("20190528060634_0528-1")]
+    partial class _05281
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,9 +50,11 @@ namespace EduCenterWeb.Migrations
 
             modelBuilder.Entity("EduCenterModel.Course.ECourseSchedule", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("LessonCode")
                         .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasMaxLength(50);
+
+                    b.Property<int>("ApplyNum");
 
                     b.Property<string>("CourseCode")
                         .HasMaxLength(20);
@@ -60,18 +62,19 @@ namespace EduCenterWeb.Migrations
                     b.Property<string>("CourseName")
                         .HasMaxLength(20);
 
-                    b.Property<int>("CourseScheduleStatus");
+                    b.Property<int>("CourseScheduleType");
 
-                    b.Property<DateTime>("Date");
+                    b.Property<int>("CourseType");
 
-                    b.Property<DateTime>("EndTime");
+                    b.Property<int>("Day");
 
-                    b.Property<DateTime>("StartTime");
+                    b.Property<int>("Lesson");
 
-                    b.Property<string>("TeaOpenId")
-                        .HasMaxLength(32);
+                    b.Property<int>("LessonNo");
 
-                    b.HasKey("Id");
+                    b.Property<int>("Year");
+
+                    b.HasKey("LessonCode");
 
                     b.ToTable("CourseSchedule");
                 });

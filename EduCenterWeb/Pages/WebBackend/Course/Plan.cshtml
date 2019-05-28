@@ -1,5 +1,5 @@
 ﻿@page
-@model EduCenterWeb.Pages.WebBackend.Course.PlanCreatorModel
+@model EduCenterWeb.Pages.WebBackend.Course.PlanModel
 @{
     ViewData["Title"] = "PlanCreator";
     Layout = "~/Pages/Shared/_EduMainPCWeb.cshtml";
@@ -9,14 +9,15 @@
     <li><a href="/Home">主页</a></li>
 }
 @Html.AntiForgeryToken()
+<link href="~/css/Plugs/LoadingIcon.css" rel="stylesheet" />
 <link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
 <script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
-
+<script src="~/lib/jquery.blockUI/jquery.blockUI.min.js"></script>
 <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
 <script src="~/lib/laydate/laydate.js"></script>
 <script src="~/js/EduLib/EditHelper.js"></script>
 <script src="~/js/EduLib/CalendorPlan.js"></script>
-<script src="~/js/WebBackEnd/Course/PlanCreator.js"></script>
+<script src="~/js/WebBackEnd/Course/Plan.js"></script>
 <style type="text/css">
     .MainContainer {
         margin-left: 30px;
@@ -103,6 +104,7 @@
         display: none;
     }
 
+    /*上排按钮Bar*/
     .BtnList {
         display: flex;
         width: 100%;
@@ -111,13 +113,18 @@
 
         .BtnList .Option {
             display: flex;
-            width: 20%;
-            justify-content: space-around;
+            width: 60%;
         }
+
+            .BtnList .Option div {
+                display: flex;
+                margin-right: 15px;
+            }
 
     .planYear {
         width: 80px;
     }
+    /*上排按钮Bar*/
 </style>
 
 <div class="MainContainer">
@@ -125,13 +132,23 @@
     <div class="CourseGridContainer">
         <div class="BtnList">
             <div class="Option">
-                <label for="planYear" style="margin-top:5px;">年：</label><input type="text" id="planYear" class="planYear form-control" />
-                <input id="btnSave" type="button" class="btn btn-info" value="保存" />
+                <div>
+                    <label for="planYear" style="margin-top:5px;">年：</label>
+                    <input type="text" id="planYear" class="planYear form-control" />
+                </div>
+                <div>
+                    <label for="selScheduleType" style="margin-top:5px;width:120px;">课程类型：</label>
+                    <select id="selScheduleType" class="form-control">
+                        @foreach (var ct in Model.CourseScheduleType)
+                        {
+                            <option value="@ct.Key">@ct.Value</option>
+                        }
+                    </select>
+                </div>
+
             </div>
             <div>
-                <input type="button" class="btn btn-warning" value="发布到标准课" />
-                <input type="button" class="btn btn-danger" value="发布到暑假课" />
-                <input type="button" class="btn btn-info" value="发布到寒假课" />
+                <input type="button" id="btnSave" class="btn btn-warning" value="发布" />
             </div>
 
         </div>
@@ -159,7 +176,6 @@
                             </div>
                         </td>
                     }
-
 
                 </tr>
 
@@ -197,13 +213,13 @@
     </div>
 </div>
 <div class="HideData">
-    <div class="CellRow list-group-item" cCode="" cType="">
-        <div class="cellText">书法</div>
-        <div>
-            <select class="selTec">
-             
-            </select>
-        </div>
+    <div class="CellRow list-group-item" cCode="" cType="" no="1">
+        <div class="cellText"></div>
+        @*<div>
+                <select class="selTec">
+
+                </select>
+            </div>*@
         <div>
             <img class="closeBtn" src="~/images/CloseDialog.png" onclick="DelRow(this);" />
         </div>
