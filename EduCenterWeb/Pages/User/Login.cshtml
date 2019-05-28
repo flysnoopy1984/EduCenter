@@ -4,6 +4,7 @@
     ViewData["Title"] = "Login";
     Layout = "~/Pages/Shared/_EduMainApp.cshtml";
 }
+
 <style type="text/css">
     /*Lay Out*/
     .MainContent {
@@ -35,7 +36,7 @@
        justify-content:center;
     }
     .ButtonArea{
-       flex-grow:0.4;
+       flex-grow:0.2;
        text-align:center;
        /*display:flex;
        justify-content:center;
@@ -52,7 +53,11 @@
     }*/
     .FootAerea{
         flex-grow:1.8;
-        background-color:blueviolet
+        display:flex;
+        flex-direction: column;
+        align-items: center;
+        /*background-color:#9900db;*/
+        /*border-top:1px outset #808080;*/
     }
      /*Lay Out*/
     .EduFieldValue{
@@ -73,12 +78,41 @@
     .EduLoginButton{
         width:50%;
         height:44px;
-            border-radius: 20px;
+        border-radius: 20px;
+        cursor:pointer !important;
+        outline:none!important;
     }
     .EduFieldValue:focus{
-         
-    border-bottom:1px solid #76c5fe;
+         border-bottom:1px solid #76c5fe;
     }
+    .OtherLoginLine{
+        position: relative;
+        margin: 0 0 10px;
+        font-size: 12px;
+        color: #b5b5b5;
+        width:300px;
+        text-align:center;
+      
+    }
+    .OtherLoginLine::before{
+        content: "";
+        border-top: 1px solid #b5b5b5;
+        display: block;
+        position: absolute;
+        width: 60px;
+        top: 5px;
+    }
+
+    .OtherLoginLine::after{
+         content: "";
+           border-top: 1px solid #b5b5b5;
+        display: block;
+        position: absolute;
+        width: 60px;
+        top: 5px;
+      right: 10px;
+    }
+   
 
     ::-webkit-input-placeholder { /* WebKit browsers */
         color: #808080;
@@ -86,6 +120,19 @@
 }
     
 </style>
+<style>
+    .wxicon {
+        width: 50px;
+        height: 50px;
+        vertical-align: -0.15em;
+        fill: currentColor;
+        overflow: hidden;
+        color:#00d31b;
+         cursor:pointer !important;
+    }
+</style>
+<script src="~/lib/iconfont.js"></script>
+
 <div class="MainContent">
     <div class="LogoArea">
 
@@ -101,7 +148,13 @@
 
 
     </div>
-    <div class="FootAerea"></div>
+    <div class="FootAerea">
+        <h6 class="OtherLoginLine">微信登录</h6>
+        <div><svg class="wxicon" aria-hidden="true">
+                <use xlink:href="#icon-weixin"></use>
+            </svg>
+        </div>
+    </div>
 
 </div>
 
