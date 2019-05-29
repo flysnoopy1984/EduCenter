@@ -78,11 +78,7 @@ namespace EduCenterSrv
             return _dbContext.DBCourseInfo.Where<ECourseInfo>(a => a.Code == pk).FirstOrDefault();
         }
 
-        public List<ECourseSchedule> GetCourseScheduleByYear(int year, CourseScheduleType scheduleType)
-        {
-            throw new NotImplementedException();
-        }
-
+      
         public void Delete(string Code)
         {
             ECourseInfo delObj = new ECourseInfo
