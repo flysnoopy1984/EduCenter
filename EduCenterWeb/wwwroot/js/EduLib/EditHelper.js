@@ -100,39 +100,12 @@
     callAjax = function (url, data, handler, msg){
 
         callAjaxOrig(url, data, handler, msg, SaveProcess, SaveDone, ShowError);
-        //SaveProcess();
-        //$.ajax({
-        //    type: "post",
-        //    url: url,
-        //    beforeSend: function (xhr) {
-        //        xhr.setRequestHeader("XSRF-TOKEN",
-        //            $('input:hidden[name="__RequestVerificationToken"]').val());
-        //    },
-        //    data: data,
-
-        //    success: function (res) {
-
-        //        if (res.IsSuccess) {
-        //            if (handler != null)
-        //                handler(res);
-        //            SaveDone(msg);
-        //        }
-        //        else {
-        //            ShowError(res.ErrorMsg);
-        //            //  SaveDone(res.ErrorMsg, true);
-
-        //        }
-        //    },
-        //    error: function (xhr, type) {
-        //        ShowError("系统错误");
-        //        // SaveDone("", true);
-        //    }
-
-        //});
+      
     };
 
-    callAjax_Query = function (url,data,handler) {
-        ShowBlock("查询中..");
+    callAjax_Query = function (url, data, handler, msg) {
+        if (msg == undefined) msg = "查询中.."
+        ShowBlock(msg);
 
         $.ajax({
             type: "post",

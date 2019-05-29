@@ -162,7 +162,7 @@
                 case 2:
                     cType = "MS"; break;
                 case 3:
-                    cType = "围棋"; break;
+                    cType = "WQ"; break;
                     
             }
           // = item.CourseType;
