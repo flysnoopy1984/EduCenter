@@ -50,17 +50,17 @@
         flex-direction: column;
     }
 
-        .GridContainder .SelectCourseTimeTitle {
-            font-weight: bold;
-            border-radius: 4px;
-            color: #707070;
-            background-color: #fdebbf;
-            padding-left: 5px;
-            margin-top: 5px;
-            margin-bottom: 10px;
-            height: 30px;
-            line-height: 30px;
-        }
+    .GridContainder .SelectCourseTimeTitle {
+        font-weight: bold;
+        border-radius: 4px;
+        color: #707070;
+        background-color: #fdebbf;
+        padding-left: 5px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        height: 30px;
+        line-height: 30px;
+    }
 
     .CourseGrid {
         width: 100%;
@@ -82,39 +82,74 @@
     }
 
     .SelectedArea {
-        width: 100%;
-        /*position: absolute;
-        bottom: 23%;*/
+         width: 100%;
+        display: flex;
+        flex-direction: column;
+        /*align-items: center;*/
     }
 
     .SelectedArea .SelectedCourseTitle {
         font-weight: bold;
         border-radius: 4px;
-        color: #ffffff;
+        color: #1b4100;
         background-color: #88caec;
         padding-left: 5px;
         height: 30px;
         line-height: 30px;
+        width: 100%;
     }
-    .SelectedArea .CourseItems{
-        display:flex;
-        margin-top:10px;
-        justify-content:space-around;
+    .SelectedArea .SelectedCourseItems{
+        display: flex;
+        flex-wrap:wrap;
+       
     }
-    .SelectedArea .CourseItems .Item{
-       display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-radius: 8px;
-    border: 1px solid #696;
-    text-align: center;
-    height: 60px;
+    .SelectedArea .SelectedCourseItems .Item{
+        display: flex;
+        flex-direction: column;
+        align-items:center;
+        /*justify-content: center;*/
+        border-radius: 8px;
+        border: 1px solid #696;
+        text-align: center;
+        /*height: 60px;*/
+        margin-top: 20px;
+        margin-left:10px;
+        margin-right:10px;
    
-    width: 120px;
-    box-shadow: #666 0px 0px 10px;
-    background: #EEFF99;
+        width: 100%;
+        box-shadow: #666 0px 0px 4px;
+        background: #EEFF99;
+        padding:5px;
+      
     }
+    .SelectCourseItemTitle{
+        border-bottom:double 1px #65dd03;
+        width:90%;
+        padding:4px;
+        font-weight:bold;
+        
+    }
+     .btnCourseItemClose{
+        background: url('/images/CloseDialog.png');
+        width:24px;
+        height:24px;
+        position:absolute;
+        right:-2px;
+        top:0px;
 
+    }
+    .SelectCourseItemContent{
+        width:90%;
+        margin:8px;
+    }
+    .SelectCourseItemContent ul{
+        list-style:none;
+    }
+    .SelectCourseItemContent ul li{
+        position:relative;
+        height:28px;
+        line-height:28px;
+    }
 
     .layui-tab-title li:first-child {
         font-weight: bold;
@@ -125,22 +160,36 @@
         font-weight: bold;
         color: #0094ff !important;
     }
-    /* Hide Area */
-    .HideData {
-        display: none;
-    }
+
 
     .CourseSelect {
-        display: flex;
+           display: flex;
         flex-direction: column;
-        height: 250px;
+        height: 150px;
+        justify-content: space-around;
     }
  
     .CourseSelect label{
         border-radius:4px;
         width:100%;
     }
-   
+    .btnList{
+        width:100%;
+        margin-bottom:10px;
+        display:flex;
+        justify-content:center;
+        margin-top:20px;
+        /*border-top:1px groove #808080;*/
+        padding-top:10px;
+    }
+    #btnConfirm{
+        width:200px;
+        font-weight:bold;
+        font-size:24px;
+       
+      
+    }
+
 </style>
 
 <link href="~/lib/bootstrap/dist/fonts/font-awesome.min.css" rel="stylesheet" />
@@ -238,52 +287,38 @@
 
     </div>
 
+   
+
     <div class="SelectedArea">
         <div class="SelectedCourseTitle">已选择课程</div>
-        <div class="CourseItems">
-            <div class="Item">
-                <div>
-                    美术1
-                </div>
-                <div>
-                    (周1 6:00-7:00)
-                </div>
-            </div>
-            <div class="Item">
-                <div>
-                    美术1
-                </div>
-                <div>
-                    (周1 6:00-7:00)
-                </div>
-            </div>
+        <div class="SelectedCourseItems">
           
+        </div>
 
+        <div class="btnList">
+            <input id="btnConfirm" type="button" value="选择完成" class="btn btn-warning" />
         </div>
     </div>
 
 
 </div>
 
-@*<div class="HideData1">
-    <div class="CourseSelect">
-            <div class="checkbox checkbox-primary ">
-                <input type="checkbox" id="checkbox1">
-                <label for="checkbox1" class="list-group-item-info" style="width:100%">
-                    Check me out
-                </label>
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="checkbox2">
-                <label for="checkbox2">
-                    Check me out
-                </label>
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="checkbox3">
-                <label for="checkbox3">
-                    Check me out
-                </label>
-            </div>
+<div id="HideData" style="display:none;">
+    <div class="Item">
+        <div class="SelectCourseItemTitle" CourseCode="">
+           
         </div>
-</div>*@
+        <div class="SelectCourseItemContent">
+            <ul>
+               
+            </ul>
+        </div>
+    </div>
+ 
+    <li lesson="" day="" id="liData">
+        <span class="SelectCourseTime"></span>
+        <div class="btnCourseItemClose"></div>
+    </li>
+    
+</div>
+

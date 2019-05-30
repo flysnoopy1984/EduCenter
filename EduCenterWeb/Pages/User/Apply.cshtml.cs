@@ -6,6 +6,7 @@ using EduCenterCore.Common.Helper;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
+using EduCenterModel.Pages.User;
 using EduCenterSrv;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -31,10 +32,12 @@ namespace EduCenterWeb.Pages.User
 
         public IActionResult OnPostInitData()
         {
-            ResultList<ECourseSchedule> result = new ResultList<ECourseSchedule>();
+            ResultObject<PUserApply> result = new ResultObject<PUserApply>();
             try
             {
-                result.List = _CourseSrv.GetCourseScheduleByYearType(DateTime.Now.Year, CourseScheduleType.Standard);
+                result.Entity.CourseScheduleList = _CourseSrv.GetCourseScheduleByYearType(DateTime.Now.Year, CourseScheduleType.Standard);
+                result.Entity.CourseTimeList = StaticDataSrv.CourseTime;
+
 
             }
             catch (Exception ex)

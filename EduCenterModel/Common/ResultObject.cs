@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EduCenterModel.Common
 {
-    public class ResultObject<T> where T : class
+    public class ResultObject<T> where T : class,new()
     {
         public ResultObject()
         {
@@ -12,7 +12,15 @@ namespace EduCenterModel.Common
             SuccessMsg = "成功";
         }
 
-        public T Entity { get; set; }
+        private T _Entity;
+        public T Entity {
+            get {
+                if (_Entity == null)
+                    _Entity = new T();
+                return _Entity;
+            }
+            set { _Entity = value; }
+        }
 
         public bool IsSuccess { get; set; }
 
