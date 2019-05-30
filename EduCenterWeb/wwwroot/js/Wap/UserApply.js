@@ -4,6 +4,8 @@
     var CourseTime = null;
     var selDay = null
     var selLesson = null;
+    var selCode = null;
+
     Init = function () {
 
         var times = $("#GridWeek tr").length ;
@@ -22,31 +24,29 @@
 
     selectCourse = function (obj) {
         var cell = $(obj);
-        var day = cell.attr("day");
-        var lesson = cell.attr("lesson");
+        selDay = cell.attr("day");
+        selLesson = cell.attr("lesson");
 
-        selDay = day;
-        selLesson = lesson;
-
-        var csList = CourseScheduleData[day][lesson];
+        var csList = CourseScheduleData[selDay][selLesson];
 
         var selectedLi = $(".SelectedCourseItems .Item .SelectCourseItemContent ul li");
+
         //原来CheckBox都选，现在单选可以修改代码。
-        var selectedCode = new Array();
+    //    var selectedCode = new Array();
         $.each(selectedLi, function () {
-            var selDay = $(this).attr("day");
-            var selLes = $(this).attr("lesson");
-            if (day == selDay && lesson == selLes) {
-                var selCode = $(this).closest(".Item").find(".SelectCourseItemTitle").attr("CourseCode");
-                selectedCode.push(selCode);
-                
+            var day = $(this).attr("day");
+            var les = $(this).attr("lesson");
+            if (day == selDay && les == selLesson) {
+                selCode = $(this).closest(".Item").find(".SelectCourseItemTitle").attr("CourseCode");
+                return false;
+             
             }
         })
         var html = '<div class="CourseSelect">';
-        html += CreateConfirmItemsHtml(-1, null, selectedCode);
+        html += CreateConfirmItemsHtml(-1, null);
         $.each(csList, function (i) {
             var item = csList[i];
-            html +=CreateConfirmItemsHtml(i, item, selectedCode);
+            html += CreateConfirmItemsHtml(i, item);
         });
         html += '</div>';
 
@@ -75,7 +75,9 @@
         });
     };
 
-    CreateConfirmItemsHtml = function (i, item, selectedCode) {
+
+    //弹出框的课程信息
+    CreateConfirmItemsHtml = function (i, item) {
         var id = "cb_" + i;
      //   var item = csList[i];
         var checked = "";
@@ -84,8 +86,7 @@
         var CourseType = -1;
 
         if (i != -1) {
-            var arrIndex = $.inArray(item.CourseCode, selectedCode);
-            if (arrIndex > -1)
+            if (item.CourseCode == selCode)
                 checked = "checked";
 
             name = item.CourseName;
@@ -109,11 +110,14 @@
     }
 
 
-
+    //主页面的课程信息
     CreateSelectCourseInfo = function (data, selectNo) {
 
         if (selectNo == -1) {
-
+            if (selCode != null && selCode != "") {
+                DeleteSelectCourseInfo(selDay, selLesson, selCode);
+            }
+            return;
         };
 
         var root = $(".SelectedCourseItems");
@@ -141,7 +145,7 @@
     };
 
     DeleteSelectCourseInfo = function (day,lesson,CourseCode) {
-
+        var root = $(".SelectedCourseItems")
     }
 
     GetDayName = function (day) {
