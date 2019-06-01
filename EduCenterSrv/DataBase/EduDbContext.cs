@@ -31,6 +31,10 @@ namespace EduCenterSrv.DataBase
 
         public DbSet<ECourseSchedule> DbCourseSchedule { get; set; }
 
+        public DbSet<ECoursePrice> DBCoursePrice { get; set; }
+
         public DbSet<ECourseTrying> DbCourseTrying { get; set; }
+
+        
     }
 }

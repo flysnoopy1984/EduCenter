@@ -61,10 +61,8 @@ namespace EduCenterWeb
             services.AddTransient<UserSrv>();
 
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
-            
-            //c => c.MigrationsAssembly("EduCenterWeb")
 
-            //  services.Configure<EduConfig>(Configuration.GetSection("EduConfig"));
+           // services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -92,6 +90,8 @@ namespace EduCenterWeb
             app.UseCookiePolicy();
 
             app.UseMvc();
+
+            //app.UseSession();
         }
     }
 }

@@ -1,6 +1,9 @@
 ﻿
+using EduCenterModel.User;
 using EduCenterSrv.DataBase;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +13,7 @@ namespace EduCenterWeb.Pages
 {
     public class EduBasePageModel: PageModel
     {
-       
+      
+
     }
 }

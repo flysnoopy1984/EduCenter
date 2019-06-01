@@ -7,6 +7,7 @@ using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterModel.Pages.User;
+using EduCenterModel.User;
 using EduCenterSrv;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -48,7 +49,35 @@ namespace EduCenterWeb.Pages.User
             return new JsonResult(result);
         }
 
-        
+        public IActionResult OnPostUpdateShopCard()
+        {
+            ResultNormal result = new ResultNormal();
+
+            try
+            {
+                //List<EUserShopingCard> cardList = new List<EUserShopingCard>();
+                //EUserShopingCard obj = new EUserShopingCard()
+                //{
+                //    KeyNo = "shanghai",
+                //    OpenId = "xxx",
+                //    ShopCartType = ShopCartType.UserPreBuyCourse
+                //};
+                //cardList.Add(obj);
+                //cardList.Add(obj);
+                //cardList.Add(obj);
+
+                //base.UserPreBuyCourse = cardList;
+            }
+            catch(Exception ex)
+            {
+                result.ErrorMsg = ex.Message;
+            }
+          
+
+            return new JsonResult(result);
+        }
+
+
 
     }
 }

@@ -12,7 +12,7 @@ namespace EduCenterModel
         {
             RecordStatus = RecordStatus.Normal;
             CreatedDateTime = DateTime.MinValue;
-            UpdatedDateTime = DateTime.MinValue;
+            UpdatedDateTime = DateTime.Now;
         }
         public RecordStatus RecordStatus { get; set; }
 

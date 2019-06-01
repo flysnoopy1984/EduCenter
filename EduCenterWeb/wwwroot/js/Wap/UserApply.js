@@ -1,5 +1,6 @@
 ﻿$(function () {
     var InitUrl = "Apply?handler=InitData";
+  
     var CourseScheduleData = null;
     var CourseTime = null;
     var selDay = null
@@ -17,6 +18,7 @@
             }
          
         }
+        $("#btnConfirm").on("click", NextStep);
         callAjax_Query(InitUrl, {}, InitCallBack,"");
     }
 
@@ -119,7 +121,20 @@
             }
             return;
         };
+        //Grid TD 信息
+        var gridRoot = null;
+        if (data.Day >= 1 && data.Day <= 5) gridRoot =$("#GridNormal");
+        else gridRoot = $("#GridWeek"); 
 
+        var td = gridRoot.find(".CellContainer[day=" + data.Day + "][lesson=" + data.Lesson + "]");
+        td.empty();
+        var gl = this.GetItemStyleByType(data.CourseType,"label");
+        var tdHtml = $("#HideData .CellCourse").clone();
+        tdHtml.addClass(gl);
+        tdHtml.find(".cellName").text(data.CourseName);
+        td.append(tdHtml);
+
+        //底部信息
         var root = $(".SelectedCourseItems");
         var item = root.find(".Item .SelectCourseItemTitle[CourseCode=" + data.CourseCode + "]");
         var ul;
@@ -131,21 +146,55 @@
             root.append(html);
         }
         else
-            ul = item.next().find(".SelectCourseItemContent ul");
+            ul = item.next().find("ul");
 
         var li = ul.find("li[lesson=" + data.Lesson + "]");
         if (li.length == 0) {
             li = $("#HideData #liData").clone();
+
             var dayName = GetDayName(data.Day);
             li.attr("lesson", data.Lesson);
             li.attr("day", data.Day);
+            li.attr("lcode", data.LessonCode);
             li.find(".SelectCourseTime").text(dayName + " | " + CourseTime[data.Lesson]);
+            li.find(".btnCourseItemClose").on("click", { "courseschedule": data }, DeleteSelectCourseInfoEvent);
             ul.append(li);
         }
     };
 
-    DeleteSelectCourseInfo = function (day,lesson,CourseCode) {
-        var root = $(".SelectedCourseItems")
+    DeleteSelectCourseInfoEvent = function (e) {
+        var courseschedule = e.data.courseschedule;
+     
+        DeleteSelectCourseInfo(courseschedule.Day, courseschedule.Lesson, courseschedule.CourseCode);
+    }
+
+    DeleteSelectCourseInfo = function (day, lesson, CourseCode) {
+
+        //底部Info
+        var course = $(".SelectedCourseItems .Item .SelectCourseItemTitle[CourseCode=" + CourseCode + "]");
+        if (course.length > 0) {
+            var ul = course.next().find("ul");
+            var childnum = ul.children("li").length;
+            var item = ul.find("li[day=" + day + "][lesson=" + lesson + "]");
+            if (item.length) {
+                item.remove();
+                if (childnum == 1) {
+                    course.parent().remove();
+                }
+            }   
+        }
+
+        //Grid Td 信息
+        var gridRoot = null;
+        if (day >= 1 && day <= 5) gridRoot = $("#GridNormal");
+        else gridRoot = $("#GridWeek");
+
+        var td = gridRoot.find(".CellContainer[day=" + day + "][lesson=" + lesson + "]");
+        td.empty();
+        var tdHtml = $("#HideData .noCourse").clone();
+       
+        td.append(tdHtml);
+
     }
 
     GetDayName = function (day) {
@@ -161,6 +210,7 @@
         return "";
     }
 
+    //label cb
     GetItemStyleByType = function (cType, ctrl) {
        
         var gl = "list-group-item-default";
@@ -188,11 +238,46 @@
 
     }
 
-   
+    NextStep = function () {
+
+        var jsonObj = [];
+       
+        $(".SelectedCourseItems .Item").each(function () {
+            var item = $(this);
+            var courseCode = item.find(".SelectCourseItemTitle").attr("CourseCode");
+            var list = item.find(".SelectCourseItemContent ul li");
+            list.each(function () {
+                var li = $(this);
+                var day = li.attr("day");
+                var lesson = li.attr("lesson");
+                var lcode = li.attr("lcode");
+
+                var itemObj = {
+                    "courseCode": courseCode,
+                    "day": day,
+                    "lesson": lesson,
+                    "lcode": lcode
+                };
+                jsonObj.push(itemObj);
+
+            })
+        });
+        sessionStorage.clear();
+        if (jsonObj.length >0) {
+            SetSessonUserApplyCourse(jsonObj);
+
+            window.location.href = "BuyCourseTime";
+        }
+        else {
+       
+            ShowError("请点击选择课程");
+        }  
+    }
 
     InitCallBack = function (result) {
 
         var list = result.Entity.CourseScheduleList;
+        
 
         $.each(list, function (i) {
             var cs = list[i];
@@ -206,11 +291,29 @@
             var t = times[i];
             CourseTime[t.Lesson] = t.TimeRange;
         });
+        var userApplyList = GetSessonUserApplyCourse();
+        if (userApplyList) {
+            $.each(userApplyList, function (i) {
+                var item = userApplyList[i];
+
+                var csList = CourseScheduleData[item.day][item.lesson];
+                $.each(csList, function (j) {
+                    var course = csList[j];
+                    if (course.CourseCode == item.courseCode) {
+                        CreateSelectCourseInfo(course, j);
+                        return false;
+                    }
+                });
+            });
+        }
+
+
        
        
     }
 
     Init();
+
 
    
 });

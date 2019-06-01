@@ -31,6 +31,9 @@ namespace EduCenterModel.Course
         public string CourseName { get; set; }
 
 
+        /// <summary>
+        ///  lessonCode = year + "_" + day + "_" + lesson + "_" + cCode + "_" + lessonNo;
+        /// </summary>
         [Key]
         [MaxLength(50)]
         public string LessonCode { get; set; }

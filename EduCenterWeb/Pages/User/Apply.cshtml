@@ -40,7 +40,7 @@
         margin-top: 10px;
         margin-bottom: 10px;
         border-bottom: 1px groove #e1e0e0;
-        width: 50%;
+        width: 80%;
     }
 
 
@@ -60,6 +60,25 @@
         margin-bottom: 10px;
         height: 30px;
         line-height: 30px;
+    }
+    .CellContainer{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+    }
+    .CellCourse{
+    
+        /*background-color: #6ae703;*/
+        height: 24px;
+        line-height: 24px;
+        width: 85%;
+        font-size: 12px;
+        border-radius: 8px;
+        /*color: #005905;*/
+        font-weight: bold;
+        /*font-family: "微软雅黑";*/
+       
     }
 
     .CourseGrid {
@@ -130,9 +149,9 @@
         
     }
      .btnCourseItemClose{
-        background: url('/images/CloseDialog.png');
+        /*background: url('/images/CloseDialog.png');
         width:24px;
-        height:24px;
+        height:24px;*/
         position:absolute;
         right:-2px;
         top:0px;
@@ -185,12 +204,11 @@
     #btnConfirm{
         width:200px;
         font-weight:bold;
-        font-size:24px;
-       
-      
+        font-size:24px;  
     }
 
 </style>
+
 
 <link href="~/lib/bootstrap/dist/fonts/font-awesome.min.css" rel="stylesheet" />
 <script src="~/lib/layui/layui.js"></script>
@@ -203,16 +221,17 @@
 <script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
 <script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
 
+<script src="~/js/EduLib/StorageManager.js"></script>
 <script src="~/js/EduLib/EditHelper.js"></script>
 <script src="~/js/Wap/UserApply.js"></script>
 
 <div class="MainContainer">
-    <div class="TaoBaoFont Title">
-        课程选择
+    <div class="Title">
+        <span class="fa fa-tags">课程选择</span>
     </div>
 
     <div class="GridContainder">
-        <div class="SelectCourseTimeTitle">请点击选择您上课的时间</div>
+        <div class="SelectCourseTimeTitle"><i class="fa fa-calendar" aria-hidden="true"></i>  请点击选择您上课的时间</div>
         <div class="layui-tab layui-tab-card">
             <ul class="layui-tab-title">
                 <li class="layui-this">双休日</li>
@@ -237,7 +256,10 @@
 
                                     <td>
                                         <div day="@(i+6)" lesson="@time.Lesson" class="CellContainer" onclick="selectCourse(this);">
-                                            无<span class="caret"></span>
+                                            <div class="noCourse"> <span>无</span><span class="caret"></span></div>
+                                            @*<div class="CellCourse">
+                                                美术1<span class="caret"></span>
+                                            </div>*@
                                         </div>
                                     </td>
                                 }
@@ -272,7 +294,7 @@
                                 {
                                     <td>
                                         <div day="@i" lesson="@(j+5)" class="CellContainer" onclick="selectCourse(this);">
-                                            无<span class="caret"></span>
+                                            <div class="noCourse"> <span>无</span><span class="caret"></span></div>
                                         </div>
                                     </td>
                                 }
@@ -280,23 +302,22 @@
                         }
                     </table>
                 </div>
-
-
             </div>
         </div>
 
     </div>
 
-   
-
     <div class="SelectedArea">
-        <div class="SelectedCourseTitle">已选择课程</div>
+        <div class="SelectedCourseTitle"><i class="fa fa-star-o" aria-hidden="true"></i>已选择课程</div>
         <div class="SelectedCourseItems">
-          
+           
         </div>
 
         <div class="btnList">
-            <input id="btnConfirm" type="button" value="选择完成" class="btn btn-warning" />
+            <button id="btnConfirm"  class="btn btn-warning">
+                <span style="padding-right:10px;">购买课时</span><span class="fa fa-shopping-cart" aria-hidden="true"></span> 
+            </button>
+          
         </div>
     </div>
 
@@ -305,20 +326,21 @@
 
 <div id="HideData" style="display:none;">
     <div class="Item">
-        <div class="SelectCourseItemTitle" CourseCode="">
-           
-        </div>
+        <div class="SelectCourseItemTitle" CourseCode=""></div>
         <div class="SelectCourseItemContent">
-            <ul>
-               
-            </ul>
+            <ul></ul>
         </div>
     </div>
- 
-    <li lesson="" day="" id="liData">
+
+    <li lesson="" day="" lcode="" id="liData">
         <span class="SelectCourseTime"></span>
-        <div class="btnCourseItemClose"></div>
+        <div class="btnCourseItemClose">
+            <i class="fa fa-trash-o" aria-hidden="true"></i>
+        </div>
     </li>
-    
+
+    <div class="noCourse"><span>无</span><span class="caret"></span></div>
+
+    <div class="CellCourse"><span class="cellName">美术1</span><span class="caret"></span></div>
 </div>
 

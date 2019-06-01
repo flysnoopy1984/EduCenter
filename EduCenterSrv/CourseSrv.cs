@@ -78,7 +78,7 @@ namespace EduCenterSrv
             return _dbContext.DBCourseInfo.Where<ECourseInfo>(a => a.Code == pk).FirstOrDefault();
         }
 
-      
+
         public void Delete(string Code)
         {
             ECourseInfo delObj = new ECourseInfo
@@ -88,6 +88,8 @@ namespace EduCenterSrv
 
             this.Delete(delObj);
         }
+
+
         #region CoureseSchedule
 
         public void DeleteCourseSchduleByYear(int year)
@@ -107,6 +109,12 @@ namespace EduCenterSrv
 
         #endregion
 
+        #region CoursePrice
+        public List<ECoursePrice> GetCoursePriceList(bool onlyAvaliable=true)
+        {
+           return _dbContext.DBCoursePrice.Where(a => a.RecordStatus == RecordStatus.Normal && a.EffectEndDate>DateTime.Now).ToList();
+        }
+        #endregion
 
     }
 }

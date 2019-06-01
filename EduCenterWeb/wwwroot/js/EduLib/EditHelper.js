@@ -38,10 +38,12 @@
         });
     };
 
-    SaveProcess = function () {
+    SaveProcess = function (msg) {
+        if (msg == undefined) msg = "处理中请稍等...";
+
         _jc = $.dialog({
             title: "消息",
-            content: "处理中请稍等...",
+            content: msg,
             buttons: {
                 Done: {
                     text: "关闭",
