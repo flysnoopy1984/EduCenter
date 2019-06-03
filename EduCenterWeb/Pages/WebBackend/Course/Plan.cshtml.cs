@@ -51,6 +51,11 @@ namespace EduCenterWeb.Pages.WebBackend.Course
             ResultNormal result = new ResultNormal();
             try
             {
+                foreach (ECourseSchedule es in list)
+                {
+                    es.LessonCode = $"{es.Year}_{es.Day}_{es.Lesson}_{es.CourseCode}_{es.LessonNo}";
+                }
+
                 if(list!=null &&list.Count>0)
                 {
                     _CourseSrv.BeginTrans();

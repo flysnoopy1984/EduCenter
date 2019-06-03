@@ -13,22 +13,29 @@ using Microsoft.AspNetCore.Hosting;
 using EduCenterCore.Common.Helper;
 using EduCenterCore.EduFramework;
 using Microsoft.EntityFrameworkCore;
+using EduCenterSrv;
+using EduCenterModel.Course;
 
 namespace EduCenterWeb.Pages.Test
 {
     public class DemoModel : EduBasePageModel
     {
-        private EduDbContext _context;
+        private OrderSrv  _orderSrv;
+        private UserSrv _userSrv;
+        private CourseSrv _courseSrv;
+        private BusinessSrv _busSrv;
       
 
         public string Msg = "";
         public string DbTest = "";
-        public DemoModel(EduDbContext context)
+        public DemoModel(OrderSrv orderSrv, UserSrv userSrv, CourseSrv courseSrv, BusinessSrv busSrv)
         {
-            _context = context;
-            
-          
-        }
+            _orderSrv = orderSrv;
+            _userSrv = userSrv;
+            _courseSrv = courseSrv;
+            _busSrv = busSrv;
+
+    }
         public void OnGet()
         {
            
@@ -68,6 +75,58 @@ namespace EduCenterWeb.Pages.Test
             {
                 Msg = ex.Message;
             }
+        }
+
+        public void OnPostPayCourseTime()
+        {
+            Msg = "创建成功！";
+            try
+            {
+                string openId = "o3nwE0qI_cOkirmh_qbGGG-5G6B0";
+
+                ECoursePrice cp = _courseSrv.GetStandPrice();
+                cp.Qty = 10;
+                cp.Price = 2000;
+
+                List<EUserCourse> eUserCourses = new List<EUserCourse>();
+                eUserCourses.Add(new EUserCourse
+                {
+                    CoursePriceType = cp.CoursePriceType,
+                    LessonCode = "2019_1_5_MS-1_1",
+                    UserOpenId = openId,
+                });
+
+                eUserCourses.Add(new EUserCourse
+                {
+                    CoursePriceType = cp.CoursePriceType,
+                    LessonCode = "2019_6_1_SF-3_1",
+                    UserOpenId = openId,
+                });
+
+                eUserCourses.Add(new EUserCourse
+                {
+                    CoursePriceType = cp.CoursePriceType,
+                    LessonCode = "2019_6_3_MS-3_1",
+                    UserOpenId = openId,
+                });
+
+                var order = _busSrv.PayCourseOrder(openId, cp, eUserCourses);
+
+                _busSrv.PayCourseSuccess(order.OrderId);
+            }
+            catch(Exception ex)
+            {
+                Msg = ex.Message;
+            }
+           
+         
+
+
+        }
+
+        private void ResponsePayCourseTimeOrder(string OrderId)
+        {
+             
         }
     }
 }

@@ -6,8 +6,15 @@ namespace EduCenterModel.BaseEnum
 {
     public enum CoursePriceType
     {
-        Standard= 0,
-        SummerWinter =1,
-        GroupPurchase = 2
+        Standard = 0,
+
+        Summer = 1,
+
+        Winter = 2,
+
+        /// <summary>
+        /// 团购
+        /// </summary>
+        Group = 10,
     }
 }

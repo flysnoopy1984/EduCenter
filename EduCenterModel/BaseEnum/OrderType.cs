@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EduCenterModel.Order
+namespace EduCenterModel.BaseEnum
 {
-    public class EOrderLineUserCourse
+    public enum OrderType
     {
-        
+        UserCourse =1,
+
     }
 }

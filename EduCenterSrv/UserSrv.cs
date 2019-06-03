@@ -1,4 +1,6 @@
-﻿using EduCenterModel.BaseEnum;
+﻿using EduCenterCore.Common.Helper;
+using EduCenterModel.BaseEnum;
+using EduCenterModel.Common;
 using EduCenterModel.User;
 using EduCenterModel.WX;
 using EduCenterSrv.DataBase;
@@ -64,6 +66,10 @@ namespace EduCenterSrv
             return user;
         }
 
-        
+        #region UserCourese
+       
+        #endregion
+
+
     }
 }

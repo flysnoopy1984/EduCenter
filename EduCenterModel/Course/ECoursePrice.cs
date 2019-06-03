@@ -22,6 +22,9 @@ namespace EduCenterModel.Course
 
         public double Price { get; set; }
 
+       
+        public double Qty { get; set; }
+
         public CoursePriceType CoursePriceType { get; set; }
 
         public DateTime EffectStartDate { get; set; }

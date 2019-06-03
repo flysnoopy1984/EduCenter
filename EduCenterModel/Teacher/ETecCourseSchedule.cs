@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EduCenterModel.Teacher
 {
-    public class ETecCourseSchedule: ECBaseModel
+    public class ETecCourse: ECBaseModel
     {
 
     }

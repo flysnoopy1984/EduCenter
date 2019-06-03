@@ -5,13 +5,12 @@ using System.Text;
 
 namespace EduCenterSrv
 {
-    public class BaseSrvMasterData<T> where T:class
+    public class BaseSrvMasterData<T>:BaseSrv where T:class
     {
-        protected EduDbContext _dbContext;
-
-        public BaseSrvMasterData(EduDbContext dbContext)
+       
+        public BaseSrvMasterData(EduDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
+           
         }
 
         public void Add(T newObj,bool saveNow = true)
@@ -43,28 +42,7 @@ namespace EduCenterSrv
             return true;
         }
 
-        public void SaveChanges()
-        {
-            _dbContext.SaveChanges();
-
-        }
-
-        public void BeginTrans()
-        {
-            _dbContext.Database.BeginTransaction();
-        }
-
-        public void CommitTrans()
-        {
-            _dbContext.Database.CommitTransaction();
-            
-        }
-
-        public void RollBackTrans()
-        {
-            _dbContext.Database.RollbackTransaction();
-
-        }
+       
 
 
     }

@@ -1,4 +1,5 @@
 ﻿using EduCenterModel.Course;
+using EduCenterModel.Order;
 using EduCenterModel.Teacher;
 using EduCenterModel.User;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,16 @@ namespace EduCenterSrv.DataBase
         public DbSet<ECourseSchedule> DbCourseSchedule { get; set; }
 
         public DbSet<ECoursePrice> DBCoursePrice { get; set; }
+
+        public DbSet<EUserCourse> DBUserCoures { get; set; }
+
+        public DbSet<EOrder> DBOrder { get; set; }
+
+        public DbSet<EOrderLine> DBOrderLine { get; set; }
+
+        public  DbSet<EUserCourseTime> DBUserCourseTime { get; set; }
+
+        public DbSet<EUserCourseTimeTrans> DBUserCourseTimeTrans { get; set; }
 
         public DbSet<ECourseTrying> DbCourseTrying { get; set; }
 
