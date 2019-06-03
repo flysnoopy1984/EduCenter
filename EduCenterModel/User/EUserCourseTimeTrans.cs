@@ -10,6 +10,10 @@ namespace EduCenterModel.User
     [Table("UserCourseTimeTrans")]
     public class EUserCourseTimeTrans: ECBaseModel
     {
+        public EUserCourseTimeTrans()
+        {
+            TransDateTime = DateTime.Now;
+        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
@@ -24,5 +28,7 @@ namespace EduCenterModel.User
 
         [MaxLength(20)]
         public string CoursePriceCode { get; set; }
+
+        public DateTime TransDateTime { get; set; }
     }
 }

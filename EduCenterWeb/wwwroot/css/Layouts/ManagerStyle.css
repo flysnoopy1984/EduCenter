@@ -67,10 +67,23 @@ a{cursor:pointer;}
     line-height: 35px;
 }
 
-.FieldLabel {
-    width: 25%;
-    text-align: center;
+.TreeRow {
+    display: flex;
+    flex-direction:column;
+    margin: 4px;
+
 }
+    .TreeRow .TreeLevel2 {
+        display: flex;
+        margin: 4px;
+        height: 25px;
+        line-height: 25px;
+    }
+
+    .FieldLabel {
+        width: 25%;
+        text-align: center;
+    }
 
 .FieldValue {
     width: 40%;

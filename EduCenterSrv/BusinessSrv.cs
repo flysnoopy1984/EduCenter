@@ -20,19 +20,44 @@ namespace EduCenterSrv
 
         }
 
-        //删除某一类型的用户课程（标准，夏季，冬季）
-        public static string sql_DeleteAllUserCourseByType(string userOpenId,CoursePriceType coursePriceType)
+        #region SQL
+        ///// <summary>
+        ///// 删除某一类型的用户课程（标准，夏季，冬季）
+        ///// </summary>
+        //public static string sql_DeleteAllUserCourseByType(string userOpenId,CoursePriceType coursePriceType)
+        //{
+        //    string sql = $"delete from UserCourse where UserOpenId='{userOpenId}' and CoursePriceType={(int)coursePriceType}";
+        //    return sql;
+        //}
+
+        /// <summary>
+        /// 删除等待支付的用户课程
+        /// </summary>
+        public static string sql_DeleteWaitingPayUserCourse(string userOpenId)
         {
-            string sql = $"delete from UserCourse where UserOpenId='{userOpenId}' and CoursePriceType={(int)coursePriceType}";
+            string sql = $"delete from UserCourse where UserOpenId='{userOpenId}' and UserCourseStatus={(int)UserCourseStatus.WaitingPay}";
             return sql;
         }
 
-        //更新这门课的总申请数
-        public static string sql_UpdateCourseScheduleApplyNum(string lessonCode)
+
+        /// <summary>
+        /// 更新这门课的总申请数
+        /// </summary>
+        public static string sql_UpdateCourseScheduleApplyNum(List<string> lessonCodeList)
         {
-            string sql = $"update CourseSchedule set ApplyNum+= 1 where LessonCode = '{lessonCode}'";
+            string sqlCodes = "";
+            for(int i=0;i<lessonCodeList.Count;i++)
+            {
+                sqlCodes += $"'{ lessonCodeList[i]}'";
+                if((i+1)< lessonCodeList.Count)
+                    sqlCodes += ",";
+            }
+            string sql = $"update CourseSchedule set ApplyNum+= 1 where LessonCode in ({sqlCodes})";
             return sql;
         }
+
+        #endregion
+
 
         #region 创建首次购买课时订单
 
@@ -40,12 +65,17 @@ namespace EduCenterSrv
         {
             try
             {
-                BeginTrans();
+                 BeginTrans();
 
-                //删除某一类型的用户课程（标准，夏季，冬季）
-                _dbContext.Database.ExecuteSqlCommand(sql_DeleteAllUserCourseByType(userOpenId, coursePrice.CoursePriceType));
-                //新建用户所有课程
-                
+                //删除等待支付的用户课程
+                _dbContext.Database.ExecuteSqlCommand(sql_DeleteWaitingPayUserCourse(userOpenId));
+
+                ////新建等待支付的用户课程
+                foreach (var uc in userCourses)
+                {
+                    uc.UserCourseStatus = UserCourseStatus.WaitingPay;
+                    uc.CreateDateTime = DateTime.Now;
+                }
                 _dbContext.DBUserCoures.AddRange(userCourses);
 
                 var Order =  CreateBuyCourseOrder(userOpenId, coursePrice);
@@ -59,7 +89,7 @@ namespace EduCenterSrv
             }
             catch (Exception ex)
             {
-                RollBackTrans();
+               RollBackTrans();
                 NLogHelper.ErrorTxt($"[PayCourseFirst]{ex.Message}");
                 throw ex;
             }
@@ -123,7 +153,17 @@ namespace EduCenterSrv
                 //新建课时交易
                 AddCourseTimeTransByLine(line);
 
+                //更新用户课程表
+                var newUserCourses = UpdateUserCourse(order.CustOpenId);
+
                 //更新这门课的总申请数
+                //var userCourseList = _dbContext.DBUserCoures
+                //    .Where(a => a.UserOpenId == order.CustOpenId && (int)a.CoursePriceType == line.Ext1)
+                //    .Select(a => a.LessonCode).ToList();
+                if(newUserCourses.Count>0)
+                    _dbContext.Database.ExecuteSqlCommand(sql_UpdateCourseScheduleApplyNum(newUserCourses));
+
+                //更新老师课程表
 
                 _dbContext.SaveChanges();
                 CommitTrans();
@@ -135,6 +175,42 @@ namespace EduCenterSrv
             }
         }
 
+        /// <summary>
+        /// 将等待支付的课程更新到用户课程中
+        /// </summary>
+        /// <returns>返回新增的课程</returns>
+        private List<string> UpdateUserCourse(string userOpenId)
+        {
+            List<string> result = new List<string>();
+
+            List<EUserCourse> allUserCourse = _dbContext.DBUserCoures.Where(a=>a.UserOpenId == userOpenId).ToList();
+            List<EUserCourse> curList = allUserCourse.Where(a=>a.UserCourseStatus != UserCourseStatus.WaitingPay).ToList();
+            List<EUserCourse> waitList = allUserCourse.Where(a => a.UserCourseStatus == UserCourseStatus.WaitingPay).ToList();
+
+            foreach(var waitCourse in waitList)
+            {
+                var curCourse = curList.Where(a => a.LessonCode == waitCourse.LessonCode).FirstOrDefault();
+                if (curCourse == null)
+                {
+                    waitCourse.UserCourseStatus = UserCourseStatus.Avaliable;
+                    result.Add(waitCourse.LessonCode);
+                }  
+                else
+                {
+                    if(curCourse.UserCourseStatus == UserCourseStatus.OutofData)
+                        curCourse.UserCourseStatus = UserCourseStatus.Avaliable;
+
+                    _dbContext.DBUserCoures.Remove(waitCourse);
+                }                   
+            }
+            return result;
+
+        }
+
+        private void UpdateTecCourse(List<string> LessonList)
+        {
+
+        }
         /// <summary>
         /// /获取订单行,更新课时
         /// </summary>
@@ -149,8 +225,18 @@ namespace EduCenterSrv
                 {
                     UserOpenId = userOpenId,
                     CoursePriceType = (CoursePriceType)line.Ext1,
+                    CreateDateTime = DateTime.Now,
+                    RemainQty = 0,
+                    InValidDateTime = DateTime.Now.AddYears(1),
+                    ReNewDateTime = DateTime.MinValue,
                 };
                 _dbContext.DBUserCourseTime.Add(CourseTime);
+            }
+            //续费
+            else
+            {
+                CourseTime.ReNewDateTime = DateTime.Now;
+                CourseTime.InValidDateTime = DateTime.Now.AddYears(1);
             }
             CourseTime.RemainQty += line.Qty;
         }
@@ -167,6 +253,8 @@ namespace EduCenterSrv
                 TransQty = line.Qty,
                 UserOpenId = line.OrderId,
                 CoursePriceCode = line.ItemCode,
+                TransDateTime = DateTime.Now,
+                
             };
             _dbContext.DBUserCourseTimeTrans.Add(trans);
         }

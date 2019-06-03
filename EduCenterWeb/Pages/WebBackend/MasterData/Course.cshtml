@@ -55,24 +55,21 @@
         text-align: center;
     }
 
-        .FieldOption .btn {
-            padding: 3px 6px;
-            margin-bottom: 6px;
-        }
+    .FieldOption .btn {
+        padding: 3px 6px;
+        margin-bottom: 6px;
+    }
 
     .HideData {
         display: none;
     }
+  
 </style>
 
 <div class="TitleBar">
     <div class="Title">课类管理</div>
 
-    <div class="TitleBarButtonList">
-        @*<input type="button" class="btn btn-info" id="btnNew" value="新增课类" />
-        <input type="button" class="btn btn-danger" id="bntDelete" value="删除" />*@
-        <input type="button" id="btn_AddLevel" class="btn btn-warning" value="添加Level" />
-    </div>
+  
 </div>
 <div class="MainContainer">
     <div class="LeftList">
@@ -83,57 +80,33 @@
         }
     </div>
     <div class="RightDetail">
-        @*<div class="CourseClass">
-            <div class="FieldLabel">课类型</div>
-            <div>
-                <select id="selCourseType" class="form-control">
-                    <option value="0">未选择</option>
-                    @foreach (var ct in Model.CourseType)
-                    {
-                        <option value="@ct.Key">@ct.Value</option>
-                    }
-                </select>
-
-            </div>
-            <div class="levelBtnDiv"><input type="button" id="btn_AddLevel" class="btn btn-warning" value="添加Level" /></div>
-        </div>*@
-
+        <div class="TitleBarButtonList">
+            <input type="button" id="btn_AddLevel" class="btn btn-warning" value="添加Level" />
+        </div>
         <div class="FormFields" id="FormFields">
-
-            @*<div class="FieldRow">
-                    <div class="FieldLabel">Code</div><div class="FieldValue"><input id="vCode" type="text" class="form-control" /></div>
-                    <div class="FieldLabel">课名</div><div class="FieldValue"><input id="vName" type="text" class="form-control" /></div>
-                    <div class="FieldLabel">级别</div>
-                    <div class="FieldValue">
-                        <select class="selLevel form-control">
-                            <option value="1" class="list-group-item list-group-item-success">1级</option>
-                            <option value="2" class="list-group-item list-group-item-warning">2级</option>
-                            <option value="3" class="list-group-item list-group-item-danger">3级</option>
-                        </select>
-                    </div>
-                    <div class="FieldOption"><input type="button" value="删除" class="btn btn-danger" onclick="DelLevel(this);" /></div>
-                </div>*@
-
-
-
         </div>
         <div class="BtnBottomList">
             <input type="button" id="btnSave" value="保存" class="btn btn-success" />
         </div>
     </div>
     <div class="HideData">
-        <div class="FieldRow">
-            <div class="FieldLabel">Code</div><div class="FieldValue"><input id="vCode" type="text" class="form-control" /></div>
-            <div class="FieldLabel">课名</div><div class="FieldValue"><input id="vName" type="text" class="form-control" /></div>
-            <div class="FieldLabel">级别</div>
-            <div class="FieldValue">
-                <select class="selLevel form-control">
-                    <option value="1" class="list-group-item list-group-item-success">1级</option>
-                    <option value="2" class="list-group-item list-group-item-warning">2级</option>
-                    <option value="3" class="list-group-item list-group-item-danger">3级</option>
-                </select>
+        <div class="TreeRow">
+            <div class="FieldRow">
+                <div class="FieldLabel">Code</div><div class="FieldValue"><input id="vCode" type="text" class="form-control" /></div>
+                <div class="FieldLabel">课名</div><div class="FieldValue"><input id="vName" type="text" class="form-control" /></div>
+                <div class="FieldLabel">级别</div>
+                <div class="FieldValue">
+                    <select class="selLevel form-control">
+                        <option value="1" class="list-group-item list-group-item-success">1级</option>
+                        <option value="2" class="list-group-item list-group-item-warning">2级</option>
+                        <option value="3" class="list-group-item list-group-item-danger">3级</option>
+                    </select>
+                </div>
+                <div class="FieldOption"><input type="button" value="删除" class="btn btn-danger" onclick="DelLevel(this);" /></div>
             </div>
-            <div class="FieldOption"><input type="button" value="删除" class="btn btn-danger" onclick="DelLevel(this);" /></div>
+            <div class="TreeLevel2">
+                <div class="FieldLabel">第二行</div><div class="FieldValue"><input id="vName" type="text" class="form-control" /></div>
+            </div>
         </div>
 
     </div>

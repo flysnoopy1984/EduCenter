@@ -5,10 +5,10 @@
     var selType = 0;
 
     Init = function () {
-        //$("#btnNew").on("click", NewObj);
-        //$("#bntDelete").on("click", Delete);
+     
         $("#btnSave").on("click", Save);
         $("#btn_AddLevel").on("click", NewLevel);
+        $(".RightDetail").hide();
     };
 
    
@@ -17,22 +17,13 @@
 
         selType = $(obj).attr("cType");
 
-   
+        $(".RightDetail").show();
         $(".LeftList").children().removeClass("active");
         $(obj).addClass("active");
 
-      //  $("#selCourseType").val(selType);
-        //$("#vCode").attr("readonly", true);
 
         callAjax_Query(getUrl, { "courseType": selType }, HandlerGet);
     };
-
-    //NewObj = function () {
-    //    //selCode = "";
-    //    //$(".LeftList").children().removeClass("active");
-    //    //emptyFields("FormFields");
-    //    //$("#vCode").attr("readonly", false);
-    //};
 
     Save = function () {
       
@@ -75,17 +66,15 @@
 
     //Level start
     NewLevel = function () {
-        var last = $("#FormFields .FieldRow:last");
+        var last = $("#FormFields .TreeRow:last");
         if (last.length == 0) {
-            last = $(".HideData .FieldRow");
+            last = $(".HideData .TreeRow");
         }
         var level = last.clone();
         level.show();
         $("#FormFields").append(level);
     }
     DelLevel = function (obj) {
-       
-      
         $(obj).closest(".FieldRow").remove();
     }
     //Level end
@@ -141,7 +130,7 @@
        
         var list = res.List;
 
-        var html = $(".HideData .FieldRow");
+        var html = $(".HideData .TreeRow");
         var root = $(".FormFields");
 
         

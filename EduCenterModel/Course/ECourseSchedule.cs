@@ -32,7 +32,7 @@ namespace EduCenterModel.Course
 
 
         /// <summary>
-        ///  lessonCode = year + "_" + day + "_" + lesson + "_" + cCode + "_" + lessonNo;
+        ///  lessonCode = year + "_" + day + "_" + lesson + "_" + cCode + "_" + lessonNo+"_"+CourseScheduleType;
         /// </summary>
         [Key]
         [MaxLength(50)]

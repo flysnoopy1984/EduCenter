@@ -11,6 +11,14 @@ namespace EduCenterModel.User
     [Table("UserCourseTime")]
     public class EUserCourseTime : ECBaseModel
     {
+        public EUserCourseTime()
+        {
+            ReNewDateTime = DateTime.MinValue;
+            if (ReNewDateTime == DateTime.MinValue)
+                InValidDateTime = CreateDateTime.AddYears(1);
+            else
+                InValidDateTime = ReNewDateTime.AddYears(1);
+        }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -23,6 +31,18 @@ namespace EduCenterModel.User
 
 
         public CoursePriceType CoursePriceType { get; set; }
+
+        public DateTime CreateDateTime { get; set; }
+
+        /// <summary>
+        /// 续费时间
+        /// </summary>
+        public DateTime ReNewDateTime { get; set; }
+
+        /// <summary>
+        /// 失效时间
+        /// </summary>
+        public DateTime InValidDateTime { get; set; }
 
     }
 }

@@ -53,7 +53,7 @@ namespace EduCenterWeb.Pages.WebBackend.Course
             {
                 foreach (ECourseSchedule es in list)
                 {
-                    es.LessonCode = $"{es.Year}_{es.Day}_{es.Lesson}_{es.CourseCode}_{es.LessonNo}";
+                    es.LessonCode = $"{es.Year}_{es.Day}_{es.Lesson}_{es.CourseCode}_{es.LessonNo}_{es.CourseScheduleType}";
                 }
 
                 if(list!=null &&list.Count>0)

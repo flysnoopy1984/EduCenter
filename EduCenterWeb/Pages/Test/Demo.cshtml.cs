@@ -124,9 +124,6 @@ namespace EduCenterWeb.Pages.Test
 
         }
 
-        private void ResponsePayCourseTimeOrder(string OrderId)
-        {
-             
-        }
+    
     }
 }
