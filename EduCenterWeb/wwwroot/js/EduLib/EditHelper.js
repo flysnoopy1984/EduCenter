@@ -2,19 +2,24 @@
 
     var _jc = null;
 
-    ShowError = function (msg) {
+    ShowError = function (msg,title,style) {
         if (_jc != null && _jc != undefined)
             _jc.close();
 
+        if (title == undefined)
+            title = "错误";
+        if (style == undefined)
+            style = 'red';
+
         $.dialog({
-            title: "错误",
+            title: title,
             content: msg,
             buttons: {
                 Done: {
                     text: "关闭",
                 }
             },
-            type: 'red',
+            type: style,
         });
     };
 
