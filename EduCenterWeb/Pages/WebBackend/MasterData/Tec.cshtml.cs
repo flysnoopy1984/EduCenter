@@ -16,7 +16,7 @@ namespace EduCenterWeb.Pages.WebBackend.MasterData
     {
         private TecSrv _TecSrv;
         private CourseSrv _CourseSrv;
-        public PTecManagerData PData;
+        public PManagerDataTec PData;
 
         public TecModel(TecSrv tecSrv, CourseSrv courseSrv)
         {
@@ -27,7 +27,7 @@ namespace EduCenterWeb.Pages.WebBackend.MasterData
 
         public void OnGet()
         {
-            PData = new PTecManagerData();
+            PData = new PManagerDataTec();
             PData.TecList = _TecSrv.GetSimpleList();
             PData.SkillLevelList = _TecSrv.GetSkillLevelList();
             PData.CourseType = _CourseSrv.GetCourseType();

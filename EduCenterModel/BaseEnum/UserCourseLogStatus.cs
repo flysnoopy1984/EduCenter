@@ -4,14 +4,12 @@ using System.Text;
 
 namespace EduCenterModel.BaseEnum
 {
-    public enum CourseScheduleType
+    public enum UserCourseLogStatus
     {
-        Standard = 0,
+        Start =0,
+        SignIn = 1,
+        Absent = -1,
 
-        Summer=1,
 
-        Winter = 2,
-
-        Group =10,
     }
 }

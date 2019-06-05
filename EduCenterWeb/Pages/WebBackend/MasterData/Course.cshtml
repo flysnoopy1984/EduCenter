@@ -105,7 +105,17 @@
                 <div class="FieldOption"><input type="button" value="删除" class="btn btn-danger" onclick="DelLevel(this);" /></div>
             </div>
             <div class="TreeLevel2">
-                <div class="FieldLabel">第二行</div><div class="FieldValue"><input id="vName" type="text" class="form-control" /></div>
+                <div class="FieldLabel">班级</div><div class="FieldValue"><input id="vClass" clsId="" type="text" class="form-control" value="1班" /></div>
+                <div class="FieldLabel">老师</div>
+                <div class="FieldValue">
+                    <select class="selTec form-control">
+                        <option value="-1" class="list-group-item list-group-item-success">请选择</option>
+                        @foreach (var tec in Model.TecList)
+                        {
+                            <option value="@tec.Code">@tec.Name</option>
+                        }
+                    </select>
+                </div>
             </div>
         </div>
 

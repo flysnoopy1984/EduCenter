@@ -7,28 +7,23 @@ using System.Text;
 
 namespace EduCenterModel.User
 {
-    [Table("UserCourseTimeTrans")]
-    public class EUserCourseTimeTrans: ECBaseModel
+    [Table("UserCourseLog")]
+    public class EUserCourseLog
     {
-        public EUserCourseTimeTrans()
-        {
-            TransDateTime = DateTime.Now;
-        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
+        [MaxLength(50)]
+        public string LessonCode { get; set; }
+
         [MaxLength(32)]
         public string UserOpenId { get; set; }
 
-
-        public double TransQty { get; set; }
+        public UserCourseLogStatus UserCourseLogStatus { get; set; }
 
         public CourseScheduleType CourseScheduleType { get; set; }
 
-        [MaxLength(20)]
-        public string CoursePriceCode { get; set; }
-
-        public DateTime TransDateTime { get; set; }
+        public DateTime CreatedDateTime { get; set; }  
     }
 }

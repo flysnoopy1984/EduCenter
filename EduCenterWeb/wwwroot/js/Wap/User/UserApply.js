@@ -8,7 +8,6 @@
     var selCode = null;
 
     Init = function () {
-
         var times = $("#GridWeek tr").length ;
         CourseScheduleData = new Object();
         for (var i = 1; i < 8; i++) {
@@ -16,8 +15,8 @@
             for (var j = 1; j < times; j++) {
                 CourseScheduleData[i][j] = new Array();
             }
-         
         }
+
         $("#btnConfirm").on("click", NextStep);
         callAjax_Query(InitUrl, {}, InitCallBack,"");
     }

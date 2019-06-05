@@ -1,4 +1,6 @@
-﻿using EduCenterModel.User;
+﻿using EduCenterCore.EduFramework;
+using EduCenterModel.Session;
+using EduCenterModel.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -11,24 +13,31 @@ namespace EduCenterWeb.Pages
 {
     public class EduBaseAppPageModel:PageModel
     {
-        /* Session Begin */
-        //public List<EUserShopingCard> UserPreBuyCourse
-        //{
-        //    get
-        //    {
-        //        string json = HttpContext.Session.GetString("UserCourseScheule");
-        //        if (string.IsNullOrEmpty(json))
-        //            return new List<EUserShopingCard>();
-        //        else
-        //            return JsonConvert.DeserializeObject<List<EUserShopingCard>>(json);
+      
+       public UserSession GetUserSession()
+       {
+            string json = HttpContext.Session.GetString(EduConstant.UserSessionKey);
 
-        //    }
-        //    set
-        //    {
-        //        string json = JsonConvert.SerializeObject(value);
-        //        HttpContext.Session.SetString("UserCourseScheule", json);
-        //    }
-        //}
-        /* Session End */
+            if (!string.IsNullOrEmpty(json))
+                return JsonConvert.DeserializeObject<UserSession>(json);
+            else
+            {
+                HttpContext.Response.Redirect("/User/Login");
+
+            }
+            return null;
+             
+
+       }
+
+        public void SetUserSesion(string openId)
+        {
+            UserSession session = new UserSession()
+            {
+                OpenId = openId
+            };
+            var json = JsonConvert.SerializeObject(session);
+            HttpContext.Session.SetString(EduConstant.UserSessionKey, json);
+        }
     }
 }

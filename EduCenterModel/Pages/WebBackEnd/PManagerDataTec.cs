@@ -8,7 +8,7 @@ using System.Text;
 
 namespace EduCenterModel.Pages.WebBackEnd
 {
-    public class PTecManagerData
+    public class PManagerDataTec
     {
         public List<STec> TecList { get; set; }
 

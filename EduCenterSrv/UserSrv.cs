@@ -2,6 +2,7 @@
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.User;
+using EduCenterModel.User.Result;
 using EduCenterModel.WX;
 using EduCenterSrv.DataBase;
 using Microsoft.EntityFrameworkCore;
@@ -67,7 +68,46 @@ namespace EduCenterSrv
         }
 
         #region UserCourese
-       
+        /// <summary>
+        /// 根据用户，和类型获取可用的课程
+        /// </summary>
+       public List<RUserCourse> GetUserCourseAvaliable(string OpenId, CourseScheduleType CourseScheduleType)
+       {
+            var times = StaticDataSrv.CourseTime;
+            var result = _dbContext.DBUserCoures.Join(_dbContext.DbCourseSchedule, uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourse
+            {
+               UserOpenId = uc.UserOpenId,
+               CourseScheduleType = uc.CourseScheduleType,
+               UserCourseStatus = uc.UserCourseStatus,
+               Day = cs.Day,
+               Lesson = cs.Lesson,
+               Time = times[cs.Lesson].TimeRange,
+               CourseName = cs.CourseName,
+
+            }).Where(a => a.UserOpenId == OpenId &&
+                    a.UserCourseStatus == UserCourseStatus.Avaliable &&
+                    a.CourseScheduleType == CourseScheduleType)
+              .OrderBy(a=>a.Day).ToList();
+
+            return result;
+
+       }
+
+        public List<RUserCourseLog> GetUserCourseLog(string OpenId, CourseScheduleType CourseScheduleType)
+        {
+           var result =  _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
+                uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourseLog
+                {
+                    UserOpenId = uc.UserOpenId,
+                    CourseScheduleType = uc.CourseScheduleType,
+                    CreatedDateTime = uc.CreatedDateTime,
+                    CourseName = cs.CourseName,
+                    LessonCode = uc.LessonCode,
+                    UserCourseLogStatus = uc.UserCourseLogStatus
+
+                }).Where(a => a.UserOpenId == OpenId && a.CourseScheduleType == CourseScheduleType).ToList();
+            return result;
+        }
         #endregion
 
 

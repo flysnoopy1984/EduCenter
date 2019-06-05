@@ -31,7 +31,7 @@ namespace EduCenterModel.User
         [MaxLength(50)]
         public string LessonCode { get; set; }
 
-        public CoursePriceType CoursePriceType { get; set; }
+        public CourseScheduleType CourseScheduleType { get; set; }
 
         public UserCourseStatus UserCourseStatus { get; set; }
         /// <summary>

@@ -3,6 +3,7 @@ using EduCenterCore.EduFramework;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Course;
 using EduCenterModel.Order;
+using EduCenterModel.Teacher;
 using EduCenterModel.User;
 using EduCenterSrv.DataBase;
 using Microsoft.EntityFrameworkCore;
@@ -116,10 +117,10 @@ namespace EduCenterSrv
                 {
                     OrderId = order.OrderId,
                     ItemCode = coursePrice.PriceCode,
-                    ItemName = $"课时购买{coursePrice.PriceCode}_{coursePrice.CoursePriceType}",
+                    ItemName = $"课时购买{coursePrice.PriceCode}_{coursePrice.CourseScheduleType}",
                     Price = coursePrice.Price,
                     Qty = coursePrice.Qty,
-                    Ext1 = (int)coursePrice.CoursePriceType,
+                    Ext1 = (int)coursePrice.CourseScheduleType,
                 };
                 _dbContext.Add(line);
 
@@ -154,17 +155,27 @@ namespace EduCenterSrv
                 AddCourseTimeTransByLine(line);
 
                 //更新用户课程表
-                var newUserCourses = UpdateUserCourse(order.CustOpenId);
+                List<string> newLessonCode = UpdateUserCourse(order.CustOpenId);
 
                 //更新这门课的总申请数
                 //var userCourseList = _dbContext.DBUserCoures
                 //    .Where(a => a.UserOpenId == order.CustOpenId && (int)a.CoursePriceType == line.Ext1)
                 //    .Select(a => a.LessonCode).ToList();
-                if(newUserCourses.Count>0)
-                    _dbContext.Database.ExecuteSqlCommand(sql_UpdateCourseScheduleApplyNum(newUserCourses));
+                if(newLessonCode.Count>0)
+                {
+                    foreach(var lc in newLessonCode)
+                    {
+                        var cs = _dbContext.DbCourseSchedule.Where(a => a.LessonCode == lc).FirstOrDefault();
+                        cs.ApplyNum++;
 
-                //更新老师课程表
-
+                        //更新老师课程表
+                        var cls = _dbContext.DBCourseInfoClass.Where(s => s.CourseCode == cs.CourseCode).FirstOrDefault();
+                        var tecCode = cls.TecCode;
+                        UpdateTecCourse(tecCode, cs.LessonCode);
+                    }
+                
+                }
+          
                 _dbContext.SaveChanges();
                 CommitTrans();
             }
@@ -207,9 +218,17 @@ namespace EduCenterSrv
 
         }
 
-        private void UpdateTecCourse(List<string> LessonList)
+        private void UpdateTecCourse(string tecCode,string LessonCode)
         {
-
+            int tcNum = _dbContext.DBTecCourse.Where(a => a.TecCode == tecCode && a.LessonCode == LessonCode).Count();
+            if (tcNum == 0)
+            {
+                _dbContext.DBTecCourse.Add(new ETecCourse
+                {
+                    LessonCode = LessonCode,
+                    TecCode = tecCode,
+                });
+            }
         }
         /// <summary>
         /// /获取订单行,更新课时
@@ -218,13 +237,13 @@ namespace EduCenterSrv
         /// <param name="line"></param>
         private void UpdateCourseTimeByLine(string userOpenId,EOrderLine line)
         {
-            var CourseTime = _dbContext.DBUserCourseTime.Where(a => a.UserOpenId == userOpenId && (int)a.CoursePriceType == line.Ext1).FirstOrDefault();
+            var CourseTime = _dbContext.DBUserCourseTime.Where(a => a.UserOpenId == userOpenId && (int)a.CourseScheduleType == line.Ext1).FirstOrDefault();
             if (CourseTime == null)
             {
                 CourseTime = new EUserCourseTime
                 {
                     UserOpenId = userOpenId,
-                    CoursePriceType = (CoursePriceType)line.Ext1,
+                    CourseScheduleType = (CourseScheduleType)line.Ext1,
                     CreateDateTime = DateTime.Now,
                     RemainQty = 0,
                     InValidDateTime = DateTime.Now.AddYears(1),
@@ -249,7 +268,7 @@ namespace EduCenterSrv
         {
             EUserCourseTimeTrans trans = new EUserCourseTimeTrans
             {
-                CoursePriceType = (CoursePriceType)line.Ext1,
+                CourseScheduleType = (CourseScheduleType)line.Ext1,
                 TransQty = line.Qty,
                 UserOpenId = line.OrderId,
                 CoursePriceCode = line.ItemCode,
@@ -258,9 +277,6 @@ namespace EduCenterSrv
             };
             _dbContext.DBUserCourseTimeTrans.Add(trans);
         }
-
-
-
 
         #endregion
 

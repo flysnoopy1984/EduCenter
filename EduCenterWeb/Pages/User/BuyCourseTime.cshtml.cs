@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EduCenterWeb.Pages.User
 {
-    public class BuyCourseTimeModel : PageModel
+    public class BuyCourseTimeModel : EduBaseAppPageModel
     {
         public void OnGet()
         {

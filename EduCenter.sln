@@ -17,7 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Document", "Document", "{DD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EduCenterModel", "EduCenterModel\EduCenterModel.csproj", "{C4051A7D-5042-41FB-B082-D817896337EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduCenterSrv", "EduCenterSrv\EduCenterSrv.csproj", "{E78D2687-382F-4289-B2AD-7FAEB4AAC83D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EduCenterSrv", "EduCenterSrv\EduCenterSrv.csproj", "{E78D2687-382F-4289-B2AD-7FAEB4AAC83D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduCenterConsole", "EduCenterConsole\EduCenterConsole.csproj", "{25B6244F-0055-4B04-AC92-4D48E6C5FC47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{E78D2687-382F-4289-B2AD-7FAEB4AAC83D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E78D2687-382F-4289-B2AD-7FAEB4AAC83D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E78D2687-382F-4289-B2AD-7FAEB4AAC83D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25B6244F-0055-4B04-AC92-4D48E6C5FC47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25B6244F-0055-4B04-AC92-4D48E6C5FC47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25B6244F-0055-4B04-AC92-4D48E6C5FC47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25B6244F-0055-4B04-AC92-4D48E6C5FC47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

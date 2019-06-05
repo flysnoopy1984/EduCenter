@@ -91,21 +91,21 @@ namespace EduCenterWeb.Pages.Test
                 List<EUserCourse> eUserCourses = new List<EUserCourse>();
                 eUserCourses.Add(new EUserCourse
                 {
-                    CoursePriceType = cp.CoursePriceType,
+                    CourseScheduleType = cp.CourseScheduleType,
                     LessonCode = "2019_1_5_MS-1_1",
                     UserOpenId = openId,
                 });
 
                 eUserCourses.Add(new EUserCourse
                 {
-                    CoursePriceType = cp.CoursePriceType,
+                    CourseScheduleType = cp.CourseScheduleType,
                     LessonCode = "2019_6_1_SF-3_1",
                     UserOpenId = openId,
                 });
 
                 eUserCourses.Add(new EUserCourse
                 {
-                    CoursePriceType = cp.CoursePriceType,
+                    CourseScheduleType = cp.CourseScheduleType,
                     LessonCode = "2019_6_3_MS-3_1",
                     UserOpenId = openId,
                 });

@@ -1,4 +1,5 @@
-﻿using EduCenterModel.Course;
+﻿using EduCenterModel.Common;
+using EduCenterModel.Course;
 using EduCenterModel.Order;
 using EduCenterModel.Teacher;
 using EduCenterModel.User;
@@ -28,13 +29,19 @@ namespace EduCenterSrv.DataBase
 
         public DbSet<ETecSkill> DBTecSkill { get; set; }
 
+        public DbSet<ETecCourse> DBTecCourse { get; set; }
+
         public DbSet<ECourseInfo> DBCourseInfo { get; set; }
+
+        public DbSet<ECourseInfoClass> DBCourseInfoClass { get; set; }
 
         public DbSet<ECourseSchedule> DbCourseSchedule { get; set; }
 
         public DbSet<ECoursePrice> DBCoursePrice { get; set; }
 
         public DbSet<EUserCourse> DBUserCoures { get; set; }
+
+        public DbSet<EUserCourseLog> DBUserCourseLog { get; set; }
 
         public DbSet<EOrder> DBOrder { get; set; }
 
@@ -44,8 +51,10 @@ namespace EduCenterSrv.DataBase
 
         public DbSet<EUserCourseTimeTrans> DBUserCourseTimeTrans { get; set; }
 
-        public DbSet<ECourseTrying> DbCourseTrying { get; set; }
+        public DbSet<ECourseTrying> DBCourseTrying { get; set; }
 
-        
+        public DbSet<EHoliday> DBHoliday { get; set; }
+
+
     }
 }

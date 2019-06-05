@@ -1,4 +1,7 @@
-﻿using EduCenterModel.Course;
+﻿using EduCenterModel.Common;
+using EduCenterModel.Course;
+using EduCenterSrv.DataBase;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,6 +10,7 @@ namespace EduCenterSrv
 {
     public static class StaticDataSrv
     {
+        private static List<EHoliday> _Holiday;
         private static List<ECourseTime> _CourseTime;
 
         public static List<ECourseTime> CourseTime
@@ -27,6 +31,16 @@ namespace EduCenterSrv
                    
                 return _CourseTime;
             }
+        }
+
+        public static List<EHoliday> GetEHolidays()
+        {
+            //static string connection = @"Server=2013-20150707DJ\SQL2012EXPRESS;Database=AppDb;Trusted_Connection=True;";
+            //4         static DbContextOptions<AppDbContext> dbContextOption = new DbContextOptions<AppDbContext>();
+            //5         static DbContextOptionsBuilder<AppDbContext> dbContextOptionBuilder = new DbContextOptionsBuilder<AppDbContext>(dbContextOption);
+            //6         AppDbContext _dbContext = new AppDbContext(dbContextOptionBuilder.UseSqlServer(connection).Options);
+
+            return _Holiday;
         }
     }
 }

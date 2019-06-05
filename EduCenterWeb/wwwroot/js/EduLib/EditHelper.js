@@ -104,9 +104,9 @@
         });
     }
 
-    callAjax = function (url, data, handler, msg){
+    callAjax = function (url, data, handler, DoneMsg){
 
-        callAjaxOrig(url, data, handler, msg, SaveProcess, SaveDone, ShowError);
+        callAjaxOrig(url, data, handler, DoneMsg, SaveProcess, SaveDone, ShowError);
       
     };
 

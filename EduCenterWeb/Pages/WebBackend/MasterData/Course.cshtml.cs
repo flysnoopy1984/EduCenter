@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
+using EduCenterModel.Pages.WebBackEnd;
+using EduCenterModel.Teacher.Result;
 using EduCenterSrv;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,29 +16,37 @@ namespace EduCenterWeb.Pages.WebBackend.MasterData
     public class CourseModel : EduBasePageModel
     {
         private CourseSrv _CourseSrv;
+        private TecSrv _TecSrv;
+
+        public List<STec> TecList { get; set; }
 
 
-        public CourseModel(CourseSrv courseSrv)
+        public CourseModel(CourseSrv courseSrv, TecSrv tecSrv)
         {
             _CourseSrv = courseSrv;
-        }
+            _TecSrv = tecSrv;
+    }
 
-        public List<ECourseInfo> CourseList { get; set; }
+   //     public List<ECourseInfo> CourseList { get; set; }
         public List<SiKsV> CourseType { get; set; }
 
         public void OnGet()
         {
             //  CourseList = _CourseSrv.GetAllList();
-
+            TecList = _TecSrv.GetSimpleList();
             CourseType = _CourseSrv.GetCourseType();
+
+
         }
 
         public IActionResult OnPostGet(CourseType courseType)
         {
-            ResultList<ECourseInfo> result = new ResultList<ECourseInfo>();
+            ResultObject<PMasterDataCourse> result = new ResultObject<PMasterDataCourse>();
+          
             try
             {
-                result.List = _CourseSrv.GetAllByType(courseType);
+                result.Entity.CourseList = _CourseSrv.GetAllByType(courseType);
+                result.Entity.ClassList = _CourseSrv.GetCourseClassList();
             }
             catch (Exception ex)
             {
@@ -46,18 +56,19 @@ namespace EduCenterWeb.Pages.WebBackend.MasterData
             return new JsonResult(result);
         }
 
-        public IActionResult OnPostSave(List<ECourseInfo> list)
+        public IActionResult OnPostSave(List<ECourseInfo> couseList,List<ECourseInfoClass> classList)
         {
 
             ResultList<SlKiV> result = new ResultList<SlKiV>();
+            bool needSave = false;
             try
             {
-
+                _CourseSrv.BeginTrans();
                 result.List = new List<SlKiV>();
-                if (list.Count > 0)
+                if (couseList.Count > 0)
                 {
-                    _CourseSrv.DelByType(list[0].CourseType);
-                    foreach (var obj in list)
+                    _CourseSrv.DelByType(couseList[0].CourseType);
+                    foreach (var obj in couseList)
                     {
 
                         _CourseSrv.Add(obj, false);
@@ -68,14 +79,23 @@ namespace EduCenterWeb.Pages.WebBackend.MasterData
                             Value = obj.Level
                         });
                     }
-                    _CourseSrv.SaveChanges();
+                    needSave = true;
                 }
+                if(classList.Count>0)
+                {
+                    foreach(var cls in classList)
+                    {
+                        _CourseSrv.CreateOrUpdateClass(cls);
+                    }
+                }
+                if(needSave)
+                    _CourseSrv.SaveChanges();
 
-
-                //  result.IntMsg = obj.Id;
+                _CourseSrv.CommitTrans();
             }
             catch (Exception ex)
             {
+                _CourseSrv.RollBackTrans();
                 result.ErrorMsg = ex.Message;
             }
 

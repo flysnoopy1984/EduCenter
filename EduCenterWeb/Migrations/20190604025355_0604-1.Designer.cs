@@ -4,39 +4,22 @@ using EduCenterSrv.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EduCenterWeb.Migrations
 {
     [DbContext(typeof(EduDbContext))]
-    partial class EduDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190604025355_0604-1")]
+    partial class _06041
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("EduCenterModel.Common.EHoliday", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Day");
-
-                    b.Property<DateTime>("HolidayDate");
-
-                    b.Property<int>("Month");
-
-                    b.Property<int>("Year");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Holiday");
-                });
 
             modelBuilder.Entity("EduCenterModel.Course.ECourseInfo", b =>
                 {
@@ -97,7 +80,7 @@ namespace EduCenterWeb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(20);
 
-                    b.Property<int>("CourseScheduleType");
+                    b.Property<int>("CoursePriceType");
 
                     b.Property<DateTime>("CreatedDateTime");
 
@@ -238,23 +221,6 @@ namespace EduCenterWeb.Migrations
                     b.ToTable("OrderLine");
                 });
 
-            modelBuilder.Entity("EduCenterModel.Teacher.ETecCourse", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("LessonCode")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("TecCode")
-                        .HasMaxLength(20);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TecCourse");
-                });
-
             modelBuilder.Entity("EduCenterModel.Teacher.ETecInfo", b =>
                 {
                     b.Property<string>("Code")
@@ -333,7 +299,7 @@ namespace EduCenterWeb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CourseScheduleType");
+                    b.Property<int>("CoursePriceType");
 
                     b.Property<DateTime>("CreateDateTime");
 
@@ -350,36 +316,13 @@ namespace EduCenterWeb.Migrations
                     b.ToTable("UserCourse");
                 });
 
-            modelBuilder.Entity("EduCenterModel.User.EUserCourseLog", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CourseScheduleType");
-
-                    b.Property<DateTime>("CreatedDateTime");
-
-                    b.Property<string>("LessonCode")
-                        .HasMaxLength(50);
-
-                    b.Property<int>("UserCourseLogStatus");
-
-                    b.Property<string>("UserOpenId")
-                        .HasMaxLength(32);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserCourseLog");
-                });
-
             modelBuilder.Entity("EduCenterModel.User.EUserCourseTime", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CourseScheduleType");
+                    b.Property<int>("CoursePriceType");
 
                     b.Property<DateTime>("CreateDateTime");
 
@@ -406,7 +349,7 @@ namespace EduCenterWeb.Migrations
                     b.Property<string>("CoursePriceCode")
                         .HasMaxLength(20);
 
-                    b.Property<int>("CourseScheduleType");
+                    b.Property<int>("CoursePriceType");
 
                     b.Property<DateTime>("TransDateTime");
 

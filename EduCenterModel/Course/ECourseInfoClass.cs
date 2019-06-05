@@ -13,10 +13,13 @@ namespace EduCenterModel.Course
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
+        [MaxLength(20)]
         public string ClassName { get; set; }
 
+        [MaxLength(20)]
         public string CourseCode { get; set; }
 
+        [MaxLength(20)]
         public string TecCode { get; set; }
     }
 }

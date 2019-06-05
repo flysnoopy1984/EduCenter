@@ -69,21 +69,32 @@ a{cursor:pointer;}
 
 .TreeRow {
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
     margin: 4px;
-
+    border-top: solid 1px #d2cfcf;
+    padding-top: 15px;
 }
-    .TreeRow .TreeLevel2 {
-        display: flex;
-        margin: 4px;
-        height: 25px;
-        line-height: 25px;
-    }
+.TreeRow .TreeLevel2 {
+    display: flex;
+    margin: 4px;
+    height: 25px;
+    line-height: 25px;
+    justify-content: center;
+    width: 70%;
+    align-self: flex-end;
+}
+.TreeRow .TreeLevel2 div .form-control {
+    height: 25px;
+    line-height: 25px;
+    width: 80px;
+    padding:4px;
+}
 
-    .FieldLabel {
-        width: 25%;
-        text-align: center;
-    }
+
+.FieldLabel {
+    width: 25%;
+    text-align: center;
+}
 
 .FieldValue {
     width: 40%;

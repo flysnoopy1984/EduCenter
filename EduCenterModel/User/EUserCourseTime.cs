@@ -30,7 +30,7 @@ namespace EduCenterModel.User
         public double RemainQty { get; set; }
 
 
-        public CoursePriceType CoursePriceType { get; set; }
+        public CourseScheduleType CourseScheduleType { get; set; }
 
         public DateTime CreateDateTime { get; set; }
 

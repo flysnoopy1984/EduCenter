@@ -30,6 +30,14 @@ namespace EduCenterSrv
             string sql = $"delete from CourseSchedule where Year={(int)year}";
             return sql;
         }
+
+        public static string sql_DeleteCourseClassByType(CourseType type)
+        {
+            string sql = $@"delete from CourseInfoClass  
+                            from CourseInfo as ci
+                            where ci.CourseType = {(int)type} and CourseInfoClass.CourseCode = ci.Code";
+            return sql;
+        }
         #endregion
 
         public List<SiKsV> GetCourseType()
@@ -56,6 +64,8 @@ namespace EduCenterSrv
         public void DelByType(CourseType courseType)
         {
             _dbContext.Database.ExecuteSqlCommand(sql_DeleteCourseByType(courseType));
+
+            _dbContext.Database.ExecuteSqlCommand(sql_DeleteCourseClassByType(courseType));
         }
 
         /// <summary>
@@ -89,6 +99,26 @@ namespace EduCenterSrv
             this.Delete(delObj);
         }
 
+        #region CourseClass
+        public List<ECourseInfoClass> GetCourseClassList()
+        {
+            return _dbContext.DBCourseInfoClass.ToList();
+
+        }
+
+        public void CreateOrUpdateClass(ECourseInfoClass cls,bool needSave=false)
+        {
+            var obj = _dbContext.DBCourseInfoClass.Where(a => a.Id == cls.Id).FirstOrDefault();
+            if (obj == null)
+                _dbContext.DBCourseInfoClass.Add(cls);
+            else
+            {
+                obj.TecCode = cls.TecCode;
+            }
+            if (needSave)
+                _dbContext.SaveChanges();
+        }
+        #endregion
 
         #region CoureseSchedule
 
@@ -107,6 +137,8 @@ namespace EduCenterSrv
             return _dbContext.DbCourseSchedule.Where(a => a.Year == year && a.CourseScheduleType == scheduleType).ToList();
         }
 
+       // public DateTime GetLast
+
         #endregion
 
         #region CoursePrice
@@ -117,7 +149,7 @@ namespace EduCenterSrv
 
         public ECoursePrice GetStandPrice()
         {
-            return _dbContext.DBCoursePrice.Where(a => a.RecordStatus == RecordStatus.Normal && a.CoursePriceType == CoursePriceType.Standard).FirstOrDefault();
+            return _dbContext.DBCoursePrice.Where(a => a.RecordStatus == RecordStatus.Normal && a.CourseScheduleType == CourseScheduleType.Standard).FirstOrDefault();
         }
 
         #endregion

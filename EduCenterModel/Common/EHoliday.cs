@@ -4,22 +4,20 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace EduCenterModel.Teacher
+namespace EduCenterModel.Common
 {
-    [Table("TecCourse")]
-    public class ETecCourse: ECBaseModel
+    [Table("Holiday")]
+    public class EHoliday
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
+        public int Year { get; set; }
 
-        [MaxLength(50)]
-        public string LessonCode { get; set; }
+        public int Month { get; set; }
 
-        [MaxLength(20)]
+        public int Day { get; set; }
 
-        public string TecCode { get; set; }
-
-
+        public DateTime HolidayDate { get; set; }
     }
 }
