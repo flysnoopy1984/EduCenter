@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EduCenterCore.EduFramework;
 using EduCenterSrv;
+using EduCenterSrv.Common;
 using EduCenterSrv.DataBase;
 
 using Microsoft.AspNetCore.Builder;
@@ -94,9 +95,12 @@ namespace EduCenterWeb
 
             app.UseSession();
             app.UseMvc();
-            
 
-           
+            StaticDataSrv.Init();
+
+
+
+
         }
     }
 }

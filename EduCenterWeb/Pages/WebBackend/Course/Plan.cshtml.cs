@@ -8,6 +8,7 @@ using EduCenterModel.Course;
 using EduCenterModel.Pages.WebBackEnd;
 using EduCenterModel.Teacher;
 using EduCenterSrv;
+using EduCenterSrv.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 

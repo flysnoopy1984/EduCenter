@@ -11,6 +11,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using EduCenterCore.EduFramework;
 using EduCenterModel.BaseEnum;
+using EduCenterSrv.Common;
 
 namespace EduCenterSrv
 {

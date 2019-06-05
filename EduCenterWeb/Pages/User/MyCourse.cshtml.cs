@@ -6,6 +6,7 @@ using EduCenterModel.BaseEnum;
 using EduCenterModel.User;
 using EduCenterModel.User.Result;
 using EduCenterSrv;
+using EduCenterSrv.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -18,6 +19,8 @@ namespace EduCenterWeb.Pages.User
 
         public List<RUserCourseLog> UserCourseLogList { get; set; }
 
+        public RUserCourse NextCourse { get; set; }
+
         public MyCourseModel(UserSrv userSrv)
         {
             _UserSrv = userSrv;
@@ -28,9 +31,27 @@ namespace EduCenterWeb.Pages.User
             if (us != null)
             {
                 UserCourseList = _UserSrv.GetUserCourseAvaliable(us.OpenId,CourseScheduleType.Standard);
-                UserCourseLogList = _UserSrv.GetUserCourseLog(us.OpenId, CourseScheduleType.Standard);
+                UserCourseLogList = _UserSrv.GetUserCourseLog(us.OpenId, CourseScheduleType.Standard,10);
+
+                //计算上一节课的时间和状态
+                foreach(var course in UserCourseList)
+                {
+                    course.LastCourseDate = DateSrv.GetLastCourseDate(course.Day);
+                    var courseLog = UserCourseLogList.Where(a=>a.LessonCode == course.LessonCode).OrderByDescending(a=>a.CreatedDateTime).FirstOrDefault();
+                    if (courseLog == null)
+                        course.LastCouseStatus = "";
+                    else
+                    {
+                        if (courseLog.UserCourseLogStatus == UserCourseLogStatus.PreNext)
+                            courseLog.UserCourseLogStatus = UserCourseLogStatus.Absent;
+                        course.LastCouseStatus = BaseEnumSrv.UserCourseLogStatusList[(int)courseLog.UserCourseLogStatus];
+                        
+                    }    
+                }
+                //计算用户下节课
+                NextCourse = _UserSrv.GetUserNextCourse(us.OpenId, CourseScheduleType.Standard, UserCourseList);
+
             }
-          //  UserCourseList =_UserSrv.GetUserCourseAvaliable()
         }
 
         public string GetDayIconFont(int day)

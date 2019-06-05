@@ -19,7 +19,7 @@ namespace EduCenterCore.Common.Helper
             {
                 _FileLogger.Info(txt);
             }
-            catch (Exception ex)
+            catch
             {
 
             }
@@ -32,8 +32,7 @@ namespace EduCenterCore.Common.Helper
 
                 _FileErrorLogger.Error(txt);
             }
-            catch (Exception ex)
-            {
+            catch { 
 
             }
         }

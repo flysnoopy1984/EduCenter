@@ -165,7 +165,7 @@
                 <div class="CourseRow">
                     <div class="CourseDay">
                         <svg class="DayIcon" aria-hidden="true">
-                           
+
                             <use xlink:href="@Model.GetDayIconFont(i)"></use>
                         </svg>
                     </div>
@@ -179,9 +179,9 @@
                                 </div>
                                 <div class="CourseDetail">
 
-                                    <div>上次开课：2019-10-6</div>
-                                  
-                                    <div>缺席</div>
+                                    <div>上次开课：@c.LastCourseDate.ToString("yyyy年MM月dd日")</div>
+
+                                    <div>@c.LastCouseStatus</div>
                                 </div>
                             </div>
                         }
@@ -189,21 +189,22 @@
                 </div>
             }
         }
-
-        <div class="NextCourse">
-            <div>
-                <div class="CourseName">下节课：美术</div>
-                <div class="CourseTime">开课时间：2019-10-22</div>
+        @if (Model.NextCourse != null)
+        {
+            <div class="NextCourse">
+                <div>
+                    <div class="CourseName">下节课：@Model.NextCourse.CourseName</div>
+                    <div class="CourseTime">开课时间：@Model.NextCourse.NextCourseDate.ToString("yyyy年MM月dd日")</div>
+                </div>
+                <div><input type="button" class="btn btn-warning" value="我要请假" /></div>
             </div>
-            <div><input type="button" class="btn btn-warning" value="我要请假" /></div>
-        </div>
+        }
+
     </div>
     <div class="CourseLog">
         <div class="SubTitle">
-            <div class="SubTitleName">课程记录[最近5次]</div> <div>更多</div>
-        </div>
-       
-       
+            <div class="SubTitleName">课程记录[最近10次]</div> <div>更多</div>
+        </div>  
         <table border="0" cellpadding="0" cellspacing="0" class="LogTable" width="100%">
             <tr>
                 <th>开始日期</th>

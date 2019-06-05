@@ -4,11 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace EduCenterSrv
+namespace EduCenterSrv.Common
 {
     public class BaseEnumSrv
     {
-        public static List<SiKsV> _SkillLevelList;
+        private static List<SiKsV> _SkillLevelList;
         public static  List<SiKsV> SkillLevelList
         {
             get
@@ -19,7 +19,7 @@ namespace EduCenterSrv
             }
         }
 
-        public static List<SiKsV> _CourseTypeList;
+        private static List<SiKsV> _CourseTypeList;
         public static List<SiKsV> CourseTypeList
         {
             get
@@ -30,7 +30,7 @@ namespace EduCenterSrv
             }
         }
 
-        public static List<SiKsV> _CourseScheduleTypeList;
+        private static List<SiKsV> _CourseScheduleTypeList;
         public static List<SiKsV> CourseScheduleTypeList
         {
             get
@@ -39,6 +39,43 @@ namespace EduCenterSrv
                     _CourseScheduleTypeList = GetCourseScheduleType();
                 return _CourseScheduleTypeList;
             }
+        }
+
+        private static Dictionary<int, string> _UserCourseLogStatusList;
+        public static Dictionary<int,string> UserCourseLogStatusList
+        {
+            get
+            {
+                if(_UserCourseLogStatusList == null)
+                    _UserCourseLogStatusList = GetUserCourseLogStatus();
+                return _UserCourseLogStatusList;
+            }
+        }
+
+        private static Dictionary<int, string> GetUserCourseLogStatus()
+        {
+            Dictionary<int, string> r = new Dictionary<int, string>();
+            foreach (UserCourseLogStatus status in Enum.GetValues(typeof(UserCourseLogStatus)))
+            {
+                string v = "";
+                switch (status)
+                {
+                    case UserCourseLogStatus.Absent:
+                        v = "缺席";
+                        break;
+                    case UserCourseLogStatus.PreNext:
+                        v = "预备";
+                        break;
+                    case UserCourseLogStatus.SignIn:
+                        v = "签到";
+                        break;
+                    case UserCourseLogStatus.Started:
+                        v = "已开课";
+                        break;
+                }
+                r.Add((int)status, v);
+            }
+            return r;
         }
 
         private static List<SiKsV> GetSkillLevel()

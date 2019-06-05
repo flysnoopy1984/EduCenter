@@ -20,6 +20,10 @@ namespace EduCenterCore.EduFramework
         {
             get { return _Enviroment.WebRootPath + @"\Files\QR\"; }
         }
+        public static string DicPath_StaticData
+        {
+            get { return _Enviroment.WebRootPath + @"\Files\StaticData\"; }
+        }
 
         public static string GetQRInviteTecFilePath(string fileName)
         {

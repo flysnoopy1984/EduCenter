@@ -15,6 +15,7 @@ using EduCenterCore.EduFramework;
 using Microsoft.EntityFrameworkCore;
 using EduCenterSrv;
 using EduCenterModel.Course;
+using Newtonsoft.Json;
 
 namespace EduCenterWeb.Pages.Test
 {
@@ -118,12 +119,15 @@ namespace EduCenterWeb.Pages.Test
             {
                 Msg = ex.Message;
             }
-           
-         
-
-
+        }
+        public void OnPostGetHolidayJson()
+        {
+           // var list = _userSrv.GetHolidayJson();
+           //var json =  JsonConvert.SerializeObject(list);
+           // Msg = json;
         }
 
-    
+
+
     }
 }

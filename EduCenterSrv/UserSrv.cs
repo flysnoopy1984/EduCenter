@@ -4,6 +4,7 @@ using EduCenterModel.Common;
 using EduCenterModel.User;
 using EduCenterModel.User.Result;
 using EduCenterModel.WX;
+using EduCenterSrv.Common;
 using EduCenterSrv.DataBase;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -74,7 +75,8 @@ namespace EduCenterSrv
        public List<RUserCourse> GetUserCourseAvaliable(string OpenId, CourseScheduleType CourseScheduleType)
        {
             var times = StaticDataSrv.CourseTime;
-            var result = _dbContext.DBUserCoures.Join(_dbContext.DbCourseSchedule, uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourse
+          
+           var result = _dbContext.DBUserCoures.Join(_dbContext.DbCourseSchedule, uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourse
             {
                UserOpenId = uc.UserOpenId,
                CourseScheduleType = uc.CourseScheduleType,
@@ -93,7 +95,51 @@ namespace EduCenterSrv
 
        }
 
-        public List<RUserCourseLog> GetUserCourseLog(string OpenId, CourseScheduleType CourseScheduleType)
+        public RUserCourse GetUserNextCourse(string OpenId, CourseScheduleType CourseScheduleType, List<RUserCourse> userCourses = null)
+        {
+            if (userCourses == null)
+                userCourses = GetUserCourseAvaliable(OpenId, CourseScheduleType);
+            RUserCourse result = null;
+
+            if (userCourses.Count > 0)
+            {
+                result = userCourses[0];
+                if(userCourses.Count>1)
+                {
+                    int curDay = DateSrv.GetDayOfWeek(DateTime.Now);
+                    int minDiff = Math.Abs(result.Day - curDay);
+
+                    List<RUserCourse> TempList = new List<RUserCourse>();
+                    TempList.Add(result);
+
+                    for (int i = 1; i < userCourses.Count; i++)
+                    {
+                        int diff = Math.Abs(userCourses[i].Day - curDay);
+                        if (diff < minDiff)
+                        {
+                            minDiff = diff;
+                            result = userCourses[i];
+                            TempList.Clear();
+                        }
+                        else if(diff == minDiff)
+                        {
+                            TempList.Add(userCourses[i]);
+                        }    
+                    }
+                    if(TempList.Count>1)
+                    {
+                        result = TempList.OrderBy(a => a.Lesson).FirstOrDefault();
+                    }
+                }
+                result.NextCourseDate = DateSrv.GetNextCourseDate(result.Day);
+              
+            }
+
+            return result;
+         
+        }
+
+        public List<RUserCourseLog> GetUserCourseLog(string OpenId, CourseScheduleType CourseScheduleType,int topnum =5)
         {
            var result =  _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
                 uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourseLog
@@ -105,9 +151,21 @@ namespace EduCenterSrv
                     LessonCode = uc.LessonCode,
                     UserCourseLogStatus = uc.UserCourseLogStatus
 
-                }).Where(a => a.UserOpenId == OpenId && a.CourseScheduleType == CourseScheduleType).ToList();
+                }).Where(a => a.UserOpenId == OpenId && a.CourseScheduleType == CourseScheduleType).Take(topnum).ToList();
             return result;
         }
+
+       
+
+
+
+        //public List<EHoliday> GetHolidayJson()
+        //{
+
+        //   return  _dbContext.DBHoliday.ToList();
+
+
+        //}
         #endregion
 
 

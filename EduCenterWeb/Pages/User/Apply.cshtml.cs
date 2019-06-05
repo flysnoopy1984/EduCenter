@@ -9,6 +9,7 @@ using EduCenterModel.Course;
 using EduCenterModel.Pages.User;
 using EduCenterModel.User;
 using EduCenterSrv;
+using EduCenterSrv.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -38,7 +39,6 @@ namespace EduCenterWeb.Pages.User
             {
                 result.Entity.CourseScheduleList = _CourseSrv.GetCourseScheduleByYearType(DateTime.Now.Year, CourseScheduleType.Standard);
                 result.Entity.CourseTimeList = StaticDataSrv.CourseTime;
-
 
             }
             catch (Exception ex)
