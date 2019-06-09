@@ -1,0 +1,202 @@
+﻿@page
+@model EduCenterWeb.Pages.WebBackend.Tec.CoursingDayModel
+@{
+    ViewData["Title"] = "CoursingDay";
+    Layout = "~/Pages/Shared/_EduMainPCWeb.cshtml";
+}
+@section navBar{
+    <li><a href="/Home">主页</a></li>
+}
+@Html.AntiForgeryToken()
+<link href="~/css/Plugs/LoadingIcon.css" rel="stylesheet" />
+<link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
+<script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="~/lib/jquery.blockUI/jquery.blockUI.min.js"></script>
+<script src="~/js/EduLib/EditHelper.js"></script>
+<script src="~/lib/laydate/laydate.js"></script>
+<script type="text/javascript" src="~/lib/iconfont.js"></script>
+<script src="~/js/WebBackEnd/Tec/CoursingDay.js"></script>
+<style type="text/css">
+.MainContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.MainContainer .DataFilterBar {
+    display: flex;
+    height: 34px;
+    line-height: 34px;
+    width: 450px;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.MainContainer .DataFilterBar div {
+    display: flex;
+    justify-content: space-around;
+   
+}
+
+.MainContainer .DataFilterBar div #selDate{
+    text-align:left;
+    width:120px;
+}
+
+.MainContainer .DataFilterBar div #selTecCode{
+    text-align:left;
+    width:120px;
+}
+
+.MainContainer .DataContent{
+    display: flex;
+    margin-bottom:50px;
+}
+.MainContainer .CourseArea{
+    flex-grow:1
+}
+.MainContainer .CourseArea #CourseTable{
+    width:100%;
+}
+.MainContainer .CourseArea #CourseTable tr th{
+    height:28px;
+    line-height:28px;
+    border:1px solid #808080;
+    text-align:center;
+    
+}
+
+.MainContainer .CourseArea #CourseTable tr td{
+    height:100px;
+    border:1px solid #808080;
+    padding:8px;
+
+}
+.MainContainer .CourseArea #CourseTable tr td .CellContainer{
+    height:100%;
+}
+
+.MainContainer .CourseArea #CourseTable tr td .CellContainer .CellOneCourse{
+    display:flex;
+   justify-content: space-evenly;
+   padding-bottom:5px;
+    width:100%;
+    cursor:pointer;
+}
+
+.MainContainer .UserArea{
+    flex-grow:8;
+    margin-left:20px;
+  
+}
+.MainContainer .UserArea #UserTable{
+    width:80%;
+}
+.MainContainer .UserArea #UserTable tr th{
+    height:28px;
+    line-height:28px;
+    border:1px solid #808080;
+    text-align:center;
+}
+
+.MainContainer .UserArea #UserTable tr td{
+    height:30px;
+    border:1px solid #808080;
+    padding:8px;
+}
+</style>
+
+<style type="text/css">
+    .TitleIcon {
+        width: 1em;
+        height: 1em;
+        vertical-align: -0.15em;
+        fill: currentColor;
+        overflow: hidden;
+        /*color:#00d31b;*/
+    }
+
+    .btnIcon {
+        width: 32px;
+        height: 32px;
+        vertical-align: -0.15em;
+        fill: currentColor;
+        overflow: hidden;
+        /*color:#00d31b;*/
+    }
+</style>
+
+<div class="MainContainer">
+    <div class="DataFilterBar">
+        <div style="width:280px">
+            <svg class="btnIcon" aria-hidden="true" onclick="AddDay();" style="margin-top:2px;">
+                <use xlink:href="#icon-btnright"></use>
+            </svg>
+            <label>日期：</label>
+            <input type="button" class="form-control" id="selDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            <svg class="btnIcon" aria-hidden="true" onclick="DelDay();">
+                <use xlink:href="#icon-btnleft"></use>
+            </svg>
+        </div>
+        <div>
+            <label>老师：</label>
+            <select id="selTecCode" class="form-control">
+                @foreach (var tec in Model.TecList)
+                {
+                    <option value="@tec.Code">@tec.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="DataContent">
+        <div class="CourseArea">
+            @*<div class="CourseInfo">2019年6月1日</div>*@
+            <table id="CourseTable" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="35%" >@DateTime.Now.ToString("yyyy年MM月dd")</th>
+                    <th width="60%">上课内容</th>
+                </tr>
+                @foreach (var time in Model.CourseTimes)
+                {
+                    <tr>
+                        <td style="text-align:center;">@time.TimeRange</td>
+                        <td>
+                            <div class="CellContainer" lesson="@time.Lesson">
+                                @*<div class="CellOneCourse"><div>[美术-初级]</div> <div>李老师</div> <div>*请假*</div></div>
+                                <div class="CellOneCourse"><div>[美术-初级]</div> <div>李老师</div> <div>*请假*</div></div>*@
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+        <div class="UserArea">
+            <table id="UserTable" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th>用户名称</th>
+                    <th>用户状态</th>
+                    <th>签到时间</th>
+                </tr>
+                <tr>
+                    <td>六萧山</td>
+                    <td>未开始</td>
+                    <td>@DateTime.Now</td>
+                </tr>
+                <tr>
+                    <td>六萧山</td>
+                    <td>未开始</td>
+                    <td>@DateTime.Now</td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+</div>
+<div id="HideData" style="display:none;">
+    <div class="CellOneCourse">
+        <div class="cellCourseName">[美术-初级]</div> 
+        <div class="cellCourseTec">李老师</div> 
+        <div class="cellCourseStatus">*请假*</div>
+    </div>
+</div>

@@ -68,5 +68,12 @@ namespace EduCenterSrv.Common
             }
             
         }
+
+        public static int GetSysDayOfWeek(DateTime date)
+        {
+            int day = (int)date.DayOfWeek;
+            if (day == 0) day = 7;
+            return day;
+        }
     }
 }

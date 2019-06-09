@@ -168,5 +168,19 @@ namespace EduCenterSrv.Common
             }
             return r;
         }
+
+        public static string GetCoursingStatusName(TecCoursingStatus coursingStatus )
+        {
+            switch(coursingStatus)
+            {
+                case TecCoursingStatus.ForLeave:
+                    return "请假";
+                case TecCoursingStatus.Normal:
+                    return "上课";
+                case TecCoursingStatus.Holiday:
+                    return "节假日";
+            }
+            return "";
+        }
     }
 }

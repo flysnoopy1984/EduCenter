@@ -9,5 +9,8 @@ namespace EduCenterModel.Course
         public int Lesson { get; set; }
 
         public string TimeRange { get; set; }
+
+        public double StartTime { get; set; }
+        public double EndTime { get; set; }
     }
 }

@@ -64,8 +64,7 @@ namespace EduCenterWeb.Pages.WebBackend.Course
                     _CourseSrv.AddRange(list);
                     _CourseSrv.SaveChanges();
                     _CourseSrv.CommitTrans();
-                }
-               
+                }  
             }
             catch(Exception ex)
             {

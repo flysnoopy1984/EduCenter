@@ -46,7 +46,16 @@ namespace EduCenterSrv
             }).ToList();
         }
 
-        public RTecAllInfo GetAllInfo(string code)
+        /// <summary>
+        /// 获取所有在职老师
+        /// </summary>
+        /// <returns></returns>
+        public List<ETecInfo> GetAllStaffTec()
+        {
+            return _dbContext.DBTecInfo.Where(a => a.RecordStatus == RecordStatus.Normal).ToList();
+        }
+
+        public RTecAllInfo GetTecAllInfo(string code)
         {
             RTecAllInfo result = new RTecAllInfo();
             result.TecInfo = Get(code);
@@ -147,6 +156,57 @@ namespace EduCenterSrv
             _dbContext.Entry(tecSkill).Property(p => p.SkillLevel).IsModified = true;
             if (needSave)
                 _dbContext.SaveChanges();
+        }
+
+        #endregion
+
+        #region TecCourse
+
+        public List<RTecCourse> GetOneDayCourse(string tecCode,DateTime date,CourseScheduleType CourseScheduleType)
+        {
+            var times = StaticDataSrv.CourseTime;
+            var linq = _dbContext.DBTecCourse.Select(a => new RTecCourse
+            {
+                TimeRange = times[a.Lesson].TimeRange,
+                CourseName = a.CourseName,
+                TecCode = a.TecCode,
+                CourseDateTime = a.CourseDateTime,
+                CourseScheduleType = a.CourseScheduleType,
+                Lesson  =a.Lesson,
+                CoursingStatus = a.CoursingStatus,
+                LessonCode = a.LessonCode
+              
+
+            })
+            .Where(a => a.TecCode == tecCode &&
+                        a.CourseDateTime.Date == date.Date &&
+                        a.CourseScheduleType == CourseScheduleType);
+
+            var result = linq.ToList();
+               
+         
+            return result;
+        }
+      
+        public List<RTecCourse> GetTecCourse(string tecCode, CourseScheduleType CourseScheduleType,int year,int month)
+        {
+            var times = StaticDataSrv.CourseTime;
+            var result = _dbContext.DBTecCourse.Select(tc => new RTecCourse
+            {
+                Day = tc.Day,
+                CourseName = tc.CourseName,
+                CourseDateTime = tc.CourseDateTime,
+                CoursingStatus = tc.CoursingStatus,
+                CourseScheduleType = tc.CourseScheduleType,
+                TecCode = tc.TecCode,
+                TimeRange = times[tc.Lesson].TimeRange,
+            })
+            .Where(a => a.CourseDateTime.Year == year &&
+                    a.CourseDateTime.Month == month &&
+                    a.TecCode == tecCode &&
+                    a.CourseScheduleType == CourseScheduleType).ToList();
+
+            return result;
         }
 
         #endregion

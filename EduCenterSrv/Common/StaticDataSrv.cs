@@ -30,18 +30,20 @@ namespace EduCenterSrv.Common
                 if (_CourseTime == null)
                 {
                     _CourseTime = new List<ECourseTime>();
-                    _CourseTime.Add(new ECourseTime{Lesson = 1,TimeRange = "9:00-10:30"});
-                    _CourseTime.Add(new ECourseTime { Lesson = 2, TimeRange = "10:30-12:00" });
-                    _CourseTime.Add(new ECourseTime { Lesson = 3, TimeRange = "13:00-14:30" });
-                    _CourseTime.Add(new ECourseTime { Lesson = 4, TimeRange = "14:30-16:00" });
-                    _CourseTime.Add(new ECourseTime { Lesson = 5, TimeRange = "16:30-18:00" });
-                    _CourseTime.Add(new ECourseTime { Lesson = 6, TimeRange = "18:30-20:00" });
+                    _CourseTime.Add(new ECourseTime{Lesson = 1,TimeRange = "9:00-10:30",StartTime=9,EndTime=10.5});
+                    _CourseTime.Add(new ECourseTime { Lesson = 2, TimeRange = "10:30-12:00",StartTime=10.5,EndTime=12 });
+                    _CourseTime.Add(new ECourseTime { Lesson = 3, TimeRange = "13:00-14:30", StartTime = 13, EndTime = 14.5 });
+                    _CourseTime.Add(new ECourseTime { Lesson = 4, TimeRange = "14:30-16:00", StartTime = 14.5, EndTime = 16 });
+                    _CourseTime.Add(new ECourseTime { Lesson = 5, TimeRange = "16:30-18:00", StartTime = 16.5, EndTime = 18 });
+                    _CourseTime.Add(new ECourseTime { Lesson = 6, TimeRange = "18:30-20:00", StartTime = 18.5, EndTime = 20 });
                  
                 }
                    
                 return _CourseTime;
             }
         }
+
+     
 
         public static Dictionary<int, Dictionary<int, EHoliday>> Holidays
         {

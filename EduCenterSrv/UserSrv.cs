@@ -92,7 +92,6 @@ namespace EduCenterSrv
               .OrderBy(a=>a.Day).ToList();
 
             return result;
-
        }
 
         public RUserCourse GetUserNextCourse(string OpenId, CourseScheduleType CourseScheduleType, List<RUserCourse> userCourses = null)
@@ -139,6 +138,16 @@ namespace EduCenterSrv
          
         }
 
+        public List<RUserCourse> GetAllUserCourseByLessonCode(string lessonCode)
+        {
+            string sql = @"select ui.Name,uc.LessonCode from UserCourse as uc
+join UserInfo as ui on ui.OpenId = uc.UserOpenId
+left join UserCourseLog as uclog on uclog.LessonCode = uc.LessonCode";
+            return null;
+        }
+        #endregion
+
+        #region UserCoureseLog
         public List<RUserCourseLog> GetUserCourseLog(string OpenId, CourseScheduleType CourseScheduleType,int topnum =5)
         {
            var result =  _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
@@ -155,7 +164,7 @@ namespace EduCenterSrv
             return result;
         }
 
-       
+        #endregion
 
 
 
@@ -166,7 +175,7 @@ namespace EduCenterSrv
 
 
         //}
-        #endregion
+
 
 
     }

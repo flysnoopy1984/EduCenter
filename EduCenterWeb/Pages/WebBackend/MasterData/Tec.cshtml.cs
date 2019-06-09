@@ -39,7 +39,7 @@ namespace EduCenterWeb.Pages.WebBackend.MasterData
             ResultObject<RTecAllInfo> result = new ResultObject<RTecAllInfo>();
             try
             {
-                result.Entity = _TecSrv.GetAllInfo(code);
+                result.Entity = _TecSrv.GetTecAllInfo(code);
             }
             catch (Exception ex)
             {

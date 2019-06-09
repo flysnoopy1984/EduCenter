@@ -5,6 +5,7 @@ using EduCenterModel.Course;
 using EduCenterModel.Order;
 using EduCenterModel.Teacher;
 using EduCenterModel.User;
+using EduCenterSrv.Common;
 using EduCenterSrv.DataBase;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -136,7 +137,7 @@ namespace EduCenterSrv
         #endregion
 
         #region 购买课时成功
-        public void PayCourseSuccess(string orderId)
+        public bool PayCourseSuccess(string orderId)
         {
             try
             {
@@ -157,10 +158,7 @@ namespace EduCenterSrv
                 //更新用户课程表
                 List<string> newLessonCode = UpdateUserCourse(order.CustOpenId);
 
-                //更新这门课的总申请数
-                //var userCourseList = _dbContext.DBUserCoures
-                //    .Where(a => a.UserOpenId == order.CustOpenId && (int)a.CoursePriceType == line.Ext1)
-                //    .Select(a => a.LessonCode).ToList();
+             
                 if(newLessonCode.Count>0)
                 {
                     foreach(var lc in newLessonCode)
@@ -171,7 +169,7 @@ namespace EduCenterSrv
                         //更新老师课程表
                         var cls = _dbContext.DBCourseInfoClass.Where(s => s.CourseCode == cs.CourseCode).FirstOrDefault();
                         var tecCode = cls.TecCode;
-                        UpdateTecCourse(tecCode, cs.LessonCode);
+                        UpdateTecCourse(tecCode, cs);
                     }
                 
                 }
@@ -183,7 +181,9 @@ namespace EduCenterSrv
             {
                 RollBackTrans();
                 NLogHelper.ErrorTxt($"[PayCourseSuccess] {ex.Message}");
+                return false;
             }
+            return true;
         }
 
         /// <summary>
@@ -218,16 +218,51 @@ namespace EduCenterSrv
 
         }
 
-        private void UpdateTecCourse(string tecCode,string LessonCode)
+
+        private void UpdateTecCourse(string tecCode,ECourseSchedule courseSchedule)
         {
-            int tcNum = _dbContext.DBTecCourse.Where(a => a.TecCode == tecCode && a.LessonCode == LessonCode).Count();
+            var time = StaticDataSrv.CourseTime.Where(a => a.Lesson == courseSchedule.Lesson).First();
+
+            int tcNum = _dbContext.DBTecCourse.Where(a => a.TecCode == tecCode && a.LessonCode == courseSchedule.LessonCode).Count();
+   
             if (tcNum == 0)
             {
-                _dbContext.DBTecCourse.Add(new ETecCourse
+                DateTime startDate = DateTime.Now;
+                int dayofWeek = DateSrv.GetSysDayOfWeek(startDate);
+                if (courseSchedule.Day - dayofWeek > 0)
+                    startDate = startDate.AddDays(courseSchedule.Day - dayofWeek);
+                else
+                    startDate = startDate.AddDays(7-(dayofWeek-courseSchedule.Day));
+
+                DateTime endDate = new DateTime(startDate.Year, 12, 31);
+                while(startDate<= endDate)
                 {
-                    LessonCode = LessonCode,
-                    TecCode = tecCode,
-                });
+                    dayofWeek = DateSrv.GetSysDayOfWeek(startDate);
+                    if(dayofWeek == courseSchedule.Day)
+                    {
+                        _dbContext.DBTecCourse.Add(new ETecCourse
+                        {
+                            CourseDateTime = startDate,
+                            CourseScheduleType = courseSchedule.CourseScheduleType,
+                            CoursingStatus = TecCoursingStatus.Normal,
+                            LessonCode = courseSchedule.LessonCode,
+                            Day = courseSchedule.Day,
+                            CourseName = courseSchedule.CourseName,
+                            TecCode = tecCode,
+                            Lesson = courseSchedule.Lesson,
+                            TimeStart = time.StartTime,
+                            TimeEnd = time.EndTime,
+                            
+                        });
+                        startDate = startDate.AddDays(7);
+                    }
+                   
+                }
+                //_dbContext.DBTecCourse.Add(new ETecCourse
+                //{
+                //    LessonCode = LessonCode,
+                //    TecCode = tecCode,
+                //});
             }
         }
         /// <summary>

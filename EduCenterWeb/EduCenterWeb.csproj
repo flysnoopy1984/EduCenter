@@ -10,9 +10,13 @@
 
   <ItemGroup>
     <Compile Remove="Data\**" />
+    <Compile Remove="wwwroot\js\WebBackEnd\Teacher\**" />
     <Content Remove="Data\**" />
+    <Content Remove="wwwroot\js\WebBackEnd\Teacher\**" />
     <EmbeddedResource Remove="Data\**" />
+    <EmbeddedResource Remove="wwwroot\js\WebBackEnd\Teacher\**" />
     <None Remove="Data\**" />
+    <None Remove="wwwroot\js\WebBackEnd\Teacher\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,14 +35,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\WebBackend\Tec\" />
     <Folder Include="Pages\WebBackend\User\" />
     <Folder Include="WebAPI\" />
     <Folder Include="wwwroot\Files\QR\InviteTec\" />
     <Folder Include="Pages\Reception\" />
     <Folder Include="wwwroot\css\Pages\" />
     <Folder Include="wwwroot\images\" />
-    <Folder Include="wwwroot\js\WebBackEnd\Teacher\" />
   </ItemGroup>
 
   <ItemGroup>
