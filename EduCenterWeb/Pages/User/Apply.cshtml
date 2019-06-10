@@ -1,4 +1,6 @@
 ﻿@page
+
+
 @model EduCenterWeb.Pages.User.ApplyModel
 @{
     ViewData["Title"] = "Apply";
@@ -66,20 +68,29 @@
         flex-direction:column;
         align-items:center;
         justify-content:center;
+        height:100%;
+        padding:6px;
+          font-size: 12px;
+         font-weight: bold;
+    }
+    .CellCourseData div{
+        margin-bottom:8px;
     }
     .CellCourse{
     
         /*background-color: #6ae703;*/
-        height: 24px;
-        line-height: 24px;
+        height: 26px;
+        line-height: 26px;
         width: 85%;
-        font-size: 12px;
-        border-radius: 8px;
+      
+        border-radius: 4px;
         /*color: #005905;*/
-        font-weight: bold;
+       
         /*font-family: "微软雅黑";*/
+     
        
     }
+  
 
     .CourseGrid {
         width: 100%;
@@ -247,25 +258,41 @@
                             <th style="color:#65dd03">周六</th>
                             <th style="color:#ff661c">周日</th>
                         </tr>
-                        @foreach (var time in Model.CourseTimes)
+                        @if (Model.CourseTimes != null)
                         {
+                            @foreach (var time in Model.CourseTimes)
+                            {
 
-                            <tr>
-                                <td style="font-weight:bold">@time.TimeRange</td>
-                                @for (int i = 0; i < 2; i++)
-                                {
+                                <tr>
+                                    <td style="font-weight:bold">@time.TimeRange</td>
+                                    @for (int i = 0; i < 2; i++)
+                                    {
 
-                                    <td>
-                                        <div day="@(i+6)" lesson="@time.Lesson" class="CellContainer" onclick="selectCourse(this);">
-                                            <div class="noCourse"> <span>无</span><span class="caret"></span></div>
-                                            @*<div class="CellCourse">
-                                                美术1<span class="caret"></span>
-                                            </div>*@
-                                        </div>
-                                    </td>
-                                }
-                            </tr>
+                                        <td>
+                                            <div day="@(i+6)" lesson="@time.Lesson" class="CellContainer" onclick="selectCourse(this);">
+                                                @*  <div class="noCourse"> <span>无</span><span class="caret"></span></div>*@
+                                                <div class="CellCourseData">
+                                                    @try
+                                                    {
+                                                        var list = Model.GetAvaliableCourseList(i + 6, time.Lesson);
+                                                        @foreach (var c in list)
+                                                        {
+                                                            <div lCode=@c.LessonCode CourseType="@Convert.ToInt32(c.CourseType)" CourseCode="@c.CourseCode" CurUser="@c.ApplyNum">@c.CourseName</div>
+                                                        }
+                                                    }
+                                                    catch
+                                                    {
+
+                                                    }
+                                                </div>
+
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                            }
                         }
+
 
 
                     </table>
@@ -275,16 +302,20 @@
                     <table id="GridNormal" class="CourseGrid" border="0" cellspacing="0" cellpadding="0">
                         <tr>
                             <th></th>
-                            @foreach (var time in Model.CourseTimes)
+                            @if (Model.CourseTimes != null)
                             {
-                                if (time.Lesson == 5 || time.Lesson == 6)
+                                foreach (var time in Model.CourseTimes)
                                 {
-                                    <th>
-                                        @time.TimeRange
-                                    </th>
-                                }
+                                    if (time.Lesson == 5 || time.Lesson == 6)
+                                    {
+                                        <th>
+                                            @time.TimeRange
+                                        </th>
+                                    }
 
+                                }
                             }
+
                         </tr>
 
                         @for (int i = 1; i < 6; i++)
@@ -295,9 +326,25 @@
                                 {
                                     <td>
                                         <div day="@i" lesson="@(j+5)" class="CellContainer" onclick="selectCourse(this);">
-                                            <div class="noCourse"> <span>无</span><span class="caret"></span></div>
-                                        </div>
-                                    </td>
+                                            <div class="CellCourseData">
+                                                @try
+                                                {
+                                                    var list = Model.GetAvaliableCourseList(i, j + 5);
+                                                  
+                                                    @foreach (var c in list)
+                                                    {
+
+                                                        <div lCode=@c.LessonCode CourseType="@Convert.ToInt32(c.CourseType)" CourseCode="@c.CourseCode" CurUser="@c.ApplyNum">@c.CourseName</div>
+                                                    }
+                                                }
+                                                catch
+                                                {
+
+                                                }
+                                                </div>
+                                                @*<div class="noCourse"> <span>无</span><span class="caret"></span></div>*@
+                                            </div>
+</td>
                                 }
                             </tr>
                         }

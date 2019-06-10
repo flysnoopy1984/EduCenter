@@ -31,7 +31,7 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
         {
             TecList = _TecSrv.GetAllStaffTec();
 
-            CourseTimes = StaticDataSrv.CourseTime.OrderBy(a => a.Lesson).ToList();
+            CourseTimes = StaticDataSrv.CourseTime.Values.ToList();
         }
 
    

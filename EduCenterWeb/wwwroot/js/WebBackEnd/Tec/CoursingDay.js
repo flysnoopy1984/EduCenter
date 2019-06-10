@@ -8,9 +8,15 @@
             elem: "#selDate",
             done: LayDataSelect
         });
+        var DateFromUrl = GetUrlParam("date");
+        var tecCodeFromUrl = GetUrlParam("tecCode");
+        if (DateFromUrl != undefined) {
+            $("#selTecCode").val(tecCodeFromUrl);
+            $("#selDate").val(DateFromUrl);
+        }
+      
         QueryOneDayCourse();
-        //var data = { "tecCode": "00001", "date": "2019-6-29" }; 
-        //callAjax_Query(QueryOneDayCourseUrl, data, QueryOneDayCourseCallBack);
+   
     }
 
     LayDataSelect = function () {

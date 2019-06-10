@@ -25,5 +25,8 @@ namespace EduCenterModel.User
         public CourseScheduleType CourseScheduleType { get; set; }
 
         public DateTime CreatedDateTime { get; set; }  
+
+        [MaxLength(10)]
+        public string CourseDateTime { get; set; }
     }
 }

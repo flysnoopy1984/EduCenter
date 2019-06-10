@@ -199,6 +199,7 @@ namespace EduCenterSrv
                 CoursingStatus = tc.CoursingStatus,
                 CourseScheduleType = tc.CourseScheduleType,
                 TecCode = tc.TecCode,
+                Lesson = tc.Lesson,
                 TimeRange = times[tc.Lesson].TimeRange,
             })
             .Where(a => a.CourseDateTime.Year == year &&
@@ -207,6 +208,49 @@ namespace EduCenterSrv
                     a.CourseScheduleType == CourseScheduleType).ToList();
 
             return result;
+        }
+
+        public void UpdateTecCourse(string tecCode, ECourseSchedule courseSchedule)
+        {
+            var time = StaticDataSrv.CourseTime[courseSchedule.Lesson];
+
+            int tcNum = _dbContext.DBTecCourse.Where(a => a.TecCode == tecCode && a.LessonCode == courseSchedule.LessonCode).Count();
+
+            if (tcNum == 0)
+            {
+                DateTime startDate = DateTime.Now;
+                int dayofWeek = DateSrv.GetSysDayOfWeek(startDate);
+                if (courseSchedule.Day - dayofWeek > 0)
+                    startDate = startDate.AddDays(courseSchedule.Day - dayofWeek);
+                else
+                    startDate = startDate.AddDays(7 - (dayofWeek - courseSchedule.Day));
+
+                DateTime endDate = new DateTime(startDate.Year, 12, 31);
+                while (startDate <= endDate)
+                {
+                    dayofWeek = DateSrv.GetSysDayOfWeek(startDate);
+                    if (dayofWeek == courseSchedule.Day)
+                    {
+                        _dbContext.DBTecCourse.Add(new ETecCourse
+                        {
+                            CourseDateTime = startDate,
+                            CourseScheduleType = courseSchedule.CourseScheduleType,
+                            CoursingStatus = TecCoursingStatus.Normal,
+                            LessonCode = courseSchedule.LessonCode,
+                            Day = courseSchedule.Day,
+                            CourseName = courseSchedule.CourseName,
+                            TecCode = tecCode,
+                            Lesson = courseSchedule.Lesson,
+                            TimeStart = time.StartTime,
+                            TimeEnd = time.EndTime,
+
+                        });
+                        startDate = startDate.AddDays(7);
+                    }
+
+                }
+
+            }
         }
 
         #endregion

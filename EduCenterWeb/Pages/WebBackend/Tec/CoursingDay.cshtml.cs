@@ -29,7 +29,7 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
         }
         public void OnGet()
         {
-            CourseTimes = StaticDataSrv.CourseTime.ToList();
+            CourseTimes = StaticDataSrv.CourseTime.Values.ToList();
         }
 
         public IActionResult OnPostQueryOneDayCourse(string tecCode,DateTime date)

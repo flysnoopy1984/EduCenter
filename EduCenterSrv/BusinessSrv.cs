@@ -61,37 +61,38 @@ namespace EduCenterSrv
         #endregion
 
 
-        #region 创建首次购买课时订单
+        #region 提交购买课时订单
 
-        public EOrder PayCourseOrder(string userOpenId, ECoursePrice coursePrice,List<EUserCourse> userCourses)
+        public EOrder PayCourseOrder(string userOpenId, ECoursePrice coursePrice)
         {
             try
             {
-                 BeginTrans();
+               //  BeginTrans();
 
-                //删除等待支付的用户课程
-                _dbContext.Database.ExecuteSqlCommand(sql_DeleteWaitingPayUserCourse(userOpenId));
+                ////删除等待支付的用户课程
+                //_dbContext.Database.ExecuteSqlCommand(sql_DeleteWaitingPayUserCourse(userOpenId));
 
-                ////新建等待支付的用户课程
-                foreach (var uc in userCourses)
-                {
-                    uc.UserCourseStatus = UserCourseStatus.WaitingPay;
-                    uc.CreateDateTime = DateTime.Now;
-                }
-                _dbContext.DBUserCoures.AddRange(userCourses);
+                //////新建等待支付的用户课程
+                //foreach (var uc in userCourses)
+                //{
+                //    uc.UserCourseStatus = UserCourseStatus.WaitingPay;
+                //    uc.CreateDateTime = DateTime.Now;
+                //}
+                //_dbContext.DBUserCoures.AddRange(userCourses);
 
+                //创建购买课时的订单
                 var Order =  CreateBuyCourseOrder(userOpenId, coursePrice);
 
                 _dbContext.SaveChanges();
 
-                CommitTrans();
+              //  CommitTrans();
 
                 return Order;
 
             }
             catch (Exception ex)
             {
-               RollBackTrans();
+             //  RollBackTrans();
                 NLogHelper.ErrorTxt($"[PayCourseFirst]{ex.Message}");
                 throw ex;
             }
@@ -156,10 +157,11 @@ namespace EduCenterSrv
                 AddCourseTimeTransByLine(line);
 
                 //更新用户课程表
-                List<string> newLessonCode = UpdateUserCourse(order.CustOpenId);
+                //    var newLessonCode =UpdateUserCourseToAvaliable(order.CustOpenId);
+                UpdateUserCourseToAvaliable(order.CustOpenId);
 
-             
-                if(newLessonCode.Count>0)
+                /*
+                if (newLessonCode.Count>0)
                 {
                     foreach(var lc in newLessonCode)
                     {
@@ -171,8 +173,8 @@ namespace EduCenterSrv
                         var tecCode = cls.TecCode;
                         UpdateTecCourse(tecCode, cs);
                     }
-                
                 }
+                */
           
                 _dbContext.SaveChanges();
                 CommitTrans();
@@ -190,7 +192,7 @@ namespace EduCenterSrv
         /// 将等待支付的课程更新到用户课程中
         /// </summary>
         /// <returns>返回新增的课程</returns>
-        private List<string> UpdateUserCourse(string userOpenId)
+        private List<string> UpdateUserCourse_Old(string userOpenId)
         {
             List<string> result = new List<string>();
 
@@ -218,53 +220,25 @@ namespace EduCenterSrv
 
         }
 
-
-        private void UpdateTecCourse(string tecCode,ECourseSchedule courseSchedule)
+       
+        private void UpdateUserCourseToAvaliable(string userOpenId)
         {
-            var time = StaticDataSrv.CourseTime.Where(a => a.Lesson == courseSchedule.Lesson).First();
+           
+            List<EUserCourse> allUserCourse = _dbContext.DBUserCoures.Where(a => a.UserOpenId == userOpenId && 
+                                                                            a.UserCourseStatus != UserCourseStatus.WaitingPay
+                                                                ).ToList();
 
-            int tcNum = _dbContext.DBTecCourse.Where(a => a.TecCode == tecCode && a.LessonCode == courseSchedule.LessonCode).Count();
-   
-            if (tcNum == 0)
+            if(allUserCourse.Count>0)
             {
-                DateTime startDate = DateTime.Now;
-                int dayofWeek = DateSrv.GetSysDayOfWeek(startDate);
-                if (courseSchedule.Day - dayofWeek > 0)
-                    startDate = startDate.AddDays(courseSchedule.Day - dayofWeek);
-                else
-                    startDate = startDate.AddDays(7-(dayofWeek-courseSchedule.Day));
-
-                DateTime endDate = new DateTime(startDate.Year, 12, 31);
-                while(startDate<= endDate)
+                foreach (var course in allUserCourse)
                 {
-                    dayofWeek = DateSrv.GetSysDayOfWeek(startDate);
-                    if(dayofWeek == courseSchedule.Day)
-                    {
-                        _dbContext.DBTecCourse.Add(new ETecCourse
-                        {
-                            CourseDateTime = startDate,
-                            CourseScheduleType = courseSchedule.CourseScheduleType,
-                            CoursingStatus = TecCoursingStatus.Normal,
-                            LessonCode = courseSchedule.LessonCode,
-                            Day = courseSchedule.Day,
-                            CourseName = courseSchedule.CourseName,
-                            TecCode = tecCode,
-                            Lesson = courseSchedule.Lesson,
-                            TimeStart = time.StartTime,
-                            TimeEnd = time.EndTime,
-                            
-                        });
-                        startDate = startDate.AddDays(7);
-                    }
-                   
+                    course.UserCourseStatus = UserCourseStatus.Avaliable;
                 }
-                //_dbContext.DBTecCourse.Add(new ETecCourse
-                //{
-                //    LessonCode = LessonCode,
-                //    TecCode = tecCode,
-                //});
+                _dbContext.SaveChanges();
             }
         }
+
+      
         /// <summary>
         /// /获取订单行,更新课时
         /// </summary>
@@ -313,6 +287,68 @@ namespace EduCenterSrv
             _dbContext.DBUserCourseTimeTrans.Add(trans);
         }
 
+        #endregion
+
+        #region 选择课程
+
+        /// <summary>
+        /// 用户选择课程
+        /// </summary>
+        /// <param name="courseList"></param>
+        public void UserSelectNewCourses(string openId,List<EUserCourse> courseList)
+        {
+            try
+            {
+                BeginTrans();
+                if (courseList.Count > 0)
+                {
+                    UserSrv userSrv = new UserSrv(_dbContext);
+                    TecSrv tecSrv = new TecSrv(_dbContext);
+                    if (userSrv.CheckHasUserCourse(openId, courseList[0].CourseScheduleType))
+                        throw new Exception("已经选择过课程!");
+                    else
+                    {
+                        foreach (var c in courseList)
+                        {
+                            c.UserOpenId = openId;
+
+                            //更新课程总人数
+                            var cs = _dbContext.DbCourseSchedule.Where(a => a.LessonCode == c.LessonCode).FirstOrDefault();
+                            cs.ApplyNum++;
+
+                            //获取课程对应的老师
+                            var cls = _dbContext.DBCourseInfoClass.Where(s => s.CourseCode == cs.CourseCode).FirstOrDefault();
+                            var tecCode = cls.TecCode;
+
+                            //更新老师课程
+                            tecSrv.UpdateTecCourse(tecCode, cs);
+
+                        }
+                        userSrv.AddUserCourse(courseList);
+                    }
+                    _dbContext.SaveChanges();
+
+                    
+
+                    CommitTrans();
+
+                    userSrv.AddNextCourseLog(openId, null, false);
+
+                }
+            }
+            catch(Exception ex)
+            {
+                RollBackTrans();
+                NLogHelper.ErrorTxt($"[UserSelectNewCourses]{ex.Message}");
+                throw ex;
+            }
+           
+           
+           
+            
+        }
+       
+      
         #endregion
 
 

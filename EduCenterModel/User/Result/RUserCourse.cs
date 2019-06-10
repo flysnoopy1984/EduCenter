@@ -21,5 +21,8 @@ namespace EduCenterModel.User.Result
 
         public DateTime NextCourseDate { get; set; }
 
+        public double StartTime { get; set; }
+        public double EndTime { get; set; }
+
     }
 }

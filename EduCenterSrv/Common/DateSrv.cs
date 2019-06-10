@@ -59,7 +59,7 @@ namespace EduCenterSrv.Common
         {
             try
             {
-                var holiday = StaticDataSrv.Holidays[date.Month][date.Day];
+                var holiday = StaticDataSrv.Holidays[date.Year][date.Month][date.Day];
                 return true;
             }
             catch

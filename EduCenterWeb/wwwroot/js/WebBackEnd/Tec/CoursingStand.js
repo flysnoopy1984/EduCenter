@@ -18,12 +18,26 @@
             type: 'month',
             done: LayDataSelect
         });
-        //var scrollHeight = $(".MainContainer").height();
-        //$(document).scrollTop(1200);
+   
 
         QueryCalendorData();
 
     };
+
+    QueryCalendorData = function () {
+        var tecCode = $("#selTecCode").val();
+        var data = {
+            "tecCode": tecCode,
+            "year": year,
+            "month": month,
+
+        }
+        var tecName = $("#selTecCode option[value=" + tecCode + "]").text();
+        var info = month + "月 " + tecName + "老师";
+        $(".CourseInfo").text(info);
+        callAjax_Query(QueryTecCourseUrl, data, QueryTecCourseCallBack, "查询中");
+
+    }
 
     AddCellTitle = function (obj, title) {
         var row = $("#HideData .cellTitle").clone();
@@ -35,6 +49,7 @@
         var row = $("#HideData .cellCourseRow").clone();
         $(row).text(courseInfo);
         $(obj).append(row);
+        return row;
     }
 
     GenCalendor = function () {
@@ -64,14 +79,19 @@
                 var cell = $(this);
 
                 if (day != -1) {
+                    var needevent = false;
                     if (TecCourseData[date] != undefined) {
                         var list = TecCourseData[date];
-
                         $.each(list, function (i) {
                             var c = list[i];
-                            AddCellCourse(container, "[" + c.TimeRange+"]"+c.CourseName)
-                           // cell.text(c.CourseName);
+                            var row = AddCellCourse(container, "[" + c.TimeRange + "]" + c.CourseName);
+                            
+                            needevent = true;
                         });
+                        if (needevent) {
+                            container.on("click", { "date": date, "tecCode": list[0].TecCode}, ToCoursingDayEvent)
+                        }
+                        
                     }
                    
                 }
@@ -80,17 +100,14 @@
         });
     }
 
-    QueryCalendorData = function () {
+    ToCoursingDayEvent = function (e) {
+        var date = e.data.date;
+        var tecCode = e.data.tecCode;
 
-        var data = {
-            "tecCode": $("#selTecCode").val(),
-            "year": year,
-            "month":month,
-
-        }
-        callAjax_Query(QueryTecCourseUrl, data, QueryTecCourseCallBack, "查询中");
-  
+        window.location.href = "CoursingDay?date=" + date + "&tecCode=" + tecCode;
     }
+
+   
     QueryTecCourseCallBack = function (res) {
 
         TecCourseData = res.Entity;

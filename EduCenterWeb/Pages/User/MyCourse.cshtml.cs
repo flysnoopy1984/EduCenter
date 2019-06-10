@@ -21,6 +21,8 @@ namespace EduCenterWeb.Pages.User
 
         public RUserCourse NextCourse { get; set; }
 
+        public RUserCourse CurrentCourse { get; set; }
+
         public MyCourseModel(UserSrv userSrv)
         {
             _UserSrv = userSrv;
@@ -30,14 +32,14 @@ namespace EduCenterWeb.Pages.User
             var us = base.GetUserSession();
             if (us != null)
             {
-                UserCourseList = _UserSrv.GetUserCourseAvaliable(us.OpenId,CourseScheduleType.Standard);
-                UserCourseLogList = _UserSrv.GetUserCourseLog(us.OpenId, CourseScheduleType.Standard,10);
+                UserCourseList = _UserSrv.GetUserCourseAvaliable(us.OpenId, CourseScheduleType.Standard);
+                UserCourseLogList = _UserSrv.GetUserCourseLog(us.OpenId, CourseScheduleType.Standard, 10);
 
                 //计算上一节课的时间和状态
-                foreach(var course in UserCourseList)
+                foreach (var course in UserCourseList)
                 {
                     course.LastCourseDate = DateSrv.GetLastCourseDate(course.Day);
-                    var courseLog = UserCourseLogList.Where(a=>a.LessonCode == course.LessonCode).OrderByDescending(a=>a.CreatedDateTime).FirstOrDefault();
+                    var courseLog = UserCourseLogList.Where(a => a.LessonCode == course.LessonCode).OrderByDescending(a => a.CreatedDateTime).FirstOrDefault();
                     if (courseLog == null)
                         course.LastCouseStatus = "";
                     else
@@ -45,13 +47,19 @@ namespace EduCenterWeb.Pages.User
                         if (courseLog.UserCourseLogStatus == UserCourseLogStatus.PreNext)
                             courseLog.UserCourseLogStatus = UserCourseLogStatus.Absent;
                         course.LastCouseStatus = BaseEnumSrv.UserCourseLogStatusList[(int)courseLog.UserCourseLogStatus];
-                        
-                    }    
-                }
-                //计算用户下节课
-                NextCourse = _UserSrv.GetUserNextCourse(us.OpenId, CourseScheduleType.Standard, UserCourseList);
 
+                    }
+                }
+                //计算当天课程
+                CurrentCourse = _UserSrv.GetCurrentUserCourse(us.OpenId);
+                if(CurrentCourse== null)
+                    //计算用户下节课
+                    NextCourse = _UserSrv.GetUserNextCourse(us.OpenId, CourseScheduleType.Standard, UserCourseList);
+
+               
             }
+            else
+                UserCourseList = new List<RUserCourse>();
         }
 
         public string GetDayIconFont(int day)

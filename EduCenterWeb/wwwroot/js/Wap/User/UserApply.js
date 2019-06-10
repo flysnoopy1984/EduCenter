@@ -1,39 +1,46 @@
 ﻿$(function () {
     var InitUrl = "Apply?handler=InitData";
   
-    var CourseScheduleData = null;
+  //  var CourseScheduleData = null;
     var CourseTime = null;
+    var CourseMaxApplyNum = null;
     var selDay = null
     var selLesson = null;
     var selCode = null;
 
     Init = function () {
-        var times = $("#GridWeek tr").length ;
-        CourseScheduleData = new Object();
-        for (var i = 1; i < 8; i++) {
-            CourseScheduleData[i] = new Object();
-            for (var j = 1; j < times; j++) {
-                CourseScheduleData[i][j] = new Array();
-            }
-        }
+        //var times = $("#GridWeek tr").length ;
+        //CourseScheduleData = new Object();
+        //for (var i = 1; i < 8; i++) {
+        //    CourseScheduleData[i] = new Object();
+        //    for (var j = 1; j < times; j++) {
+        //        CourseScheduleData[i][j] = new Array();
+        //    }
+        //}
 
         $("#btnConfirm").on("click", NextStep);
-        callAjax_Query(InitUrl, {}, InitCallBack,"");
+
+        callAjax_Query(InitUrl, {}, InitCallBack, "");
+
     }
-
-
 
     selectCourse = function (obj) {
         var cell = $(obj);
         selDay = cell.attr("day");
         selLesson = cell.attr("lesson");
 
-        var csList = CourseScheduleData[selDay][selLesson];
+        //生成单元格中的课程数据
+        var csList = new Array();
+        cell.find(".CellCourseData div").each(function () {
+          
+            var item = CreateDataObject(parseInt(selDay), parseInt(selLesson), $(this))
+         
+            csList.push(item);
+        });
 
+        //根据底部信息获取选择Code
         var selectedLi = $(".SelectedCourseItems .Item .SelectCourseItemContent ul li");
-
         //原来CheckBox都选，现在单选可以修改代码。
-    //    var selectedCode = new Array();
         $.each(selectedLi, function () {
             var day = $(this).attr("day");
             var les = $(this).attr("lesson");
@@ -44,7 +51,7 @@
             }
         })
         var html = '<div class="CourseSelect">';
-        html += CreateConfirmItemsHtml(-1, null);
+       // html += CreateConfirmItemsHtml(-1, null);
         $.each(csList, function (i) {
             var item = csList[i];
             html += CreateConfirmItemsHtml(i, item);
@@ -57,8 +64,14 @@
             type: 'red',
             buttons: {
                 cancel: {
-                    text: "换一天",
-                    btnClass: 'btn-info'
+                    text: "清空重选",
+                    btnClass: 'btn-info',
+                    action: function () {
+                        DeleteSameTimeCourse(selDay, selLesson,true);
+                        //var checkedNo = $(this).val();
+                        //var checkeditem = csList[checkedNo];
+                        //DeleteSelectCourseInfo(checkeditem.Day, checkeditem.Lesson, checkeditem.LessonCode);
+                    }
                 },
                 OK: {
                     text: '确认选择',
@@ -102,10 +115,18 @@
 
 
         var html = "";
-       
+        var disabled = "";
+        var itemDes = "";
+        //最大人数判断
+        var maxNum = CourseMaxApplyNum[CourseType];
+        if (maxNum == item.ApplyNum) {
+            disabled = "disabled";
+            itemDes = "(已满)";
+        }
+           
         html += '<div class="radio ' + cbcss + '">';
-        html += '<input type="radio" name="AvaliableCourse" value="' + i + '"  id="' + id + '" ' + checked + '>';
-        html += '<label for="' + id + '" class="' + lbcss + '">' + name + '</label>';
+        html += '<input ' + disabled+' type="radio" name="AvaliableCourse" value="' + i + '"  id="' + id + '" ' + checked + '>';
+        html += '<label for="' + id + '" class="' + lbcss + '">' + name + '  ' + itemDes+'</label>';
         html += '</div>';
         return html;
     }
@@ -126,7 +147,9 @@
         else gridRoot = $("#GridWeek"); 
 
         var td = gridRoot.find(".CellContainer[day=" + data.Day + "][lesson=" + data.Lesson + "]");
-        td.empty();
+        td.find(".CellCourseData").hide();
+        td.find(".CellCourse").remove();
+    //    td.empty();
         var gl = this.GetItemStyleByType(data.CourseType,"label");
         var tdHtml = $("#HideData .CellCourse").clone();
         tdHtml.addClass(gl);
@@ -134,9 +157,14 @@
         td.append(tdHtml);
 
         //底部信息
+
+        //删除已经选择的同时段课程
+        DeleteSameTimeCourse(data.Day, data.Lesson,false);
+
         var root = $(".SelectedCourseItems");
         var item = root.find(".Item .SelectCourseItemTitle[CourseCode=" + data.CourseCode + "]");
         var ul;
+
         if (item.length == 0) {
             var html = $("#HideData .Item").clone();
             html.find(".SelectCourseItemTitle").text(data.CourseName);
@@ -155,7 +183,7 @@
             li.attr("lesson", data.Lesson);
             li.attr("day", data.Day);
             li.attr("lcode", data.LessonCode);
-            li.find(".SelectCourseTime").text(dayName + " | " + CourseTime[data.Lesson]);
+            li.find(".SelectCourseTime").text(dayName + " | " + CourseTime[data.Lesson].TimeRange);
             li.find(".btnCourseItemClose").on("click", { "courseschedule": data }, DeleteSelectCourseInfoEvent);
             ul.append(li);
         }
@@ -182,17 +210,34 @@
                 }
             }   
         }
+       
+        RestoreCellData(day, lesson);
 
-        //Grid Td 信息
+    }
+
+    RestoreCellData = function (day,lesson) {
         var gridRoot = null;
         if (day >= 1 && day <= 5) gridRoot = $("#GridNormal");
         else gridRoot = $("#GridWeek");
 
         var td = gridRoot.find(".CellContainer[day=" + day + "][lesson=" + lesson + "]");
-        td.empty();
-        var tdHtml = $("#HideData .noCourse").clone();
-       
-        td.append(tdHtml);
+        td.find(".CellCourseData").show();
+        td.find(".CellCourse").remove();
+    }
+    //根据Day Lesson找到已选择的课程
+    DeleteSameTimeCourse = function (day, lesson,IsRestoreCell) {
+        var course = $(".SelectCourseItemContent ul li[lesson=" + lesson + "][day=" + day + "]");
+        if (course.length > 0) {
+            if (course.parent().children().length == 1) {
+                course.closest(".Item").remove();
+            }
+            else
+                course.remove();
+        }
+
+        if (IsRestoreCell) {
+            RestoreCellData(day, lesson);
+        }
 
     }
 
@@ -274,41 +319,78 @@
     }
 
     InitCallBack = function (result) {
-
+        /*
         var list = result.Entity.CourseScheduleList;
-        
 
         $.each(list, function (i) {
             var cs = list[i];
             CourseScheduleData[cs.Day][cs.Lesson].push(cs);
-         
         });
 
         var times = result.Entity.CourseTimeList;
+
         CourseTime = new Object();
+
         $.each(times, function (i) {
             var t = times[i];
             CourseTime[t.Lesson] = t.TimeRange;
         });
+        */
+        CourseTime = result.Entity.CourseTimeList;
+        CourseMaxApplyNum = result.Entity.CourseMaxApplyNum;
+        InitUserAction();
+
+    
+    }
+
+    InitUserAction = function () {
+
         var userApplyList = GetSessonUserApplyCourse();
+
+      
+
         if (userApplyList) {
             $.each(userApplyList, function (i) {
-                var item = userApplyList[i];
 
-                var csList = CourseScheduleData[item.day][item.lesson];
-                $.each(csList, function (j) {
-                    var course = csList[j];
-                    if (course.CourseCode == item.courseCode) {
-                        CreateSelectCourseInfo(course, j);
-                        return false;
-                    }
+                var item = userApplyList[i];
+                var gridRoot = null;
+                if (item.day >= 1 && item.day <= 5) gridRoot = $("#GridNormal");
+                else gridRoot = $("#GridWeek"); 
+
+                var divList = gridRoot.find(".CellContainer[day=" + item.day + "][lesson=" + item.lesson + "] div[lCode=" + item.lcode+"]");
+                $.each(divList, function (i) {
+                    var course = CreateDataObject(item.day, item.lesson, $(this));
+                    CreateSelectCourseInfo(course, i);
                 });
+                
+           
+                //$.each(csList, function (j) {
+                //    var course = csList[j];
+                //    if (course.CourseCode == item.courseCode) {
+                //        CreateSelectCourseInfo(course, j);
+                //        return false;
+                //    }
+                //});
             });
         }
+        
+    }
 
+    CreateDataObject =function(day,lesson,row)
+    {
+        var item = new Object();
+        item.CourseCode = $(row).attr("CourseCode");
+        item.CourseName = $(row).text();
+        item.CourseType = parseInt($(row).attr("CourseType"));
+        item.Day = parseInt(day);
+        item.Lesson = parseInt(lesson);
+        item.LessonCode = $(row).attr("lCode");
+        item.ApplyNum = $(row).attr("CurUser");
+        return item;
+    }
 
-       
-       
+    InitCourse = function () {
+
     }
 
     Init();

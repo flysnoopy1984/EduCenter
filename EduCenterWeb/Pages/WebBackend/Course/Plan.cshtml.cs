@@ -40,7 +40,7 @@ namespace EduCenterWeb.Pages.WebBackend.Course
 
         public void OnGet()
         {
-            CourseTimes = StaticDataSrv.CourseTime.OrderBy(a => a.Lesson).ToList();
+            CourseTimes = StaticDataSrv.CourseTime.Values.ToList();
             
             CourseList = _CourseSrv.GetAllList();
 
@@ -57,11 +57,13 @@ namespace EduCenterWeb.Pages.WebBackend.Course
                     es.LessonCode = $"{es.Year}_{es.Day}_{es.Lesson}_{es.CourseCode}_{es.LessonNo}_{es.CourseScheduleType}";
                 }
 
-                if(list!=null &&list.Count>0)
+                if (list!=null &&list.Count>0)
                 {
                     _CourseSrv.BeginTrans();
                     _CourseSrv.DeleteCourseSchduleByYear(list[0].Year);
+                    _CourseSrv.SaveChanges();
                     _CourseSrv.AddRange(list);
+                   
                     _CourseSrv.SaveChanges();
                     _CourseSrv.CommitTrans();
                 }  

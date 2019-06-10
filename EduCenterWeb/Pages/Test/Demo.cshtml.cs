@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using EduCenterSrv;
 using EduCenterModel.Course;
 using Newtonsoft.Json;
+using EduCenterModel.BaseEnum;
 
 namespace EduCenterWeb.Pages.Test
 {
@@ -90,30 +91,34 @@ namespace EduCenterWeb.Pages.Test
                 cp.Price = 2000;
 
                 List<EUserCourse> eUserCourses = new List<EUserCourse>();
+
+               
                 eUserCourses.Add(new EUserCourse
                 {
                     CourseScheduleType = cp.CourseScheduleType,
-                    LessonCode = "2019_1_5_MS-1_1",
+                    LessonCode = "2019_1_5_MS-1_1_Standard",
                     UserOpenId = openId,
                 });
-
+           
                 eUserCourses.Add(new EUserCourse
                 {
                     CourseScheduleType = cp.CourseScheduleType,
-                    LessonCode = "2019_6_1_SF-3_1",
+                    LessonCode = "2019_1_6_WQ-1_1_Standard",
                     UserOpenId = openId,
                 });
-
+            
                 eUserCourses.Add(new EUserCourse
                 {
                     CourseScheduleType = cp.CourseScheduleType,
-                    LessonCode = "2019_6_3_MS-3_1",
+                    LessonCode = "2019_2_5_SF-1_1_Standard",
                     UserOpenId = openId,
                 });
 
-                var order = _busSrv.PayCourseOrder(openId, cp, eUserCourses);
+                var order = _busSrv.PayCourseOrder(openId, cp);
 
                 _busSrv.PayCourseSuccess(order.OrderId);
+
+                _busSrv.UserSelectNewCourses(openId, eUserCourses);
             }
             catch(Exception ex)
             {
