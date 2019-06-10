@@ -113,14 +113,14 @@ flex-direction:column;
     justify-content: space-between;
 }
 
-.CourseArea .NextCourse .CourseName {
+.CourseArea .NextCourse .CourseInfo .CourseName {
     color: #f57b7b;
     font-weight: bold;
     margin-bottom: 10px;
     font-size:18px;
 }
 
-.CourseArea .NextCourse .CourseTime {
+.CourseArea .NextCourse  .CourseInfo .CourseTime {
     font-weight: bold;
     font-size: 16px;
     color: #00288d;
@@ -129,15 +129,28 @@ flex-direction:column;
 .CourseArea .CurrentCourse {
     display: flex;
     justify-content: space-between;
+    height:90px;
 }
 
-.CourseArea .CurrentCourse .CourseName {
+.CourseArea .CurrentCourse .CourseInfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.CourseArea .CurrentCourse .UserOption{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.CourseArea .CurrentCourse .CourseInfo .CourseName {
     color: #27af00;
     font-weight: bold;
     margin-bottom: 10px;
+    font-size:18px;
 }
 
-.CourseArea .CurrentCourse .CourseTime {
+.CourseArea .CurrentCourse .CourseInfo .CourseTime {
     font-weight: bold;
     font-size: 16px;
     color: #00288d;
@@ -224,22 +237,28 @@ flex-direction:column;
         @if (Model.CurrentCourse != null)
         {
     <div class="CurrentCourse">
-        <div>
+        <div class="CourseInfo">
             <div class="CourseName">当前：@Model.CurrentCourse.CourseName</div>
             <div class="CourseTime">时间：@Model.CurrentCourse.Time</div>
         </div>
-        <div><input type="button" class="btn btn-danger" value="我要签到" /></div>
-       
+        <div class="UserOption">
+            <input type="button" class="btn btn-warning" value="我要请假" />
+            <input type="button" class="btn btn-danger" value="我要签到" />
+        </div>
+
     </div>
         }
         else if (Model.NextCourse != null)
         {
     <div class="NextCourse">
-        <div>
+        <div class="CourseInfo">
             <div class="CourseName">下节课：@Model.NextCourse.CourseName</div>
             <div class="CourseTime">时间：@Model.NextCourse.Time</div>
         </div>
-        <div><input type="button" class="btn btn-warning" value="我要请假" /></div>
+        <div class="UserOption">
+            <input type="button" class="btn btn-warning" value="我要请假" />
+      
+        </div>
     </div>
         }
 
