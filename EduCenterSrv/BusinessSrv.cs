@@ -328,11 +328,11 @@ namespace EduCenterSrv
                     }
                     _dbContext.SaveChanges();
 
-                    
+                    userSrv.AddNextCourseLog(openId, null, false);
 
                     CommitTrans();
 
-                    userSrv.AddNextCourseLog(openId, null, false);
+                  
 
                 }
             }
