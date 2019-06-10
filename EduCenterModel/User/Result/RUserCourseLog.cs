@@ -8,12 +8,8 @@ namespace EduCenterModel.User.Result
     {
        
         public string CourseName { get; set; }
-        public string CreatedDateTimeStr
-        {
-            get
-            {
-                return CreatedDateTime.ToString("yyyy年MM月dd日");
-            }
-        }
+
+        public string CourseTime { get; set; }
+       
     }
 }

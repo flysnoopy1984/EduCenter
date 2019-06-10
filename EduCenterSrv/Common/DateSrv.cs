@@ -18,42 +18,44 @@ namespace EduCenterSrv.Common
             DateTime courseDate = DateTime.Now;
             int curDay = GetDayOfWeek(courseDate);
 
-            if (curDay>day)
+            if (day> curDay)
                 courseDate = courseDate.AddDays(day - curDay);
             else
             {
                 int diff = 7 - (day - curDay);
-                courseDate = courseDate.AddDays(-diff);
+                courseDate = courseDate.AddDays(diff);
             }
-            courseDate = courseDate.AddDays(7);
-
+          
+            //考虑是否节假日
             while (IsHoliday(courseDate))
             {
                 courseDate = courseDate.AddDays(7);
             }
+            //考虑是否节假日
+
             return courseDate;
         }
-        public static DateTime GetLastCourseDate(int day)
-        {
-            DateTime result = DateTime.Now;
-            int curDay = GetDayOfWeek(result);
+        //public static DateTime GetLastCourseDate(int day)
+        //{
+        //    DateTime result = DateTime.Now;
+        //    int curDay = GetDayOfWeek(result);
 
-            if (curDay > day)
-                result = result.AddDays(day - curDay);
-            else
-            {
-                int diff = 7-(day - curDay);
-                result= result.AddDays(-diff);
-            }
-            //考虑是否节假日
-            while(IsHoliday(result))
-            {
-                result = result.AddDays(-7);
-            }
-            //考虑老师是否请假
+        //    if (curDay > day)
+        //        result = result.AddDays(day - curDay);
+        //    else
+        //    {
+        //        int diff = 7-(day - curDay);
+        //        result= result.AddDays(-diff);
+        //    }
+        //    //考虑是否节假日
+        //    while(IsHoliday(result))
+        //    {
+        //        result = result.AddDays(-7);
+        //    }
+        //    //考虑老师是否请假
 
-            return result;
-        }
+        //    return result;
+        //}
 
         public static bool IsHoliday(DateTime date)
         {

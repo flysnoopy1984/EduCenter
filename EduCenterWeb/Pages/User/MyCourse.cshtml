@@ -53,7 +53,7 @@ display: flex;
 justify-content: space-between;
 width: 100%;
 /*border-bottom:groove 1px #808080;*/
-margin-bottom: 20px;
+margin-bottom: 30px;
 }
 
 .CourseArea .CourseRow .CourseContent {
@@ -71,6 +71,7 @@ height: 65px;
 display: flex;
 flex-direction: column;
 justify-content: space-evenly;
+margin-bottom:10px;
 }
 
 .CourseArea .CourseRow .CourseContent .OneCourse .CourseInfo {
@@ -96,6 +97,7 @@ width: 100%;
 justify-content: space-between;
 font-weight: bold;
 color: #646363;
+flex-direction:column;
 }
 
 .CourseArea .CourseRow .CourseContent .OneCourse .CourseDetail .SignIn {
@@ -115,6 +117,7 @@ color: #646363;
     color: #f57b7b;
     font-weight: bold;
     margin-bottom: 10px;
+    font-size:18px;
 }
 
 .CourseArea .NextCourse .CourseTime {
@@ -208,9 +211,9 @@ color: #646363;
                                 </div>
                                 <div class="CourseDetail">
 
-                                    <div>上次开课：@c.LastCourseDate.ToString("yyyy年MM月dd日")</div>
+                                    <div>下次开课：@c.NextCourseDate.ToString("yyyy年MM月dd日")</div>
 
-                                    <div>@c.LastCouseStatus</div>
+                                    <div><a href="#">上课记录</a></div>
                                 </div>
                             </div>
                         }
@@ -234,7 +237,7 @@ color: #646363;
     <div class="NextCourse">
         <div>
             <div class="CourseName">下节课：@Model.NextCourse.CourseName</div>
-            <div class="CourseTime">时间：@Model.NextCourse.NextCourseDate.ToString("MM月dd日")</div>
+            <div class="CourseTime">时间：@Model.NextCourse.Time</div>
         </div>
         <div><input type="button" class="btn btn-warning" value="我要请假" /></div>
     </div>

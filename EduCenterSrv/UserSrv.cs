@@ -100,7 +100,7 @@ namespace EduCenterSrv
             return (n > 0);
         }
 
-        public RUserCourse GetCurrentUserCourse(string OpenId)
+        public RUserCourse GetCurrentUserCourse(string OpenId, CourseScheduleType CourseScheduleType)
         {
             int dayofWeek = DateSrv.GetDayOfWeek(DateTime.Now);
             int h = DateTime.Now.Hour;
@@ -117,15 +117,31 @@ namespace EduCenterSrv
                 StartTime = times[cs.Lesson].StartTime,
                 EndTime = times[cs.Lesson].EndTime,
                 UserCourseStatus = uc.UserCourseStatus,
-            }).Where(a => a.Day == dayofWeek &&
+                CourseScheduleType = uc.CourseScheduleType
+            })
+            .Where(a => a.Day == dayofWeek &&
+            a.CourseScheduleType == CourseScheduleType &&
             a.UserOpenId == OpenId &&
             a.UserCourseStatus == UserCourseStatus.Avaliable &&
             a.StartTime<=h &&
             a.EndTime>=h).FirstOrDefault();
-
-            
             return result;
+        }
 
+        public RUserCourse GetNextUserCourse(string OpenId)
+        {
+            var result = _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
+            uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourse
+            {
+                UserOpenId = uc.UserOpenId,
+                CourseScheduleType = uc.CourseScheduleType,            
+                CourseName = cs.CourseName,
+                LessonCode = uc.LessonCode,
+                
+              
+
+            }).Where(a => a.UserOpenId == OpenId).FirstOrDefault();
+            return result;
         }
 
         public RUserCourse GetUserNextCourse(string OpenId, CourseScheduleType CourseScheduleType, List<RUserCourse> userCourses = null)
@@ -187,7 +203,14 @@ left join UserCourseLog as uclog on uclog.LessonCode = uc.LessonCode";
         #endregion
 
         #region UserCoureseLog
-        public List<RUserCourseLog> GetUserCourseLog(string OpenId, CourseScheduleType CourseScheduleType,int topnum =5)
+        /// <summary>
+        /// 排除Pre的记录
+        /// </summary>
+        /// <param name="OpenId"></param>
+        /// <param name="CourseScheduleType"></param>
+        /// <param name="topnum"></param>
+        /// <returns></returns>
+        public List<RUserCourseLog> GetUserCourseLogHistory(string OpenId, CourseScheduleType CourseScheduleType,int topnum =5)
         {
            var result =  _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
                 uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourseLog
@@ -199,11 +222,34 @@ left join UserCourseLog as uclog on uclog.LessonCode = uc.LessonCode";
                     LessonCode = uc.LessonCode,
                     UserCourseLogStatus = uc.UserCourseLogStatus
 
-                }).Where(a => a.UserOpenId == OpenId && a.CourseScheduleType == CourseScheduleType).Take(topnum).ToList();
+                }).Where(a => a.UserOpenId == OpenId && 
+                        a.CourseScheduleType == CourseScheduleType &&
+                        a.UserCourseLogStatus!= UserCourseLogStatus.PreNext).Take(topnum).ToList();
             return result;
         }
 
-        public void AddNextCourseLog(string OpenId, List<RUserCourse> userCourseList = null,bool isIncludeToday = true)
+        public RUserCourseLog GetUserCourseLogPre(string OpenId, CourseScheduleType CourseScheduleType)
+        {
+            var times = StaticDataSrv.CourseTime;
+            var result = _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
+                 uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourseLog
+                 {
+                     UserOpenId = uc.UserOpenId,
+                     CourseScheduleType = uc.CourseScheduleType,
+                     UserCourseLogStatus = uc.UserCourseLogStatus,
+                     CourseTime = times[cs.Lesson].TimeRange, 
+                     CourseName = cs.CourseName,
+                     LessonCode = uc.LessonCode,
+                     CourseDateTime = uc.CourseDateTime
+
+                 }).Where(a => a.UserOpenId == OpenId &&
+                         a.CourseScheduleType == CourseScheduleType &&
+                         a.UserCourseLogStatus == UserCourseLogStatus.PreNext).FirstOrDefault();
+            return result;
+        }
+
+
+        public void AddNextCourseLog(string OpenId,bool isIncludeToday = true)
         {
             int dayofWeek = DateSrv.GetDayOfWeek(DateTime.Now);
             int curHour = DateTime.Now.Hour;
@@ -213,31 +259,23 @@ left join UserCourseLog as uclog on uclog.LessonCode = uc.LessonCode";
             EUserCourseLog ucLog = null;
             RUserCourse nextCourse = null;
             List<RUserCourse> courseList = null;
-            if (userCourseList != null)
-            {
-                courseList = userCourseList.OrderByDescending(a => a.Day)
-                           .ThenBy(a => a.Lesson).ToList();
-            }
-            else
-            {
-                courseList = _dbContext.DBUserCoures.Join(_dbContext.DbCourseSchedule,
-                           uc => uc.LessonCode,
-                           cs => cs.LessonCode,
-                           (uc, cs) => new RUserCourse
-                           {
-                               Day = cs.Day,
-                               Lesson = cs.Lesson,
-                               CourseScheduleType = cs.CourseScheduleType,
-                               LessonCode = cs.LessonCode,
-                               StartTime = times[cs.Lesson].StartTime,
-                               EndTime = times[cs.Lesson].EndTime,
-                               UserOpenId = uc.UserOpenId,
-                           })
-                           .Where(a => a.UserOpenId == OpenId)
-                           .OrderByDescending(a => a.Day)
-                           .ThenBy(a => a.Lesson).ToList();
-            }
-           
+          
+            courseList = _dbContext.DBUserCoures.Join(_dbContext.DbCourseSchedule,
+                        uc => uc.LessonCode,
+                        cs => cs.LessonCode,
+                        (uc, cs) => new RUserCourse
+                        {
+                            Day = cs.Day,
+                            Lesson = cs.Lesson,
+                            CourseScheduleType = cs.CourseScheduleType,
+                            LessonCode = cs.LessonCode,
+                            StartTime = times[cs.Lesson].StartTime,
+                            EndTime = times[cs.Lesson].EndTime,
+                            UserOpenId = uc.UserOpenId,
+                        })
+                        .Where(a => a.UserOpenId == OpenId)
+                        .OrderByDescending(a => a.Day)
+                        .ThenBy(a => a.Lesson).ToList();
 
             //如果不是第一次报名则计算当天的。
             if (isIncludeToday)

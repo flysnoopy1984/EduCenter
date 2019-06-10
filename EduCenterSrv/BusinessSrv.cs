@@ -328,7 +328,7 @@ namespace EduCenterSrv
                     }
                     _dbContext.SaveChanges();
 
-                    userSrv.AddNextCourseLog(openId, null, false);
+                    userSrv.AddNextCourseLog(openId, false);
 
                     CommitTrans();
 
