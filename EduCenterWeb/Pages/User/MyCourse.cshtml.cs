@@ -42,7 +42,7 @@ namespace EduCenterWeb.Pages.User
               
                 }
                 //获取用户Log Pre的课程
-                 var userLog = _UserSrv.GetUserCourseLogPre(us.OpenId, CourseScheduleType.Standard);
+                 var userLog = _UserSrv.GetNextUserCourseLog(us.OpenId, CourseScheduleType.Standard);
                  if(userLog.CourseDateTime == DateTime.Today.ToString("yyyy-MM-dd"))
                  {
                     CurrentCourse = new RUserCourse

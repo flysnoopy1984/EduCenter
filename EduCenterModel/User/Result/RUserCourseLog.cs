@@ -16,6 +16,9 @@ namespace EduCenterModel.User.Result
         public string CourseTime { get; set; }
 
         public string UserCourseStatusName { get; set; }
+
+        public double StartTime { get; set; }
+        public double EndTime { get; set; }
       
         public int Day { get; set; }
 

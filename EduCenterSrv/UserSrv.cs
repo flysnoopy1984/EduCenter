@@ -30,6 +30,15 @@ namespace EduCenterSrv
             string sql = $"update UserInfo set UserRole = {(int)updateRole} where OpenId='{openId}'";
             return sql;
         }
+
+        public static string sql_UpdateUserCourseLogStatus(string lessonCode, string openId, CourseScheduleType courseScheduleType, UserCourseLogStatus userCourseLogStatus)
+        {
+            string sql = $@"update UserCourseLog 
+                            set UserCourseLogStatus = '{(int)userCourseLogStatus}'
+                            where UserOpenId = '{openId}' and LessonCode = '{lessonCode}' and CourseScheduleType = '{(int)courseScheduleType}'";
+            return sql;
+        }
+
         #endregion
 
         /// <summary>
@@ -241,10 +250,11 @@ namespace EduCenterSrv
         }
 
      
-        public RUserCourseLog GetUserCourseLogPre(string OpenId, CourseScheduleType CourseScheduleType)
+        public RUserCourseLog GetNextUserCourseLog(string OpenId, CourseScheduleType CourseScheduleType)
         {
           //  var ucLog = null;
             var times = StaticDataSrv.CourseTime;
+
             var result = _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
                  uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourseLog
                  {
@@ -252,16 +262,44 @@ namespace EduCenterSrv
                      CourseScheduleType = uc.CourseScheduleType,
                      UserCourseLogStatus = uc.UserCourseLogStatus,
                      CourseTime = times[cs.Lesson].TimeRange, 
+                     StartTime = times[cs.Lesson].StartTime,
+                     EndTime = times[cs.Lesson].EndTime,
                      CourseName = cs.CourseName,
                      LessonCode = uc.LessonCode,
                      CourseDateTime = uc.CourseDateTime
 
                  }).Where(a => a.UserOpenId == OpenId &&
                          a.CourseScheduleType == CourseScheduleType &&
-                         a.UserCourseLogStatus == UserCourseLogStatus.PreNext).FirstOrDefault();
-           
+                         a.UserCourseLogStatus != UserCourseLogStatus.Absent).FirstOrDefault();
+            if (result != null)
+            {
+                var courseDate = DateTime.Parse(result.CourseDateTime);
+
+                if (DateTime.Now > courseDate)
+                {
+                    UpdateUserCourseLogStatus(result.LessonCode, OpenId, CourseScheduleType, UserCourseLogStatus.Absent);
+                    result = AddNextCourseLog(OpenId);
+                }
+                else if (result.CourseDateTime == DateTime.Now.ToString("yyyy-MM-dd"))
+                {
+                    if (DateTime.Now.Hour > result.EndTime)
+                    {
+                        UpdateUserCourseLogStatus(result.LessonCode, OpenId, CourseScheduleType, UserCourseLogStatus.Absent);
+                        result = AddNextCourseLog(OpenId);
+                    }
+                }
+
+            }
+            else
+                result = AddNextCourseLog(OpenId);
 
             return result;
+        }
+
+        public void UpdateUserCourseLogStatus(string lessonCode,string openId, CourseScheduleType courseScheduleType, UserCourseLogStatus userCourseLogStatus)
+        {
+            string sql = sql_UpdateUserCourseLogStatus(lessonCode, openId, courseScheduleType, userCourseLogStatus);
+            _dbContext.Database.ExecuteSqlCommand(sql);
         }
 
 
@@ -284,6 +322,7 @@ namespace EduCenterSrv
                         {
                             Day = cs.Day,
                             Lesson = cs.Lesson,
+                            CourseName = cs.CourseName,
                             CourseScheduleType = cs.CourseScheduleType,
                             LessonCode = cs.LessonCode,
                             StartTime = times[cs.Lesson].StartTime,
@@ -331,9 +370,19 @@ namespace EduCenterSrv
                 ucLog = existLog;
 
             //返回RUserCourseLog仅为了给其他函数用
-            result = (RUserCourseLog)ucLog;
-            result.CourseName = nextCourse.CourseName;
-            result.CourseTime = nextCourse.Time;
+            result = new RUserCourseLog
+            {
+                CourseName = nextCourse.CourseName,
+                CourseTime = nextCourse.Time,
+                UserOpenId = ucLog.UserOpenId,
+                CourseDateTime = ucLog.CourseDateTime,
+                CreatedDateTime = ucLog.CreatedDateTime,
+                CourseScheduleType = ucLog.CourseScheduleType,
+                LessonCode = ucLog.LessonCode,
+                UserCourseLogStatus = ucLog.UserCourseLogStatus,
+            };
+               
+      
             return result;
         }
 

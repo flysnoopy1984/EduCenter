@@ -22,7 +22,7 @@ namespace EduCenterSrv.Common
                 courseDate = courseDate.AddDays(day - curDay);
             else
             {
-                int diff = 7 - (day - curDay);
+                int diff = 7 - (curDay- day );
                 courseDate = courseDate.AddDays(diff);
             }
           
