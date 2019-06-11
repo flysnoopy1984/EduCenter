@@ -35,11 +35,12 @@
         height: 34px;
         line-height: 34px;
         font-size: 20px;
-        margin-top: 10px;
+        margin-top: 30px;
         margin-bottom: 10px;
         background-color: #96dffd;
         width: 80%;
         border-radius: 8px;
+        font-weight:bold;
     }
 
     .CourseArea {
@@ -199,7 +200,7 @@ flex-direction:column;
 </style>
 <div class="MainContainer">
     <div class="Title">
-        <span class="fa fa-calendar">我的课程</span>
+        <span class="fa fa-calendar" style="margin-right:8px;"></span>我的课程
     </div>
     <div class="CourseArea">
         @for (int i = 1; i <= 7; i++)
@@ -242,8 +243,8 @@ flex-direction:column;
             <div class="CourseTime">时间：@Model.CurrentCourse.Time</div>
         </div>
         <div class="UserOption">
-            <input type="button" class="btn btn-warning" value="我要请假" />
-            <input type="button" class="btn btn-danger" value="我要签到" />
+            <input id="btn_Leave" type="button" class="btn btn-warning" value="我要请假" />
+            <input id="btn_Sign" type="button" class="btn btn-danger" value="我要签到" />
         </div>
 
     </div>
@@ -256,50 +257,50 @@ flex-direction:column;
             <div class="CourseTime">时间：@Model.NextCourse.Time</div>
         </div>
         <div class="UserOption">
-            <input type="button" class="btn btn-warning" value="我要请假" />
+            <input id="btn_Leave" type="button" class="btn btn-warning" value="我要请假" />
       
         </div>
     </div>
         }
 
     </div>
-    <div class="CourseLog">
-        <div class="SubTitle">
-            <div class="SubTitleName">课程记录[最近10次]</div> <div>更多</div>
-        </div>
-        <table border="0" cellpadding="0" cellspacing="0" class="LogTable" width="100%">
-            <tr>
-                <th>开始日期</th>
-                <th>课程名</th>
-                <th>状态</th>
-            </tr>
-            <tr>
-                <td>2019-10-22</td>
-                <td>美术</td>
-                <td>缺席</td>
-            </tr>
-            <tr>
-                <td>2019-10-22</td>
-                <td>美术</td>
-                <td>缺席</td>
-            </tr>
-            <tr>
-                <td>2019-10-22</td>
-                <td>美术</td>
-                <td>缺席</td>
-            </tr>
-            <tr>
-                <td>2019-10-22</td>
-                <td>美术</td>
-                <td>缺席</td>
-            </tr>
-            <tr>
-                <td>2019-10-22</td>
-                <td>美术</td>
-                <td>缺席</td>
-            </tr>
-        </table>
+<div class="CourseLog">
+    <div class="SubTitle">
+        <div class="SubTitleName">课程记录[最近10次]</div> <div>更多</div>
     </div>
+    <table border="0" cellpadding="0" cellspacing="0" class="LogTable" width="100%">
+        <tr>
+            <th>开始日期</th>
+            <th>课程名</th>
+            <th>状态</th>
+        </tr>
+        <tr>
+            <td>2019-10-22</td>
+            <td>美术</td>
+            <td>缺席</td>
+        </tr>
+        <tr>
+            <td>2019-10-22</td>
+            <td>美术</td>
+            <td>缺席</td>
+        </tr>
+        <tr>
+            <td>2019-10-22</td>
+            <td>美术</td>
+            <td>缺席</td>
+        </tr>
+        <tr>
+            <td>2019-10-22</td>
+            <td>美术</td>
+            <td>缺席</td>
+        </tr>
+        <tr>
+            <td>2019-10-22</td>
+            <td>美术</td>
+            <td>缺席</td>
+        </tr>
+    </table>
+</div>
 </div>
 
 

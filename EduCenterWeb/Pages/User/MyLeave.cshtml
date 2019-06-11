@@ -4,6 +4,246 @@
     ViewData["Title"] = "MyLeave";
     Layout = "~/Pages/Shared/_EduMainApp.cshtml";
 }
+@Html.AntiForgeryToken()
 
-<h2>MyLeave</h2>
+<link href="~/lib/bootstrap/dist/fonts/font-awesome.min.css" rel="stylesheet" />
+<link href="~/css/Plugs/checkbox_radio.css" rel="stylesheet" />
+
+<style type="text/css">
+    .MainContainer {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin-left: 10px;
+        margin-right: 10px;
+        height: 100vh;
+    }
+
+    .LeaveTitle {
+        color: #864b00;
+        text-align: center;
+        height: 34px;
+        line-height: 34px;
+        font-size: 20px;
+        margin-top: 30px;
+        margin-bottom: 10px;
+        background-color: #fdec96;
+        width: 80%;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+
+    .LeaveLog {
+        width: 100%;
+        overflow-y: auto;
+        min-height: 200px;
+    }
+
+    .SubTitle {
+        display: flex;
+        justify-content: space-between;
+        width: 90%;
+    }
+
+    .SubTitleName {
+        padding-left: 5px;
+        padding-bottom: 8px;
+        color: #3d86ff;
+        font-weight: bold;
+        margin-bottom: 10px;
+        margin-left: 10px;
+        border-bottom: solid 1px black;
+    }
+
+    .CourseLog .LogTable {
+        width: 95%;
+        margin-left: 10px;
+    }
+
+    .DateArea {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        height: 40px;
+    }
+
+        .DateArea .CalendarPicker {
+            display: flex;
+            color: #9da09b;
+        }
+
+        .DateArea .DateLabel {
+            font-weight: bold;
+            line-height: 40px;
+        }
+
+        .DateArea .CalendarPicker .DateInput {
+            border-bottom: solid 1px #808080;
+            width: 150px;
+            line-height: 40px;
+            padding-left: 15px;
+            color: #12aa21;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+    .LeaveArea {
+        margin-top: 30px;
+        margin-bottom: 30px;
+        width: 100%;
+        /*border:solid 1px #808080;*/
+        min-height: 50vh;
+        overflow-y: auto;
+    }
+        /* Loading */
+        .LeaveArea .LoadingArea {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: none;
+        }
+
+            .LeaveArea .LoadingArea .IconLoading {
+                width: 56px;
+                height: 56px;
+            }
+
+        /*请假课列表*/
+        .LeaveArea .LeaveList {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+            .LeaveArea .LeaveList .Course {
+                display: flex;
+                margin-bottom: 15px;
+            }
+
+                .LeaveArea .LeaveList .Course .CourseContent {
+                    flex-grow: 2;
+                    display: flex;
+                    justify-content: space-between;
+                    padding-right: 20px;
+                    height: 50px;
+                    flex-wrap: wrap;
+                    font-weight: bold;
+                    font-size: 16px;
+                }
+
+                    .LeaveArea .LeaveList .Course .CourseContent .CourseName {
+                        color: #fb9d1e;
+                        padding-right: 10px;
+                    }
+
+                    .LeaveArea .LeaveList .Course .CourseContent .CourseStatus {
+                        color: #924802;
+                    }
+
+                .LeaveArea .LeaveList .Course .UserOption {
+                    width: 70px;
+                }
+
+    .checkbox {
+        margin-top: 1px;
+    }
+</style>
+<script src="~/js/EduLib/EditHelper.js"></script>
+<script src="~/lib/laydate/laydate.js"></script>
+<script src="~/js/Wap/User/UserLeave.js"></script>
+<div class="MainContainer">
+    <div class="LeaveTitle">课程请假</div>
+    <div class="DateArea">
+        <div class="DateLabel">选择日期：</div>
+        <div class="CalendarPicker">
+            <div class="DateInput"></div>
+            <div class="fa fa-calendar fa-2x" id="btn_DatePick"></div>
+        </div>
+    </div>
+    <div class="LeaveArea">
+        <div class="LoadingArea">
+            <div class="IconLoading fa fa-spinner fa-pulse fa-4x fa-fw "></div>
+        </div>
+        <div class="LeaveList">
+
+            <div class="Course">
+                <div class="CourseContent">
+                    <div class="CourseName">美术基础班</div>
+                    <div class="CourseStatus">已请假</div>
+                    <div>16:00-20:00</div>
+                </div>
+                <div class="UserOption">
+                    <div class="checkbox checkbox-primary">
+                        <input id="checkbox2" type="checkbox">
+                        <label for="checkbox2">
+                            选择
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="LeaveLog">
+        <div class="SubTitle">
+            <div class="SubTitleName">请假记录[最近10次]</div> <div>更多</div>
+        </div>
+        @*<table border="0" cellpadding="0" cellspacing="0" class="LogTable" width="100%">
+                <tr>
+                    <th>开始日期</th>
+                    <th>课程名</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td>2019-10-22</td>
+                    <td>美术</td>
+                    <td>缺席</td>
+                </tr>
+                <tr>
+                    <td>2019-10-22</td>
+                    <td>美术</td>
+                    <td>缺席</td>
+                </tr>
+                <tr>
+                    <td>2019-10-22</td>
+                    <td>美术</td>
+                    <td>缺席</td>
+                </tr>
+                <tr>
+                    <td>2019-10-22</td>
+                    <td>美术</td>
+                    <td>缺席</td>
+                </tr>
+                <tr>
+                    <td>2019-10-22</td>
+                    <td>美术</td>
+                    <td>缺席</td>
+                </tr>
+            </table>*@
+    </div>
+</div>
+<div id="HideData" style="display:none;">
+    <div class="Course">
+        <div class="CourseContent">
+            <div class="CourseName">美术基础班</div>
+            <div class="CourseStatus">已请假</div>
+            <div class="CourseTime">16:00-20:00</div>
+        </div>
+        <div class="UserOption">
+            <div class="checkbox checkbox-primary">
+                <input id="" type="checkbox">
+                <label for="">
+                    选择
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
 

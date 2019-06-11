@@ -14,7 +14,16 @@
             if (showMsg == 1)
             ShowInfo("不能重复选课！");
         }
+        $("#btn_Leave").on("click", LeaveEvent);
+        $("#btn_Sign").on("click", SignInEvent);
     };
+
+    LeaveEvent = function () {
+        window.location.href = "MyLeave";
+    }
+    SignInEvent = function () {
+        window.location.href = "MySign";
+    }
 
     Init();
 });

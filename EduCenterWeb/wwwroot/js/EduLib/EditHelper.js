@@ -144,6 +144,37 @@
         });
     };
 
+    callAjax_Query_NoBlock = function (url, data, handler,needErrorMsg) {
+
+        if (needErrorMsg == undefined) needErrorMsg = true;
+        else needErrorMsg = false;
+
+        $.ajax({
+            type: "post",
+            url: url,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: data,
+            success: function (res) {
+                if (res.IsSuccess) {
+                    if (handler != null)
+                        handler(res);
+                }
+                else {
+                    if (needErrorMsg)
+                    ShowError(res.ErrorMsg);
+                }
+            },
+            error: function (xhr, type) {
+                if (needErrorMsg)
+                ShowError("系统错误");
+            }
+
+        });
+    };
+
     emptyFields = function (rootId) {
         $("#" + rootId).find("input[type='text']").val("");
     };

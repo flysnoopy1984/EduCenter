@@ -39,31 +39,39 @@ namespace EduCenterWeb.Pages.User
                 foreach (var course in UserCourseList)
                 {
                     course.NextCourseDate = DateSrv.GetNextCourseDate(course.Day);
-                    //course.LastCourseDate = DateSrv.GetLastCourseDate(course.Day);
-                    //var courseLog = UserCourseLogList.Where(a => a.LessonCode == course.LessonCode).OrderByDescending(a => a.CreatedDateTime).FirstOrDefault();
-                    //if (courseLog == null)
-                    //    course.LastCouseStatus = "";
-                    //else
-                    //{
-                    //    if (courseLog.UserCourseLogStatus == UserCourseLogStatus.PreNext)
-                    //        courseLog.UserCourseLogStatus = UserCourseLogStatus.Absent;
-                    //    course.LastCouseStatus = BaseEnumSrv.UserCourseLogStatusList[(int)courseLog.UserCourseLogStatus];
-
-                    //}
+              
                 }
-                //计算当天课程
-                CurrentCourse = _UserSrv.GetCurrentUserCourse(us.OpenId, CourseScheduleType.Standard);
-                if (CurrentCourse == null)
+                //获取用户Log Pre的课程
+                 var userLog = _UserSrv.GetUserCourseLogPre(us.OpenId, CourseScheduleType.Standard);
+                 if(userLog.CourseDateTime == DateTime.Today.ToString("yyyy-MM-dd"))
+                 {
+                    CurrentCourse = new RUserCourse
+                    {
+                        CourseName = userLog.CourseName,
+                        Time = userLog.CourseTime,
+                    };
+                 }
+                 else
                 {
-                    //计算用户下节课
-                    var userLog = _UserSrv.GetUserCourseLogPre(us.OpenId, CourseScheduleType.Standard);
                     NextCourse = new RUserCourse
                     {
                         CourseName = userLog.CourseName,
                         Time = DateTime.Parse(userLog.CourseDateTime).ToString("MM月dd日")
                     };
-                    
                 }
+             //   CurrentCourse = _UserSrv.GetCurrentUserCourse(us.OpenId, CourseScheduleType.Standard);
+
+                //if (CurrentCourse == null)
+                //{
+                //    //计算用户下节课
+                  
+                //    NextCourse = new RUserCourse
+                //    {
+                //        CourseName = userLog.CourseName,
+                //        Time = DateTime.Parse(userLog.CourseDateTime).ToString("MM月dd日")
+                //    };
+                    
+                //}
             }
             else
                 UserCourseList = new List<RUserCourse>();

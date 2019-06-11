@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EduCenterWeb.Pages.User
 {
-    public class MySignModel : PageModel
+    public class MySignModel : EduBaseAppPageModel
     {
         public void OnGet()
         {

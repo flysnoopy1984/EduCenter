@@ -10,6 +10,10 @@ namespace EduCenterModel.User.Result
         public string CourseName { get; set; }
 
         public string CourseTime { get; set; }
+
+        public int Day { get; set; }
+
+        public int Lesson { get; set; }
        
     }
 }

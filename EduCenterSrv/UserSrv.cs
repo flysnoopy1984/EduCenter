@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+
+
 namespace EduCenterSrv
 {
     public class UserSrv
@@ -137,9 +139,6 @@ namespace EduCenterSrv
                 CourseScheduleType = uc.CourseScheduleType,            
                 CourseName = cs.CourseName,
                 LessonCode = uc.LessonCode,
-                
-              
-
             }).Where(a => a.UserOpenId == OpenId).FirstOrDefault();
             return result;
         }
@@ -188,14 +187,6 @@ namespace EduCenterSrv
          
         }
 
-        public List<RUserCourse> GetAllUserCourseByLessonCode(string lessonCode)
-        {
-            string sql = @"select ui.Name,uc.LessonCode from UserCourse as uc
-join UserInfo as ui on ui.OpenId = uc.UserOpenId
-left join UserCourseLog as uclog on uclog.LessonCode = uc.LessonCode";
-            return null;
-        }
-
         public void AddUserCourse(List<EUserCourse> courseList)
         {
             _dbContext.DBUserCoures.AddRange(courseList);   
@@ -203,6 +194,27 @@ left join UserCourseLog as uclog on uclog.LessonCode = uc.LessonCode";
         #endregion
 
         #region UserCoureseLog
+
+        public RUserCourseLog GetUserCourseLog(string OpenId, CourseScheduleType CourseScheduleType,string date,string lessonCode)
+        {
+            var times = StaticDataSrv.CourseTime;
+            var result = _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
+                 uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourseLog
+                 {
+                     UserOpenId = uc.UserOpenId,
+                     CourseScheduleType = uc.CourseScheduleType,
+                     UserCourseLogStatus = uc.UserCourseLogStatus,
+                     LessonCode = uc.LessonCode,
+                     CourseDateTime = uc.CourseDateTime,
+                     CourseTime = times[cs.Lesson].TimeRange,
+                     CourseName = cs.CourseName,
+
+                 }).Where(a => a.UserOpenId == OpenId &&
+                         a.CourseScheduleType == CourseScheduleType &&
+                         a.LessonCode  == lessonCode &&
+                         a.CourseDateTime == date).FirstOrDefault();
+            return result;
+        }
         /// <summary>
         /// 排除Pre的记录
         /// </summary>
@@ -230,6 +242,7 @@ left join UserCourseLog as uclog on uclog.LessonCode = uc.LessonCode";
 
         public RUserCourseLog GetUserCourseLogPre(string OpenId, CourseScheduleType CourseScheduleType)
         {
+          //  var ucLog = null;
             var times = StaticDataSrv.CourseTime;
             var result = _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
                  uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourseLog
@@ -245,17 +258,20 @@ left join UserCourseLog as uclog on uclog.LessonCode = uc.LessonCode";
                  }).Where(a => a.UserOpenId == OpenId &&
                          a.CourseScheduleType == CourseScheduleType &&
                          a.UserCourseLogStatus == UserCourseLogStatus.PreNext).FirstOrDefault();
+           
+
             return result;
         }
 
 
-        public void AddNextCourseLog(string OpenId,bool isIncludeToday = true)
+        public RUserCourseLog AddNextCourseLog(string OpenId,bool isIncludeToday = true)
         {
             int dayofWeek = DateSrv.GetDayOfWeek(DateTime.Now);
             int curHour = DateTime.Now.Hour;
 
             var times = StaticDataSrv.CourseTime;
 
+            RUserCourseLog result = null;
             EUserCourseLog ucLog = null;
             RUserCourse nextCourse = null;
             List<RUserCourse> courseList = null;
@@ -272,6 +288,7 @@ left join UserCourseLog as uclog on uclog.LessonCode = uc.LessonCode";
                             StartTime = times[cs.Lesson].StartTime,
                             EndTime = times[cs.Lesson].EndTime,
                             UserOpenId = uc.UserOpenId,
+                            Time = times[cs.Lesson].TimeRange
                         })
                         .Where(a => a.UserOpenId == OpenId)
                         .OrderByDescending(a => a.Day)
@@ -304,11 +321,61 @@ left join UserCourseLog as uclog on uclog.LessonCode = uc.LessonCode";
             var existLog = _dbContext.DBUserCourseLog.Where(a => a.UserOpenId == OpenId &&
                                               a.LessonCode == ucLog.LessonCode &&
                                               a.CourseDateTime == ucLog.CourseDateTime).FirstOrDefault();
-            if(existLog == null)
+            if (existLog == null)
             {
                 _dbContext.DBUserCourseLog.Add(ucLog);
                 _dbContext.SaveChanges();
             }
+            else
+                ucLog = existLog;
+
+            //返回RUserCourseLog仅为了给其他函数用
+            result = (RUserCourseLog)ucLog;
+            result.CourseName = nextCourse.CourseName;
+            result.CourseTime = nextCourse.Time;
+            return result;
+        }
+
+        public List<RUserCourseLog> GetUserCourseByDate(string OpenId,string date, CourseScheduleType courseScheduleType)
+        {
+            //var quc = _dbContext.DBUserCoures.Where(a => a.UserOpenId == OpenId && a.CourseScheduleType == courseScheduleType);
+            //var qulog = _dbContext.DBUserCourseLog.Where(a => a.UserOpenId == OpenId &&
+            //a.CourseScheduleType == courseScheduleType &&
+            //a.CourseDateTime == date);
+
+            //var data = from uc in _dbContext.DBUserCoures
+            //           join cs in _dbContext.DbCourseSchedule on uc.LessonCode equals cs.LessonCode
+            //           join ul in _dbContext.DBUserCourseLog  on uc.LessonCode equals ul.LessonCode
+            //           into uc_ul
+            //           from ucul in uc_ul.DefaultIfEmpty()
+            //           where ucul.CourseDateTime == date && uc.UserOpenId
+
+
+
+
+
+
+
+            string sql = @"select cs.CourseName,
+                                  cs.Lesson,
+                                  cs.Day,
+                                  cs.LessonCode,
+                                  ul.UserCourseLogStatus
+                          from UserCourse as uc
+                            join CourseSchedule as cs on cs.LessonCode = uc.LessonCode
+                            left join UserCourseLog as ul on uc.LessonCode = ul.LessonCode 
+                            and ul.courseDateTime ='2019-06-11'
+                            where uc.UserOpenId ='o3nwE0qI_cOkirmh_qbGGG-5G6B0' and uc.CourseScheduleType = 0";
+
+            //var list = _dbContext.Set<RUserCourseLog>().FromSql(sql).Select(a => new RUserCourseLog
+            //{
+            //    CourseName = a.CourseName,
+            //    LessonCode = a.LessonCode,
+            //    Day = a.Day,
+            //    Lesson = a.Lesson
+            // }).ToList();
+         
+            return null;
         }
         #endregion
 
