@@ -92,7 +92,7 @@
         margin-bottom: 30px;
         width: 100%;
         /*border:solid 1px #808080;*/
-        min-height: 50vh;
+        min-height: 40vh;
         overflow-y: auto;
     }
         /* Loading */
@@ -152,6 +152,9 @@
         margin-top: 1px;
     }
 </style>
+<link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
+<script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+
 <script src="~/js/EduLib/EditHelper.js"></script>
 <script src="~/lib/laydate/laydate.js"></script>
 <script src="~/js/Wap/User/UserLeave.js"></script>
@@ -170,7 +173,7 @@
         </div>
         <div class="LeaveList">
 
-            <div class="Course">
+            @*<div class="Course">
                 <div class="CourseContent">
                     <div class="CourseName">美术基础班</div>
                     <div class="CourseStatus">已请假</div>
@@ -184,7 +187,7 @@
                         </label>
                     </div>
                 </div>
-            </div>
+            </div>*@
 
         </div>
 
@@ -229,11 +232,11 @@
     </div>
 </div>
 <div id="HideData" style="display:none;">
-    <div class="Course">
+    <div class="Course" lCode="">
         <div class="CourseContent">
-            <div class="CourseName">美术基础班</div>
-            <div class="CourseStatus">已请假</div>
-            <div class="CourseTime">16:00-20:00</div>
+            <div class="CourseName"></div>
+            <div class="CourseStatus"></div>
+            <div class="CourseTime"></div>
         </div>
         <div class="UserOption">
             <div class="checkbox checkbox-primary">

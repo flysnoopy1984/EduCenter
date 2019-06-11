@@ -11,10 +11,10 @@ namespace EduCenterModel.BaseEnum
         ///  签到后，新建记录的状态
         /// </summary>
         PreNext =1,
-        /// <summary>
-        /// 老师开课后
-        /// </summary>
-        Started =2,
+        ///// <summary>
+        ///// 老师开课后
+        ///// </summary>
+        //Started =2,
         /// <summary>
         /// 用户签到后
         /// </summary>

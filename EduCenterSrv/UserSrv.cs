@@ -240,6 +240,7 @@ namespace EduCenterSrv
             return result;
         }
 
+     
         public RUserCourseLog GetUserCourseLogPre(string OpenId, CourseScheduleType CourseScheduleType)
         {
           //  var ucLog = null;
@@ -338,34 +339,51 @@ namespace EduCenterSrv
 
         public List<RUserCourseLog> GetUserCourseByDate(string OpenId,string date, CourseScheduleType courseScheduleType)
         {
+            var dayofweek = DateSrv.GetDayOfWeek(DateTime.Parse(date));
+
+            List<RUserCourseLog> result = null;
             //var quc = _dbContext.DBUserCoures.Where(a => a.UserOpenId == OpenId && a.CourseScheduleType == courseScheduleType);
             //var qulog = _dbContext.DBUserCourseLog.Where(a => a.UserOpenId == OpenId &&
             //a.CourseScheduleType == courseScheduleType &&
             //a.CourseDateTime == date);
+            var times = StaticDataSrv.CourseTime;
 
-            //var data = from uc in _dbContext.DBUserCoures
-            //           join cs in _dbContext.DbCourseSchedule on uc.LessonCode equals cs.LessonCode
-            //           join ul in _dbContext.DBUserCourseLog  on uc.LessonCode equals ul.LessonCode
-            //           into uc_ul
-            //           from ucul in uc_ul.DefaultIfEmpty()
-            //           where ucul.CourseDateTime == date && uc.UserOpenId
+            var efSql = from uc in _dbContext.DBUserCoures
+                        join ul in _dbContext.DBUserCourseLog.Where(a => a.CourseDateTime == date) on uc.LessonCode equals ul.LessonCode into uc_ul
+                        from ucul in uc_ul.DefaultIfEmpty()
+                        join cs in _dbContext.DbCourseSchedule on uc.LessonCode equals cs.LessonCode
+                        where uc.UserOpenId == OpenId &&
+                              uc.CourseScheduleType == courseScheduleType &&
+                              cs.Day == dayofweek
+                        select new RUserCourseLog
+                        {
+                            CourseName = cs.CourseName,
+                            Lesson = cs.Lesson,
+                            Day = cs.Day,
+                            CourseTime = times[cs.Lesson].TimeRange,
+                            UserCourseLogStatus = ucul==null?UserCourseLogStatus.PreNext: ucul.UserCourseLogStatus,
+                            LessonCode = uc.LessonCode,
+                            UserCourseStatusName = ucul == null? BaseEnumSrv.UserCourseLogStatusList[(int)UserCourseLogStatus.PreNext]: BaseEnumSrv.UserCourseLogStatusList[(int)ucul.UserCourseLogStatus]
+                        };
+
+            result = efSql.ToList();
+
+
+            throw new Exception("Test Error");
 
 
 
 
-
-
-
-            string sql = @"select cs.CourseName,
-                                  cs.Lesson,
-                                  cs.Day,
-                                  cs.LessonCode,
-                                  ul.UserCourseLogStatus
-                          from UserCourse as uc
-                            join CourseSchedule as cs on cs.LessonCode = uc.LessonCode
-                            left join UserCourseLog as ul on uc.LessonCode = ul.LessonCode 
-                            and ul.courseDateTime ='2019-06-11'
-                            where uc.UserOpenId ='o3nwE0qI_cOkirmh_qbGGG-5G6B0' and uc.CourseScheduleType = 0";
+            //string sql = @"select cs.CourseName,
+            //                      cs.Lesson,
+            //                      cs.Day,
+            //                      cs.LessonCode,
+            //                      ul.UserCourseLogStatus
+            //              from UserCourse as uc
+            //                join CourseSchedule as cs on cs.LessonCode = uc.LessonCode
+            //                left join UserCourseLog as ul on uc.LessonCode = ul.LessonCode 
+            //                and ul.courseDateTime ='2019-06-11'
+            //                where uc.UserOpenId ='o3nwE0qI_cOkirmh_qbGGG-5G6B0' and uc.CourseScheduleType = 0";
 
             //var list = _dbContext.Set<RUserCourseLog>().FromSql(sql).Select(a => new RUserCourseLog
             //{
@@ -375,7 +393,7 @@ namespace EduCenterSrv
             //    Lesson = a.Lesson
             // }).ToList();
          
-            return null;
+            return result;
         }
         #endregion
 

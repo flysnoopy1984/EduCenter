@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EduCenterCore.Common.Helper;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.User.Result;
@@ -35,13 +36,14 @@ namespace EduCenterWeb.Pages.User
                 var us = base.GetUserSession();
                 if(us !=null)
                 {
-                    _UserSrv.GetUserCourseByDate(us.OpenId, date, CourseScheduleType.Standard);
+                    result.List = _UserSrv.GetUserCourseByDate(us.OpenId, date, CourseScheduleType.Standard);
                 }
               
             }
             catch(Exception ex)
             {
-
+                result.ErrorMsg = "数据获取失败";
+                NLogHelper.ErrorTxt($"[OnPostGetCourseByDate]:{ex.Message}");
             }
             return new JsonResult(result);
         }

@@ -144,10 +144,10 @@
         });
     };
 
-    callAjax_Query_NoBlock = function (url, data, handler,needErrorMsg) {
+    callAjax_Query_NoBlock = function (url, data, handler,needErrorMsg,ErrorMsgHandler) {
 
         if (needErrorMsg == undefined) needErrorMsg = true;
-        else needErrorMsg = false;
+      
 
         $.ajax({
             type: "post",
@@ -163,13 +163,22 @@
                         handler(res);
                 }
                 else {
-                    if (needErrorMsg)
-                    ShowError(res.ErrorMsg);
+                    if (needErrorMsg) {
+                        if (ErrorMsgHandler != undefined)
+                            ErrorMsgHandler(res.ErrorMsg);
+                        else
+                            ShowError(res.ErrorMsg);
+                    }
+                  
                 }
             },
             error: function (xhr, type) {
-                if (needErrorMsg)
-                ShowError("系统错误");
+                if (needErrorMsg) {
+                    if (ErrorMsgHandler != undefined)
+                        ErrorMsgHandler("系统错误");
+                    else
+                        ShowError("系统错误");
+                }
             }
 
         });

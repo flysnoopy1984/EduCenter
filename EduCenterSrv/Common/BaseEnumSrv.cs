@@ -64,14 +64,12 @@ namespace EduCenterSrv.Common
                         v = "缺席";
                         break;
                     case UserCourseLogStatus.PreNext:
-                        v = "预备";
+                        v = "准备上课";
                         break;
                     case UserCourseLogStatus.SignIn:
-                        v = "签到";
+                        v = "已签到";
                         break;
-                    case UserCourseLogStatus.Started:
-                        v = "已开课";
-                        break;
+                 
                 }
                 r.Add((int)status, v);
             }
@@ -182,5 +180,21 @@ namespace EduCenterSrv.Common
             }
             return "";
         }
+
+        //public static string GetUserCourseLogStatusName(UserCourseLogStatus status)
+        //{
+        //    switch (status)
+        //    {
+        //        case UserCourseLogStatus.Absent:
+        //            return "缺席";
+        //        case UserCourseLogStatus.PreNext:
+        //            return "准备上课";
+        //        case UserCourseLogStatus.SignIn:
+        //            return "已签到";
+        //        //case UserCourseLogStatus.Started:
+        //        //    return "已签到";
+        //    }
+        //    return "";
+        //}
     }
 }
