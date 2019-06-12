@@ -51,11 +51,11 @@ namespace EduCenterWeb.Pages.User
             var us = base.GetUserSession();
             if(us!=null)
             {
-                if (_UserSrv.CheckHasUserCourse(us.OpenId, CourseScheduleType.Standard))
-                {
+                //if (_UserSrv.CheckHasUserCourse(us.OpenId, CourseScheduleType.Standard))
+                //{
                   
-                    HttpContext.Response.Redirect("/User/MyCourse?showMsg=1");
-                }
+                //    HttpContext.Response.Redirect("/User/MyCourse?showMsg=1");
+                //}
                 CourseTimes = StaticDataSrv.CourseTime.Values.ToList();
 
                 //获取所有课程信息，并整理Day,Lesson Hashtable

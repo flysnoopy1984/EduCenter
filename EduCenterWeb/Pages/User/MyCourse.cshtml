@@ -26,7 +26,7 @@
         flex-direction: column;
         margin-left: 10px;
         margin-right: 10px;
-        height: 100vh;
+        height: 100%;
     }
 
     .Title {
@@ -72,7 +72,7 @@ height: 65px;
 display: flex;
 flex-direction: column;
 justify-content: space-evenly;
-margin-bottom:10px;
+margin-bottom:15px;
 }
 
 .CourseArea .CourseRow .CourseContent .OneCourse .CourseInfo {
@@ -87,7 +87,7 @@ justify-content: space-between;
 }
 
 .CourseArea .CourseRow .CourseContent .OneCourse .CourseInfo .CourseTime {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     color: #04616e;
 }
@@ -96,18 +96,15 @@ justify-content: space-between;
 display: flex;
 width: 100%;
 justify-content: space-between;
-font-weight: bold;
+/*font-weight: bold;*/
 color: #646363;
 flex-direction:column;
 }
-
-.CourseArea .CourseRow .CourseContent .OneCourse .CourseDetail .SignIn {
-    color: #47c404;
+.CourseArea .CourseRow .CourseContent .OneCourse .CourseDetail div{
+    display:flex;
+    justify-content:space-between;
 }
 
-.CourseArea .CourseRow .CourseContent .OneCourse .CourseDetail .Absent {
-    color: #d50000;
-}
 
 .CourseArea .NextCourse {
     display: flex;
@@ -152,7 +149,7 @@ flex-direction:column;
 }
 
 .CourseArea .CurrentCourse .CourseInfo .CourseTime {
-    font-weight: bold;
+    /*font-weight: bold;*/
     font-size: 16px;
     color: #00288d;
 }
@@ -186,6 +183,11 @@ flex-direction:column;
 .CourseLog .LogTable {
     width: 95%;
     margin-left: 10px;
+}
+.CourseStatus{
+    color: #12e209;
+    font-weight: bold;
+    font-size: 16px;
 }
 </style>
 <style>
@@ -224,10 +226,11 @@ flex-direction:column;
                                     <div class="CourseTime">@c.Time</div>
                                 </div>
                                 <div class="CourseDetail">
-
-                                    <div>下次开课：@c.NextCourseDate.ToString("yyyy年MM月dd日")</div>
-
-                                    <div><a href="#">上课记录</a></div>
+                                    <div style="margin-bottom:4px;">
+                                        <div>下次开课：</div>
+                                        <div style="font-weight:bold;">@c.NextCourseDate.ToString("yyyy年MM月dd日")</div>
+                                    </div>
+                                    <div style="justify-content:flex-end"><a class="fa fa-eye" aria-hidden="true" href="#">上课记录</a></div>
                                 </div>
                             </div>
                         }
@@ -237,70 +240,74 @@ flex-direction:column;
         }
         @if (Model.CurrentCourse != null)
         {
-    <div class="CurrentCourse">
-        <div class="CourseInfo">
-            <div class="CourseName">当前：@Model.CurrentCourse.CourseName</div>
-            <div class="CourseTime">时间：@Model.CurrentCourse.Time</div>
-        </div>
-        <div class="UserOption">
-            <input id="btn_Leave" type="button" class="btn btn-warning" value="我要请假" />
-            <input id="btn_Sign" type="button" class="btn btn-danger" value="我要签到" />
-        </div>
+            <div class="CurrentCourse">
+                <div class="CourseInfo">
+                    <div class="CourseName">当前：@Model.CurrentCourse.CourseName</div>
+                    <div class="CourseTime">时间：@Model.CurrentCourse.CourseTime</div>
+                </div>
+                <div class="UserOption">
+                    @if (Model.NextCourse.UserCourseLogStatus == EduCenterModel.BaseEnum.UserCourseLogStatus.PreNext)
+                    {
+                        <input id="btn_Leave" type="button" class="btn btn-warning" date="@Model.CurrentCourse.CourseDateTime" value="我要请假" />
+                    }
+                    else
+                    {
+                        <div>@Model.UserCourseLogStatus[(int)Model.CurrentCourse.UserCourseLogStatus]</div>
+                    }
+                    <input id="btn_Sign" type="button" class="btn btn-danger" date="@Model.CurrentCourse.CourseDateTime" value="我要签到" />
+                </div>
 
-    </div>
+            </div>
         }
+
         else if (Model.NextCourse != null)
         {
-    <div class="NextCourse">
-        <div class="CourseInfo">
-            <div class="CourseName">下节课：@Model.NextCourse.CourseName</div>
-            <div class="CourseTime">时间：@Model.NextCourse.Time</div>
-        </div>
-        <div class="UserOption">
-            <input id="btn_Leave" type="button" class="btn btn-warning" value="我要请假" />
-      
-        </div>
-    </div>
+            <div class="NextCourse">
+                <div class="CourseInfo">
+                    <div class="CourseName">下节课：@Model.NextCourse.CourseName</div>
+                    <div class="CourseTime">时间：@Model.NextCourse.CourseTime</div>
+                </div>
+                <div class="UserOption">
+                    @if (Model.NextCourse.UserCourseLogStatus == EduCenterModel.BaseEnum.UserCourseLogStatus.PreNext)
+                    {
+                        <input id="btn_Leave" type="button" class="btn btn-warning" date="@Model.NextCourse.CourseDateTime" value="我要请假" />
+                    }
+                    else
+                    {
+                        <div class="CourseStatus">@Model.UserCourseLogStatus[(int)Model.NextCourse.UserCourseLogStatus]</div>
+                    }
+
+
+                </div>
+            </div>
         }
 
     </div>
-<div class="CourseLog">
-    <div class="SubTitle">
-        <div class="SubTitleName">课程记录[最近10次]</div> <div>更多</div>
-    </div>
-    <table border="0" cellpadding="0" cellspacing="0" class="LogTable" width="100%">
-        <tr>
-            <th>开始日期</th>
-            <th>课程名</th>
-            <th>状态</th>
-        </tr>
-        <tr>
-            <td>2019-10-22</td>
-            <td>美术</td>
-            <td>缺席</td>
-        </tr>
-        <tr>
-            <td>2019-10-22</td>
-            <td>美术</td>
-            <td>缺席</td>
-        </tr>
-        <tr>
-            <td>2019-10-22</td>
-            <td>美术</td>
-            <td>缺席</td>
-        </tr>
-        <tr>
-            <td>2019-10-22</td>
-            <td>美术</td>
-            <td>缺席</td>
-        </tr>
-        <tr>
-            <td>2019-10-22</td>
-            <td>美术</td>
-            <td>缺席</td>
-        </tr>
-    </table>
-</div>
+    @if (@Model.UserCourseLogList != null && @Model.UserCourseLogList.Count > 0)
+    {
+        <div class="CourseLog">
+            <div class="SubTitle">
+                <div class="SubTitleName">课程记录[最近10次]</div> <div>更多</div>
+            </div>
+            <table border="0" cellpadding="0" cellspacing="0" class="LogTable" width="100%">
+                <tr>
+                    <th>开始日期</th>
+                    <th>课程名</th>
+                    <th>状态</th>
+                </tr>
+                @foreach (var log in @Model.UserCourseLogList)
+                {
+                    <tr>
+                        <td>@log.CourseDateTime</td>
+                        <td>@log.CourseName</td>
+                        <td>@log.UserCourseLogStatusName</td>
+                    </tr>
+                }
+              
+            </table>
+        </div>
+    }
+
 </div>
 
 

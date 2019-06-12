@@ -2,6 +2,19 @@
 
     var _jc = null;
 
+    ShowInfo = function (msg, title, style) {
+        if (title == undefined)
+            title = "信息";
+        if (style == undefined)
+            style = 'orange';
+
+        $.alert({
+            title: title,
+            content: msg,
+          
+            type: style,
+        });
+    }
     ShowError = function (msg,title,style) {
         if (_jc != null && _jc != undefined)
             _jc.close();

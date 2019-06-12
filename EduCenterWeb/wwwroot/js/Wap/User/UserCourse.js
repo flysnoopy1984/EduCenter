@@ -19,10 +19,12 @@
     };
 
     LeaveEvent = function () {
-        window.location.href = "MyLeave";
+        var date = $("#btn_Leave").attr("date");
+        window.location.href = "MyLeave?date=" + date;
     }
     SignInEvent = function () {
-        window.location.href = "MySign";
+        var date = $("#btn_Leave").attr("date");
+        window.location.href = "MySign?date="+date;
     }
 
     Init();

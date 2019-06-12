@@ -19,9 +19,11 @@ namespace EduCenterWeb.Pages.User
 
         public List<RUserCourseLog> UserCourseLogList { get; set; }
 
-        public RUserCourse NextCourse { get; set; }
+        public RUserCourseLog NextCourse { get; set; }
 
-        public RUserCourse CurrentCourse { get; set; }
+        public RUserCourseLog CurrentCourse { get; set; }
+
+        public Dictionary<int,string> UserCourseLogStatus { get; set; }
 
         public MyCourseModel(UserSrv userSrv)
         {
@@ -32,6 +34,7 @@ namespace EduCenterWeb.Pages.User
             var us = base.GetUserSession();
             if (us != null)
             {
+                UserCourseLogStatus = BaseEnumSrv.UserCourseLogStatusList;
                 UserCourseList = _UserSrv.GetUserCourseAvaliable(us.OpenId, CourseScheduleType.Standard);
                 UserCourseLogList = _UserSrv.GetUserCourseLogHistory(us.OpenId, CourseScheduleType.Standard, 10);
 
@@ -41,22 +44,26 @@ namespace EduCenterWeb.Pages.User
                     course.NextCourseDate = DateSrv.GetNextCourseDate(course.Day);
               
                 }
-                //获取用户Log Pre的课程
+                //获取用户下次的课程
                  var userLog = _UserSrv.GetNextUserCourseLog(us.OpenId, CourseScheduleType.Standard);
                  if(userLog.CourseDateTime == DateTime.Today.ToString("yyyy-MM-dd"))
                  {
-                    CurrentCourse = new RUserCourse
+                    CurrentCourse = new RUserCourseLog
                     {
                         CourseName = userLog.CourseName,
-                        Time = userLog.CourseTime,
+                        CourseTime = userLog.CourseTime,
+                        CourseDateTime = userLog.CourseDateTime,
+                        UserCourseLogStatus = userLog.UserCourseLogStatus,
                     };
                  }
                  else
                 {
-                    NextCourse = new RUserCourse
+                    NextCourse = new RUserCourseLog
                     {
                         CourseName = userLog.CourseName,
-                        Time = DateTime.Parse(userLog.CourseDateTime).ToString("MM月dd日")
+                        CourseTime = DateTime.Parse(userLog.CourseDateTime).ToString("MM月dd日"),
+                        CourseDateTime = userLog.CourseDateTime,
+                        UserCourseLogStatus = userLog.UserCourseLogStatus,
                     };
                 }
              //   CurrentCourse = _UserSrv.GetCurrentUserCourse(us.OpenId, CourseScheduleType.Standard);

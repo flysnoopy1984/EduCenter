@@ -233,23 +233,53 @@ namespace EduCenterSrv
         /// <returns></returns>
         public List<RUserCourseLog> GetUserCourseLogHistory(string OpenId, CourseScheduleType CourseScheduleType,int topnum =5)
         {
-           var result =  _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
-                uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourseLog
-                {
-                    UserOpenId = uc.UserOpenId,
-                    CourseScheduleType = uc.CourseScheduleType,
-                    CreatedDateTime = uc.CreatedDateTime,
-                    CourseName = cs.CourseName,
-                    LessonCode = uc.LessonCode,
-                    UserCourseLogStatus = uc.UserCourseLogStatus
 
-                }).Where(a => a.UserOpenId == OpenId && 
+            var result = _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
+                 uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourseLog
+                 {
+                     UserOpenId = uc.UserOpenId,
+                     CourseScheduleType = uc.CourseScheduleType,
+                     CourseDateTime = uc.CourseDateTime,
+                     CourseName = cs.CourseName,
+                     LessonCode = uc.LessonCode,
+                     CreatedDateTime = uc.CreatedDateTime,
+                     UserCourseLogStatus = uc.UserCourseLogStatus,
+                     UserCourseLogStatusName = BaseEnumSrv.UserCourseLogStatusList[(int)uc.UserCourseLogStatus],
+
+                })
+                .OrderByDescending(a=>a.CreatedDateTime)
+                .Where(a => a.UserOpenId == OpenId && 
                         a.CourseScheduleType == CourseScheduleType &&
                         a.UserCourseLogStatus!= UserCourseLogStatus.PreNext).Take(topnum).ToList();
             return result;
         }
 
-     
+        public List<RUserCourseLog> GetUserCourseLogList(string OpenId, CourseScheduleType CourseScheduleType, 
+                                                         UserCourseLogStatus userCourseLogStatus,
+                                                        int pageIndex= 0,int pageSize =20)
+        {
+
+            var result = _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
+                 uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourseLog
+                 {
+                     UserOpenId = uc.UserOpenId,
+                     CourseScheduleType = uc.CourseScheduleType,
+                     CourseDateTime = uc.CourseDateTime,
+                     CourseName = cs.CourseName,
+                     LessonCode = uc.LessonCode,
+                     CreatedDateTime = uc.CreatedDateTime,
+                     UserCourseLogStatus = uc.UserCourseLogStatus,
+                     UserCourseLogStatusName = BaseEnumSrv.UserCourseLogStatusList[(int)uc.UserCourseLogStatus],
+
+                 })
+                .OrderByDescending(a => a.CreatedDateTime)
+                .Where(a => a.UserOpenId == OpenId &&
+                        a.CourseScheduleType == CourseScheduleType &&
+                        a.UserCourseLogStatus == userCourseLogStatus).Skip(pageIndex* pageSize).Take(pageSize).ToList();
+            return result;
+        }
+
+
         public RUserCourseLog GetNextUserCourseLog(string OpenId, CourseScheduleType CourseScheduleType)
         {
           //  var ucLog = null;
@@ -271,10 +301,11 @@ namespace EduCenterSrv
                  }).Where(a => a.UserOpenId == OpenId &&
                          a.CourseScheduleType == CourseScheduleType &&
                          a.UserCourseLogStatus != UserCourseLogStatus.Absent).FirstOrDefault();
+            //检测这节课是否已过
             if (result != null)
             {
                 var courseDate = DateTime.Parse(result.CourseDateTime);
-
+                
                 if (DateTime.Now > courseDate)
                 {
                     UpdateUserCourseLogStatus(result.LessonCode, OpenId, CourseScheduleType, UserCourseLogStatus.Absent);
@@ -406,22 +437,20 @@ namespace EduCenterSrv
                               cs.Day == dayofweek
                         select new RUserCourseLog
                         {
+                            CourseScheduleType = uc.CourseScheduleType,
                             CourseName = cs.CourseName,
                             Lesson = cs.Lesson,
                             Day = cs.Day,
                             CourseTime = times[cs.Lesson].TimeRange,
                             UserCourseLogStatus = ucul==null?UserCourseLogStatus.PreNext: ucul.UserCourseLogStatus,
                             LessonCode = uc.LessonCode,
-                            UserCourseStatusName = ucul == null? BaseEnumSrv.UserCourseLogStatusList[(int)UserCourseLogStatus.PreNext]: BaseEnumSrv.UserCourseLogStatusList[(int)ucul.UserCourseLogStatus]
+                            UserCourseLogStatusName = ucul == null? BaseEnumSrv.UserCourseLogStatusList[(int)UserCourseLogStatus.PreNext]: BaseEnumSrv.UserCourseLogStatusList[(int)ucul.UserCourseLogStatus]
                         };
 
             result = efSql.ToList();
 
 
-            throw new Exception("Test Error");
-
-
-
+           
 
             //string sql = @"select cs.CourseName,
             //                      cs.Lesson,
@@ -443,6 +472,31 @@ namespace EduCenterSrv
             // }).ToList();
          
             return result;
+        }
+
+        public void AddOrUpdateUesrCourseLog(List<EUserCourseLog> logList,string openId)
+        {
+            foreach(var log in logList)
+            {
+                log.UserOpenId = openId;
+                var data =_dbContext.DBUserCourseLog.Where(a => a.UserOpenId == log.UserOpenId &&
+                                                    a.LessonCode == log.LessonCode &&
+                                                    a.CourseDateTime == log.CourseDateTime &&
+                                                    a.CourseScheduleType == log.CourseScheduleType).FirstOrDefault();
+               
+                if(data == null)
+                {
+                    log.CreatedDateTime = DateTime.Now;
+                    _dbContext.DBUserCourseLog.Add(log);
+                }
+                else
+                {
+                    data.UserCourseLogStatus = log.UserCourseLogStatus;
+                }
+
+            }
+            _dbContext.SaveChanges();
+            
         }
         #endregion
 

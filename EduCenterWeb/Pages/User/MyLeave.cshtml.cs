@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using EduCenterCore.Common.Helper;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
+using EduCenterModel.User;
 using EduCenterModel.User.Result;
 using EduCenterSrv;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,8 @@ namespace EduCenterWeb.Pages.User
 {
     public class MyLeaveModel : EduBaseAppPageModel
     {
+        public List<RUserCourseLog> UserCourseLogList { get; set; }
+
         private UserSrv _UserSrv;
 
         public MyLeaveModel(UserSrv userSrv)
@@ -22,8 +25,14 @@ namespace EduCenterWeb.Pages.User
         }
         public void OnGet()
         {
-            if (base.GetUserSession() == null)
+            var us = base.GetUserSession();
+            if ( us== null)
                 return;
+            else
+            {
+
+                UserCourseLogList = _UserSrv.GetUserCourseLogList(us.OpenId, CourseScheduleType.Standard, UserCourseLogStatus.Leave);
+            }
         }
 
         
@@ -42,10 +51,40 @@ namespace EduCenterWeb.Pages.User
             }
             catch(Exception ex)
             {
-                result.ErrorMsg = "数据获取失败";
-                NLogHelper.ErrorTxt($"[OnPostGetCourseByDate]:{ex.Message}");
+                result.ErrorMsg = "数据获取失败,请联系工作人员";
+                NLogHelper.ErrorTxt($"MyLeaveModel[OnPostGetCourseByDate]:{ex.Message}");
             }
             return new JsonResult(result);
         }
+        
+
+        public IActionResult OnPostCourseLeave(List<EUserCourseLog> list)
+        {
+            ResultNormal result = new ResultNormal();
+            try
+            {
+                var us = base.GetUserSession();
+                if (us != null)
+                {
+                    foreach(var c in list)
+                    {
+                        c.UserCourseLogStatus = UserCourseLogStatus.Leave;
+                    }
+                    _UserSrv.AddOrUpdateUesrCourseLog(list, us.OpenId);
+                }   
+                else
+                    result.ErrorMsg = "请重新登陆！";
+
+
+
+            }
+            catch (Exception ex)
+            {
+                result.ErrorMsg = "请假失败,请联系工作人员";
+                NLogHelper.ErrorTxt($"MyLeaveModel[OnPostCourseLeave]:{ex.Message}");
+            }
+            return new JsonResult(result);
+        }
+       
     }
 }

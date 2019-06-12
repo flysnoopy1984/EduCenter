@@ -61,13 +61,19 @@ namespace EduCenterSrv.Common
                 switch (status)
                 {
                     case UserCourseLogStatus.Absent:
-                        v = "缺席";
+                        v = "学生缺席";
                         break;
                     case UserCourseLogStatus.PreNext:
                         v = "准备上课";
                         break;
                     case UserCourseLogStatus.SignIn:
-                        v = "已签到";
+                        v = "学生签到";
+                        break;
+                    case UserCourseLogStatus.Leave:
+                        v = "申请请假";
+                        break;
+                    case UserCourseLogStatus.TecLeave:
+                        v = "老师请假";
                         break;
                  
                 }

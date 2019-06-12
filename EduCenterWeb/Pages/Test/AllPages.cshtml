@@ -1,0 +1,32 @@
+﻿@page
+@model EduCenterWeb.Pages.Test.AllPagesModel
+@{
+    ViewData["Title"] = "AllPages";
+    Layout = "~/Pages/Shared/_EduMainApp.cshtml";
+}
+
+<h2>AllPages</h2>
+<script type="text/javascript">
+    function Go(url) {
+        window.location.href = url;
+    }
+</script>
+<style type="text/css">
+    div{
+        margin:20px;
+    }
+</style>
+<div>
+    <input type="button" value="Apply" onclick="Go('/User/Apply')" />
+</div>
+<div>
+    <input type="button" value="MyCourse" onclick="Go('/User/MyCourse')" />
+</div>
+<div>
+    <input type="button" value="MyLeave" onclick="Go('/User/MyLeave')" />
+</div>
+<div>
+    <input type="button" value="BuyCourseTime" onclick="Go('/User/BuyCourseTime')" />
+</div>
+
+
