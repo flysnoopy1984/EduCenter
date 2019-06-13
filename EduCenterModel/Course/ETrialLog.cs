@@ -41,6 +41,8 @@ namespace EduCenterModel.Course
         public int Lesson { get; set; }
         public DateTime TrialDateTime { get; set; }
 
+        public DateTime ApplyDateTime { get; set; }
+
         public TrialLogStatus TrialLogStatus { get; set; }
 
         [MaxLength(400)]

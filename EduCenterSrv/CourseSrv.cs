@@ -108,6 +108,31 @@ namespace EduCenterSrv
 
         }
 
+        public RCourseInfoClass GetCourseInfoClass(string courseCode,string className= "1班")
+        {
+            RCourseInfoClass result;
+            var efSql = from cls in _dbContext.DBCourseInfoClass
+                        join tec in _dbContext.DBTecInfo on cls.TecCode equals tec.Code
+                        join ci in _dbContext.DBCourseInfo on  cls.CourseCode equals ci.Code
+                        where cls.CourseCode == courseCode && cls.ClassName == className
+                        select new RCourseInfoClass
+                        {
+                            ClassName = className,
+                            CourseName = ci.Name,
+                            CourseCode = cls.CourseCode,
+                            TecName = tec.Name,
+                            TecCode = tec.Code,
+                        };
+            result = efSql.FirstOrDefault();
+            return result;
+
+        }
+
+       
+
+
+
+
         public void CreateOrUpdateClass(ECourseInfoClass cls,bool needSave=false)
         {
             var obj = _dbContext.DBCourseInfoClass.Where(a => a.Id == cls.Id).FirstOrDefault();
@@ -157,11 +182,51 @@ namespace EduCenterSrv
         #endregion
 
         #region TrialLog
-        public List<ETrialLog> GetTrialLogList(string date,string CourseCode)
+        public List<ETrialLog> GetTrialLogList(string openId,string date,string CourseCode)
         {
-            return _dbContext.DBETrialLog.
+            return _dbContext.DBTrialLog.
                    Where(a => a.CourseCode == CourseCode &&
-                         a.TrialDateTime.ToString("yyyy-MM-dd") == date).ToList();
+                         a.TrialDateTime.ToString("yyyy-MM-dd") == date &&
+                         a.OpenId == openId
+                         ).ToList();
+        }
+     
+        public void AddTrial(ETrialLog log)
+        { 
+            _dbContext.DBTrialLog.Add(log);
+        }
+
+        public EduErrorMessage VerifyUserTrial(string openId, string courseCode = null,string date =null)
+        {
+            if(courseCode == null)
+            {
+                int c = _dbContext.DBTrialLog.Where(a => a.OpenId == openId && (int)a.TrialLogStatus >= 10).Count();
+                //获取所有类型，每个类型试听2次
+                var bl = Enum.GetValues(typeof(CourseType)).Length;
+                if (c >= bl * 2) return EduErrorMessage.ApplyTrial_OverAllLimit;
+            }
+            else
+            {
+                if(date == null)
+                {
+                    int c = _dbContext.DBTrialLog.Where(a => a.OpenId == openId &&
+                                             (int)a.TrialLogStatus >= 10 &&
+                                                  a.CourseCode == courseCode).Count();
+                    if (c >= 2) return EduErrorMessage.ApplyTrial_OverSingleLimit;
+                }
+                else
+                {
+                    int c = _dbContext.DBTrialLog.
+                    Where(a => a.CourseCode == courseCode &&
+                        a.TrialDateTime.ToString("yyyy-MM-dd") == date &&
+                        a.OpenId == openId).Count();
+                    if (c > 0) return EduErrorMessage.ApplyTrial_Exist;
+                }
+              
+            }
+            return EduErrorMessage.NoError;
+         
+            
         }
         #endregion
 

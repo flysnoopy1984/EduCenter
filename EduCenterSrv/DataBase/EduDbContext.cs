@@ -51,7 +51,7 @@ namespace EduCenterSrv.DataBase
 
         public DbSet<EUserCourseTimeTrans> DBUserCourseTimeTrans { get; set; }
 
-        public DbSet<ETrialLog> DBETrialLog { get; set; }
+        public DbSet<ETrialLog> DBTrialLog { get; set; }
 
         public DbSet<EHoliday> DBHoliday { get; set; }
 

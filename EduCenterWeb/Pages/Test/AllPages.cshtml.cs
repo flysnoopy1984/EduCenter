@@ -11,7 +11,7 @@ namespace EduCenterWeb.Pages.Test
     {
         public void OnGet()
         {
-            base.SetUserSesion("o3nwE0qI_cOkirmh_qbGGG-5G6B0");
+            base.SetUserSesion("o3nwE0qI_cOkirmh_qbGGG-5G6B0","Jacky");
         }
     }
 }
