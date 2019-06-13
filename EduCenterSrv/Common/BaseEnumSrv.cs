@@ -114,29 +114,38 @@ namespace EduCenterSrv.Common
             return r;
         }
 
+        public static string GetCourseTypeName(int key)
+        {
+            return GetCourseTypeName((CourseType)key);
+        }
+        public static string GetCourseTypeName(CourseType key)
+        {
+            switch (key)
+            {
+                case CourseType.MS:
+                    return "美术";
+                 
+                case CourseType.SF:
+                    return "书法";
+                  
+                case CourseType.WQ:
+                    return "围棋";
+                    
+                default:
+                    return "";
+                   
+
+
+            }
+        }
+
         private static List<SiKsV> GetCourseType()
         {
             List<SiKsV> r = new List<SiKsV>();
             foreach (CourseType ct in Enum.GetValues(typeof(CourseType)))
             {
-                string v = "";
-                switch (ct)
-                {
-                    case CourseType.MS:
-                        v = "美术";
-                        break;
-                    case CourseType.SF:
-                        v = "书法";
-                        break;
-                    case CourseType.WQ:
-                        v = "围棋";
-                        break;
-                    default:
-                        v = "未分类";
-                        break;
-
-
-                }
+                string v = GetCourseTypeName(ct);
+             
                 r.Add(new SiKsV
                 {
                     Key = (int)ct,

@@ -2,6 +2,8 @@
     var urlLogin = "/user/Login?handler=UserLogin";
     Init = function () {
         $(".wxicon").on("click", UserLogin);
+
+      
     }
 
     UserLogin = function () {

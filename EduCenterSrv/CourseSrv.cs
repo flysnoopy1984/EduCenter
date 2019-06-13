@@ -53,6 +53,7 @@ namespace EduCenterSrv
         /// <returns></returns>
         public List<ECourseInfo> GetAllList()
         {
+            
            return  _dbContext.Set<ECourseInfo>().OrderBy(a=>a.CourseType).ToList();
         
         }
@@ -153,6 +154,15 @@ namespace EduCenterSrv
             return _dbContext.DBCoursePrice.Where(a => a.RecordStatus == RecordStatus.Normal && a.CourseScheduleType == CourseScheduleType.Standard).FirstOrDefault();
         }
 
+        #endregion
+
+        #region TrialLog
+        public List<ETrialLog> GetTrialLogList(string date,string CourseCode)
+        {
+            return _dbContext.DBETrialLog.
+                   Where(a => a.CourseCode == CourseCode &&
+                         a.TrialDateTime.ToString("yyyy-MM-dd") == date).ToList();
+        }
         #endregion
 
 

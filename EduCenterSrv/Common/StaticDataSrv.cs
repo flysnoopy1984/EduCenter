@@ -18,6 +18,7 @@ namespace EduCenterSrv.Common
     {
         private static Dictionary<int,Dictionary<int, Dictionary<int, EHoliday>>> _Holiday;
         private static Dictionary<int,ECourseTime> _CourseTime;
+        private static Dictionary<int, ECourseTime> _TrialTime;
         private static Dictionary<int, int> _CourseMaxApplyNum;
 
         public static void Init()
@@ -62,7 +63,28 @@ namespace EduCenterSrv.Common
             }
         }
 
-     
+        public static Dictionary<int, ECourseTime> TrialTime
+        {
+            get
+            {
+                if (_CourseTime == null)
+                {
+                    _CourseTime = new Dictionary<int, ECourseTime>();
+
+                    _CourseTime.Add(1, new ECourseTime { Lesson = 1, TimeRange = "9:00-10:00", StartTime = 9, EndTime = 10 });
+                    _CourseTime.Add(2, new ECourseTime { Lesson = 2, TimeRange = "10:00-11:00", StartTime = 10, EndTime = 11 });
+                    _CourseTime.Add(3, new ECourseTime { Lesson = 3, TimeRange = "11:00-12:00", StartTime = 11, EndTime = 12 });
+                    _CourseTime.Add(4, new ECourseTime { Lesson = 4, TimeRange = "13:00-14:00", StartTime = 13, EndTime = 14 });
+                    _CourseTime.Add(5, new ECourseTime { Lesson = 5, TimeRange = "14:00-15:00", StartTime = 14, EndTime = 15 });
+                    _CourseTime.Add(6, new ECourseTime { Lesson = 6, TimeRange = "15:00-16:00", StartTime = 15, EndTime =16 });
+
+                }
+
+                return _CourseTime;
+            }
+        }
+
+
 
         public static Dictionary<int, Dictionary<int, Dictionary<int, EHoliday>>> Holidays
         {

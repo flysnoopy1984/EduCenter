@@ -43,18 +43,23 @@
 
     ShowBlock = function (msg) {
 
-        if (msg == undefined) msg = "处理中...";
-        var html = '<div class="loader_box">';
-        html += '<div class="loader-05"></div><span id="BlockText">' + msg + '</span>';
-        html += '</div>';
+        var html = '<div class="fa fa-spinner fa-pulse fa-3x fa-fw " style="color:#ffffff"></div>';
+     //   if (msg == undefined) msg = "处理中...";
+        //var html = '<div class="loader_box">';
+        //html += '<div class="loader-05"></div><span id="BlockText">' + msg + '</span>';
+        //html +='<div class="fa fa-spinner fa-pulse fa-3x fa-fw "></div>'
+        //html += '</div>';
         $.blockUI({
             message: html,
             css: {
+                backgroundColor:'#ffffff00',
                 border: 'none',
+                
 
             }
         });
     };
+
 
     SaveProcess = function (msg) {
         if (msg == undefined) msg = "处理中请稍等...";
