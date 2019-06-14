@@ -19,6 +19,8 @@ namespace EduCenterModel.BaseEnum
         /// </summary>
         WQ = 3,
 
+      
+
 
     }
 }

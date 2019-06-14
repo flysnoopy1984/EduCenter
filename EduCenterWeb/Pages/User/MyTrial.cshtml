@@ -4,51 +4,161 @@
     ViewData["Title"] = "MyTrial";
     Layout = "~/Pages/Shared/_EduMainApp.cshtml";
 }
+@using EduCenterSrv.Common;
 
 @Html.AntiForgeryToken()
-    <style type="text/css">
-        .MainContainer {
-            display: flex;
-            align-items: center;
-            flex-direction: column;
+<style type="text/css">
+    .MainContainer {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin-left: 10px;
+        margin-right: 10px;
+        height: 100%;
+    }
+
+    .MainTitle {
+        color: #f7e6b8;
+        text-align: center;
+        font-size: 20px;
+        margin-top: 40px;
+        margin-bottom: 30px;
+        background-color: #fe852a;
+        width: 90%;
+        border-radius: 8px;
+        font-weight: bold;
+        border: solid 1px;
+    }
+
+    .Trial {
+        width: 90%;
+    }
+
+    .oneline {
+        display: flex;
+        justify-content: space-between;
+        height: 30px;
+    }
+
+    .MyTrialLog {
+        width: 100%;
+        min-height: 200px;
+        margin-top: 40px; 
+        /*position: absolute;
+        bottom: 0px;*/
+    /* top: 350px; */
+    }
+
+        .MyTrialLog .LogTable {
+            width: 95%;
             margin-left: 10px;
-            margin-right: 10px;
-            height: 100%;
         }
 
-        .MainTitle {
-            color: #f7e6b8;
-            text-align: center;
-            font-size: 20px;
-            margin-top: 30px;
-            margin-bottom: 10px;
-            background-color: #fe852a;
-            width: 90%;
-            border-radius: 8px;
-            font-weight: bold;
-            border: solid 1px;
-        }
+            .MyTrialLog .LogTable tr td {
+                height: 30px;
+                line-height: 30px;
+            }
 
+    .SubTitle {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        height: 40px;
+        align-items: baseline;
+    }
 
-        .MyTrialList {
-        }
-    </style>
+    .SubTitleName {
+        padding-left: 5px;
+        padding-bottom: 8px;
+        color: #1d7b00;
+        font-weight: bold;
+        margin-bottom: 10px;
+        margin-left: 10px;
+        border-bottom: solid 1px black;
+        width: 30%;
+    }
+
+    .LogSubTitle {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .LogSubTitleName {
+        padding-left: 5px;
+        padding-bottom: 8px;
+        color: #ff3d3d;
+        font-weight: bold;
+        margin-bottom: 10px;
+        margin-left: 10px;
+        border-bottom: solid 1px black;
+        width: 90%;
+    }
+</style>
+<script src="~/lib/jquery.blockUI/jquery.blockUI.min.js"></script>
+<link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
+<script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="~/js/EduLib/EditHelper.js"></script>
+<script src="~/js/Wap/User/MyTrial.js"></script>
 <div class="MainContainer">
     <div class="MainTitle"><i class="fa fa-telegram" aria-hidden="true" style="margin-right:10px;"></i>试听申请</div>
-    <div class="MyTrialList">
-        <div class="Trial">
-            <div class="oneline">
-                <div class="">美术课</div>
-                <div class="">2019年3月19号 10：00-11：00   </div>
-            </div>
-            <div class="oneline">
-                <div class="">已参加</div>
-
-            </div>
-
+    <div class="SubTitle">
+        <div class="SubTitleName">当前申请</div>
+        <div>
+            <button class="btn btn-info" id="btn_ToApply">
+                <i class="fa fa-sign-in" aria-hidden="true" style="margin-right:10px;"></i>申请试听
+            </button>
         </div>
     </div>
+    @if (Model.CurrentTrialList != null)
+    {
+        foreach (var log in Model.CurrentTrialList)
+        {
+            <div class="Trial" TrialId="@log.Id">
+                <div class="oneline">
+                    <div class="">@log.CourseName</div>
+                    <div style="color: #70bcff;">@BaseEnumSrv.GetTrialLogStatusName(@log.TrialLogStatus)</div>
+                </div>
+                <div class="oneline">
+                    <div style="font-weight:bold">@log.TrialDateTime.ToString("yyyy年MM月dd日") @StaticDataSrv.TrialTime[@log.Lesson].TimeRange </div>
+                    <div style="color:#808080" id="btn_Cancel"><i class="fa fa-trash" aria-hidden="true"></i>取消</div>
+                </div>
+            </div>
+        }
+
+    }
+    else
+    {
+        <div style="margin-top:40px;">暂时没有</div>
+    }
+
+    @if (Model.TrialLogList != null)
+    {
+        <div class="MyTrialLog">
+            <div class="LogSubTitle">
+                <div class="LogSubTitleName">试听记录</div>
+            </div>
+            <table border="0" cellpadding="0" cellspacing="0" class="LogTable">
+                <tr>
+                    <th>课程名</th>
+                    <th>试听日期</th>
+                    <th>状态</th>
+                </tr>
+                @foreach (var log in @Model.TrialLogList)
+                {
+                    <tr>
+                        <td class="TextNoWrap" style="width:110px; display:inline-block;">@log.CourseName</td>
+                        <td>@log.TrialDateTime.ToString("yyyy年MM月dd日")</td>
+
+                        <td>@BaseEnumSrv.GetTrialLogStatusName(log.TrialLogStatus)</td>
+                    </tr>
+                }
+            </table>
+
+        </div>
+    }
+
 
 </div>
-     
+
 

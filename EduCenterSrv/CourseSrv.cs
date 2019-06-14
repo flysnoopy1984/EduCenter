@@ -39,6 +39,14 @@ namespace EduCenterSrv
                             where ci.CourseType = {(int)type} and CourseInfoClass.CourseCode = ci.Code";
             return sql;
         }
+
+        public static string sql_UpdateTrialLogStatus(long Id,TrialLogStatus status)
+        {
+            string sql = $@"update [TrialLog] 
+                            set TrialLogStatus = {(int)status}
+                            where Id={Id}";
+            return sql;
+        }
         #endregion
 
         public List<SiKsV> GetCourseType()
@@ -122,6 +130,7 @@ namespace EduCenterSrv
                             CourseCode = cls.CourseCode,
                             TecName = tec.Name,
                             TecCode = tec.Code,
+                            CourseType = ci.CourseType,
                         };
             result = efSql.FirstOrDefault();
             return result;
@@ -182,48 +191,71 @@ namespace EduCenterSrv
         #endregion
 
         #region TrialLog
-        public List<ETrialLog> GetTrialLogList(string openId,string date,string CourseCode)
+        public List<ETrialLog> QueryTrialLogList(string openId,string CourseCode=null, string date=null)
         {
-            return _dbContext.DBTrialLog.
-                   Where(a => a.CourseCode == CourseCode &&
-                         a.TrialDateTime.ToString("yyyy-MM-dd") == date &&
-                         a.OpenId == openId
-                         ).ToList();
+
+            var sql = _dbContext.DBTrialLog.
+                   Where(a=>a.OpenId == openId);
+            if (CourseCode != null)
+                sql = sql.Where(a => a.CourseCode == CourseCode);
+            if (date != null)
+                sql = sql.Where(a => a.TrialDateTime.ToString("yyyy-MM-dd") == date);
+            sql = sql.OrderByDescending(a => a.ApplyDateTime);
+            return sql.ToList();
         }
-     
+
+        public void  UpdateTrialStatus(ETrialLog log)
+        {
+            _dbContext.DBTrialLog.Update(log);
+        }
+
+        public void UpdateTrialStatus(long Id,TrialLogStatus status)
+        {
+            var sql = sql_UpdateTrialLogStatus(Id, status);
+            _dbContext.Database.ExecuteSqlCommand(sql);
+        }
+
+
         public void AddTrial(ETrialLog log)
         { 
             _dbContext.DBTrialLog.Add(log);
         }
 
-        public EduErrorMessage VerifyUserTrial(string openId, string courseCode = null,string date =null)
+        
+
+        public EduErrorMessage VerifyUserTrial(string openId, int courseType = -1,string date =null,int lesson =-1)
         {
-            if(courseCode == null)
+            if(courseType == -1)
             {
                 int c = _dbContext.DBTrialLog.Where(a => a.OpenId == openId && (int)a.TrialLogStatus >= 10).Count();
                 //获取所有类型，每个类型试听2次
                 var bl = Enum.GetValues(typeof(CourseType)).Length;
-                if (c >= bl * 2) return EduErrorMessage.ApplyTrial_OverAllLimit;
+                if (c >= bl * 2)
+                    return EduErrorMessage.ApplyTrial_OverAllLimit;
             }
-            else
+            else if(courseType>0)
             {
-                if(date == null)
-                {
-                    int c = _dbContext.DBTrialLog.Where(a => a.OpenId == openId &&
-                                             (int)a.TrialLogStatus >= 10 &&
-                                                  a.CourseCode == courseCode).Count();
-                    if (c >= 2) return EduErrorMessage.ApplyTrial_OverSingleLimit;
-                }
-                else
-                {
-                    int c = _dbContext.DBTrialLog.
-                    Where(a => a.CourseCode == courseCode &&
-                        a.TrialDateTime.ToString("yyyy-MM-dd") == date &&
-                        a.OpenId == openId).Count();
-                    if (c > 0) return EduErrorMessage.ApplyTrial_Exist;
-                }
-              
+                int c = _dbContext.DBTrialLog.Where(a => a.OpenId == openId &&
+                                            (int)a.TrialLogStatus >= 10 &&
+                                               (int)a.CourseType == courseType).Count();
+                if (c >= 2) return EduErrorMessage.ApplyTrial_OverSingleLimit;
             }
+          
+            if(date!=null)
+            {
+                 var list = _dbContext.DBTrialLog.
+                 Where(a => a.TrialDateTime.ToString("yyyy-MM-dd") == date &&
+                     a.Lesson == lesson &&
+                     a.OpenId == openId).GroupBy(a=>a.Lesson).ToList();
+               
+                foreach ( var l in list)
+                {
+                    if(l.Count()>0)
+                     return EduErrorMessage.ApplyTrial_SameTypeExist;
+                }
+               
+            }
+           
             return EduErrorMessage.NoError;
          
             

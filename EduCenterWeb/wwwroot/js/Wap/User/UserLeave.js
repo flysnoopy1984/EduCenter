@@ -11,6 +11,7 @@
             eventElem: '#btn_DatePick',
             min:0,
             trigger: 'click',
+            theme: 'molv',
             done: function (value, date) {
              //   alert('你选择的日期是：' + value + '\n获得的对象是' + JSON.stringify(date));
                 QueryCourse(value);

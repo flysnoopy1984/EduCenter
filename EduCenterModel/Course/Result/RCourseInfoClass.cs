@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EduCenterModel.BaseEnum;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,5 +10,7 @@ namespace EduCenterModel.Course.Result
         public string TecName { get; set; }
 
         public string CourseName { get; set; }
+
+        public CourseType CourseType { get; set; }
     }
 }

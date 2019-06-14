@@ -4,8 +4,19 @@
 
     Init = function () {
 
+        var sysDate = new Date();
+        var year = sysDate.getFullYear();
+        var month = sysDate.getMonth() + 1;
+        var monthName = month;
+        if (month < 10)
+            monthName = "0" + month;
+        var day = sysDate.getDate();
+
+        $("#selDate").text(year + "-" + monthName + "-" + day);
+
         laydate.render({
             elem: "#selDate",
+            theme: 'molv',
             done: LayDataSelect
         });
         var DateFromUrl = GetUrlParam("date");

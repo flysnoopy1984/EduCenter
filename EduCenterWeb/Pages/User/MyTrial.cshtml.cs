@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EduCenterCore.Common.Helper;
+using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterModel.Course.Result;
@@ -16,9 +17,9 @@ namespace EduCenterWeb.Pages.User
     public class MyTrialModel : EduBaseAppPageModel
     {
         private CourseSrv _CourseSrv;
+        public List<ETrialLog> TrialLogList { get; set; }
 
-        public Dictionary<int,ECourseTime> TrialTime { get; set; }
-        public Dictionary<int, List<ECourseInfo>> CourseDic { get; set; }
+        public List<ETrialLog> CurrentTrialList { get; set; }
         public MyTrialModel(CourseSrv courseSrv)
         {
             _CourseSrv = courseSrv;
@@ -28,45 +29,59 @@ namespace EduCenterWeb.Pages.User
        
         public void OnGet()
         {
-            var list = _CourseSrv.GetAllList();
-            var curct = -1;
-            CourseDic = new Dictionary<int, List<ECourseInfo>>();
-            foreach (var c in list)
+            var us = base.GetUserSession();
+            if (us != null)
             {
-                int ct = (int)c.CourseType;
-                if (curct != ct)
+                TrialLogList = _CourseSrv.QueryTrialLogList(us.OpenId);
+                if(TrialLogList !=null)
                 {
-                    curct = ct;
-                    CourseDic.Add(ct,new List<ECourseInfo>());
-                    CourseDic[ct].Add(c);
-                }
-                else
-                    CourseDic[ct].Add(c);
+                    CurrentTrialList = TrialLogList.Where(a=>a.TrialDateTime>= DateTime.Today).ToList();
+                    if (CurrentTrialList.Count == 0) CurrentTrialList = null;
 
-            }
+                    var checkList = TrialLogList.Where(a => a.TrialDateTime < DateTime.Today && 
+                                                       (a.TrialLogStatus == TrialLogStatus.UserApply ||
+                                                       a.TrialLogStatus == TrialLogStatus.TecConfirm)).ToList();
+                    if (checkList.Count>0)
+                    {
+                        foreach (var log in checkList)
+                        {
+                            log.TrialLogStatus = EduCenterModel.BaseEnum.TrialLogStatus.UserNotCome;
+                            _CourseSrv.UpdateTrialStatus(log);
+                        }
 
-            TrialTime = StaticDataSrv.TrialTime;
-        }
-        public IActionResult OnPostGetAvaliableTrial(string date,string CourseCode)
-        {
-            ResultList<RTrialLog> result = new ResultList<RTrialLog>();
-            try
-            {
-                date = DateTime.Parse(date).ToString("yyyy-MM-dd");
-                var us = base.GetUserSession();
-                if (us != null)
-                {
+                    }
                     
                 }
+            }
+        }
 
+        public IActionResult OnPostCancelTrial(long Id)
+        {
+            ResultNormal result = new ResultNormal();
+            try
+            {
+                var us = base.GetUserSession(false);
+                if (us != null)
+                {
+                    _CourseSrv.UpdateTrialStatus(Id, TrialLogStatus.Cancel);
+                }
+                else
+                {
+                    result.IntMsg = -1;
+                    result.ErrorMsg = "需要您重新登录！";
+                }
             }
             catch (Exception ex)
             {
-                result.ErrorMsg = "数据获取失败,请联系工作人员";
-                NLogHelper.ErrorTxt($"MyLeaveModel[OnPostGetCourseByDate]:{ex.Message}");
+                result.ErrorMsg = "提交申请失败,请联系工作人员";
+                NLogHelper.ErrorTxt($"我的试听[OnPostCancelTrial]:{ex.Message}");
             }
             return new JsonResult(result);
         }
-        
+
+
+
+
+
     }
 }

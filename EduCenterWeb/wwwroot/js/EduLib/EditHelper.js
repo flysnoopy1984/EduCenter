@@ -2,19 +2,62 @@
 
     var _jc = null;
 
-    ShowInfo = function (msg, title, style) {
-        if (title == undefined)
+    ShowInfo = function (msg, title, style,closeSec,actionHandler) {
+        if (title == undefined || title == null)
             title = "信息";
-        if (style == undefined)
+        if (style == undefined || style == null)
             style = 'orange';
 
-        $.alert({
+        var jc = $.alert({
             title: title,
             content: msg,
-          
             type: style,
+            buttons: {
+                ok: function () {
+                    if (actionHandler)
+                        actionHandler();
+                },
+            }
+           
+        });
+        if (closeSec != undefined && closeSec > 0) {
+            setTimeout(function () {
+                if (!jc.isClosed()) {
+                    jc.close();
+                    if (actionHandler)
+                        actionHandler();
+                }
+               
+            }, 1000 * closeSec);
+        }
+    }
+
+    ShowConfirm = function (msg, title, style, yesHandler, noHandler) {
+        if (title == undefined || title==null)
+            title = "确认";
+        if (style == undefined || style == null)
+            style = 'orange';
+
+        $.confirm({
+            title: title,
+            content: msg,
+            type: style,
+            buttons: {
+              
+                no: {
+                    text: '不了',
+                    btnClass: 'btn-blue',
+                    action: noHandler,
+                },
+                yes: {
+                    text: '是的',
+                    btnClass: 'btn-red',
+                    action: yesHandler,
+                },
+            }
         });
     }
+
     ShowError = function (msg,title,style) {
         if (_jc != null && _jc != undefined)
             _jc.close();
@@ -128,8 +171,8 @@
       
     };
 
-    callAjax_Query = function (url, data, handler, msg) {
-        if (msg == undefined) msg = "查询中.."
+    callAjax_Query = function (url, data, handler, msg,AfterError) {
+        //if (msg == undefined) msg = "查询中.."
         ShowBlock(msg);
 
         $.ajax({
@@ -150,13 +193,18 @@
 
                 }
                 else {
+                    
                     ShowError(res.ErrorMsg);
+                    if (AfterError)
+                        AfterError(res);
 
                 }
             },
             error: function (xhr, type) {
                 CloseBlock();
                 ShowError("系统错误");
+                if (AfterError)
+                    AfterError(res);
             }
 
         });

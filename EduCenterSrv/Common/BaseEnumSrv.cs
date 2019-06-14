@@ -196,6 +196,25 @@ namespace EduCenterSrv.Common
             return "";
         }
 
+        public static string GetTrialLogStatusName(TrialLogStatus trialLogStatus)
+        {
+            switch(trialLogStatus)
+            {
+                case TrialLogStatus.Cancel:
+                    return "取消";
+                case TrialLogStatus.Done:
+                    return "完成";
+                case TrialLogStatus.TecConfirm:
+                    return "已安排";
+                case TrialLogStatus.UserApply:
+                    return "已申请";
+                case TrialLogStatus.UserNotCome:
+                    return "未参加";
+             
+            }
+            return "";
+        }
+
         //public static string GetUserCourseLogStatusName(UserCourseLogStatus status)
         //{
         //    switch (status)

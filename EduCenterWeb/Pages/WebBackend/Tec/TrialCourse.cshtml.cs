@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EduCenterModel.Course;
+using EduCenterModel.Teacher;
 using EduCenterSrv;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,20 +12,21 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
 {
     public class TrialCourseModel : PageModel
     {
+        public List<ETecInfo> TecList { get; set; }
         public List<ECourseInfo> CourseList { get; set; }
 
-        private UserSrv _UserSrv;
+        private TecSrv _TecSrv;
         private CourseSrv _CourseSrv;
 
 
-        public TrialCourseModel(UserSrv userSrv, CourseSrv courseSrv)
+        public TrialCourseModel(TecSrv tecSrv, CourseSrv courseSrv)
         {
-            _UserSrv = userSrv;
+            _TecSrv = tecSrv;
             _CourseSrv = courseSrv;
         }
         public void OnGet()
         {
-            _CourseSrv.GetSimpleList();
+            TecList = _TecSrv.GetAllStaffTec();
         }
     }
 }

@@ -15,6 +15,7 @@
             elem: '.DateInput',
             eventElem: '#btn_DatePick',
             min: 0,
+            theme: 'molv',
             trigger: 'click',
             done: function (value, date) {
                 //   alert('你选择的日期是：' + value + '\n获得的对象是' + JSON.stringify(date));
@@ -74,11 +75,20 @@
             "date": date,
         }
       
-        callAjax_Query(SubmitTrialUrl, data, SubmitTrialCallBack,"")
+        callAjax_Query(SubmitTrialUrl, data, SubmitTrialCallBack, "", SubmitError)
     }
 
     SubmitTrialCallBack = function () {
-        window.location.href = "MyTrial";
+        ShowInfo("申请试听成功！", null, null, 2, function () {
+            window.location.href = "MyTrial";
+        });     
+        
+    }
+
+    SubmitError = function (res) {
+        if (res.IntMsg == -1) {
+            window.location.href = "Login";
+        }
     }
         
     Init();

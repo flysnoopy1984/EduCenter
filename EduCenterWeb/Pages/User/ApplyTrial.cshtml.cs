@@ -55,13 +55,15 @@ namespace EduCenterWeb.Pages.User
                 var us = base.GetUserSession(false);
                 if (us != null)
                 {
-                    if (_CourseSrv.VerifyUserTrial(us.OpenId, courseCode) == EduErrorMessage.ApplyTrial_OverSingleLimit)
+                    var cls = _CourseSrv.GetCourseInfoClass(courseCode);
+
+                    var errorMsg = _CourseSrv.VerifyUserTrial(us.OpenId, (int)cls.CourseType,date, Lesson);
+                    if (errorMsg == EduErrorMessage.ApplyTrial_OverSingleLimit)
                         result.ErrorMsg = "同类型课不能试听超过2次";
-                    if(_CourseSrv.VerifyUserTrial(us.OpenId,courseCode, date) == EduErrorMessage.ApplyTrial_Exist)
-                        result.ErrorMsg = "已经申请试听";    
+                    else if (errorMsg == EduErrorMessage.ApplyTrial_SameTypeExist)
+                        result.ErrorMsg = "同时段已经有申请试听";
                     else
                     {
-                        var cls = _CourseSrv.GetCourseInfoClass(courseCode);
                         ETrialLog log = new ETrialLog
                         {
                             OpenId = us.OpenId,
@@ -70,17 +72,22 @@ namespace EduCenterWeb.Pages.User
                             TecName = cls.TecName,
                             CourseCode = cls.CourseCode,
                             CourseName = cls.CourseName,
+                            CourseType = cls.CourseType,
                             ApplyDateTime = DateTime.Now,
                             Lesson = Lesson,
                             TrialDateTime = DateTime.Parse(date),
-                            TrialLogStatus = TrialLogStatus.UserApply
+                            TrialLogStatus = TrialLogStatus.UserApply,
+
                         };
                         _CourseSrv.AddTrial(log);
                         _CourseSrv.SaveChanges();
                     }
+                   
+                    
                 }
                 else
                 {
+                    result.IntMsg = -1;
                     result.ErrorMsg = "需要您重新登录！";
                 }
             }

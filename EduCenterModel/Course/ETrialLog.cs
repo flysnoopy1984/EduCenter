@@ -26,6 +26,8 @@ namespace EduCenterModel.Course
         [MaxLength(20)]
         public string TecName { get; set; }
 
+        public CourseType CourseType { get; set; }
+
         [MaxLength(20)]
         public string CourseCode { get; set; }
 
