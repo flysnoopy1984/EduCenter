@@ -15,6 +15,8 @@ namespace EduCenterModel.Common
      
         public List<T> List { get; set; }
 
+        public int RecordTotal { get; set; }
+
         public bool IsSuccess { get; set; }
 
         private string _ErrorMsg;

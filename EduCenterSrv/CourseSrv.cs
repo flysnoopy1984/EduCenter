@@ -204,6 +204,41 @@ namespace EduCenterSrv
             return sql.ToList();
         }
 
+        public List<RTrialLog> QueryTrialLogList_BackEnd(string fromDate,string toDate,out int RecordTotal,string tecCode=null, int pageIndex = 0,int pageSize =20)
+        {
+            List<RTrialLog> result = null;
+            var sql = _dbContext.DBTrialLog.
+                  Where(a => a.TrialDateTime>= DateTime.Parse(fromDate) && a.TrialDateTime <=DateTime.Parse(toDate));
+            if(!string.IsNullOrEmpty(tecCode))
+            {
+                sql = sql.Where(a => a.TecCode == tecCode);
+            }
+            RecordTotal = sql.Count();
+
+            sql = sql.OrderByDescending(a => a.TrialDateTime);
+            var times = StaticDataSrv.TrialTime;
+            result = sql.Select(a => new RTrialLog
+            {
+                Id = a.Id,
+                ApplyDateTime = a.ApplyDateTime,
+                TrialDateTime = a.TrialDateTime,
+                CourseCode = a.CourseCode,
+                CourseName = a.CourseName,
+                TecCode = a.TecCode,
+                TecName = a.TecName,
+                OpenId = a.OpenId,
+                UserName = a.UserName,
+                TrialLogStatus = a.TrialLogStatus,
+                TrialLogStatusName = BaseEnumSrv.GetTrialLogStatusName(a.TrialLogStatus),
+                TrialTimeStr = times[a.Lesson].TimeRange,
+
+
+            }).Skip((pageIndex-1) * pageSize).Take(pageSize).ToList();
+          
+           
+            return result;
+        }
+
         public void  UpdateTrialStatus(ETrialLog log)
         {
             _dbContext.DBTrialLog.Update(log);
