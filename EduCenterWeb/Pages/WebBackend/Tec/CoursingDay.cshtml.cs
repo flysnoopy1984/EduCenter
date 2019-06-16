@@ -25,10 +25,11 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
         {
             _TecSrv = tecSrc;
             _UserSrv = uerSrv;
-            TecList = _TecSrv.GetAllStaffTec();
+            
         }
         public void OnGet()
         {
+            TecList = _TecSrv.GetAllStaffTec();
             CourseTimes = StaticDataSrv.CourseTime.Values.ToList();
         }
 
@@ -52,12 +53,13 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
             return new JsonResult(result);
         }
 
-        public IActionResult OnPostQueryUserCourse(string lessonCode)
+        public IActionResult OnPostQueryUserCourse(string lessonCode,string date)
         {
-            ResultList<RUserCourse> result = new ResultList<RUserCourse>();
+            ResultList<RUserCurrentCourse> result = new ResultList<RUserCurrentCourse>();
             try
             {
-               
+
+                result.List = _UserSrv.GetUserCouseLogByLessonCode(lessonCode, DateTime.Parse(date).ToString("yyyy-MM-dd"));
             }
             catch (Exception ex)
             {

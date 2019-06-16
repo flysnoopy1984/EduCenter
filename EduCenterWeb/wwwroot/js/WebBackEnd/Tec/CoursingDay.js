@@ -1,6 +1,6 @@
 ﻿$(function () {
     var QueryOneDayCourseUrl = "CoursingDay?handler=QueryOneDayCourse";
-   var QueryUserCourseUrl = ""
+    var QueryUserCourseUrl = "CoursingDay?handler=QueryUserCourse";
 
     Init = function () {
 
@@ -54,16 +54,34 @@
             html.children(".cellCourseTec").text(tecName);
             html.children(".cellCourseStatus").text(tc.CoursingStatusName);
 
-            html.on("click", { "LessonCode": tc.LessonCode}, QueryUserCourseList)
+            html.on("click", {"LessonCode": tc.LessonCode}, QueryUserCourseList)
             $(".CellContainer[lesson=" + tc.Lesson + "]").append(html);
         });
     }
     QueryUserCourseList = function (e) {
         var lessonCode = e.data.LessonCode;
         var date = $("#selDate").val();
+        var data = {
+            "lessonCode": lessonCode,
+            "date": date,
+        }
+        callAjax_Query(QueryUserCourseUrl, data, QueryUserCourseListCallBack);
     }
 
-    QueryUserCourseListCallBack = function () {
+    QueryUserCourseListCallBack = function (res) {
+        var data = res.List;
+        var root = $("#UserTable");
+        root.children(".UserTableRow").remove();
+        $.each(data, function (i) {
+            var item = data[i];
+            var html = $("#HideData .UserTableRow").clone();
+
+            html.children(".UserName").text(item.UserName);
+            html.children(".CourseStatus").text(item.UserCourseLogStatusName);
+            html.children(".SignDate").text(item.SignDateTime);
+            root.append(html);
+        });
+
 
     }
 

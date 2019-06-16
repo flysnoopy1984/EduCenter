@@ -28,5 +28,9 @@ namespace EduCenterModel.User
 
         [MaxLength(10)]
         public string CourseDateTime { get; set; }
+
+        public DateTime UserLeaveDateTime { get; set; }
+
+        public DateTime UserSignDateTime { get; set; }
     }
 }

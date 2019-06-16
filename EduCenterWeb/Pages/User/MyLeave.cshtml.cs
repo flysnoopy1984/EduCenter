@@ -66,11 +66,11 @@ namespace EduCenterWeb.Pages.User
                 var us = base.GetUserSession();
                 if (us != null)
                 {
-                    foreach(var c in list)
-                    {
-                        c.UserCourseLogStatus = UserCourseLogStatus.Leave;
-                    }
-                    _UserSrv.AddOrUpdateUesrCourseLog(list, us.OpenId);
+                    //foreach(var c in list)
+                    //{
+                    //    c.UserCourseLogStatus = UserCourseLogStatus.Leave;
+                    //}
+                    _UserSrv.UpdateCourseLogToLeave(list, us.OpenId);
                 }   
                 else
                     result.ErrorMsg = "请重新登陆！";

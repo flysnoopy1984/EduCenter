@@ -105,6 +105,27 @@ namespace EduCenterSrv
             return result;
        }
 
+        public List<RUserCurrentCourse> GetUserCouseLogByLessonCode(string lessonCode,string date)
+        {
+          
+            var efSql = from uc in _dbContext.DBUserCoures.Where(a => a.LessonCode == lessonCode)
+                        join ui in _dbContext.DBUserInfo on uc.UserOpenId equals ui.OpenId
+                        join ul in _dbContext.DBUserCourseLog on uc.LessonCode equals ul.LessonCode into uc_ul
+                        from ucul in uc_ul.DefaultIfEmpty()
+                        .Where(a=>a.LessonCode == lessonCode && a.CourseDateTime == date)
+                        select new RUserCurrentCourse
+                        {
+                            UserOpenId = ui.OpenId,
+                            LessonCode = uc.LessonCode,
+                            SignDateTime = ucul.UserSignDateTime.ToString("yyyy-MM-dd hh:mm"),
+                            UserCourseLogStatus = ucul.UserCourseLogStatus,
+                            UserCourseLogStatusName = BaseEnumSrv.GetUserCourseLogStatusName(ucul.UserCourseLogStatus),
+                            UserName = ui.Name,
+                        };
+            return efSql.ToList();
+                                 
+        }
+
         public bool CheckHasUserCourse(string OpenId, CourseScheduleType CourseScheduleType)
         {
             int n =  _dbContext.DBUserCoures.Where(a => a.CourseScheduleType == CourseScheduleType && a.UserCourseStatus != UserCourseStatus.WaitingPay).Count();
@@ -474,7 +495,7 @@ namespace EduCenterSrv
             return result;
         }
 
-        public void AddOrUpdateUesrCourseLog(List<EUserCourseLog> logList,string openId)
+        public void UpdateCourseLogToLeave(List<EUserCourseLog> logList,string openId)
         {
             foreach(var log in logList)
             {
@@ -483,16 +504,15 @@ namespace EduCenterSrv
                                                     a.LessonCode == log.LessonCode &&
                                                     a.CourseDateTime == log.CourseDateTime &&
                                                     a.CourseScheduleType == log.CourseScheduleType).FirstOrDefault();
+                log.UserCourseLogStatus = UserCourseLogStatus.Leave;
                
                 if(data == null)
                 {
                     log.CreatedDateTime = DateTime.Now;
+                    log.UserLeaveDateTime = DateTime.Now;
                     _dbContext.DBUserCourseLog.Add(log);
                 }
-                else
-                {
-                    data.UserCourseLogStatus = log.UserCourseLogStatus;
-                }
+              
 
             }
             _dbContext.SaveChanges();

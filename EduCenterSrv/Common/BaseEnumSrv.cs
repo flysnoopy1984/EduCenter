@@ -52,31 +52,37 @@ namespace EduCenterSrv.Common
             }
         }
 
-        private static Dictionary<int, string> GetUserCourseLogStatus()
+        public static string GetUserCourseLogStatusName(UserCourseLogStatus status)
+        {
+            string v = "";
+            switch (status)
+            {
+                case UserCourseLogStatus.Absent:
+                    v = "学生缺席";
+                    break;
+                case UserCourseLogStatus.PreNext:
+                    v = "准备上课";
+                    break;
+                case UserCourseLogStatus.SignIn:
+                    v = "学生签到";
+                    break;
+                case UserCourseLogStatus.Leave:
+                    v = "申请请假";
+                    break;
+                case UserCourseLogStatus.TecLeave:
+                    v = "老师请假";
+                    break;
+
+            }
+            return v;
+        }
+        public static Dictionary<int, string> GetUserCourseLogStatus()
         {
             Dictionary<int, string> r = new Dictionary<int, string>();
             foreach (UserCourseLogStatus status in Enum.GetValues(typeof(UserCourseLogStatus)))
             {
-                string v = "";
-                switch (status)
-                {
-                    case UserCourseLogStatus.Absent:
-                        v = "学生缺席";
-                        break;
-                    case UserCourseLogStatus.PreNext:
-                        v = "准备上课";
-                        break;
-                    case UserCourseLogStatus.SignIn:
-                        v = "学生签到";
-                        break;
-                    case UserCourseLogStatus.Leave:
-                        v = "申请请假";
-                        break;
-                    case UserCourseLogStatus.TecLeave:
-                        v = "老师请假";
-                        break;
-                 
-                }
+                string v = GetUserCourseLogStatusName(status);
+               
                 r.Add((int)status, v);
             }
             return r;
