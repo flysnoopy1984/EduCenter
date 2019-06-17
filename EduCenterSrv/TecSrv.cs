@@ -292,25 +292,25 @@ namespace EduCenterSrv
 
             var tecInfo = _dbContext.DBTecInfo.Where(a => a.Code == tecCode).First();
 
-            var gpSql = sql.GroupBy(a => a.CourseDateTime.ToString("yyyy-MM-dd"));
+         //   var gpSql = sql.GroupBy(a => a.CourseDateTime.ToString("yyyy-MM-dd"));
 
+
+            var result = sql.Select(a => new RTecCourse
+            {
+
+                Id = a.Id,
+                CourseDateTime = a.CourseDateTime,
+                CoursingStatus = a.CoursingStatus,
+                CoursingStatusName = statusName,
+                TecCode = a.TecCode,
+                CourseName = a.CourseName,
+                Lesson = a.Lesson,
+                TimeRange = time[a.Lesson].TimeRange,
+                TecName = tecInfo.Name,
+                ApplyLeaveDateTime = a.ApplyLeaveDateTime,
+
+            }).Skip((pageIndex - 1) * pageSize).Take(pageSize);
            
-            //var result = sql.Select(a => new RTecCourse
-            //{
-              
-            //    Id = a.Id,
-            //    CourseDateTime = a.CourseDateTime,
-            //    CoursingStatus = a.CoursingStatus,
-            //    CoursingStatusName = statusName,
-            //    TecCode = a.TecCode,
-            //    CourseName = a.CourseName,
-            //    Lesson = a .Lesson,
-            //    TimeRange = time[a.Lesson].TimeRange,
-            //    TecName = tecInfo.Name,
-            //    ApplyLeaveDateTime = a.ApplyLeaveDateTime,
-
-            //}) .Skip((pageIndex - 1) * pageSize).Take(pageSize);
-         
             return result.ToList();
         }
 

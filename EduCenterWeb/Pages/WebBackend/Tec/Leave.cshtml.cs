@@ -27,11 +27,16 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
 
         public IActionResult OnPostQueryTecLeave(string date, string tecCode, int pageIndex, int pageSize)
         {
-            ResultList<RTecCourse> result = new ResultList<RTecCourse>();
+            ResultList<Dictionary<string, List<RTecCourse>>> result = new ResultList<Dictionary<string, List<RTecCourse>>>();
             try
             {
                 int recordTotal;
-                result.List = _TecSrv.QueryTecLeave(date, out recordTotal, tecCode, pageIndex, pageSize);
+                var r = _TecSrv.QueryTecLeave(date, out recordTotal, tecCode, pageIndex, pageSize);
+                
+                foreach(var item in r)
+                {
+                    
+                }
                 result.RecordTotal = recordTotal;
             }
             catch (Exception ex)
