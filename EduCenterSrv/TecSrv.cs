@@ -202,6 +202,7 @@ namespace EduCenterSrv
                 Lesson = tc.Lesson,
                 TimeRange = times[tc.Lesson].TimeRange,
             })
+            .OrderBy(a => a.Lesson)
             .Where(a => a.CourseDateTime.Year == year &&
                     a.CourseDateTime.Month == month &&
                     a.TecCode == tecCode &&
@@ -209,6 +210,8 @@ namespace EduCenterSrv
 
             return result;
         }
+
+       
 
         public void UpdateTecCourse(string tecCode, ECourseSchedule courseSchedule)
         {
@@ -253,6 +256,59 @@ namespace EduCenterSrv
             }
         }
 
+        #endregion
+
+        #region TecLeave
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tecCode"></param>
+        /// <param name="date">年-月</param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        public List<RTecLeave> QueryTecLeave(string date, out int TotalRecords,string LessonCode =null, string tecCode= null,int pageIndex=1,int pageSize=20)
+        {
+            var sql = _dbContext.DBTecLeave.Where(a=>a.LeaveDate.ToString("yyyy-MM") == date);
+            if (!string.IsNullOrEmpty(tecCode))
+                sql = sql.Where(a => a.TecCode == tecCode);
+            if (!string.IsNullOrEmpty(LessonCode))
+                sql = sql.Where(a => a.LessonCode == LessonCode);
+
+            TotalRecords = sql.Count();
+
+            var result = sql.Select(a => new RTecLeave
+            {
+                CreateDateTime = a.CreateDateTime,
+                Id = a.Id,
+                LeaveDate = a.LeaveDate,
+                LeaveStatus = a.LeaveStatus,
+                LessonCode = a.LessonCode,
+                Remark = a.Remark,
+                TecCode = a.TecCode,
+                LeaveStatusName = BaseEnumSrv.GetLeaveStatusName(a.LeaveStatus),
+
+            }).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+         
+            return result.ToList();
+        }
+
+        public List<RTecCourse> GetTecOneDayAllLesson(string tecCode, string date)
+        {
+            var time = StaticDataSrv.CourseTime;
+            var result = _dbContext.DBTecCourse.Where(a => a.CourseDateTime.ToString("yyyy-MM-dd") == date && a.TecCode == tecCode)
+                .Select(a => new RTecCourse()
+                {
+                    TimeRange = time[a.Lesson].TimeRange,
+                    LessonCode = a.LessonCode,
+                    CourseName = a.CourseName,
+                    Lesson = a.Lesson,
+                    CoursingStatus = a.CoursingStatus,
+                   
+                }).OrderBy(a=>a.Lesson);
+
+            return result.ToList();
+        }
         #endregion
 
 

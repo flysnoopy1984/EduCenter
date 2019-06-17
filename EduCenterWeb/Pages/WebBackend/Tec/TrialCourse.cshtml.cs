@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EduCenterWeb.Pages.WebBackend.Tec
 {
-    public class TrialCourseModel : PageModel
+    public class TrialCourseModel : EduBasePageModel
     {
         public List<ETecInfo> TecList { get; set; }
         public List<ECourseInfo> CourseList { get; set; }

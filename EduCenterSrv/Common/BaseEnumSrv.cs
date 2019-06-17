@@ -221,6 +221,22 @@ namespace EduCenterSrv.Common
             return "";
         }
 
+        public static string GetLeaveStatusName(LeaveStatus leaveStatus)
+        {
+            switch (leaveStatus)
+            {
+                case LeaveStatus.Cannel:
+                    return "取消";
+                case LeaveStatus.Pass:
+                    return "确认请假";
+                case LeaveStatus.Submit:
+                    return "教师提交";
+           
+
+            }
+            return "";
+        }
+
         //public static string GetUserCourseLogStatusName(UserCourseLogStatus status)
         //{
         //    switch (status)

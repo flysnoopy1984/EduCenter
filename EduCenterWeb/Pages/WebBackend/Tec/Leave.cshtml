@@ -1,0 +1,123 @@
+﻿@page
+@model EduCenterWeb.Pages.WebBackend.Tec.LeaveModel
+@{
+    ViewData["Title"] = "Leave";
+    Layout = "~/Pages/Shared/_EduMainPCWeb.cshtml";
+}
+@section navBar{
+    <li><a href="/Home">主页</a></li>
+}
+@Html.AntiForgeryToken()
+<style type="text/css">
+    .MainContainer {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .MainContainer .DataFilterBar {
+            display: flex;
+            height: 34px;
+            line-height: 34px;
+            width: 800px;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+            .MainContainer .DataFilterBar div {
+                display: flex;
+                /*justify-content: space-around;*/
+            }
+
+                .MainContainer .DataFilterBar div #selDate {
+                    text-align: left;
+                    width: 120px;
+                }
+
+                .MainContainer .DataFilterBar div #selTecCode {
+                    text-align: left;
+                    width: 120px;
+                }
+    .CalendarPicker{
+        /*width:380px;*/
+    }
+    .CalendarPicker #btn_Add{
+        margin-right:10px;
+        margin-top:2px;
+    }
+    .CalendarPicker #btn_Del{
+         margin-left:10px;
+    }
+     .CalendarPicker .StartDateInput{
+         width:100px;
+         border-bottom:solid 1px #808080;
+         padding-left:20px;
+         color:#00ce1d;
+         font-weight:bold;
+    }
+</style>
+<style type="text/css">
+    .TitleIcon {
+        width: 1em;
+        height: 1em;
+        vertical-align: -0.15em;
+        fill: currentColor;
+        overflow: hidden;
+        /*color:#00d31b;*/
+    }
+
+    .btnIcon {
+        width: 32px;
+        height: 32px;
+        vertical-align: -0.15em;
+        fill: currentColor;
+        overflow: hidden;
+        /*color:#00d31b;*/
+    }
+</style>
+<script type="text/javascript" src="~/lib/iconfont.js"></script>
+<link href="~/lib/layui/css/layui.css" rel="stylesheet" />
+
+<script src="~/lib/laydate/laydate.js"></script>
+<script src="~/lib/layer-v3.1.1/layer/layer.js"></script>
+@*<script src="~/lib/layui/layui.js"></script>*@
+
+
+
+
+<script src="~/js/WebBackEnd/Tec/Leave.js"></script>
+
+<div class="MainContainer">
+    <div class="DataFilterBar">
+        <div class="CalendarPicker">
+            <svg class="btnIcon" id="btn_Add" aria-hidden="true" onclick="Add();">
+                <use xlink:href="#icon-btnright"></use>
+            </svg>
+            <label>月份：</label>
+            <div>
+                <div class="StartDateInput"></div>
+                <div class="fa fa-calendar fa-2x btnCalendarIcon" id="btn_StartDatePick"></div>
+            </div>
+            <svg class="btnIcon" id="btn_Del" aria-hidden="true" onclick="Del();">
+                <use xlink:href="#icon-btnleft"></use>
+            </svg>
+        </div>
+        <div>
+            <label>老师：</label>
+            <select id="selTecCode" class="form-control">
+                <option value="">全部</option>
+                @foreach (var tec in Model.TecList)
+                {
+                    <option value="@tec.Code">@tec.Name</option>
+                }
+            </select>
+        </div>
+        <div>
+            <input id="btn_CreateLeave" type="button" value="创建教师请假" class="btn btn-info" />
+        </div>
+    </div>
+   
+    <div class="DataContent">
+        <table id="TableLeave"></table>
+    </div>
+
+</div>

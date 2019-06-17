@@ -30,24 +30,16 @@
         });
        
         var tecCode = $("#selTecCode").val();
-        var fDate = $(".StartDateInput").text();
-        var tDate = $(".EndDateInput").text();
+        //var fDate = $(".StartDateInput").text();
+        //var tDate = $(".EndDateInput").text();
 
 
-        QueryTrialData(tecCode, fDate, tDate);
+        QueryTrialData(tecCode, fdateText, tdateText);
 
 
     }
 
-    getDateStr = function (date) {
-        var year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var monthName = month;
-        if (month < 10)
-            monthName = "0" + month;
-        var day = date.getDate();
-        return year + "-" + monthName + "-" + day;
-    }
+   
     //getLayuiDateStr = function (date) {
     //    var year = date.year;
     //    var month = date.month;
@@ -108,11 +100,14 @@
                 },
                 response: {
                     msgName: 'ErrorMsg', //规定状态信息的字段名称，默认：msg
+                    statusName: 'code',
                 }, 
                 parseData: function (res) { //res 即为原始返回的数据
                     var code = 0;
                     if (!res.IsSuccess)
                         code = 200;
+                    else
+                        code = 0;
                     return {
                         "code": code, //解析接口状态
                         "msg": res.ErrorMsg, //解析提示文本
@@ -133,7 +128,6 @@
                         field: 'TrialLogStatusName',
                         title: '状态',
                         templet: function (d) {
-
                             if (d.TrialLogStatus != 10)
                                 return '<div>' + d.TrialLogStatusName + '</div>';
                             if (d.TrialLogStatus == 11)

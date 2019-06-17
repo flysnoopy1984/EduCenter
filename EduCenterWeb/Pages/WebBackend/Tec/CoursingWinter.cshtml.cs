@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EduCenterWeb.Pages.WebBackend.Tec
 {
-    public class CoursingWinterModel : PageModel
+    public class CoursingWinterModel : EduBasePageModel
     {
         public void OnGet()
         {

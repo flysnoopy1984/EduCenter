@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EduCenterWeb.Pages.WebBackend.Tec
 {
-    public class CoursingDayModel : PageModel
+    public class CoursingDayModel : EduBasePageModel
     {
         public List<ETecInfo> TecList { get; set; }
         private TecSrv _TecSrv;

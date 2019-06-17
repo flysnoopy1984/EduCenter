@@ -71,18 +71,16 @@
     QueryUserCourseListCallBack = function (res) {
         var data = res.List;
         var root = $("#UserTable");
-        root.children(".UserTableRow").remove();
+        root.find(".UserTableRow").remove();
+
         $.each(data, function (i) {
             var item = data[i];
             var html = $("#HideData .UserTableRow").clone();
-
             html.children(".UserName").text(item.UserName);
             html.children(".CourseStatus").text(item.UserCourseLogStatusName);
             html.children(".SignDate").text(item.SignDateTime);
             root.append(html);
         });
-
-
     }
 
     Init();

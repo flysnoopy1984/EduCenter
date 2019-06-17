@@ -6,7 +6,8 @@ namespace EduCenterModel.BaseEnum
 {
     public enum LeaveStatus
     {
-        Submit,
-        Pass,
+        Submit = 1,
+        Pass = 10,
+        Cannel = -1,
     }
 }

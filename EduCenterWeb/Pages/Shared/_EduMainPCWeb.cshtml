@@ -6,17 +6,19 @@
     <title>云艺书院后台管理</title>
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/EduLib/Common.js"></script>
     <link href="~/lib/bootstrap/dist/fonts/font-awesome.min.css" rel="stylesheet" />
     <link href="~/css/WebMain.css" rel="stylesheet" />
     <script type="text/javascript">
         function SwitchMenu(obj) {
-            if($(obj).parent().hasClass('open')) {
-			    $(obj).parent().removeClass('open');
-		    } else {
-			    $(obj).parent().addClass('open');
-		    }
-        }  
-    </script>
+            if ($(obj).parent().hasClass('open')) {
+                $(obj).parent().removeClass('open');
+            } else {
+                $(obj).parent().addClass('open');
+            }
+        }
+
+/**/</script>
 </head>
 <body>
     <div class="navbar navbar-inverse" role="navigation">
@@ -43,7 +45,7 @@
                     </a>
                     <ul class="templatemo-submenu">
                         <li><a href="/WebBackEnd/MasterData/Tec"><i class="fa fa-users"></i>教师管理</a></li>
-                        <li><a href="/WebBackEnd/MasterData/Course"><i class="fa fa-users"></i>课程信息</a></li>
+                        <li><a href="/WebBackEnd/MasterData/Course"><i class="fa fa-users"></i>课程管理</a></li>
                       
                     </ul>
                 </li>
@@ -52,18 +54,17 @@
                         <i class="fa fa-database"></i> 报名排课 <div class="pull-right"><span class="caret"></span></div>
                     </a>
                     <ul class="templatemo-submenu">
-                        <li><a href="/WebBackEnd/Course/Plan"><i class="fa fa-users"></i>标准课</a></li>
+                        <li><a href="/WebBackEnd/Course/Plan"><i class="fa fa-users"></i>排课查询</a></li>
                     </ul>
                 </li>
                 <li class="sub open active">
                     <a href="javascript:;" onclick="SwitchMenu(this);">
-                        <i class="fa fa-database"></i> 教师课程情况 <div class="pull-right"><span class="caret"></span></div>
+                        <i class="fa fa-database"></i> 教师情况 <div class="pull-right"><span class="caret"></span></div>
                     </a>
                     <ul class="templatemo-submenu">
                         <li><a href="/WebBackEnd/Tec/CoursingDay"><i class="fa fa-users"></i>日课程</a></li>
                         <li><a href="/WebBackEnd/Tec/CoursingStand"><i class="fa fa-users"></i>月标准班</a></li>
-                        <li><a href="/WebBackEnd/User/ApplySummer"><i class="fa fa-users"></i>暑假班</a></li>
-                        <li><a href="/WebBackEnd/User/ApplyWinter"><i class="fa fa-users"></i>寒假班</a></li>
+                        <li><a href="/WebBackEnd/Tec/Leave"><i class="fa fa-users"></i>教师请假</a></li>
                     </ul>
                 </li>
                 <li class="sub open active">
@@ -71,7 +72,7 @@
                         <i class="fa fa-database"></i> 试听课 <div class="pull-right"><span class="caret"></span></div>
                     </a>
                     <ul class="templatemo-submenu">
-                        <li><a href="/WebBackEnd/Tec/TrialCourse"><i class="fa fa-users"></i>查询</a></li>
+                        <li><a href="/WebBackEnd/Tec/TrialCourse"><i class="fa fa-users"></i>试听课查询</a></li>
                     </ul>
                 </li>
             </ul>

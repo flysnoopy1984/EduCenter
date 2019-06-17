@@ -25,6 +25,15 @@
         return "false";
     }
 
+    getDateStr = function (date) {
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var monthName = month;
+        if (month < 10)
+            monthName = "0" + month;
+        var day = date.getDate();
+        return year + "-" + monthName + "-" + day;
+    }
 })
 String.format = function () {
     // The string containing the format items (e.g. "{0}")

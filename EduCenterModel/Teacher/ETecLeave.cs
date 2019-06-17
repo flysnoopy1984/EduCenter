@@ -18,11 +18,17 @@ namespace EduCenterModel.Teacher
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
+        [MaxLength(20)]
         public string TecCode { get; set; }
 
         public LeaveStatus LeaveStatus { get; set; }
 
-        public long CourseScheduleId { get; set; }
+        public DateTime LeaveDate { get; set; }
+
+        public DateTime CreateDateTime { get; set; }
+
+        [MaxLength(50)]
+        public string LessonCode { get; set; }
 
         [MaxLength(200)]
         public string Remark { get; set; } 

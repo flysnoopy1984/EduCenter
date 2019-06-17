@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EduCenterWeb.Pages.WebBackend.Tec
 {
-    public class CoursingStandModel : PageModel
+    public class CoursingStandModel : EduBasePageModel
     {
         private TecSrv _TecSrv;
         private UserSrv _UserSrv;
