@@ -275,6 +275,8 @@ namespace EduCenterWeb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("ApplyLeaveDateTime");
+
                     b.Property<DateTime>("CourseDateTime");
 
                     b.Property<string>("CourseName")

@@ -1,7 +1,8 @@
 ﻿$(function () {
-    var QueryTrialLogUrl = "TrialCourse?handler=QueryTrialLog";
+   
     var QueryTecLeaveUrl = "Leave?handler=QueryTecLeave";
     var table;
+    var leavelayer;
     Init = function () {
         var date = new Date();
         var year = date.getFullYear();
@@ -36,7 +37,7 @@
                 },
                 url: QueryTrialLogUrl,
                 method: 'post',
-                where: { "fromDate": fDate, "toDate": tDate, "tecCode": tecCode },
+                where: { "date": date, "tecCode": tecCode, "tecCode": tecCode },
                 request: {
                     pageName: 'pageIndex',
                     limitName: 'pageSize'
@@ -62,9 +63,8 @@
                 cols: [[ //表头
                     { field: 'TecCode', title: '教师编号', width: 135, },
                     { field: 'TecName', title: '教师名称', width: 135, },
-                    { field: 'CourseName', title: '请假日期', width: 135, },
-                    { field: 'TrialDateStr', title: '申请时间', width: 135, },
-                    { field: 'ApplyDateTimeStr', title: '状态', width: 100, },
+                    { field: 'CourseDateTimeStr', title: '请假时间', width: 135, },
+                    { field: 'ApplyLeaveDateTimeStr', title: '申请时间', width: 100, },
                 ]]
 
             });
@@ -78,7 +78,7 @@
     }
 
     CreateNewLeave = function () {
-        layer.open({
+        leavelayer = layer.open({
             type: 2,
             title: '创建教师请假',
             shadeClose: true,
@@ -86,6 +86,10 @@
             area: ['600px', '80%'],
             content: 'NewLeave' //iframe的url
         }); 
+    }
+
+    CloseNewLeave = function () {
+        layer.closeAll("iframe");
     }
     Init();
 })

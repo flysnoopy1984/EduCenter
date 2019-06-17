@@ -30,6 +30,18 @@ namespace EduCenterSrv
             string sql = $"delete from TecSkill where TecCode='{tecCode}'";
             return sql;
         }
+        public static string sql_UpdateTecCourseBatch(List<long> list)
+        {
+            string ids="";
+            for(int i=0;i<list.Count;i++)
+            {
+                ids += list[i].ToString();
+                if ((i + 1) < list.Count)
+                    ids += ",";
+            }
+            string sql = $"update TecCourse set CoursingStatus = 1,ApplyLeaveDateTime='{DateTime.Now}' where Id in ({ids})";
+            return sql;
+        }
         #endregion
 
 
@@ -267,28 +279,37 @@ namespace EduCenterSrv
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public List<RTecLeave> QueryTecLeave(string date, out int TotalRecords,string LessonCode =null, string tecCode= null,int pageIndex=1,int pageSize=20)
+        public List<RTecCourse> QueryTecLeave(string date, out int TotalRecords,string tecCode= null,int pageIndex=1,int pageSize=20)
         {
-            var sql = _dbContext.DBTecLeave.Where(a=>a.LeaveDate.ToString("yyyy-MM") == date);
+            var sql = _dbContext.DBTecCourse.Where(a=>a.CourseDateTime.ToString("yyyy-MM") == date && a.CoursingStatus == TecCoursingStatus.ForLeave);
             if (!string.IsNullOrEmpty(tecCode))
                 sql = sql.Where(a => a.TecCode == tecCode);
-            if (!string.IsNullOrEmpty(LessonCode))
-                sql = sql.Where(a => a.LessonCode == LessonCode);
+
 
             TotalRecords = sql.Count();
+            var statusName = BaseEnumSrv.GetCoursingStatusName(TecCoursingStatus.ForLeave);
+            var time = StaticDataSrv.CourseTime;
 
-            var result = sql.Select(a => new RTecLeave
-            {
-                CreateDateTime = a.CreateDateTime,
-                Id = a.Id,
-                LeaveDate = a.LeaveDate,
-                LeaveStatus = a.LeaveStatus,
-                LessonCode = a.LessonCode,
-                Remark = a.Remark,
-                TecCode = a.TecCode,
-                LeaveStatusName = BaseEnumSrv.GetLeaveStatusName(a.LeaveStatus),
+            var tecInfo = _dbContext.DBTecInfo.Where(a => a.Code == tecCode).First();
 
-            }).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            var gpSql = sql.GroupBy(a => a.CourseDateTime.ToString("yyyy-MM-dd"));
+
+           
+            //var result = sql.Select(a => new RTecCourse
+            //{
+              
+            //    Id = a.Id,
+            //    CourseDateTime = a.CourseDateTime,
+            //    CoursingStatus = a.CoursingStatus,
+            //    CoursingStatusName = statusName,
+            //    TecCode = a.TecCode,
+            //    CourseName = a.CourseName,
+            //    Lesson = a .Lesson,
+            //    TimeRange = time[a.Lesson].TimeRange,
+            //    TecName = tecInfo.Name,
+            //    ApplyLeaveDateTime = a.ApplyLeaveDateTime,
+
+            //}) .Skip((pageIndex - 1) * pageSize).Take(pageSize);
          
             return result.ToList();
         }
@@ -299,6 +320,7 @@ namespace EduCenterSrv
             var result = _dbContext.DBTecCourse.Where(a => a.CourseDateTime.ToString("yyyy-MM-dd") == date && a.TecCode == tecCode)
                 .Select(a => new RTecCourse()
                 {
+                    Id = a.Id,
                     TimeRange = time[a.Lesson].TimeRange,
                     LessonCode = a.LessonCode,
                     CourseName = a.CourseName,
@@ -308,6 +330,24 @@ namespace EduCenterSrv
                 }).OrderBy(a=>a.Lesson);
 
             return result.ToList();
+        }
+
+        public bool SubmitLeave(List<long> list)
+        {
+            try
+            {
+                _dbContext.Database.BeginTransaction();
+                var sql = sql_UpdateTecCourseBatch(list);
+                _dbContext.Database.ExecuteSqlCommand(sql);
+                _dbContext.Database.CommitTransaction();
+                return true;
+            }
+            catch
+            {
+                _dbContext.Database.RollbackTransaction();
+                return false;
+            }
+         
         }
         #endregion
 

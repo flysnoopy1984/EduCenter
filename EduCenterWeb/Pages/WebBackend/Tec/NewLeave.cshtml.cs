@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EduCenterModel.Common;
+using EduCenterModel.Teacher;
 using EduCenterModel.Teacher.Result;
 using EduCenterSrv;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,23 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
            
                 result.List = _TecSrv.GetTecOneDayAllLesson(tecCode,date);
                 
+            }
+            catch (Exception ex)
+            {
+                result.ErrorMsg = ex.Message;
+            }
+
+            return new JsonResult(result);
+        }
+
+        public IActionResult OnPostSubmitTecLeave(List<long> list)
+        {
+            ResultNormal result = new ResultNormal();
+            try
+            {
+
+                _TecSrv.SubmitLeave(list);
+
             }
             catch (Exception ex)
             {

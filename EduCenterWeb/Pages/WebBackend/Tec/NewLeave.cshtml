@@ -6,6 +6,7 @@
 }
 @Html.AntiForgeryToken()
 <script src="~/lib/laydate/laydate.js"></script>
+<script src="~/lib/layer-v3.1.1/layer/layer.js"></script>
 <link href="~/css/Plugs/checkbox_radio.css" rel="stylesheet" />
 
 <link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
@@ -90,18 +91,16 @@
     <div class="NoLesson"> 没有课程</div>
     <div class="LessonList">
         <hr />
-        <div class="checkbox checkbox-danger">
-            <input id="cb_allDay" type="checkbox" checked>
-            <label for="cb_allDay">
-                全天
-            </label>
+        <input id="btn_selectAll" type="button" value="全天"  class="btn btn-info btn-xs" />
+        <hr />
+        <div style="text-align:center">
+            <input id="btn_submitLeave" type="button" value="提交请假" class="btn btn-warning" />
         </div>
-
     </div>
 </div>
 <div id="HideData" style="display:none;">
     <div class="checkbox checkbox-warning">
-        <input id="" type="checkbox" checked>
+        <input id="" type="checkbox" tcId="">
         <label for="">
 
         </label>

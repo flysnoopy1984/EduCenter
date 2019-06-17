@@ -30,6 +30,8 @@ namespace EduCenterModel.Teacher
 
         public DateTime CourseDateTime { get; set; }
 
+        public DateTime ApplyLeaveDateTime { get; set; }
+
 
         public int Day { get; set; }
 

@@ -25,13 +25,13 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
             TecList = _TecSrv.GetSimpleList();
         }
 
-        public IActionResult OnPostQueryTecLeave(string date, string tecCode,string LessonCode, int pageIndex, int pageSize)
+        public IActionResult OnPostQueryTecLeave(string date, string tecCode, int pageIndex, int pageSize)
         {
-            ResultList<RTecLeave> result = new ResultList<RTecLeave>();
+            ResultList<RTecCourse> result = new ResultList<RTecCourse>();
             try
             {
                 int recordTotal;
-                result.List = _TecSrv.QueryTecLeave(date, out recordTotal, LessonCode, tecCode, pageIndex, pageSize);
+                result.List = _TecSrv.QueryTecLeave(date, out recordTotal, tecCode, pageIndex, pageSize);
                 result.RecordTotal = recordTotal;
             }
             catch (Exception ex)
