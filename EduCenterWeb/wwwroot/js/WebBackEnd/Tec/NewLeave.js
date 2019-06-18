@@ -137,7 +137,10 @@
 
         ShowInfo("请假成功", null, null, 0, function(){
 
-            parent.CloseNewLeave();
+            var date = $(".StartDateInput").text().substr(0,7);
+            var tecCode = $("#selTecCode").val();
+
+            parent.CloseNewLeave(tecCode,date);
         });
         
     }

@@ -237,6 +237,22 @@ namespace EduCenterSrv.Common
             return "";
         }
 
+        public static string GetCourseScheduleTypeName(CourseScheduleType courseScheduleType)
+        {
+            switch (courseScheduleType)
+            {
+                case CourseScheduleType.Group:
+                    return "团购课";
+                case CourseScheduleType.Standard:
+                    return "标准课";
+                case CourseScheduleType.Summer:
+                    return "暑假班";
+                case CourseScheduleType.Winter:
+                    return "寒假班";
+            }
+            return "";
+        }
+
         //public static string GetUserCourseLogStatusName(UserCourseLogStatus status)
         //{
         //    switch (status)

@@ -275,9 +275,30 @@ namespace EduCenterSrv
             return result;
         }
 
+        public List<RUserCourseList> QueryUserCourseLogList(string openId, int pageIndex = 1, int pageSize = 20)
+        {
+            var time = StaticDataSrv.CourseTime;
+            var result = _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
+                uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourseList
+                {
+                 
+                   CourseName = cs.CourseName,
+                   CourseDate =  uc.CourseDateTime,
+                   LessonTime = time[cs.Lesson].TimeRange,
+                   CourseStatusName = BaseEnumSrv.UserCourseLogStatusList[(int)uc.UserCourseLogStatus],
+                   CreatedDateTime = uc.CreatedDateTime,
+                   OpenId = uc.UserOpenId,
+                   CourseScheduleTypeName = BaseEnumSrv.GetCourseScheduleTypeName(uc.CourseScheduleType),
+
+                })
+               .OrderByDescending(a => a.CreatedDateTime)
+               .Where(a => a.OpenId == openId)
+                    .Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+            return result;
+        }
         public List<RUserCourseLog> GetUserCourseLogList(string OpenId, CourseScheduleType CourseScheduleType, 
                                                          UserCourseLogStatus userCourseLogStatus,
-                                                        int pageIndex= 0,int pageSize =20)
+                                                        int pageIndex= 1,int pageSize =20)
         {
 
             var result = _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
@@ -296,7 +317,7 @@ namespace EduCenterSrv
                 .OrderByDescending(a => a.CreatedDateTime)
                 .Where(a => a.UserOpenId == OpenId &&
                         a.CourseScheduleType == CourseScheduleType &&
-                        a.UserCourseLogStatus == userCourseLogStatus).Skip(pageIndex* pageSize).Take(pageSize).ToList();
+                        a.UserCourseLogStatus == userCourseLogStatus).Skip((pageIndex-1)* pageSize).Take(pageSize).ToList();
             return result;
         }
 

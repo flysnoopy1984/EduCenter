@@ -12,13 +12,25 @@
         var year = date.getFullYear();
         var month = date.getMonth() + 1;
 
+        var dateText = year + "-" + month;
+
+        var paramDate = GetUrlParam("date");
+        var paramTecCode = GetUrlParam("tecCode");
+        if (paramTecCode != undefined) {
+            $("#selTecCode").val(paramTecCode);
+        }
+        if (paramDate != undefined) {
+            dateText = paramDate;
+        }
+
+
         laydate.render({
             elem: ".StartDateInput",
             eventElem: '#btn_StartDatePick',
             done: LayDaySelect,
             type:'month',
             theme: 'molv',
-            value: year + "-" + month,
+            value: dateText,
             isInitValue: false
         });
         $("#btn_CreateLeave").on("click", CreateNewLeave);
@@ -27,11 +39,11 @@
 
         layui.use('laypage', function () {
             glaypage= layui.laypage;
-          
-          
         });
     
-        ReSetQuery(year + "-" + month);
+
+    
+        ReSetQuery(dateText);
       //  QueryLeaveList($("#selTecCode").val(),year + "-" + month,1);
     }
     LayDaySelect = function (value) {
@@ -152,12 +164,12 @@
         }); 
     }
 
-    CloseNewLeave = function () {
+    CloseNewLeave = function (tecCode,date) {
 
         layer.closeAll("iframe");
-        var date = $(".StartDateInput").text();
-        var tecCode = 
-        window.location.href = "Leave"
+        //var date = $(".StartDateInput").text();
+        //var tecCode = 
+        window.location.href = "Leave?tecCode="+tecCode + "&date=" + date;
     }
     Init();
 })
