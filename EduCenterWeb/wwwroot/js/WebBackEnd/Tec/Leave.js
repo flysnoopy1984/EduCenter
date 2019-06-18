@@ -1,8 +1,12 @@
 ﻿$(function () {
    
     var QueryTecLeaveUrl = "Leave?handler=QueryTecLeave";
-    var table;
-    var leavelayer;
+    var GetTecLeaveCourseUrl = "Leave?handler=GetTecLeaveCourse";
+
+    var glaypage;
+    var pageIndex = 1;
+    var pageSize = 20;
+  
     Init = function () {
         var date = new Date();
         var year = date.getFullYear();
@@ -11,74 +15,134 @@
         laydate.render({
             elem: ".StartDateInput",
             eventElem: '#btn_StartDatePick',
-            done: LayDataSelect,
+            done: LayDaySelect,
             type:'month',
             theme: 'molv',
             value: year + "-" + month,
             isInitValue: false
         });
         $("#btn_CreateLeave").on("click", CreateNewLeave);
+
+        $("#selTecCode").on("click", TecSelect);
+
+        layui.use('laypage', function () {
+            glaypage= layui.laypage;
+          
+          
+        });
+    
+        ReSetQuery(year + "-" + month);
+      //  QueryLeaveList($("#selTecCode").val(),year + "-" + month,1);
+    }
+    LayDaySelect = function (value) {
+        ReSetQuery(value);
+    }
+    TecSelect = function () {
+        var date = $(".StartDateInput").text();
+        ReSetQuery(date);
+    }
+    ReSetQuery = function (date) {
+        pageIndex = 1;
+       
+        QueryLeaveList(date);
     }
 
-    QueryTecLeave = function (tecCode,date) {
-        layui.use('table', function () {
-            table = layui.table;
-            //var tecCode = $("#selTecCode").val();
-            //var fDate = $(".StartDateInput").text();
-            //var tDate = $(".EndDateInput").text();
-            //第一个实例
-            table.render({
-                elem: '#TableLeave',
-                id: "tableLeaveList",
-                height: 'full-350',
-                limit: 20,
-                headers: {
-                    "XSRF-TOKEN": $('input:hidden[name="__RequestVerificationToken"]').val(),
-                },
-                url: QueryTrialLogUrl,
-                method: 'post',
-                where: { "date": date, "tecCode": tecCode, "tecCode": tecCode },
-                request: {
-                    pageName: 'pageIndex',
-                    limitName: 'pageSize'
-                },
-                response: {
-                    msgName: 'ErrorMsg', //规定状态信息的字段名称，默认：msg
-                    statusName: 'code',
-                },
-                parseData: function (res) { //res 即为原始返回的数据
-                    var code = 0;
-                    if (!res.IsSuccess)
-                        code = 200;
-                    else
-                        code = 0;
-                    return {
-                        "code": code, //解析接口状态
-                        "msg": res.ErrorMsg, //解析提示文本
-                        "count": res.RecordTotal, //解析数据长度
-                        "data": res.List //解析数据列表
-                    }
-                },
-                page: true, //开启分页
-                cols: [[ //表头
-                    { field: 'TecCode', title: '教师编号', width: 135, },
-                    { field: 'TecName', title: '教师名称', width: 135, },
-                    { field: 'CourseDateTimeStr', title: '请假时间', width: 135, },
-                    { field: 'ApplyLeaveDateTimeStr', title: '申请时间', width: 100, },
-                ]]
+    StartQuery = function () {
+        $(".DataMsg").hide();
+        $(".TableData").show();
+    }
+    NoData = function () {
+        $(".DataMsg").text("没有数据");
+        $(".DataMsg").show();
+        $(".TableData").hide();
+    }
 
+    QueryLeaveList = function (date) {
+        StartQuery();
+        var tecCode = $("#selTecCode").val();
+
+        var data = {
+            "date": date,
+            "tecCode": tecCode,
+            "pageIndex": pageIndex,
+            "pageSize": pageSize,
+
+        }
+        callAjax_Query(QueryTecLeaveUrl, data,QueryLeaveListCallBack, "");
+    }
+
+    QueryLeaveListCallBack = function (res) {
+        $("#TableLeave tr td").remove();
+        var data = res.List;
+        if (data.length > 0) {
+            var root = $("#TableLeave");
+            $.each(data, function (i) {
+                var leaveType = "";
+                if (data[i].LeaveType == 1)
+                    leaveType = "全天请假";
+                else
+                    leaveType = "<a style='cursor:pointer; color:blue' onclick=ShowDetailLesson(this)>部分请假</a>";
+
+                var html = "<tr class='trLeave'>";
+                html += "<td class='tdTecCode'>" + data[i].TecCode + "</td>";
+                html += "<td class='tdTecName'>" + data[i].TecName + "</td>";
+                html += "<td class='tdDate'>" + data[i].LeaveDateStr + "</td>";
+
+                html += "<td>" + leaveType + "</td>";
+                html += "<td class='tdLessonDetail'></td>";
+                html += "</tr>";
+                root.append(html);
             });
 
-       
-        });
+            glaypage.render({
+                elem: 'Pager',
+                layout: ['prev', 'page', 'next', 'count', 'skip'],
+                limit: pageSize,
+                count: res.RecordTotal,
+                jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        QueryLeaveList();
+                    }
+
+                }
+            });
+        }
+        else {
+            NoData();
+        }
+     
     }
 
-    LayDataSelect = function () {
+    ShowDetailLesson = function (obj) {
 
+        var tr = $(obj).closest(".trLeave");
+        var detailTd = tr.children(".tdLessonDetail");
+        if ($(detailTd).text() == "") {
+            var tecCode = tr.children(".tdTecCode").text();
+            var date = tr.children(".tdDate").text();
+            
+            $(detailTd).append('<i class="fa fa-spinner fa-pulse fa-lg fa-fw"></i>稍等...');
+
+            callAjax_Query_NoBlock(GetTecLeaveCourseUrl, { "tecCode": tecCode,"date":date}, function (res) {
+                $(detailTd).empty();
+                var data = res.List;
+                var html = $("#HideData .DetailLessonList").clone();
+                $.each(data, function (i) {
+                    html.append("<div>" + data[i].CourseName + " | " + data[i].TimeRange+"</div>");
+                });
+                
+                $(detailTd).append(html);
+            });
+
+        }
     }
+    //GetTecLeaveCourseCallBack = function (res) {
+
+    //}
 
     CreateNewLeave = function () {
-        leavelayer = layer.open({
+        layer.open({
             type: 2,
             title: '创建教师请假',
             shadeClose: true,
@@ -89,7 +153,11 @@
     }
 
     CloseNewLeave = function () {
+
         layer.closeAll("iframe");
+        var date = $(".StartDateInput").text();
+        var tecCode = 
+        window.location.href = "Leave"
     }
     Init();
 })

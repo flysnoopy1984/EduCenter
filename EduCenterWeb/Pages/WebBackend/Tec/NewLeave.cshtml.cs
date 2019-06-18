@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EduCenterCore.Common.Helper;
 using EduCenterModel.Common;
 using EduCenterModel.Teacher;
 using EduCenterModel.Teacher.Result;
@@ -26,7 +27,7 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
 
         public IActionResult OnPostQueryLessonList(string tecCode, string date)
         {
-            ResultList<RTecCourse> result = new ResultList<RTecCourse>();
+            ResultList<RTecLesson> result = new ResultList<RTecLesson>();
             try
             {
            
@@ -41,18 +42,19 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
             return new JsonResult(result);
         }
 
-        public IActionResult OnPostSubmitTecLeave(List<long> list)
+        public IActionResult OnPostSubmitTecLeave(List<long> list,ETecLeave tecLeave)
         {
             ResultNormal result = new ResultNormal();
             try
             {
 
-                _TecSrv.SubmitLeave(list);
+                _TecSrv.SubmitLeave(list,tecLeave);
 
             }
             catch (Exception ex)
             {
-                result.ErrorMsg = ex.Message;
+                result.ErrorMsg = "请假失败，请联系管理员";
+                NLogHelper.ErrorTxt($"后台新增请假[OnPostSubmitTecLeave]:{ex.Message}");
             }
 
             return new JsonResult(result);

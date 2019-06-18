@@ -21,14 +21,16 @@ namespace EduCenterModel.Teacher
         [MaxLength(20)]
         public string TecCode { get; set; }
 
-        public LeaveStatus LeaveStatus { get; set; }
+        [MaxLength(20)]
+        public string TecName { get; set; }
+
+        //public LeaveStatus LeaveStatus { get; set; }
 
         public DateTime LeaveDate { get; set; }
 
-        public DateTime CreateDateTime { get; set; }
+        public DateTime ApplyDateTime { get; set; }
 
-        [MaxLength(50)]
-        public string LessonCode { get; set; }
+        public LeaveType LeaveType { get; set; }
 
         [MaxLength(200)]
         public string Remark { get; set; } 

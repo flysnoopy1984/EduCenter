@@ -72,7 +72,7 @@
                 }
                 var labelObj = html.find("label");
                 labelObj.attr("for", id);
-                labelObj.text(item.CourseName + " | " + item.TimeRange)
+                labelObj.text(item.CourseName + " | " + item.TimeRange + "  " + item.CourseStatusName);
                 $(".LessonList #btn_selectAll").after(html);
             });
             //是否没有可选的时间段
@@ -107,6 +107,18 @@
     SubmitTecLeave = function () {
       
         var list = new Array();
+        var tecLeave = new Object();
+        var date = $(".StartDateInput").text();
+
+        tecLeave.LeaveDate = date;
+        tecLeave.tecCode = $("#selTecCode").val();
+        tecLeave.tecName = $("#selTecCode option:selected").text();
+        //    tecLeave.LeaveType = 
+        if ($(".LessonList input[type=checkbox]").length == $(".LessonList input[type=checkbox]:checked").length) 
+            tecLeave.LeaveType = 1;
+        else
+            tecLeave.LeaveType = 2;
+
 
         $(".LessonList input[type=checkbox]:checked:not(:disabled)").each(function () {
             var Id = $(this).attr("tcId");
@@ -118,7 +130,7 @@
             ShowInfo("请先选择请假时间段", null, null, 1);
         }
         else
-            callAjax_Query(SubmitTecLeaveUrl, { "list": list }, SubmitTecLeaveCallBack, "");
+            callAjax_Query(SubmitTecLeaveUrl, { "list": list, "tecLeave": tecLeave }, SubmitTecLeaveCallBack, "");
     }
 
     SubmitTecLeaveCallBack = function (res) {

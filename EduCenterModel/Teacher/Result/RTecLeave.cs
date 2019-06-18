@@ -6,12 +6,16 @@ namespace EduCenterModel.Teacher.Result
 {
     public class RTecLeave:ETecLeave
     {
-        public string LeaveStatusName { get; set; }
+        public string LeaveDateStr
+        {
+            get { return LeaveDate.ToString("yyyy-MM-dd"); }
+        }
 
-        public string CreateDateTimeStr {
+        public string ApplyDateTimeeStr
+        {
             get
             {
-                return base.CreateDateTime.ToString("yyyy-MM-dd hh:mm:dd");
+                return ApplyDateTime.ToString("yyyy-MM-dd hh:mm:dd");
             }    
         }
 

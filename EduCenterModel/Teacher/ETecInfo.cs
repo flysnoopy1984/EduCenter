@@ -25,7 +25,7 @@ namespace EduCenterModel.Teacher
         [MaxLength(32)]
         public string UserOpenId { get; set; }
 
-        [MaxLength(10)]
+        [MaxLength(20)]
         public string Name { get; set; }
 
         public int Sex { get; set; }
