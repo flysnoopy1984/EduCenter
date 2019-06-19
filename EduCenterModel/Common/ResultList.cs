@@ -15,7 +15,7 @@ namespace EduCenterModel.Common
      
         public List<T> List { get; set; }
 
-        public int RecordTotal { get; set; }
+        
 
         public bool IsSuccess { get; set; }
 
@@ -35,5 +35,9 @@ namespace EduCenterModel.Common
 
 
         public int IntMsg { get; set; }
+
+        public int RecordTotal { get; set; }
+
+        public int TotlaPage { get; set; }
     }
 }

@@ -17,5 +17,7 @@ namespace EduCenterModel.User.Result
         public string OpenId { get; set; }
 
         public string CourseScheduleTypeName { get; set; }
+
+        public string LessonCode { get; set; }
     }
 }

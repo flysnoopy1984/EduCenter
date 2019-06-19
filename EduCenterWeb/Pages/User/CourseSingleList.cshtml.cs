@@ -11,20 +11,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EduCenterWeb.Pages.User
 {
-    public class CourseListModel : EduBaseAppPageModel
+    public class CourseSingleListModel : EduBaseAppPageModel
     {
         private UserSrv _UserSrv;
-
-        public CourseListModel(UserSrv userSrv)
-        {
-            _UserSrv = userSrv;
-        }
         public void OnGet()
         {
 
         }
+        public CourseSingleListModel(UserSrv userSrv)
+        {
+            _UserSrv = userSrv;
+        }
 
-        public IActionResult OnPostQueryList(int pageIndex,int pageSize)
+        public IActionResult OnPostQueryList(string LessonCode,int pageIndex, int pageSize)
         {
             ResultList<RUserCourseList> result = new ResultList<RUserCourseList>();
             try
@@ -33,7 +32,7 @@ namespace EduCenterWeb.Pages.User
                 if (us != null)
                 {
                     int totalPages;
-                    result.List= _UserSrv.QueryUserCourseLogList(us.OpenId, out totalPages,null,pageIndex, pageSize);
+                    result.List = _UserSrv.QueryUserCourseLogList(us.OpenId, out totalPages, LessonCode,pageIndex, pageSize);
                     result.TotlaPage = totalPages;
                 }
                 else
@@ -45,7 +44,7 @@ namespace EduCenterWeb.Pages.User
             catch (Exception ex)
             {
                 result.ErrorMsg = "获取数据失败！";
-                NLogHelper.ErrorTxt($"课程列表[OnPostQueryList]:{ex.Message}");
+                NLogHelper.ErrorTxt($"单个课程列表[OnPostQueryList]:{ex.Message}");
             }
             return new JsonResult(result);
         }

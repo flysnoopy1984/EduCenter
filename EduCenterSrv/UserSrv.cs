@@ -275,25 +275,31 @@ namespace EduCenterSrv
             return result;
         }
 
-        public List<RUserCourseList> QueryUserCourseLogList(string openId, int pageIndex = 1, int pageSize = 20)
+        public List<RUserCourseList> QueryUserCourseLogList(string openId, out int totalPage,string LessonCode=null, int pageIndex = 1, int pageSize = 20)
         {
             var time = StaticDataSrv.CourseTime;
-            var result = _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
+            var sql = _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
                 uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourseList
                 {
-                 
-                   CourseName = cs.CourseName,
-                   CourseDate =  uc.CourseDateTime,
-                   LessonTime = time[cs.Lesson].TimeRange,
-                   CourseStatusName = BaseEnumSrv.UserCourseLogStatusList[(int)uc.UserCourseLogStatus],
-                   CreatedDateTime = uc.CreatedDateTime,
-                   OpenId = uc.UserOpenId,
-                   CourseScheduleTypeName = BaseEnumSrv.GetCourseScheduleTypeName(uc.CourseScheduleType),
 
-                })
-               .OrderByDescending(a => a.CreatedDateTime)
-               .Where(a => a.OpenId == openId)
+                    CourseName = cs.CourseName,
+                    CourseDate = uc.CourseDateTime,
+                    LessonTime = time[cs.Lesson].TimeRange,
+                    CourseStatusName = BaseEnumSrv.UserCourseLogStatusList[(int)uc.UserCourseLogStatus],
+                    CreatedDateTime = uc.CreatedDateTime,
+                    OpenId = uc.UserOpenId,
+                    LessonCode = uc.LessonCode,
+                    CourseScheduleTypeName = BaseEnumSrv.GetCourseScheduleTypeName(uc.CourseScheduleType),
+
+                }).Where(a => a.OpenId == openId);
+            if (!string.IsNullOrEmpty(LessonCode))
+                sql = sql.Where(a => a.LessonCode == LessonCode);
+            int totalCount = sql.Count();
+            totalPage = Convert.ToInt32(totalCount / pageSize)+1;
+
+            var result = sql.OrderByDescending(a => a.CreatedDateTime)
                     .Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+            
             return result;
         }
         public List<RUserCourseLog> GetUserCourseLogList(string OpenId, CourseScheduleType CourseScheduleType, 
