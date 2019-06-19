@@ -22,8 +22,12 @@ namespace EduCenterModel.Course
 
         public double Price { get; set; }
 
+        
+
        
         public double Qty { get; set; }
+
+        public double ExtQty { get; set; }
 
         public CourseScheduleType CourseScheduleType { get; set; }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EduCenterCore.Common.Helper;
 using EduCenterModel.Common;
+using EduCenterModel.Course;
 using EduCenterModel.User.Result;
 using EduCenterSrv;
 using Microsoft.AspNetCore.Mvc;
@@ -14,14 +15,23 @@ namespace EduCenterWeb.Pages.User
     public class CourseSingleListModel : EduBaseAppPageModel
     {
         private UserSrv _UserSrv;
-        public void OnGet()
-        {
+        private CourseSrv _CourseSrv;
+        public ECourseSchedule CourseInfo { get; set; }
 
-        }
-        public CourseSingleListModel(UserSrv userSrv)
+        public CourseSingleListModel(UserSrv userSrv, CourseSrv courseSrv)
         {
+            _CourseSrv = courseSrv;
             _UserSrv = userSrv;
         }
+
+        public void OnGet()
+        {
+            string lessonCode = HttpContext.Request.Query["LCode"];
+            if (!string.IsNullOrEmpty(lessonCode))
+                CourseInfo = _CourseSrv.GetCourseSchedule(lessonCode);
+         
+        }
+    
 
         public IActionResult OnPostQueryList(string LessonCode,int pageIndex, int pageSize)
         {

@@ -231,7 +231,7 @@
                 else {
                     if (needErrorMsg) {
                         if (ErrorMsgHandler != undefined)
-                            ErrorMsgHandler(res.ErrorMsg);
+                            ErrorMsgHandler(res);
                         else
                             ShowError(res.ErrorMsg);
                     }
@@ -240,8 +240,12 @@
             },
             error: function (xhr, type) {
                 if (needErrorMsg) {
-                    if (ErrorMsgHandler != undefined)
-                        ErrorMsgHandler("系统错误");
+                    if (ErrorMsgHandler != undefined) {
+                        var eObj = new Object();
+                        eObj.ErrorMsg = "系统错误";
+                        ErrorMsgHandler(eObj);
+                    }
+                       
                     else
                         ShowError("系统错误");
                 }

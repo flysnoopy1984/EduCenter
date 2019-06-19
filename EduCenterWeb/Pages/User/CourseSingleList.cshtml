@@ -1,7 +1,7 @@
 ﻿@page
-@model EduCenterWeb.Pages.User.CourseListModel
+@model EduCenterWeb.Pages.User.CourseSingleListModel
 @{
-    ViewData["Title"] = "CourseList";
+    ViewData["Title"] = "CourseSingleList";
     Layout = "~/Pages/Shared/_EduMainApp.cshtml";
 }
 @Html.AntiForgeryToken()
@@ -33,7 +33,7 @@
 
     .dataList {
         width: 90%;
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .OneRecord {
@@ -96,10 +96,18 @@
 <script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
 <script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
 <script src="~/js/EduLib/EditHelper.js"></script>
+<script src="~/js/EduLib/Common.js"></script>
 <script src="~/js/Wap/User/CourseSingleList.js"></script>
 <div class="MainContainer">
     <div class="Title">
-        <span class="fa fa-list-alt" style="margin-right:8px;"></span>美术课-基础
+        <span class="fa fa-list-alt" style="margin-right:8px;"></span>
+        @if (Model.CourseInfo != null)
+        {
+    <span class="TitleName">
+        @Model.CourseInfo.CourseName
+    </span>
+        }
+
     </div>
     <div class="dataList">
 
@@ -114,12 +122,13 @@
                 <div>开课时间：</div>
                 <div class="couseTime">2019-06-10 17:00-19:00</div>
             </div>
+        </div>
+        <div class="OneLine">
             <div class="LineColumn">
                 <div>上课状态：</div>
                 <div class="courseStatus">已签到</div>
             </div>
         </div>
-     
     </div>
     <hr />
 </div>

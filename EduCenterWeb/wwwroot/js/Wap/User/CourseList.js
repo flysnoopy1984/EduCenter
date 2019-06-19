@@ -24,14 +24,13 @@
                             item.find(".courseStatus").text(d.CourseStatusName);
                             item.find(".courseScheduleType").text(d.CourseScheduleTypeName);
                             item.find(".couseTime").text(d.CourseDate + " | " + d.LessonTime);
-                            item.append("<hr />");
-                            html += item.html();
+                            
+                            html += item.prop("outerHTML");
+                            html +="<hr />";
                          
                         });
                         next(html, page < res.TotlaPage);
-                    }, false);
-                   
- 
+                    }, true, QueryErrorHandler);
                 }
             });
            
@@ -39,6 +38,14 @@
        // QueryList();
     }
 
+    QueryErrorHandler = function (res) {
+        if (res.IntMsg == -1) {
+            ShowInfo(res.ErrorMsg, null, "red", 1, function () {
+                window.location.href = "Login";
+            });
+
+        }
+    }
  
     Init();
 });

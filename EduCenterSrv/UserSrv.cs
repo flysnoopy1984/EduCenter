@@ -93,6 +93,7 @@ namespace EduCenterSrv
                CourseScheduleType = uc.CourseScheduleType,
                UserCourseStatus = uc.UserCourseStatus,
                Day = cs.Day,
+               LessonCode = cs.LessonCode,
                Lesson = cs.Lesson,
                Time = times[cs.Lesson].TimeRange,
                CourseName = cs.CourseName,
@@ -292,8 +293,10 @@ namespace EduCenterSrv
                     CourseScheduleTypeName = BaseEnumSrv.GetCourseScheduleTypeName(uc.CourseScheduleType),
 
                 }).Where(a => a.OpenId == openId);
+
             if (!string.IsNullOrEmpty(LessonCode))
                 sql = sql.Where(a => a.LessonCode == LessonCode);
+
             int totalCount = sql.Count();
             totalPage = Convert.ToInt32(totalCount / pageSize)+1;
 

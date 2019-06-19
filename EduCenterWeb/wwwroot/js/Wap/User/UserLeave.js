@@ -118,9 +118,10 @@
         LoadingDone();
     }
 
-    GetCourseByDateError = function (errorMsg) {
+    GetCourseByDateError = function (res) {
         LoadingDone();
-        ShowError(errorMsg);
+
+        ShowError(res.ErrorMsg);
         // $(".LeaveList").text(errorMsg);
     }
 

@@ -4,8 +4,23 @@
     ViewData["Title"] = "BuyCourseTime";
     Layout = "~/Pages/Shared/_EduMainApp.cshtml";
 }
+@functions{
+    public string GetTextColor(string PriceCode)
+    {
+        switch (PriceCode)
+        {
+            case "StandardPrice1": return "text-primary";
+            case "StandardPrice2": return "text-success";
+            case "StandardPrice3": return "text-warning";
+            case "StandardPrice4": return "text-danger";
+         
 
-@*<script src="~/lib/iconfont.js"></script>*@
+
+        }
+        return "";
+    }
+}
+<link href="~/css/Plugs/checkbox_radio.css" rel="stylesheet" />
 <script type="text/javascript" src="~/lib/iconfont.js"></script>
 <link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
 <script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
@@ -39,6 +54,7 @@
         width: 100%;
         display: flex;
         flex-direction: column;
+        align-items: center;
     }
 
     .CourseStandardPriceTitle {
@@ -55,7 +71,7 @@
     }
 
     .PriceList {
-        width: 100%;
+        width: 90%;
         display: flex;
         flex-direction: column;
     }
@@ -63,46 +79,17 @@
     .PriceItem {
         width: 100%;
         display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .ItemRemark {
-        height: 35px;
-        line-height: 35px;
-        font-size: 22px;
-        font-weight: bold;
-        display: flex;
+        /* flex-direction: column; */
+        align-items: baseline;
+        /* height: 60px; */
         justify-content: space-between;
-        width: 80%;
-        color: #0094ff;
-        margin-bottom: 10px;
+        border-bottom: solid 1px #f3a657;
+        padding-top: 20px;
     }
 
-    .BuyCount {
-        width: 80%;
-        display: flex;
-        justify-content: space-between;
-    }
-
-        .BuyCount .BuyWord {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .BuyCount .BuyField {
-            height: 40px;
-            line-height: 40px;
-            display: flex;
-            width: 55%;
-            justify-content: space-around;
-        }
-
-    .buyNum {
-        width: 60px;
-        display: unset;
-        color: #00350a;
-        font-weight: bold;
+    .BtnAreaList {
+        position: absolute;
+        bottom: 40px;
     }
 </style>
 
@@ -125,8 +112,14 @@
         overflow: hidden;
         /*color:#00d31b;*/
     }
-    
+
+    hr {
+        margin-bottom: 20px;
+        margin-top: 4px;
+        background: #ffac71;
+    }
 </style>
+
 <div class="MainContainer">
     <div class="Title">
         <svg class="TitleIcon" aria-hidden="true">
@@ -136,30 +129,41 @@
     <div class="Content">
         <div class="CourseStandardPriceTitle"><i class="fa fa-list" aria-hidden="true"></i>  课时价格</div>
         <div class="PriceList">
-            <div class="PriceItem">
-                <div class="ItemRemark">
-                    <div>标准价格</div>
-                    <div><span style="color:#ff6a00">200</span>元/课时</div>
+            @foreach (var p in Model.PriceList)
+            {
+             
+                    <div class="PriceItem @GetTextColor(p.PriceCode) ">
+                        <div>@p.PriceName</div>
+                        <div><i class="fa fa-jpy" aria-hidden="true"></i> <span class="CoursePrice">@p.Price</span></div>
+                        <div><span class="CourseQty">@p.Qty</span>课时</div>
+                        <div class="radio radio-info">
+                            <input type="radio" name="PriceItem" id="r_@p.PriceCode" value="@p.PriceCode">
+                            <label for="r_@p.PriceCode">
+                                选择
+                            </label>
+                        </div>
 
-                </div>
-                <div class="BuyCount">
-                    <div class="BuyWord">购买</div>
-                    <div class="BuyField">
-                        <svg class="btnIcon" aria-hidden="true" style="margin-top:2px;" onclick="DelBuyNum();">
-                            <use xlink:href="#icon-btnright"></use>
-                        </svg>
-                        <input type="text" id="buyNum" readonly value="20" class="form-control buyNum" />
-                        <svg class="btnIcon" aria-hidden="true" onclick="AddBuyNum();">
-                            <use xlink:href="#icon-btnleft"></use>
-                        </svg>
                     </div>
+                }
 
-                </div>
-            </div>
         </div>
         <div class="BtnAreaList">
-
+            <button class="btn btn-warning" id="btn_Submit">确认提交</button>
         </div>
     </div>
 </div>
+@*<div id="HideData" style="display:none;">
+        <div class="PriceItem">
+            <div>套餐1</div>
+            <div><i class="fa fa-jpy" aria-hidden="true"></i> <span class="CoursePrice">4888</span></div>
+            <div><span class="CourseQty">40</span>课时</div>
+            <div class="radio radio-info">
+                <input type="radio" name="radio2" id="radio4" value="option2" checked="">
+                <label for="radio4">
+                    选择
+                </label>
+            </div>
+
+        </div>
+    </div>*@
 

@@ -173,7 +173,13 @@ namespace EduCenterSrv
             return _dbContext.DbCourseSchedule.Where(a => a.Year == year && a.CourseScheduleType == scheduleType).ToList();
         }
 
-       // public DateTime GetLast
+        public ECourseSchedule GetCourseSchedule(string LessonCode)
+        {
+            return _dbContext.DbCourseSchedule.Where(a => a.LessonCode == LessonCode).FirstOrDefault();
+        }
+
+
+        // public DateTime GetLast
 
         #endregion
 
