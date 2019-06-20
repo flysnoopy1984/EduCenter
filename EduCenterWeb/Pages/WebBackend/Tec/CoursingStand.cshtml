@@ -88,11 +88,12 @@
     <div class="DataFilterBar">
         <div>
             <label>日期：</label>
-            <input type="button" class="form-control" id="selDate" value="@DateTime.Today" />
+            <input type="button" class="form-control" id="selDate" value="" />
         </div>
         <div>
             <label>老师：</label>
             <select id="selTecCode" class="form-control">
+              
                 @foreach (var tec in Model.TecList)
                 {
                     <option value="@tec.Code">@tec.Name</option>

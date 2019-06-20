@@ -1,0 +1,104 @@
+﻿@page
+@model EduCenterWeb.Pages.WebBackend.MasterData.GlobalConfigModel
+@{
+    ViewData["Title"] = "GlobalConfig";
+    Layout = "~/Pages/Shared/_EduMainPCWeb.cshtml";
+}
+@section navBar{
+    <li><a href="/Home">主页</a></li>
+}
+@functions{
+    public string GetTextColor(CourseScheduleType type)
+    {
+        switch (type)
+        {
+          
+            case  CourseScheduleType.Winter: return "text-info";
+          
+            case  CourseScheduleType.Summer: return "text-danger";
+
+
+
+        }
+        return "";
+    }
+}
+@Html.AntiForgeryToken()
+@using EduCenterModel.BaseEnum;
+
+<style type="text/css">
+    .MainContent {
+        font-size: 15px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .subTitle {
+        height: 40px;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 40px;
+        /*width:50%;*/
+        background: #e1ffe2;
+        border-radius: 4px;
+        padding-left: 8px;
+        margin-bottom: 20px;
+    }
+
+    .YearGroupRecord {
+        display: flex;
+        width: 40%;
+        justify-content: space-between;
+        border-bottom: solid 1px #999999;
+        margin-bottom: 20px;
+    }
+
+    .DateRangeLine {
+        display: flex;
+        flex-direction: column;
+        width: 70%;
+    }
+
+    .DateRange {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+
+        .DateRange .Date {
+            display: flex;
+            width: 70%;
+            justify-content: space-between;
+        }
+</style>
+
+<h3 style="border-bottom: solid 1px #999999; padding-bottom:8px;">全局设置</h3>
+<div class="MainContent">
+    <div class="subTitle text-danger">寒暑假区间</div>
+    @foreach (var range in Model.DateRange)
+    {
+
+
+        <div class="YearGroupRecord ">
+            <div>@range.Key</div>
+            <div class="DateRangeLine">
+                @foreach (var dr in range.Value)
+                {
+                   
+                    <div class="DateRange @GetTextColor(dr.CourseScheduleType)">
+                        <div class="Name">@dr.CourseDateRangeName</div>
+                        <div class="Date">
+                            <div>@dr.StartDate.ToString("yyyy-MM-dd")</div> 到
+                            <div>@dr.EndDate.ToString("yyyy-MM-dd")</div>
+                        </div>
+                    </div>
+
+                }
+
+            </div>
+        </div>
+    }
+
+</div>
+

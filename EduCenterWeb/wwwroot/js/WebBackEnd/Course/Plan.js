@@ -12,6 +12,8 @@
         laydate.render({
             elem: "#planYear",
             type: 'year',
+            min: -1,
+           max:365*3,
             done: LayDataSelect
         });
 
@@ -107,15 +109,12 @@
             var cType = cellRow.attr("cType");
             var lessonNo = cellRow.attr("no");
             var cellText = cellRow.find(".cellText");
-         //   var selTec = cellRow.find(".selTec");
-            //var time = cellRow.parent().parent().siblings(":first").text();
-            //var starttime = time.split("-")[0];
-            //var endtime = time.split("-")[1];
 
-        
             var day = cellRow.parent().attr("day");
             var lesson = cellRow.parent().attr("lesson");
             var lessonCode = year + "_" + day + "_" + lesson + "_" + cCode + "_" + lessonNo;
+
+            var CourseScheduleType = $("#selScheduleType").val();
 
 
             var courseSchedule = {
@@ -127,7 +126,8 @@
                 "CourseType": cType,
                 "Lesson": lesson,
                 "LessonCode": lessonCode,
-                "LessonNo": lessonNo
+                "LessonNo": lessonNo,
+                "CourseScheduleType": CourseScheduleType,
                 //"StartTime": starttime,
                 //"EndTime": endtime
 

@@ -52,8 +52,8 @@ namespace EduCenterWeb
                      {
                          options.RootDirectory = "/Pages";//默认目录
                                                           //options.Conventions.AddPageRoute("/pages", "/1");//重写URL
-                    options.Conventions.AddPageRoute("/User/Login", "");//默认主页
-                       //  options.Conventions.AddPageRoute("/WebBackend/Login", "");
+                   // options.Conventions.AddPageRoute("/User/Login", "");//默认主页
+                         options.Conventions.AddPageRoute("/WebBackend/Login", "");
                      }); ;
 
       
@@ -62,12 +62,23 @@ namespace EduCenterWeb
                 c => c.MigrationsAssembly("EduCenterWeb")
                 ));
 
-            services.AddTransient<CourseSrv>();
-            services.AddTransient<TecSrv>();
-            services.AddTransient<UserSrv>();
-            services.AddTransient<OrderSrv>();
-            services.AddTransient<BusinessSrv>();
+            services.AddScoped<CourseSrv>();
+            services.AddScoped<TecSrv>();
+            services.AddScoped<UserSrv>();
+            services.AddScoped<OrderSrv>();
+            services.AddScoped<BusinessSrv>();
+         
+        }
 
+        public static void InitGlobalData(IApplicationBuilder applicationBuilder)
+        {
+            using (var serviceScope = applicationBuilder.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
+                    .CreateScope())
+            {
+                EduDbContext context = serviceScope.ServiceProvider.GetService<EduDbContext>();
+                StaticDataSrv.InitDbData(context);
+
+            }
         }
 
 
@@ -98,7 +109,8 @@ namespace EduCenterWeb
             app.UseSession();
             app.UseMvc();
 
-         //   StaticDataSrv.Init();
+            InitGlobalData(app);
+            StaticDataSrv.Init();
 
 
         

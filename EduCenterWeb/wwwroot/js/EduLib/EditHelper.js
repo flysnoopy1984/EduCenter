@@ -95,8 +95,9 @@
         $.blockUI({
             message: html,
             css: {
-                backgroundColor:'#ffffff00',
+                //backgroundColor:'#ffffff00',
                 border: 'none',
+                backgroundColor:'',
                 
 
             }

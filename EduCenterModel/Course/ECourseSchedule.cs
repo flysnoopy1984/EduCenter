@@ -11,7 +11,7 @@ namespace EduCenterModel.Course
     /// 总课程表
     /// </summary>
     [Table("CourseSchedule")]
-    public class ECourseSchedule: ECBaseModel
+    public class ECourseSchedule: ECMasterDataModel
     {
         public ECourseSchedule()
         {

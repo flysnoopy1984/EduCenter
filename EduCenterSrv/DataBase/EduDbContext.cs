@@ -56,5 +56,7 @@ namespace EduCenterSrv.DataBase
         public DbSet<EHoliday> DBHoliday { get; set; }
 
         public DbSet<ETecOffDay> DBTecOffDay { get; set; }
+
+        public DbSet<ECourseDateRange> DbCourseDateRange { get; set; }
     }
 }

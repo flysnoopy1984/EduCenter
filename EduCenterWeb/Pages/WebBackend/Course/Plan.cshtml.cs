@@ -92,5 +92,7 @@ namespace EduCenterWeb.Pages.WebBackend.Course
 
             return new JsonResult(result);
         }
+
+        
     }
 }

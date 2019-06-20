@@ -21,11 +21,34 @@ namespace EduCenterSrv.Common
         private static Dictionary<int, ECourseTime> _TrialTime;
         private static Dictionary<int, int> _CourseMaxApplyNum;
 
+        private static List<ECourseDateRange> _CourseDateRange;
+     
         public static void Init()
         {
             _CourseTime = CourseTime;
-            _Holiday = Holidays;
+          //  _Holiday = Holidays;
             _CourseMaxApplyNum = CourseMaxApplyNum;
+        }
+
+        /// <summary>
+        /// 全局数据库数据初始化
+        /// </summary>
+        /// <param name="srv"></param>
+        public static void InitDbData(EduDbContext db)
+        {
+            GlobalSrv srv = new GlobalSrv(db);
+
+            _CourseDateRange = srv.GetCourseDateRangeList();
+          
+        }
+
+    
+        public static List<ECourseDateRange> CourseDateRange
+        {
+            get
+            {
+                return _CourseDateRange;
+            }
         }
         public static Dictionary<int,int> CourseMaxApplyNum
         {
@@ -67,20 +90,20 @@ namespace EduCenterSrv.Common
         {
             get
             {
-                if (_CourseTime == null)
+                if (_TrialTime == null)
                 {
-                    _CourseTime = new Dictionary<int, ECourseTime>();
+                    _TrialTime = new Dictionary<int, ECourseTime>();
 
-                    _CourseTime.Add(1, new ECourseTime { Lesson = 1, TimeRange = "9:00-10:00", StartTime = 9, EndTime = 10 });
-                    _CourseTime.Add(2, new ECourseTime { Lesson = 2, TimeRange = "10:00-11:00", StartTime = 10, EndTime = 11 });
-                    _CourseTime.Add(3, new ECourseTime { Lesson = 3, TimeRange = "11:00-12:00", StartTime = 11, EndTime = 12 });
-                    _CourseTime.Add(4, new ECourseTime { Lesson = 4, TimeRange = "13:00-14:00", StartTime = 13, EndTime = 14 });
-                    _CourseTime.Add(5, new ECourseTime { Lesson = 5, TimeRange = "14:00-15:00", StartTime = 14, EndTime = 15 });
-                    _CourseTime.Add(6, new ECourseTime { Lesson = 6, TimeRange = "15:00-16:00", StartTime = 15, EndTime =16 });
+                    _TrialTime.Add(1, new ECourseTime { Lesson = 1, TimeRange = "9:00-10:00", StartTime = 9, EndTime = 10 });
+                    _TrialTime.Add(2, new ECourseTime { Lesson = 2, TimeRange = "10:00-11:00", StartTime = 10, EndTime = 11 });
+                    _TrialTime.Add(3, new ECourseTime { Lesson = 3, TimeRange = "11:00-12:00", StartTime = 11, EndTime = 12 });
+                    _TrialTime.Add(4, new ECourseTime { Lesson = 4, TimeRange = "13:00-14:00", StartTime = 13, EndTime = 14 });
+                    _TrialTime.Add(5, new ECourseTime { Lesson = 5, TimeRange = "14:00-15:00", StartTime = 14, EndTime = 15 });
+                    _TrialTime.Add(6, new ECourseTime { Lesson = 6, TimeRange = "15:00-16:00", StartTime = 15, EndTime =16 });
 
                 }
 
-                return _CourseTime;
+                return _TrialTime;
             }
         }
 

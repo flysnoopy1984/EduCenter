@@ -5,20 +5,26 @@
     var sysDate = new Date();
     var year = sysDate.getFullYear();
     var month = sysDate.getMonth() + 1;
+   
     var firstDate = new Date(year, month-1, 1);
     var dayofweek = firstDate.getDay();
-    firstDate.setDate(0);
-    MaxDay = firstDate.getDate();
 
+    var nextDate = new Date(year, month, 1);
+    nextDate.setDate(0);
+    MaxDay = nextDate.getDate();
+    var glaydate;
+ 
     Init = function () {
     
         $("#selDate").val(year + "-" + month);
-        laydate.render({
+
+        glaydate =laydate.render({
             elem: "#selDate",
             type: 'month',
             done: LayDataSelect
         });
-   
+
+        $("#selTecCode").on("change", TecSelectEvent);
 
         QueryCalendorData();
 
@@ -48,8 +54,16 @@
     AddCellCourse = function (obj,courseInfo) {
         var row = $("#HideData .cellCourseRow").clone();
         $(row).text(courseInfo);
+      
         $(obj).append(row);
         return row;
+    }
+
+    ConnectDate = function (day) {
+        var mn = month;
+        if (month < 10)
+            mn = "0" + month;
+        return year + "-" + mn + "-" + day;
     }
 
     GenCalendor = function () {
@@ -61,22 +75,23 @@
 
             days.each(function (d) {
                 container = $(this).children(".CellContainer");
-                
-                date = year + "-" + month + "-" + day;
+                container.empty();
+               
                 if (row == 0 && day == -1) {
                     if ((d + 1) == dayofweek) {
                         day = 1;
-                        
+                        date = ConnectDate(day);
                         AddCellTitle(container, date)
                        
                     }
                 }
                 else if (day > 0) {
                     day += 1;
+                    date = ConnectDate(day);
                     if (day <= MaxDay)
                         AddCellTitle(container, date)
                 }
-                var cell = $(this);
+             //  var cell = $(this);
 
                 if (day != -1) {
                     var needevent = false;
@@ -118,15 +133,36 @@
     }
 
 
-    LayDataSelect = function () {
+    LayDataSelect = function (value,obj) {
+        year = obj.year;
+        month = obj.month;
 
+        firstDate = new Date(year, month-1, 1);
+        dayofweek = firstDate.getDay();
+        nextDate = new Date(year, month, 1);
+        nextDate.setDate(0);
+        MaxDay = nextDate.getDate();
+
+
+        QueryCalendorData();
     }
 
-    LoadCourseData = function () {
-        var tecCode = $("#selTecCode").val();
-        var date = $("#selDate").val();
-        var year = date.split('-')[0];
-        var month = date.split('-')[1];
+    TecSelectEvent = function () {
+
+    
+        year = glaydate.config.dateTime.year;
+        month = glaydate.config.dateTime.month+1;
+
+      
+
+        firstDate = new Date(year, month - 1, 1);
+        dayofweek = firstDate.getDay();
+        nextDate = new Date(year, month, 1);
+        nextDate.setDate(0);
+        MaxDay = nextDate.getDate();
+
+        QueryCalendorData();
+    //     var a = glaydate;
     }
 
     Init();
