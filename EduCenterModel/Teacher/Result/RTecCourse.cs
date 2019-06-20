@@ -28,6 +28,8 @@ namespace EduCenterModel.Teacher.Result
             }
         }
 
+        public int ApplyNum { get; set; }
+
 
     }
 }

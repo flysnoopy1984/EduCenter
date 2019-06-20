@@ -51,9 +51,20 @@
         $(obj).append(row);
     }
 
-    AddCellCourse = function (obj,courseInfo) {
+    AddCellCourse = function (obj,c) {
         var row = $("#HideData .cellCourseRow").clone();
-        $(row).text(courseInfo);
+        var cst = "标";
+        if (c.CourseScheduleType == 1)
+            cst = "暑";
+        else if (c.CourseScheduleType == 2)
+            cst = "寒";
+        var info = "[" + cst + "]" + c.CourseName + " | " + c.TimeRange + "(" + c.ApplyNum + ")";
+        if (c.CoursingStatus == 1)
+            row.addClass("text-danger");
+        else if (c.CoursingStatus == 2)
+            row.addClass("text-warning");
+
+        $(row).text(info);
       
         $(obj).append(row);
         return row;
@@ -99,7 +110,7 @@
                         var list = TecCourseData[date];
                         $.each(list, function (i) {
                             var c = list[i];
-                            var row = AddCellCourse(container, "[" + c.TimeRange + "]" + c.CourseName);
+                            var row = AddCellCourse(container,c);
                             
                             needevent = true;
                         });

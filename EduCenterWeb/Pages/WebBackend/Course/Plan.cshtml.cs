@@ -52,38 +52,45 @@ namespace EduCenterWeb.Pages.WebBackend.Course
             ResultNormal result = new ResultNormal();
             try
             {
+                List<ECourseSchedule> newList = new List<ECourseSchedule>();
                 foreach (ECourseSchedule es in list)
                 {
                     es.LessonCode = $"{es.Year}_{es.Day}_{es.Lesson}_{es.CourseCode}_{es.LessonNo}_{es.CourseScheduleType}";
+                    if(es.Id==0)
+                    {
+                        newList.Add(es);
+                    }
                 }
 
-                if (list!=null &&list.Count>0)
+                if (newList.Count>0)
                 {
-                    _CourseSrv.BeginTrans();
-                    _CourseSrv.DeleteCourseSchduleByYear(list[0].Year);
+                    _CourseSrv.AddRange(newList);
+                  
                     _CourseSrv.SaveChanges();
-                    _CourseSrv.AddRange(list);
-                   
-                    _CourseSrv.SaveChanges();
-                    _CourseSrv.CommitTrans();
+                    
                 }  
             }
             catch(Exception ex)
             {
                 result.ErrorMsg = ex.Message;
-                _CourseSrv.RollBackTrans();
+              
             }
             return new JsonResult(result);
         }
 
         public IActionResult OnPostGet(int year,CourseScheduleType scheduleType)
         {
-            ResultList<ECourseSchedule> result = new ResultList<ECourseSchedule>();
-        
+            ResultObject<PPlan> result = new ResultObject<PPlan>();
+           
             try
             {
-               
-                result.List = _CourseSrv.GetCourseScheduleByYearType(year,scheduleType);
+                ECourseDateRange dr = StaticDataSrv.CourseDateRange.Where(a => a.CourseScheduleType == scheduleType && a.Year == year).FirstOrDefault();
+                result.Entity.PlanInfo = "";
+                if (dr != null)
+                    result.Entity.PlanInfo = $"{dr.Year} {dr.CourseDateRangeName}: {dr.StartDate.ToString("MM月dd日")} 到 {dr.EndDate.ToString("MM月dd日")}";
+             
+                result.Entity.CourseScheduleList = _CourseSrv.GetCourseScheduleByYearType(year,scheduleType);
+          
             }
             catch (Exception ex)
             {
@@ -93,6 +100,28 @@ namespace EduCenterWeb.Pages.WebBackend.Course
             return new JsonResult(result);
         }
 
-        
+        public IActionResult OnPostDelete(long Id)
+        {
+            ResultNormal result = new ResultNormal();
+            try
+            {
+                var DelObj = _CourseSrv.GetCourseSchedule(Id);
+                if(DelObj!=null)
+                {
+                    if (DelObj.ApplyNum > 0)
+                    {
+                        result.ErrorMsg = "已经有用户报名，不能删除此课程";
+                    }
+                    else
+                        _CourseSrv.DeleteCourseSchdule(DelObj);
+                }
+            }
+            catch(Exception ex)
+            {
+                result.ErrorMsg = ex.Message;
+            }
+            return new JsonResult(result);
+        }
+
     }
 }

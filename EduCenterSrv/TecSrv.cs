@@ -203,7 +203,7 @@ namespace EduCenterSrv
         public List<RTecCourse> GetTecCourse(string tecCode, CourseScheduleType CourseScheduleType,int year,int month)
         {
             var times = StaticDataSrv.CourseTime;
-            var result = _dbContext.DBTecCourse.Select(tc => new RTecCourse
+            var result = _dbContext.DBTecCourse.Join(_dbContext.DbCourseSchedule, tc => tc.LessonCode, cs => cs.LessonCode, (tc, cs) => new RTecCourse
             {
                 Day = tc.Day,
                 CourseName = tc.CourseName,
@@ -213,6 +213,11 @@ namespace EduCenterSrv
                 TecCode = tc.TecCode,
                 Lesson = tc.Lesson,
                 TimeRange = times[tc.Lesson].TimeRange,
+                ApplyNum = cs.ApplyNum,
+                LessonCode = cs.LessonCode,
+                CoursingStatusName = BaseEnumSrv.GetCoursingStatusName(tc.CoursingStatus),
+                
+
             })
             .OrderBy(a => a.Lesson)
             .Where(a => a.CourseDateTime.Year == year &&

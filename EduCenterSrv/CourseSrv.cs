@@ -168,6 +168,18 @@ namespace EduCenterSrv
             _dbContext.DbCourseSchedule.AddRange(list);
         }
 
+        public void AddCourseSchdule(ECourseSchedule newObj)
+        {
+            _dbContext.DbCourseSchedule.Add(newObj);
+        }
+
+  
+
+        public void DeleteCourseSchdule(ECourseSchedule delObj)
+        {
+            _dbContext.DbCourseSchedule.Remove(delObj);
+        }
+
         public List<ECourseSchedule> GetCourseScheduleByYearType(int year, CourseScheduleType scheduleType)
         {
             return _dbContext.DbCourseSchedule.Where(a => a.Year == year && a.CourseScheduleType == scheduleType).ToList();
@@ -176,6 +188,11 @@ namespace EduCenterSrv
         public ECourseSchedule GetCourseSchedule(string LessonCode)
         {
             return _dbContext.DbCourseSchedule.Where(a => a.LessonCode == LessonCode).FirstOrDefault();
+        }
+
+        public ECourseSchedule GetCourseSchedule(long Id)
+        {
+            return _dbContext.DbCourseSchedule.Where(a => a.Id == Id).FirstOrDefault();
         }
 
 

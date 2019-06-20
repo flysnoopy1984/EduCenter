@@ -2,7 +2,6 @@
     var saveUrl = "Plan?handler=Save";
     var delUrl = "Plan?handler=Delete";
     var getUrl = "Plan?handler=Get";
-    var SkillLevel = null;
 
     Init = function () {
         var myDate = new Date();
@@ -13,7 +12,7 @@
             elem: "#planYear",
             type: 'year',
             min: -1,
-           max:365*3,
+            max:365*3,
             done: LayDataSelect
         });
 
@@ -48,8 +47,6 @@
         callAjax_Query(getUrl, data, HandlerGet);
     }
 
-       
-
 
     DropData = function (event, ui) {
 
@@ -62,26 +59,11 @@
 
         var curNo = root.find(".CellRow[ccode=" + cCode + "]").length;
 
-        CreateRow(root, cCode, cType, cName, curNo+1);
+        CreateRow(root, cCode, cType, cName, curNo+1,"",0);
 
     };
 
-    CreateRow = function (root, cCode, cType, cName,no) {
-
-        var gl = GetCellStyleByType(cType);
-
-        var cellRow = $(".HideData .CellRow").clone();
-
-        cellRow.addClass(gl);
-        cellRow.attr("cCode", cCode);
-        cellRow.attr("no", no);
-        cellRow.attr("cType", cType);
-        var cellText = cellRow.find(".cellText");
-
-        cellText.text(cName);
-        cellRow.show();
-        root.append(cellRow);
-    }
+   
 
     GetCellStyleByType = function (cType) {
         var gl = "list-group-item-info";
@@ -109,10 +91,11 @@
             var cType = cellRow.attr("cType");
             var lessonNo = cellRow.attr("no");
             var cellText = cellRow.find(".cellText");
+            var rId = cellRow.attr("rId");
 
             var day = cellRow.parent().attr("day");
             var lesson = cellRow.parent().attr("lesson");
-            var lessonCode = year + "_" + day + "_" + lesson + "_" + cCode + "_" + lessonNo;
+        //    var lessonCode = year + "_" + day + "_" + lesson + "_" + cCode + "_" + lessonNo;
 
             var CourseScheduleType = $("#selScheduleType").val();
 
@@ -120,12 +103,13 @@
             var courseSchedule = {
                 "CourseCode": cCode,
                 "CourseName": cellText.text(),
+                "Id":rId,
                // "TecCode": tecCode,
                 "Year": year,
                 "Day": day,
                 "CourseType": cType,
                 "Lesson": lesson,
-                "LessonCode": lessonCode,
+           //     "LessonCode": lessonCode,
                 "LessonNo": lessonNo,
                 "CourseScheduleType": CourseScheduleType,
                 //"StartTime": starttime,
@@ -145,7 +129,8 @@
     },
 
     HandlerGet = function (result) {
-        var ScheduleList = result.List;
+
+        var ScheduleList = result.Entity.CourseScheduleList;
         var root;
         $("#CourseGrid tr .CourseCell .CellContainer").empty();
 
@@ -165,15 +150,74 @@
                     cType = "WQ"; break;
                     
             }
-          // = item.CourseType;
+       
             var cName = item.CourseName;
             root = $("#CourseGrid tr .CourseCell .CellContainer[day=" + day + "][lesson=" + lesson + "] ");
 
-            CreateRow(root, cCode, cType, cName);
-
+            CreateRow(root, cCode, cType, cName, no, item.Id, item.ApplyNum);
 
         });
 
+
+        //PlanInfo
+        var pi = result.Entity.PlanInfo;
+        $(".PlanInfo").text(pi);
+    
+     }
+
+    CreateRow = function (root, cCode, cType, cName, no,rId,applyNum) {
+
+        var gl = GetCellStyleByType(cType);
+
+        var cellRow = $(".HideData .CellRow").clone();
+
+        cellRow.addClass(gl);
+        cellRow.attr("cCode", cCode);
+        cellRow.attr("no", no);
+        cellRow.attr("cType", cType);
+        cellRow.attr("rId", rId);
+        var cellText = cellRow.find(".cellText");
+
+        cellText.text(cName + "(" + applyNum + ")");
+        cellRow.show();
+        root.append(cellRow);
+    }
+
+    DelRow = function (obj) {
+
+        var cellRow = $(obj).closest(".CellRow");
+        var Id = cellRow.attr("rId");
+        if (Id == "") {
+            ShowInfo("已成功删除!", null, null, 1, function () {
+                cellRow.remove();
+            })
+         
+        }
+           
+        else {
+            callAjax_Query(delUrl, { "Id": Id }, function () {
+
+                ShowInfo("已成功删除!", null, null, 1, function () {
+                    cellRow.remove();
+                })
+            });
+        }
+       
+
+        
+    }
+
+    InitCalendor = function (dragObj, dropObj, DropEvent) {
+
+        $(dragObj).draggable({
+            helper: "clone",
+            cursor: "move",
+        });
+
+        $(dropObj).droppable({
+            hoverClass: "DropCellHover",
+            drop: DropEvent
+        });
     },
 
     Init();
