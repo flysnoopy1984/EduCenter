@@ -16,6 +16,8 @@
         }
         $("#btn_Leave").on("click", LeaveEvent);
         $("#btn_Sign").on("click", SignInEvent);
+
+     //   InitMenu(".LeftMenu");
     };
 
     LeaveEvent = function () {
@@ -26,6 +28,8 @@
         var date = $("#btn_Leave").attr("date");
         window.location.href = "MySign?date="+date;
     }
+    InitMenu(".LeftMenu");
+
 
     Init();
 });

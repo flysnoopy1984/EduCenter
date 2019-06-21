@@ -32,12 +32,13 @@
         height: 34px;
         line-height: 34px;
         font-size: 20px;
-        margin-top: 40px;
+        margin-top: 10px;
         margin-bottom: 30px;
         background-color: #96dffd;
-        width: 80%;
-        border-radius: 8px;
+        width: 95%;
+        border-radius: 4px;
         font-weight:bold;
+       
     }
 
     .CourseArea {
@@ -197,9 +198,12 @@ flex-direction:column;
         /*color:#00d31b;*/
     }
 </style>
+
 <div class="MainContainer">
     <div class="Title">
-        <span class="fa fa-calendar" style="margin-right:8px;"></span>我的课程
+        <div>
+            <span class="fa fa-calendar" style="margin-right:8px;"></span>我的课程
+        </div>
     </div>
     <div class="CourseArea">
         @for (int i = 1; i <= 7; i++)
@@ -300,7 +304,7 @@ flex-direction:column;
                         <td>@log.UserCourseLogStatusName</td>
                     </tr>
                 }
-              
+
             </table>
         </div>
     }

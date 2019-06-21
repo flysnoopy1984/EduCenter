@@ -1,169 +1,188 @@
 ﻿@page
 @model EduCenterWeb.Pages.User.LoginModel
 @{
-    ViewData["Title"] = "Login";
-    Layout = "~/Pages/Shared/_EduMainApp.cshtml";
+    Layout = null;
 }
 @Html.AntiForgeryToken()
-<style type="text/css">
-    /*Lay Out*/
-    .MainContent {
-        // background-image: url('/images/bk_applogin.png');
-        background-repeat: no-repeat;
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        height: 100vh;
-    }
-    /* Login Area */
-    .LogoArea {
-        flex-grow: 5;
-        background-image: url('/images/LOGO_120.png');
-        background-position: center bottom;
-        background-repeat: no-repeat;
-        /*background-color:aliceblue;*/
-    }
+<!DOCTYPE html>
 
-    .FieldsArea {
-        flex-grow: 1;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        /*background-color:antiquewhite;*/
-    }
+<html>
 
-        .FieldsArea div {
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width" />
+    @*<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1, maximum-scale=1, user-scalable=no">*@
+    <title>云艺书院</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/fonts/font-awesome.min.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <link href="~/css/Layouts/GlobalShared.css" rel="stylesheet" />
+
+    <style type="text/css">
+        /*Lay Out*/
+        .MainContent {
+            // background-image: url('/images/bk_applogin.png');
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100vh;
+        }
+        /* Login Area */
+        .LogoArea {
+            flex-grow: 5;
+            background-image: url('/images/LOGO_120.png');
+            background-position: center bottom;
+            background-repeat: no-repeat;
+            /*background-color:aliceblue;*/
+        }
+
+        .FieldsArea {
+            flex-grow: 1;
             display: flex;
             justify-content: center;
+            flex-direction: column;
+            /*background-color:antiquewhite;*/
         }
 
-    .ButtonArea {
-        flex-grow: 0.2;
-        text-align: center;
-        /*display:flex;
-       justify-content:center;
-       flex-direction:column;*/
-    }
+            .FieldsArea div {
+                display: flex;
+                justify-content: center;
+            }
 
-        .ButtonArea #NoAccountLine {
-            margin-top: 15px;
+        .ButtonArea {
+            flex-grow: 0.2;
+            text-align: center;
+            /*display:flex;
+           justify-content:center;
+           flex-direction:column;*/
         }
 
-    /*.ButtonArea .line2{
-        flex-grow:3;
-    }*/
-    .FootAerea {
-        flex-grow: 1.8;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        /*background-color:#9900db;*/
-        /*border-top:1px outset #808080;*/
-    }
-    /*Lay Out*/
-    .EduFieldValue {
-        border: none;
-        border-bottom: 1px solid #efefef;
-        border-radius: 0px;
-        height: 54px;
-        line-height: 54px;
-        padding: 2px 6px;
-        width: 70%;
-        -webkit-box-shadow: none;
-        background-color: transparent;
-        outline: none;
-        font-size: 16px;
-    }
+            .ButtonArea #NoAccountLine {
+                margin-top: 15px;
+            }
 
-    .EduLoginButton {
-        width: 50%;
-        height: 44px;
-        border-radius: 20px;
-        cursor: pointer !important;
-        outline: none !important;
-    }
-
-    .EduFieldValue:focus {
-        border-bottom: 1px solid #76c5fe;
-    }
-
-    .OtherLoginLine {
-        position: relative;
-        margin: 0 0 10px;
-        font-size: 12px;
-        color: #b5b5b5;
-        width: 300px;
-        text-align: center;
-    }
-
-        .OtherLoginLine::before {
-            content: "";
-            border-top: 1px solid #b5b5b5;
-            display: block;
-            position: absolute;
-            width: 60px;
-            top: 5px;
+        /*.ButtonArea .line2{
+            flex-grow:3;
+        }*/
+        .FootAerea {
+            flex-grow: 1.8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /*background-color:#9900db;*/
+            /*border-top:1px outset #808080;*/
+        }
+        /*Lay Out*/
+        .EduFieldValue {
+            border: none;
+            border-bottom: 1px solid #efefef;
+            border-radius: 0px;
+            height: 54px;
+            line-height: 54px;
+            padding: 2px 6px;
+            width: 70%;
+            -webkit-box-shadow: none;
+            background-color: transparent;
+            outline: none;
+            font-size: 16px;
         }
 
-        .OtherLoginLine::after {
-            content: "";
-            border-top: 1px solid #b5b5b5;
-            display: block;
-            position: absolute;
-            width: 60px;
-            top: 5px;
-            right: 10px;
+        .EduLoginButton {
+            width: 50%;
+            height: 44px;
+            border-radius: 20px;
+            cursor: pointer !important;
+            outline: none !important;
         }
 
+        .EduFieldValue:focus {
+            border-bottom: 1px solid #76c5fe;
+        }
 
-    ::-webkit-input-placeholder { /* WebKit browsers */
-        color: #808080;
-        font-size: 16px;
-    }
-</style>
-<style>
-    .wxicon {
-        width: 50px;
-        height: 50px;
-        vertical-align: -0.15em;
-        fill: currentColor;
-        overflow: hidden;
-        color: #00d31b;
-        cursor: pointer !important;
-    }
-</style>
-<script src="~/lib/iconfont.js"></script>
+        .OtherLoginLine {
+            position: relative;
+            margin: 0 0 10px;
+            font-size: 12px;
+            color: #b5b5b5;
+            width: 300px;
+            text-align: center;
+        }
 
-<link href="~/css/Plugs/LoadingIcon.css" rel="stylesheet" />
-<link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
-<script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
-<script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
-<script src="~/js/EduLib/EditHelper.js"></script>
+            .OtherLoginLine::before {
+                content: "";
+                border-top: 1px solid #b5b5b5;
+                display: block;
+                position: absolute;
+                width: 60px;
+                top: 5px;
+            }
 
-<script src="~/js/Wap/User/UserLogin.js"></script>
-<div class="MainContent">
-    <div class="LogoArea">
-
-    </div>
-    <div class="FieldsArea">
-        <div><input type="text" placeholder="请输入手机号" class="EduFieldValue" /></div>
-        <div><input type="text" placeholder="请输入密码" class="EduFieldValue" style="margin-top:25px;" /></div>
-    </div>
-    <div class="ButtonArea">
-
-        <input type="button" class="btn btn-info EduLoginButton" value="登陆" />
-        <div id="NoAccountLine"> <a href="#">没有账号？</a></div>
+            .OtherLoginLine::after {
+                content: "";
+                border-top: 1px solid #b5b5b5;
+                display: block;
+                position: absolute;
+                width: 60px;
+                top: 5px;
+                right: 10px;
+            }
 
 
-    </div>
-    <div class="FootAerea">
-        <h6 class="OtherLoginLine">微信登录</h6>
-        <div>
-            <svg class="wxicon" aria-hidden="true">
-                <use xlink:href="#icon-weixin"></use>
-            </svg>
+        ::-webkit-input-placeholder { /* WebKit browsers */
+            color: #808080;
+            font-size: 16px;
+        }
+    </style>
+    <style>
+        .wxicon {
+            width: 50px;
+            height: 50px;
+            vertical-align: -0.15em;
+            fill: currentColor;
+            overflow: hidden;
+            color: #00d31b;
+            cursor: pointer !important;
+        }
+    </style>
+    <script src="~/lib/iconfont.js"></script>
+
+    <link href="~/css/Plugs/LoadingIcon.css" rel="stylesheet" />
+    <link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
+    <script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+    <script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
+    <script src="~/js/EduLib/EditHelper.js"></script>
+
+    <script src="~/js/Wap/User/UserLogin.js"></script>
+</head>
+
+
+<body>
+    <div class="MainContent">
+        <div class="LogoArea">
+
         </div>
+        <div class="FieldsArea">
+            <div><input type="text" placeholder="请输入手机号" class="EduFieldValue" /></div>
+            <div><input type="text" placeholder="请输入密码" class="EduFieldValue" style="margin-top:25px;" /></div>
+        </div>
+        <div class="ButtonArea">
+
+            <input type="button" class="btn btn-info EduLoginButton" value="登陆" />
+            <div id="NoAccountLine"> <a href="#">没有账号？</a></div>
+
+
+        </div>
+        <div class="FootAerea">
+            <h6 class="OtherLoginLine">微信登录</h6>
+            <div>
+                <svg class="wxicon" aria-hidden="true">
+                    <use xlink:href="#icon-weixin"></use>
+                </svg>
+            </div>
+        </div>
+
     </div>
-
-</div>
-
+</body>
+</html>

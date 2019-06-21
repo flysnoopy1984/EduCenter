@@ -16,7 +16,10 @@
       "files": [
         "jquery-ui.min.js"
       ]
+    },
+    {
+      "library": "jquery.transit@0.9.12",
+      "destination": "wwwroot/lib/jquery.transit/"
     }
-
   ]
 }
