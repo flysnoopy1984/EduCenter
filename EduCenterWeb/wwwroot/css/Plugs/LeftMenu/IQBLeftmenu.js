@@ -8,8 +8,8 @@
         if(MenuStatus ==1)
         {
 
-            $(".sidenav").css("display", "none");
-        
+          //  $(".sidenav").css("display", "none");
+            $(".sidenav").transition({ x: '0px' });
         //    $(".MainContainer").transition({ x: '0px' });
           
         
@@ -18,9 +18,9 @@
         else
         {
 
-            $(".sidenav").css("display", "unset");
+       //     $(".sidenav").css("display", "unset");
         
-          //  $(".MainContainer").transition({ x: '150px' });
+            $(".sidenav").transition({ x: '150px' });
          //   $(".sidenav b").css("opacity", "1");
          //   $(".sidenav b").transition({ x: '0px' });
          
@@ -29,6 +29,7 @@
     };
 
     InitMenu = function (Id) {
+   //     $(".sidenav").transition({ x: '-150px' });
         $(Id).on("click", switchMenu);
     }
     GoMenu = function (url) {

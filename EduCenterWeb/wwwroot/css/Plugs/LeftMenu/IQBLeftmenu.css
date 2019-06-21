@@ -23,10 +23,10 @@
     background: #757572;
     width: 150px;
     position: absolute;
-    right: 0;
+    left: -150px;
     top: 0px;
     bottom: 0;
-    display: none;
+    
     margin-bottom: unset !important;
     flex-direction: column;
     padding-top:80px;
