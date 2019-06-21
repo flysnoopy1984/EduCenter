@@ -28,8 +28,6 @@
         var date = $("#btn_Leave").attr("date");
         window.location.href = "MySign?date="+date;
     }
-    InitMenu(".LeftMenu");
-
-
+ 
     Init();
 });

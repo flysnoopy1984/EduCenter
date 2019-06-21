@@ -10,12 +10,25 @@
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/fonts/font-awesome.min.css" rel="stylesheet" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>*@
     <link href="~/css/Layouts/GlobalShared.css" rel="stylesheet" />
     <script src="~/lib/jquery.transit/jquery.transit.min.js"></script>
     <link href="~/css/Plugs/LeftMenu/IQBLeftmenu.css" rel="stylesheet" />
     <script src="~/css/Plugs/LeftMenu/IQBLeftmenu.js"></script>
-   
+
+    <style type="text/css">
+    .Title {
+        text-align: center;
+        height: 34px;
+        line-height: 34px;
+        font-size: 20px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        width: 95%;
+        border-radius: 4px;
+        font-weight:bold;
+    }
+    </style>
 </head>
 <body>
     <div class="LeftMenu">
@@ -24,34 +37,41 @@
     </div>
     <div>
         <ul id="LeftMainMenu" class="sidenav">
-            <li onclick="GoMenu('签到');">
-                <div>
-                    <i class="fa fa-book" aria-hidden="true"></i><span><b>签到</b></span>
+            <li onclick="GoMenu('MySign');">
+                <div class="MenuItem">
+                    <i class="fa fa-pencil-square" aria-hidden="true"></i><span><b>签到</b></span>
                 </div>
             </li>
-            <li onclick="GoMenu('我的课程');">
-                <div>
-                    <i class="fa fa-book" aria-hidden="true"></i><span><b>我的课程</b></span>
+            <li onclick="GoMenu('MyCourse');">
+                <div class="MenuItem">
+                    <i class="fa fa-book" aria-hidden="true"></i><span><b>课程表</b></span>
                 </div>
             </li>
-            <li >
-               
-                <div>
-                    <a data-toggle="collapse"
-                       href="#collapseOne">
-                        <i class="fa fa-book" aria-hidden="true"></i><span><b>我的请假</b></span>
-                    </a>
+            <li onclick="GoMenu('MyLeave');">
+                <div class="MenuItem">
+                    <i class="fa fa-location-arrow" aria-hidden="true"></i><span><b>请假</b></span>
                 </div>
-                
-                    <div>
-                        <div id="collapseOne" class="panel-collapse collapse in">
-                            <div class="panel-body">
-                              1
-                            </div>
-                        </div>
-                    </div>
-               
-</li>
+            </li>
+            <li onclick="GoMenu('MyPayment');">
+                <div class="MenuItem">
+                    <i class="fa fa-jpy" aria-hidden="true"></i><span><b>缴费</b></span>
+                </div>
+            </li>
+            <li onclick="GoMenu('MyCourseTime');">
+                <div class="MenuItem">
+                    <i class="fa fa-clock-o" aria-hidden="true"></i><span><b>课时</b></span>
+                </div>
+            </li>
+            <li onclick="GoMenu('MyTrial');">
+                <div class="MenuItem">
+                    <i class="fa fa-sign-in" aria-hidden="true"></i><span><b>试听课</b></span>
+                </div>
+            </li>
+            <li onclick="GoMenu('MyInfo');">
+                <div class="MenuItem">
+                    <i class="fa fa-user" aria-hidden="true"></i><span><b>我的信息</b></span>
+                </div>
+            </li>
         </ul>
     </div>
 
