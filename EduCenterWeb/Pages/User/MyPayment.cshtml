@@ -4,6 +4,22 @@
     ViewData["Title"] = "MyPayment";
     Layout = "~/Pages/Shared/_EduMainApp.cshtml";
 }
+<script type="text/javascript">
+    function GoBuy() {
+        window.location.href = "BuyCourseTime";
+    }
 
+      function GoApply() {
+        window.location.href = "Apply";
+    }
+</script>
 <h2>MyPayment</h2>
+
+<button class="btn btn-warning" onclick="GoBuy()">
+    续费课时
+</button>
+<button class="btn btn-warning" onclick="GoApply()">
+    选择课程
+</button>
+
 
