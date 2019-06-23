@@ -204,8 +204,12 @@
             error: function (xhr, type) {
                 CloseBlock();
                 ShowError("系统错误");
-                if (AfterError)
-                    AfterError(res);
+                if (AfterError) {
+                    var eObj = new Object();
+                    eObj.ErrorMsg = "系统错误";
+                    AfterError(eObj);
+                }
+                   
             }
 
         });

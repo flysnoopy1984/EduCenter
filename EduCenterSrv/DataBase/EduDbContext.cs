@@ -21,6 +21,8 @@ namespace EduCenterSrv.DataBase
      
         public DbSet<EUserInfo> DBUserInfo { get; set; }
 
+        public DbSet<EUserAccount> DBUserAccount { get; set; }
+
         public DbSet<EUserInfoBackEnd> DBUserInfoBackEnd { get; set; }
 
         public DbSet<ETecInfo> DBTecInfo { get; set; }

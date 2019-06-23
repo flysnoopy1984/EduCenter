@@ -11,5 +11,7 @@ namespace EduCenterModel.Session
 
         public string UserName { get; set; }
 
+        public string HeaderUrl { get; set; }
+
     }
 }

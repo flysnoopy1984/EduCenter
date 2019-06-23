@@ -252,6 +252,22 @@ namespace EduCenterSrv.Common
             }
             return "";
         }
+        public static string GetOrderTypeName(OrderType orderType)
+        {
+            switch (orderType)
+            {
+                case OrderType.UserCourse:
+                    return "标准课套餐";
+                case OrderType.UserCourse_Summer:
+                    return "暑假班套餐";
+                case OrderType.UserCourse_Winter:
+                    return "寒假班套餐";
+              
+            }
+            return "";
+        }
+
+  
 
         //public static string GetUserCourseLogStatusName(UserCourseLogStatus status)
         //{

@@ -6,7 +6,9 @@ namespace EduCenterModel.BaseEnum
 {
     public enum OrderType
     {
-        UserCourse =1,
+        UserCourse =0,
+        UserCourse_Summer= 1,
+        UserCourse_Winter = 2,
 
     }
 }

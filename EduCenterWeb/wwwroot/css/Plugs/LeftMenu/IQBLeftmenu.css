@@ -26,7 +26,7 @@
     left: -150px;
     top: 0px;
     bottom: 0;
-    z-index:99999;
+    z-index:99999 !important;
     margin-bottom: unset !important;
     flex-direction: column;
     padding-top:80px;

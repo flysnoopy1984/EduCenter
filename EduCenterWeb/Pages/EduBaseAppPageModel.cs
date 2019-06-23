@@ -31,12 +31,13 @@ namespace EduCenterWeb.Pages
 
        }
 
-        public void SetUserSesion(string openId,string userName)
+        public void SetUserSesion(string openId,string userName,string headerUrl)
         {
             UserSession session = new UserSession()
             {
                 OpenId = openId,
                 UserName = userName,
+                HeaderUrl = headerUrl,
 
             };
             var json = JsonConvert.SerializeObject(session);

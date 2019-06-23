@@ -41,6 +41,28 @@ namespace EduCenterSrv
 
         #endregion
 
+        #region UserInfo
+
+        public EUserInfo CreateNewUserFromWXUser(WXUserInfo wxUser)
+        {
+            EUserInfo user = new EUserInfo
+            {
+                OpenId = wxUser.openid,
+                ChildName = "",
+                Name = wxUser.nickname,
+                Sex = wxUser.sex,
+                UserRole = UserRole.Visitor,
+                CreatedDateTime = DateTime.Now,
+                UpdatedDateTime = DateTime.Now,
+            };
+            _dbContext.DBUserInfo.Add(user);
+
+            EUserAccount eUserAccount = CreateNewUserAccount(wxUser.openid);
+             _dbContext.DBUserAccount.Add(eUserAccount);
+            return user;
+        }
+
+       
         /// <summary>
         /// 添加或更新微信用户，微信相关字段总是更新
         /// </summary>
@@ -53,16 +75,7 @@ namespace EduCenterSrv
                              .FirstOrDefault();
             if(user == null)
             {
-                 user = new EUserInfo
-                 {
-                      OpenId = wxUser.openid,
-                      ChildName = "",
-                      Name = wxUser.nickname,
-                      Sex = wxUser.sex,
-                      UserRole = UserRole.Visitor,
-                      CreatedDateTime = DateTime.Now,
-                      UpdatedDateTime = DateTime.Now,
-                 };
+                user = CreateNewUserFromWXUser(wxUser);
             }
             user.wx_Name = wxUser.nickname;
             user.wx_city = wxUser.city;
@@ -71,19 +84,20 @@ namespace EduCenterSrv
             user.wx_province = wxUser.province;
             if(user.Id>0)
                 _dbContext.DBUserInfo.Update(user);
-            else
-                _dbContext.DBUserInfo.Add(user);
+        
 
             _dbContext.SaveChanges();
 
             return user;
         }
 
+        #endregion
+
         #region UserCourese
         /// <summary>
         /// 根据用户，和类型获取可用的课程
         /// </summary>
-       public List<RUserCourse> GetUserCourseAvaliable(string OpenId, CourseScheduleType CourseScheduleType)
+        public List<RUserCourse> GetUserCourseAvaliable(string OpenId, CourseScheduleType CourseScheduleType)
        {
             var times = StaticDataSrv.CourseTime;
           
@@ -330,6 +344,25 @@ namespace EduCenterSrv
             return result;
         }
 
+        public List<RUserComsume> QueryUserCourseComsume(string OpenId, int pageIndex = 1, int pageSize = 10)
+        {
+            var time = StaticDataSrv.CourseTime;
+            var sql = from log in _dbContext.DBUserCourseLog
+                      join c in _dbContext.DbCourseSchedule on log.LessonCode equals c.LessonCode
+                      where log.UserOpenId == OpenId && (int)log.UserCourseLogStatus >= 10
+                      select new RUserComsume
+                      {
+                          CourseDate = log.CourseDateTime,
+                          CourseTime = time[c.Lesson].TimeRange,
+                          CourseName = c.CourseName,
+                          CourseStatus = BaseEnumSrv.GetUserCourseLogStatusName(log.UserCourseLogStatus),
+                          CourseSchudeuleType = BaseEnumSrv.GetCourseScheduleTypeName(c.CourseScheduleType),
+
+                      };
+            var result = sql.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+
+            return result;
+        }
 
         public RUserCourseLog GetNextUserCourseLog(string OpenId, CourseScheduleType CourseScheduleType)
         {
@@ -430,7 +463,8 @@ namespace EduCenterSrv
                     }
                 }
             }
-            if (nextCourse == null) nextCourse = courseList[courseList.Count - 1];         
+            if (nextCourse == null) nextCourse = courseList[courseList.Count - 1]; 
+            
             ucLog = new EUserCourseLog
             {
                 UserOpenId = OpenId,
@@ -500,28 +534,6 @@ namespace EduCenterSrv
 
             result = efSql.ToList();
 
-
-           
-
-            //string sql = @"select cs.CourseName,
-            //                      cs.Lesson,
-            //                      cs.Day,
-            //                      cs.LessonCode,
-            //                      ul.UserCourseLogStatus
-            //              from UserCourse as uc
-            //                join CourseSchedule as cs on cs.LessonCode = uc.LessonCode
-            //                left join UserCourseLog as ul on uc.LessonCode = ul.LessonCode 
-            //                and ul.courseDateTime ='2019-06-11'
-            //                where uc.UserOpenId ='o3nwE0qI_cOkirmh_qbGGG-5G6B0' and uc.CourseScheduleType = 0";
-
-            //var list = _dbContext.Set<RUserCourseLog>().FromSql(sql).Select(a => new RUserCourseLog
-            //{
-            //    CourseName = a.CourseName,
-            //    LessonCode = a.LessonCode,
-            //    Day = a.Day,
-            //    Lesson = a.Lesson
-            // }).ToList();
-         
             return result;
         }
 
@@ -551,14 +563,36 @@ namespace EduCenterSrv
         #endregion
 
 
+        #region UserAccount
 
-        //public List<EHoliday> GetHolidayJson()
-        //{
+        public EUserAccount CreateNewUserAccount(string openId)
+        {
+            EUserAccount eUserAccount = new EUserAccount
+            {
+                DeadLine = DateTime.MinValue,
+                SummerDeadLine = DateTime.MinValue,
+                WinterDeadLine = DateTime.MinValue,
+                RemainSummerTime = 0,
+                RemainWinterTime = 0,
+                RemainCourseTime = 0,
+              
+                UserOpenId = openId,
+            };
+            return eUserAccount;
+        }
+        public EUserAccount GetUserAccount(string openId)
+        {
+            EUserAccount result = _dbContext.DBUserAccount.Where(a => a.UserOpenId == openId).FirstOrDefault();
+            if(result == null)
+            {
+                result = CreateNewUserAccount(openId);
+                _dbContext.Add(result);
+                _dbContext.SaveChanges();
+            }
+            return result;
+        }
+        #endregion
 
-        //   return  _dbContext.DBHoliday.ToList();
-
-
-        //}
 
 
 

@@ -18,5 +18,10 @@ namespace EduCenterSrv
         {
             return _dbContext.DbCourseDateRange.ToList();
         }
+
+        public List<EHoliday> GetHolidayJson()
+        {
+            return _dbContext.DBHoliday.ToList();
+        }
     }
 }

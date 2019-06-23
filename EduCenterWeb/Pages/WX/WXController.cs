@@ -102,7 +102,7 @@ namespace EduCenterWeb.Pages.WX
                                 break;
                             default:
                                 return _wxMessage.toText(WXReplyContent.DefaultMsessage());
-                              //  return _wxMessage.toText(WXReplyContent.NewTec("宋"));
+                             
 
                         }
                     }
@@ -154,7 +154,7 @@ namespace EduCenterWeb.Pages.WX
         /// </summary>
         private void ScanHandler()
         {
-            
+         
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace EduCenterWeb.Pages.WX
         /// </summary>
         private void SubscribeHandler()
         {
-
+           
         }
 
      

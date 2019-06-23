@@ -4,14 +4,16 @@ using EduCenterSrv.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EduCenterWeb.Migrations
 {
     [DbContext(typeof(EduDbContext))]
-    partial class EduDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190622102240_0622-1")]
+    partial class _06221
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -419,20 +421,12 @@ namespace EduCenterWeb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(32);
 
-                    b.Property<DateTime>("DeadLine");
-
                     b.Property<int>("Id")
                         .ValueGeneratedOnAddOrUpdate();
 
+                    b.Property<double>("RemainBalance");
+
                     b.Property<double>("RemainCourseTime");
-
-                    b.Property<double>("RemainSummerTime");
-
-                    b.Property<double>("RemainWinterTime");
-
-                    b.Property<DateTime>("SummerDeadLine");
-
-                    b.Property<DateTime>("WinterDeadLine");
 
                     b.HasKey("UserOpenId");
 
