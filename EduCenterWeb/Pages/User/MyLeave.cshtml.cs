@@ -42,10 +42,15 @@ namespace EduCenterWeb.Pages.User
             try
             {
                 date = DateTime.Parse(date).ToString("yyyy-MM-dd");
-                var us = base.GetUserSession();
+                var us = base.GetUserSession(false);
                 if(us !=null)
                 {
                     result.List = _UserSrv.GetUserCourseByDate(us.OpenId, date, CourseScheduleType.Standard);
+                }
+                else
+                {
+                    result.IntMsg = -1;
+                    result.ErrorMsg = "请重新登陆！";
                 }
               
             }
@@ -63,7 +68,7 @@ namespace EduCenterWeb.Pages.User
             ResultNormal result = new ResultNormal();
             try
             {
-                var us = base.GetUserSession();
+                var us = base.GetUserSession(false);
                 if (us != null)
                 {
                     //foreach(var c in list)
@@ -73,7 +78,11 @@ namespace EduCenterWeb.Pages.User
                     _UserSrv.UpdateCourseLogToLeave(list, us.OpenId);
                 }   
                 else
+                {
+                    result.IntMsg = -1;
                     result.ErrorMsg = "请重新登陆！";
+                }
+                   
 
 
 

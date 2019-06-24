@@ -40,7 +40,10 @@ namespace EduCenterWeb
 
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
-            services.AddSession();
+            services.AddSession(o=> 
+            {
+                o.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                  .AddJsonOptions(opt => {
@@ -67,7 +70,7 @@ namespace EduCenterWeb
             services.AddScoped<UserSrv>();
             services.AddScoped<OrderSrv>();
             services.AddScoped<BusinessSrv>();
-         
+            services.AddScoped<EduCenterSrv.SMS.SMSSrv>();
         }
 
         public static void InitGlobalData(IApplicationBuilder applicationBuilder)

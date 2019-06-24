@@ -13,5 +13,7 @@ namespace EduCenterModel.Session
 
         public string HeaderUrl { get; set; }
 
+        public string Phone { get; set; }
+
     }
 }

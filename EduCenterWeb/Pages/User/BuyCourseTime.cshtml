@@ -13,8 +13,6 @@
             case "StandardPrice2": return "text-success";
             case "StandardPrice3": return "text-warning";
             case "StandardPrice4": return "text-danger";
-         
-
 
         }
         return "";
@@ -26,7 +24,7 @@
 <script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
 <script src="~/js/EduLib/EditHelper.js"></script>
 <script src="~/js/EduLib/StorageManager.js"></script>
-<script src="~/js/Wap/User/UserBuyCourseTime.js"></script>
+<script src="~/js/Wap/User/BuyCourseTime.js"></script>
 
 <style type="text/css">
     .MainContainer {
@@ -122,9 +120,12 @@
     <div class="Content">
         <div class="CourseStandardPriceTitle"><i class="fa fa-list" aria-hidden="true"></i>  课时价格</div>
         <div class="PriceList">
-            @foreach (var p in Model.PriceList)
+
+            @if (Model.PriceList != null)
             {
-             
+                foreach (var p in Model.PriceList)
+                {
+
                     <div class="PriceItem @GetTextColor(p.PriceCode) ">
                         <div>@p.PriceName</div>
                         <div><i class="fa fa-jpy" aria-hidden="true"></i> <span class="CoursePrice">@p.Price</span></div>
@@ -138,6 +139,8 @@
 
                     </div>
                 }
+            }
+
 
         </div>
         <div class="BtnAreaList">
@@ -145,18 +148,25 @@
         </div>
     </div>
 </div>
-@*<div id="HideData" style="display:none;">
-        <div class="PriceItem">
-            <div>套餐1</div>
-            <div><i class="fa fa-jpy" aria-hidden="true"></i> <span class="CoursePrice">4888</span></div>
-            <div><span class="CourseQty">40</span>课时</div>
-            <div class="radio radio-info">
-                <input type="radio" name="radio2" id="radio4" value="option2" checked="">
-                <label for="radio4">
-                    选择
-                </label>
-            </div>
+<div id="HideData" style="display:none;">
+    @if (@Model.UserSession != null)
+    {
+        <input type="hidden" id="hUserPhone" value="@Model.UserSession.Phone" />
+    }
 
-        </div>
-    </div>*@
+</div>
+    @*<div id="HideData" style="display:none;">
+            <div class="PriceItem">
+                <div>套餐1</div>
+                <div><i class="fa fa-jpy" aria-hidden="true"></i> <span class="CoursePrice">4888</span></div>
+                <div><span class="CourseQty">40</span>课时</div>
+                <div class="radio radio-info">
+                    <input type="radio" name="radio2" id="radio4" value="option2" checked="">
+                    <label for="radio4">
+                        选择
+                    </label>
+                </div>
+
+            </div>
+        </div>*@
 

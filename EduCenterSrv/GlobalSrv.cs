@@ -16,7 +16,7 @@ namespace EduCenterSrv
 
         public List<ECourseDateRange> GetCourseDateRangeList()
         {
-            return _dbContext.DbCourseDateRange.ToList();
+            return _dbContext.DBCourseDateRange.ToList();
         }
 
         public List<EHoliday> GetHolidayJson()

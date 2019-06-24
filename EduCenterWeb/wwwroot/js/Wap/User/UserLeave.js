@@ -120,8 +120,11 @@
 
     GetCourseByDateError = function (res) {
         LoadingDone();
-
-        ShowError(res.ErrorMsg);
+        if (res.IntMsg = -1) {
+            window.location.href = "Login";
+        }
+        else
+            ShowError(res.ErrorMsg);
         // $(".LeaveList").text(errorMsg);
     }
 

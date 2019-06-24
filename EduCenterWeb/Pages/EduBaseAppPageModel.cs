@@ -14,6 +14,7 @@ namespace EduCenterWeb.Pages
     public class EduBaseAppPageModel:PageModel
     {
       
+       
        public UserSession GetUserSession(bool toLoginIfError = true)
        {
             string json = HttpContext.Session.GetString(EduConstant.UserSessionKey);
@@ -31,13 +32,14 @@ namespace EduCenterWeb.Pages
 
        }
 
-        public void SetUserSesion(string openId,string userName,string headerUrl)
+        public void SetUserSesion(string openId,string userName,string headerUrl,string phone)
         {
             UserSession session = new UserSession()
             {
                 OpenId = openId,
                 UserName = userName,
                 HeaderUrl = headerUrl,
+                Phone = phone
 
             };
             var json = JsonConvert.SerializeObject(session);

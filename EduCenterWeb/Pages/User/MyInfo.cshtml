@@ -4,19 +4,76 @@
     ViewData["Title"] = "MyInfo";
     Layout = "~/Pages/Shared/_EduMainApp.cshtml";
 }
-<style></style>
-    <div class="MainContainer">
-        <div class="ProfileHeader">
+<script src="~/js/Wap/User/UserInfo.js"></script>
+<style>
+    .MainContainer
+    {
+        display:flex;
+        flex-direction:column;
+    }
+    .ProfileHeader{
+        display:flex;   
+        height:150px;
+       
+    }
+    .ImgHeaderArea{
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        width:40%
+
+    }
+    .ImgHeaderArea img{
+        border:solid 1px white;
+        border-radius:90px; 
+        width:90px;
+        height:90px;
+    }
+    .UserSimpleInfo{
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        width:60%;
+    }
+ .UserSimpleInfo .Name{
+     font-weight:bold;
+     width:80%;
+ }
+ .UserSimpleInfo .Phone{
+     font-size:11px;
+ }
+
+</style>
+<div class="MainContainer">
+    @if (Model.UserSession != null)
+    {
+        <div class="ProfileHeader bg-info">
             <div class="ImgHeaderArea">
-                <img src="" /> 
+                <img src="@Model.UserSession.HeaderUrl" />
             </div>
-            <div class="UserSimpleInfo">
-                <div class="Name"></div>
+            <div class="UserSimpleInfo ">
+                <div class="Name TextNoWrap">@Model.UserSession.UserName</div>
+                <div class="Phone text-success">
+                    联系方式：
+                    @if (string.IsNullOrEmpty(Model.UserSession.Phone))
+                    {
+                        <i id="btn_EditPhone" class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    }
+                    else
+                    {
+                        @Model.UserSession.Phone
+                    }
+                </div>
             </div>
         </div>
+    }
 
-        <div class="ProfileBody">
 
-        </div>
+    <div class="ProfileBody">
+        <div class="ContactPhone"></div>
+        <div class="ChildName"></div>
+        <div class="ChildAge"></div>
+        <div class="ChildSex"></div>
     </div>
+</div>
 

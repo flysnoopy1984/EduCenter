@@ -3,6 +3,7 @@ using EduCenterModel.Course;
 using EduCenterModel.Order;
 using EduCenterModel.Teacher;
 using EduCenterModel.User;
+using EduCenterSrv.SMS;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -59,6 +60,13 @@ namespace EduCenterSrv.DataBase
 
         public DbSet<ETecOffDay> DBTecOffDay { get; set; }
 
-        public DbSet<ECourseDateRange> DbCourseDateRange { get; set; }
+        public DbSet<ECourseDateRange> DBCourseDateRange { get; set; }
+
+        //SMS Begin
+        public DbSet<ESMSLog> DBSMSLog { get; set; }
+
+        public DbSet<ESMSVerification> DBSMSVerification { get; set; }
+
+        //SMS End
     }
 }

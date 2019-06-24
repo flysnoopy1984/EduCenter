@@ -39,9 +39,7 @@
   <ItemGroup>
     <Folder Include="Pages\WebBackend\User\" />
     <Folder Include="WebAPI\" />
-    <Folder Include="wwwroot\css\Plugs\LeftMenu\" />
     <Folder Include="wwwroot\Files\QR\InviteTec\" />
-    <Folder Include="Pages\Reception\" />
     <Folder Include="wwwroot\css\Pages\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>

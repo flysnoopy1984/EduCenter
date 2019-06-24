@@ -31,6 +31,12 @@ namespace EduCenterSrv
             return sql;
         }
 
+        public static string sql_UpdateUserPhone(string openId,string phone)
+        {
+            string sql = $"update UserInfo set Phone = {phone} where OpenId='{openId}'";
+            return sql;
+        }
+
         public static string sql_UpdateUserCourseLogStatus(string lessonCode, string openId, CourseScheduleType courseScheduleType, UserCourseLogStatus userCourseLogStatus)
         {
             string sql = $@"update UserCourseLog 
@@ -89,6 +95,13 @@ namespace EduCenterSrv
             _dbContext.SaveChanges();
 
             return user;
+        }
+
+        public bool UpdateUserPhone(string openId,string phone)
+        {
+            var sql = sql_UpdateUserPhone(openId, phone);
+            _dbContext.Database.ExecuteSqlCommand(sql);
+            return true;
         }
 
         #endregion
