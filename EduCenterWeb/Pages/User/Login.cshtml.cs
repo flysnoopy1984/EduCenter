@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EduCenterCore.Common.Helper;
 using EduCenterModel.Common;
+using EduCenterSrv;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -11,6 +12,12 @@ namespace EduCenterWeb.Pages.User
 {
     public class LoginModel : EduBaseAppPageModel
     {
+        private UserSrv _UserSrv;
+
+        public LoginModel(UserSrv userSrv)
+        {
+            _UserSrv = userSrv;
+        }
         public void OnGet()
         {
 
@@ -21,7 +28,9 @@ namespace EduCenterWeb.Pages.User
             ResultNormal result = new ResultNormal();
             try
             {
-                base.SetUserSesion("o3nwE0qI_cOkirmh_qbGGG-5G6B0","Jacky", "http://thirdwx.qlogo.cn/mmopen/hzVGicX27IG18yibKNnHfBojH4SpCPGNEvyOUZE8jxOw2ZnYcHzAkm72jugRaRc53jn1zZER32wE4SUib1aX3W7qwTZgolC4HWk/132","");
+                var ui = _UserSrv.GetUserInfo("o3nwE0qI_cOkirmh_qbGGG-5G6B0");
+
+                base.SetUserSesion(ui.OpenId,ui.Name, ui.wx_headimgurl,ui.Phone);
             }
             catch (Exception ex)
             {

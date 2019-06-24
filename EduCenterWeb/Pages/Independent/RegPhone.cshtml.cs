@@ -32,7 +32,7 @@ namespace EduCenterWeb.Pages.Independent
             ResultObject<OutSMS> result = new ResultObject<OutSMS>();
             try
             {
-                var us = GetUserSession();
+                var us = GetUserSession(false);
                 if(us != null)
                     result.Entity = _smsSrv.RequireVerifyCode(mobilePhone, IntervalSec);
                 else
@@ -58,22 +58,25 @@ namespace EduCenterWeb.Pages.Independent
                 result.Entity = _smsSrv.SubmitUserVerifyCode(mobilePhone, Code);
                 if(result.Entity.SMSVerifyStatus == SMSVerifyStatus.Success)
                 {
-
-                    DoUpdateUserPhone();
+                    var us = GetUserSession(false);
+                    DoUpdateUserPhone(us.OpenId,mobilePhone);
                 }
             }
             catch(Exception ex)
             {
-                result.ErrorMsg = "请求短信失败";
+                result.ErrorMsg = "系统错误。验证短信失败！";
                 NLogHelper.ErrorTxt($"验证校验码[OnPostSubmitVerifyCode]:{ex.Message}");
             }
             return new JsonResult(result);
             
         }
 
-        private void DoUpdateUserPhone()
+        private void DoUpdateUserPhone(string openId,string phone)
         {
-          
+            _userSrv.UpdateUserPhone(openId, phone);
+            var us = GetUserSession(false);
+            us.Phone = phone;
+            SetUserSesion(us);
         }
     }
 }

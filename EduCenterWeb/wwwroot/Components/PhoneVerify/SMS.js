@@ -89,12 +89,15 @@
        // var url = "/API/SMS/SentSMS_IQBPay_BuyerOrder";
 
         $.ajax({
-            type: 'get',
-            dataType: "json",
+            type: 'post',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
             data: { "mobilePhone": Phone, "IntervalSec": countDown},
             url: RequireVerifyCodeUrl,
             success: function (res) {
-              
+                btnGetVC.attr("disabled", false);
                 if (res.IsSuccess) {
                     var result = res.Entity;
                     btnSubmitVC.attr("disabled", false);
@@ -116,17 +119,17 @@
                 else {
                     if (res.IntMsg == -1) {
                         ShowInfo(res.ErrorMsg, null, null, 1, function () {
-
+                            window.location.href = "/User/Login";
                         })
                     }
                     else {
-
+                        alert(res.ErrorMsg);
                     }
 
                    
                 }
                    
-              
+               
 
             },
             error: function (xhr, type) {
@@ -152,13 +155,15 @@
 
 
         $.ajax({
-            type: 'get',
-            dataType: "json",
+            type: 'post',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
             data: { "mobilePhone": Phone, "Code": Code },
             url: SubmitVerifyCodeUrl,
             success: function (res) {
 
-             
                 if (res.IsSuccess) {
                     var data = res.Entity;
                     if (endEvent)
@@ -199,6 +204,24 @@
 
             }
         });
+    }
+
+    isPhoneNo = function(phone) {
+        var pattern = /^1[345789]\d{9}$/;
+        return pattern.test(phone);
+    }
+
+    GetUrlParam = function (name, nd) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+        if (r != null) {
+            if (nd) {
+                return unescape(decodeURI(r[2]));
+            }
+            return unescape(r[2]);
+        }
+
+        return null; //返回参数值
     }
 
     ShowInfo = function (msg, title, style, closeSec, actionHandler) {

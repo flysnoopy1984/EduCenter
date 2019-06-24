@@ -5,7 +5,7 @@
     
         if (phone.val() == "" || phone.val() == null) {
             ShowInfo("请先绑定手机号，谢谢！", null, null, 2, function () {
-                window.location.href = "/Independent/RegPhone";
+                window.location.href = "/Independent/RegPhone?rurl=/User/BuyCourseTime";
             });
         }
       

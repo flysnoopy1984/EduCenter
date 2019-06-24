@@ -1,6 +1,7 @@
 ﻿using EduCenterCore.EduFramework;
 using EduCenterModel.Session;
 using EduCenterModel.User;
+using EduCenterSrv;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -44,6 +45,32 @@ namespace EduCenterWeb.Pages
             };
             var json = JsonConvert.SerializeObject(session);
             HttpContext.Session.SetString(EduConstant.UserSessionKey, json);
+        }
+        public void SetUserSesion(UserSession session)
+        {
+         
+            var json = JsonConvert.SerializeObject(session);
+            HttpContext.Session.SetString(EduConstant.UserSessionKey, json);
+        }
+
+        public void SetUserSesion(EUserInfo ui)
+        {
+            UserSession session = new UserSession()
+            {
+                OpenId = ui.OpenId,
+                UserName = ui.Name,
+                HeaderUrl = ui.wx_headimgurl,
+                Phone = ui.Phone,
+
+            };
+            var json = JsonConvert.SerializeObject(session);
+            HttpContext.Session.SetString(EduConstant.UserSessionKey, json);
+        }
+
+        public void RefreshSession(string openId,UserSrv userSrv)
+        {
+           var ui =  userSrv.GetUserInfo(openId);
+            SetUserSesion(ui);
         }
     }
 }

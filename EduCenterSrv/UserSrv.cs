@@ -16,12 +16,12 @@ using System.Text;
 
 namespace EduCenterSrv
 {
-    public class UserSrv
+    public class UserSrv: BaseSrv
     {
-        private EduDbContext _dbContext;
-        public UserSrv(EduDbContext dbContext)
+      
+        public UserSrv(EduDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
+           
         }
 
         #region SQL
@@ -102,6 +102,11 @@ namespace EduCenterSrv
             var sql = sql_UpdateUserPhone(openId, phone);
             _dbContext.Database.ExecuteSqlCommand(sql);
             return true;
+        }
+
+        public EUserInfo GetUserInfo(string openId)
+        {
+            return _dbContext.DBUserInfo.Where(a => a.OpenId == openId).FirstOrDefault();
         }
 
         #endregion
