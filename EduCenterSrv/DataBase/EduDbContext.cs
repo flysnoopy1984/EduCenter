@@ -22,6 +22,8 @@ namespace EduCenterSrv.DataBase
      
         public DbSet<EUserInfo> DBUserInfo { get; set; }
 
+        public DbSet<EUserChild> DBUserChild { get; set; }
+
         public DbSet<EUserAccount> DBUserAccount { get; set; }
 
         public DbSet<EUserInfoBackEnd> DBUserInfoBackEnd { get; set; }
@@ -68,5 +70,7 @@ namespace EduCenterSrv.DataBase
         public DbSet<ESMSVerification> DBSMSVerification { get; set; }
 
         //SMS End
+
+        
     }
 }

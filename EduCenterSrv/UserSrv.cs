@@ -45,6 +45,12 @@ namespace EduCenterSrv
             return sql;
         }
 
+        public static string sql_DeleteAllUserChild(string openId)
+        {
+            string sql = $"delete from UserChild where UserOpenId ='{openId}'";
+            return sql;
+        }
+
         #endregion
 
         #region UserInfo
@@ -608,6 +614,31 @@ namespace EduCenterSrv
                 _dbContext.SaveChanges();
             }
             return result;
+        }
+        #endregion
+
+        #region UserChild
+        public void SaveChild(List<EUserChild> list)
+        {
+            var sql = sql_DeleteAllUserChild(list[0].UserOpenId);
+            try
+            {
+                _dbContext.Database.BeginTransaction();
+                _dbContext.Database.ExecuteSqlCommand(sql);
+                _dbContext.DBUserChild.AddRange(list);
+                _dbContext.SaveChanges();
+                _dbContext.Database.CommitTransaction();
+            }
+            catch
+            {
+                _dbContext.Database.RollbackTransaction();
+            }
+          
+        }
+
+        public List<EUserChild> GetAllChild(string openId)
+        {
+            return _dbContext.DBUserChild.Where(a => a.UserOpenId == openId).OrderBy(a=>a.No).ToList();
         }
         #endregion
 

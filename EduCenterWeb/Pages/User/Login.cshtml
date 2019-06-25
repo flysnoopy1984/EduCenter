@@ -31,9 +31,9 @@
         }
         /* Login Area */
         .LogoArea {
-            flex-grow: 5;
+            flex-grow: 4;
             background-image: url('/images/LOGO_120.png');
-            background-position: center bottom;
+            background-position: center center;
             background-repeat: no-repeat;
             /*background-color:aliceblue;*/
         }
@@ -52,7 +52,7 @@
             }
 
         .ButtonArea {
-            flex-grow: 0.2;
+            flex-grow: 1;
             text-align: center;
             /*display:flex;
            justify-content:center;
@@ -145,6 +145,15 @@
             color: #00d31b;
             cursor: pointer !important;
         }
+         .sm_wxicon {
+            width: 20px;
+            height: 20px;
+            vertical-align:middle;
+            fill: currentColor;
+            overflow: hidden;
+            color: #ffffff;
+            cursor: pointer !important;
+        }
     </style>
     <script src="~/lib/iconfont.js"></script>
 
@@ -163,20 +172,27 @@
         <div class="LogoArea">
 
         </div>
-        <div class="FieldsArea">
+        @*<div class="FieldsArea">
             <div><input type="text" placeholder="请输入手机号" class="EduFieldValue" /></div>
             <div><input type="text" placeholder="请输入密码" class="EduFieldValue" style="margin-top:25px;" /></div>
-        </div>
+        </div>*@
+
         <div class="ButtonArea">
 
-            <input type="button" class="btn btn-info EduLoginButton" value="登陆" />
-            <div id="NoAccountLine"> <a href="#">没有账号？</a></div>
+            <button id="btnLogin" class="btn btn-info EduLoginButton">
+                <svg class="sm_wxicon" aria-hidden="true">
+                    <use xlink:href="#icon-weixin"></use>
+                </svg>
+                <span style="margin-left: 10px;">登陆</span>
+            </button>
+         
+            @*<div id="NoAccountLine"> <a href="#">没有账号？</a></div>*@
 
 
         </div>
         <div class="FootAerea">
             <h6 class="OtherLoginLine">微信登录</h6>
-            <div>
+            <div id="btnWxLogin">
                 <svg class="wxicon" aria-hidden="true">
                     <use xlink:href="#icon-weixin"></use>
                 </svg>
