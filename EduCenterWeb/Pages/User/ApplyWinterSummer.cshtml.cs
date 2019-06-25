@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EduCenterCore.Common.Helper;
 using EduCenterModel.BaseEnum;
+using EduCenterModel.Common;
 using EduCenterModel.Course;
+using EduCenterModel.Pages.User;
 using EduCenterSrv;
 using EduCenterSrv.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +53,25 @@ namespace EduCenterWeb.Pages.User
 
                 CourseScheduleList = _CourseSrv.GetCourseScheduleByYearType(DateTime.Now.Year, CourseScheduleType.Summer);
             }
+        }
+
+        public IActionResult OnPostInitData()
+        {
+            ResultObject<PUserApply> result = new ResultObject<PUserApply>();
+            // ResultObject<> result = new ResultObject<Dictionary<int, ECourseTime>>();
+            try
+            {
+                //  result.Entity.CourseScheduleList = _CourseSrv.GetCourseScheduleByYearType(DateTime.Now.Year, CourseScheduleType.Standard);
+                result.Entity.CourseTimeList = StaticDataSrv.CourseTime;
+                result.Entity.CourseMaxApplyNum = StaticDataSrv.CourseMaxApplyNum;
+
+            }
+            catch (Exception ex)
+            {
+                result.ErrorMsg = "未能获取数据！请联系管理员或稍后再试";
+                NLogHelper.ErrorTxt(ex.Message);
+            }
+            return new JsonResult(result);
         }
     }
 }

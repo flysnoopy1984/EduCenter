@@ -173,7 +173,7 @@
         line-height: 28px;
     }
 
-    .layui-tab-title li:first-child {
+    /*.layui-tab-title li:first-child {
         font-weight: bold;
         color: #ff661c !important;
     }
@@ -181,7 +181,7 @@
     .layui-tab-title li:last-child {
         font-weight: bold;
         color: #0094ff !important;
-    }
+    }*/
 
 
     .CourseSelect {
@@ -211,6 +211,10 @@
         font-weight: bold;
         font-size: 24px;
     }
+    .layui-tab-title li{font-weight:bold;}
+    .text-warning {
+        color: #ffa200;
+    }
 </style>
 
 
@@ -218,7 +222,7 @@
 <link href="~/css/Plugs/checkbox_radio.css" rel="stylesheet" />
 <link href="~/css/Plugs/LoadingIcon.css" rel="stylesheet" />
 <script src="~/lib/layui/layui.js"></script>
-<script src="~/lib/layui/lay/modules/element.js"></script>
+<script src="~/lib/layui/lay/modules/element.v1.1.js"></script>
 
 <link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
 <script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
@@ -236,15 +240,15 @@
     <div class="GridContainder">
         <div class="SelectCourseTimeTitle"><i class="fa fa-calendar" aria-hidden="true"></i>  请点击选择您上课的时间</div>
 
-        <div class="layui-tab layui-tab-card" >
-            <ul class="layui-tab-title" >
-                <li>一</li>
-                <li>二</li>
-                <li>三</li>
-                <li>四</li>
-                <li>五</li>
-                <li>六</li>
-                <li>日</li>
+        <div class="layui-tab layui-tab-card">
+            <ul class="layui-tab-title layui-tab-more" >
+                <li class="text-primary">一</li>
+                <li class="text-primary">二</li>
+                <li class="text-primary">三</li>
+                <li class="text-primary">四</li>
+                <li class="text-primary">五</li>
+                <li class="text-success">六</li>
+                <li class="text-danger">日</li>
             </ul>
             <div class="layui-tab-content">
                 @for (int i = 1; i <= 7; i++)
@@ -254,30 +258,30 @@
                     {
                         cls = "layui-show";
                     }
-                    <div class="layui-tab-item @cls">
-                        <!--双休日-->
-                        <table id="GridWeek" class="CourseGrid" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                                <th></th>
-                                <th>@GetDayName(i)</th>
-                            </tr>
-                            @if (Model.CourseTimes != null)
+                <div class="layui-tab-item @cls">
+                    <!--双休日-->
+                    <table id="GridWeek" day="@i" class="CourseGrid" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <th></th>
+                            <th class="text-warning">@GetDayName(i)</th>
+                        </tr>
+                        @if (Model.CourseTimes != null)
                             {
-                                @foreach (var time in Model.CourseTimes)
+                        @foreach (var time in Model.CourseTimes)
                                 {
 
-                            <tr>
+                        <tr>
                             <td style="font-weight:bold">@time.TimeRange</td>
                             <td>
-                                <div day="@(i+6)" lesson="@time.Lesson" class="CellContainer" onclick="selectCourse(this);">
+                                <div day="@i" lesson="@time.Lesson" class="CellContainer" onclick="selectCourse(this);">
                                     @*  <div class="noCourse"> <span>无</span><span class="caret"></span></div>*@
                                     <div class="CellCourseData">
                                         @try
                                         {
-                                            var list = Model.GetAvaliableCourseList(i + 6, time.Lesson);
-                                            @foreach (var c in list)
+                                            var list = Model.GetAvaliableCourseList(i, time.Lesson);
+                                        @foreach (var c in list)
                                             {
-                                                <div lCode=@c.LessonCode CourseType="@Convert.ToInt32(c.CourseType)" CourseCode="@c.CourseCode" CurUser="@c.ApplyNum">@c.CourseName</div>
+                                        <div lCode=@c.LessonCode CourseType="@Convert.ToInt32(c.CourseType)" CourseCode="@c.CourseCode" CurUser="@c.ApplyNum">@c.CourseName</div>
                                             }
                                         }
                                         catch
@@ -294,12 +298,10 @@
 
 
 
-                        </table>
-                    </div>
-                }
-
-
+                    </table>
                 </div>
+                }
+            </div>
         </div>
 
     </div>

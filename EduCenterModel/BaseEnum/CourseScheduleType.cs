@@ -12,6 +12,8 @@ namespace EduCenterModel.BaseEnum
 
         Winter = 2,
 
+        SummerWinter =3,
+
         Group =10,
     }
 }

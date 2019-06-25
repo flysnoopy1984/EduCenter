@@ -1,5 +1,5 @@
 ﻿$(function () {
-    var InitUrl = "Apply?handler=InitData";
+    var InitUrl = "ApplyWinterSummer?handler=InitData";
 
     //  var CourseScheduleData = null;
     var CourseTime = null;
@@ -11,9 +11,8 @@
     Init = function () {
      
         $("#btnConfirm").on("click", NextStep);
-
-     //   callAjax_Query(InitUrl, {}, InitCallBack, "");
-
+        callAjax_Query(InitUrl, {}, InitCallBack, "");
+     
     }
 
     selectCourse = function (obj) {
@@ -72,7 +71,7 @@
                         $(".CourseSelect").find("input[type=radio]:checked").each(function () {
                             var checkedNo = $(this).val();
                             var checkeditem = csList[checkedNo];
-                            CreateSelectCourseInfo(checkeditem, checkedNo);
+                            CreateSelectCourseInfo(checkeditem, checkedNo, cell);
 
                         })
                     }
@@ -125,7 +124,7 @@
 
 
     //主页面的课程信息
-    CreateSelectCourseInfo = function (data, selectNo) {
+    CreateSelectCourseInfo = function (data, selectNo, cell) {
 
         if (selectNo == -1) {
             if (selCode != null && selCode != "") {
@@ -134,9 +133,8 @@
             return;
         };
         //Grid TD 信息
-        var gridRoot = null;
-        if (data.Day >= 1 && data.Day <= 5) gridRoot = $("#GridNormal");
-        else gridRoot = $("#GridWeek");
+        var gridRoot = $(cell).closest("#GridWeek");
+      
 
         var td = gridRoot.find(".CellContainer[day=" + data.Day + "][lesson=" + data.Lesson + "]");
         td.find(".CellCourseData").hide();
@@ -208,9 +206,10 @@
     }
 
     RestoreCellData = function (day, lesson) {
-        var gridRoot = null;
-        if (day >= 1 && day <= 5) gridRoot = $("#GridNormal");
-        else gridRoot = $("#GridWeek");
+        var gridRoot = $(".CourseGrid[day="+day+"]");
+      //  var gridRoot = $("#GridWeek[day=" + day + "]");
+        //if (day >= 1 && day <= 5) gridRoot = $("#GridNormal");
+        //else gridRoot = $("#GridWeek");
 
         var td = gridRoot.find(".CellContainer[day=" + day + "][lesson=" + lesson + "]");
         td.find(".CellCourseData").show();

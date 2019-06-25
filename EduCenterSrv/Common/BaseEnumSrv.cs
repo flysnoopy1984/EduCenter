@@ -249,6 +249,10 @@ namespace EduCenterSrv.Common
                     return "暑假班";
                 case CourseScheduleType.Winter:
                     return "寒假班";
+                case CourseScheduleType.SummerWinter:
+                    return "寒暑假班";
+
+
             }
             return "";
         }
