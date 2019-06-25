@@ -1,5 +1,6 @@
 ﻿$(function () {
     var InitUrl = "Apply?handler=InitData";
+    var SubmitUrl = "Apply?handler=Submit";
   
   //  var CourseScheduleData = null;
     var CourseTime = null;

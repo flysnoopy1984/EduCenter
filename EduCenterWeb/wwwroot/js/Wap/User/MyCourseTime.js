@@ -3,6 +3,7 @@
     var QueryConsumeListUrl = "MyCourseTime?handler=QueryConsumeList";
     var ReChargeData = null;
     var ComsumeData = null;
+
     Init = function () {
 
         $("#btnToBuy").on("click", function() {

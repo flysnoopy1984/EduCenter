@@ -52,9 +52,9 @@ namespace EduCenterSrv.DataBase
 
         public DbSet<EOrderLine> DBOrderLine { get; set; }
 
-        public  DbSet<EUserCourseTime> DBUserCourseTime { get; set; }
+        //public  DbSet<EUserCourseTime> DBUserCourseTime { get; set; }
 
-        public DbSet<EUserCourseTimeTrans> DBUserCourseTimeTrans { get; set; }
+        //public DbSet<EUserCourseTimeTrans> DBUserCourseTimeTrans { get; set; }
 
         public DbSet<ETrialLog> DBTrialLog { get; set; }
 

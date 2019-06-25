@@ -584,6 +584,11 @@ namespace EduCenterSrv
             _dbContext.SaveChanges();
             
         }
+
+        public void BatchCreateUserCourseLog(List<EUserCourseLog> list)
+        {
+            _dbContext.DBUserCourseLog.AddRange(list);
+        }
         #endregion
 
 

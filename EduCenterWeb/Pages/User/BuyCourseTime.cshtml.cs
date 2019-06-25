@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EduCenterModel.BaseEnum;
+using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterModel.Session;
 using EduCenterSrv;
@@ -12,20 +14,61 @@ namespace EduCenterWeb.Pages.User
 {
     public class BuyCourseTimeModel : EduBaseAppPageModel
     {
+        private BusinessSrv _BusinessSrv;
         private CourseSrv _CourseSrv;
         public UserSession UserSession { get; set; }
         public List<ECoursePrice> PriceList { get; set; }
-        public BuyCourseTimeModel(CourseSrv courseSrv)
+
+        public List<ECoursePrice> SummerPriceList { get; set; }
+
+        public List<ECoursePrice> WinterPriceList { get; set; }
+        public BuyCourseTimeModel(CourseSrv courseSrv, BusinessSrv businessSrv)
         {
             _CourseSrv = courseSrv;
+            _BusinessSrv = businessSrv;
         }
 
         public void OnGet()
         {
             UserSession = this.GetUserSession();
             if(UserSession != null)
-                PriceList = _CourseSrv.GetCoursePriceList();
+            {
+                var list = _CourseSrv.GetCoursePriceList();
+                PriceList =list.Where(a=>a.CourseScheduleType ==CourseScheduleType.Standard).ToList();
+                SummerPriceList = list.Where(a => a.CourseScheduleType == CourseScheduleType.Summer).ToList();
+                WinterPriceList = list.Where(a => a.CourseScheduleType == CourseScheduleType.Winter).ToList();
+            }
+               
 
+        }
+
+        public IActionResult OnPostBuyCourse(string priceCode)
+        {
+            ResultNormal result = new ResultNormal();
+            try
+            {
+                var us = GetUserSession(false);
+                if(us !=null)
+                {
+                    ECoursePrice eCoursePrice =  _CourseSrv.GetCoursePrice(priceCode);
+                    var order = _BusinessSrv.PayCourseOrder(us.OpenId, eCoursePrice);
+                    _BusinessSrv.PayCourseSuccess(order.OrderId);
+                    result.IntMsg = (int)eCoursePrice.CourseScheduleType;
+
+                }
+                else
+                {
+                    result.IntMsg = -1;
+                    result.ErrorMsg = "请先重新登录";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                result.ErrorMsg = ex.Message;
+             
+            }
+            return new JsonResult(result);
         }
     }
 }

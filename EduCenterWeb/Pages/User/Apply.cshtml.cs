@@ -84,7 +84,33 @@ namespace EduCenterWeb.Pages.User
         }
 
       
-
+        public IActionResult OnPostSubmit(List<string> lessonCodeList)
+        {
+            ResultNormal result = new ResultNormal();
+            try
+            {
+                var us = base.GetUserSession(false);
+                if(us!=null)
+                {
+                    foreach(var lc in lessonCodeList)
+                    {
+                        EUserCourseLog eUserCourseLog = new EUserCourseLog();
+                        
+                    }
+                }
+                else
+                {
+                    result.IntMsg = -1;
+                    result.ErrorMsg = "请重新登陆";
+                }
+            }
+            catch (Exception ex)
+            {
+                result.ErrorMsg = "提交数据错误！请联系管理员或稍后再试";
+                NLogHelper.ErrorTxt($"标准班课程选择[OnPostSubmit]:{ex.Message}");
+            }
+            return new JsonResult(result);
+        }
 
     }
 }

@@ -206,6 +206,11 @@ namespace EduCenterSrv
            return _dbContext.DBCoursePrice.Where(a => a.RecordStatus == RecordStatus.Normal && a.EffectEndDate>DateTime.Now).ToList();
         }
 
+        public ECoursePrice GetCoursePrice(string priceCode)
+        {
+            return _dbContext.DBCoursePrice.Where(a => a.PriceCode == priceCode).FirstOrDefault();
+        }
+
         public ECoursePrice GetStandPrice()
         {
             return _dbContext.DBCoursePrice.Where(a => a.RecordStatus == RecordStatus.Normal && a.CourseScheduleType == CourseScheduleType.Standard).FirstOrDefault();

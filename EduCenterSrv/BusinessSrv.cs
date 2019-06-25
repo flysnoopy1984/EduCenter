@@ -1,6 +1,7 @@
 ﻿using EduCenterCore.Common.Helper;
 using EduCenterCore.EduFramework;
 using EduCenterModel.BaseEnum;
+using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterModel.Order;
 using EduCenterModel.Teacher;
@@ -62,23 +63,31 @@ namespace EduCenterSrv
 
 
         #region 提交购买课时订单
-
+        
         public EOrder PayCourseOrder(string userOpenId, ECoursePrice coursePrice)
         {
             try
             {
                //  BeginTrans();
 
-                ////删除等待支付的用户课程
-                //_dbContext.Database.ExecuteSqlCommand(sql_DeleteWaitingPayUserCourse(userOpenId));
+             
+                //检查用户是否已经购买暑假寒假
+                if(coursePrice.CourseScheduleType == CourseScheduleType.Summer ||
+                    coursePrice.CourseScheduleType == CourseScheduleType.Winter)
+                {
+                    var sql = from o in _dbContext.DBOrder
+                              join l in _dbContext.DBOrderLine on o.OrderId equals l.OrderId
+                              where o.OrderStatus == OrderStatus.PaySuccess && o.CustOpenId == userOpenId
+                              && l.ItemCode == coursePrice.PriceCode
+                              select o.OrderId;
 
-                //////新建等待支付的用户课程
-                //foreach (var uc in userCourses)
-                //{
-                //    uc.UserCourseStatus = UserCourseStatus.WaitingPay;
-                //    uc.CreateDateTime = DateTime.Now;
-                //}
-                //_dbContext.DBUserCoures.AddRange(userCourses);
+                    var item = sql.FirstOrDefault();
+                    if(item != null)
+                    {
+                        var cstName = BaseEnumSrv.GetCourseScheduleTypeName(coursePrice.CourseScheduleType);
+                        throw new EduException($"[{cstName}]只能购买一次，您已购买过");
+                    }
+                }
 
                 //创建购买课时的订单
                 var Order =  CreateBuyCourseOrder(userOpenId, coursePrice);
@@ -90,12 +99,17 @@ namespace EduCenterSrv
                 return Order;
 
             }
+            catch (EduException eex)
+            {
+                throw eex;
+            }
             catch (Exception ex)
             {
              //  RollBackTrans();
                 NLogHelper.ErrorTxt($"[PayCourseFirst]{ex.Message}");
                 throw ex;
             }
+          
         }
 
 
@@ -153,12 +167,12 @@ namespace EduCenterSrv
                 var line = _dbContext.DBOrderLine.Where(a => a.OrderId == orderId).FirstOrDefault();
                 UpdateCourseTimeByLine(order.CustOpenId, line);
 
-                //新建课时交易
-                AddCourseTimeTransByLine(line);
+                ////新建课时交易
+                //AddCourseTimeTransByLine(line);
 
                 //更新用户课程表
                 //    var newLessonCode =UpdateUserCourseToAvaliable(order.CustOpenId);
-                UpdateUserCourseToAvaliable(order.CustOpenId);
+              //  UpdateUserCourseToAvaliable(order.CustOpenId);
 
                 /*
                 if (newLessonCode.Count>0)
@@ -246,46 +260,54 @@ namespace EduCenterSrv
         /// <param name="line"></param>
         private void UpdateCourseTimeByLine(string userOpenId,EOrderLine line)
         {
-            var CourseTime = _dbContext.DBUserCourseTime.Where(a => a.UserOpenId == userOpenId && (int)a.CourseScheduleType == line.Ext1).FirstOrDefault();
-            if (CourseTime == null)
+       
+            var userAccount =  _dbContext.DBUserAccount.Where(a => a.UserOpenId == userOpenId).FirstOrDefault();
+            if(userAccount == null)
             {
-                CourseTime = new EUserCourseTime
-                {
-                    UserOpenId = userOpenId,
-                    CourseScheduleType = (CourseScheduleType)line.Ext1,
-                    CreateDateTime = DateTime.Now,
-                    RemainQty = 0,
-                    InValidDateTime = DateTime.Now.AddYears(1),
-                    ReNewDateTime = DateTime.MinValue,
-                };
-                _dbContext.DBUserCourseTime.Add(CourseTime);
+                UserSrv userSrv = new UserSrv(_dbContext);
+                userAccount = userSrv.CreateNewUserAccount(userOpenId);
             }
-            //续费
-            else
+            
+            CourseScheduleType courseScheduleType = (CourseScheduleType)line.Ext1;
+            ECourseDateRange dr = null;
+            switch(courseScheduleType)
             {
-                CourseTime.ReNewDateTime = DateTime.Now;
-                CourseTime.InValidDateTime = DateTime.Now.AddYears(1);
+                case CourseScheduleType.Standard:
+                    userAccount.RemainCourseTime += line.Qty;
+                    userAccount.DeadLine = userAccount.DeadLine.AddYears(1);
+                    break;
+                case CourseScheduleType.Summer:
+                    userAccount.RemainSummerTime += line.Qty;
+                    dr = StaticDataSrv.CourseDateRange.Where(a => a.CourseScheduleType == CourseScheduleType.Summer && a.Year == DateTime.Now.Year).FirstOrDefault();
+                    userAccount.SummerDeadLine = dr.EndDate;
+                    break;
+                case CourseScheduleType.Winter:
+                    userAccount.RemainWinterTime += line.Qty;
+                    dr = StaticDataSrv.CourseDateRange.Where(a => a.CourseScheduleType == CourseScheduleType.Winter && a.Year == DateTime.Now.Year).FirstOrDefault();
+                    userAccount.WinterDeadLine = dr.EndDate;
+                    break;
+                
             }
-            CourseTime.RemainQty += line.Qty;
+
         }
 
         /// <summary>
         /// 新建课时交易
         /// </summary>
         /// <param name="line"></param>
-        private void AddCourseTimeTransByLine(EOrderLine line)
-        {
-            EUserCourseTimeTrans trans = new EUserCourseTimeTrans
-            {
-                CourseScheduleType = (CourseScheduleType)line.Ext1,
-                TransQty = line.Qty,
-                UserOpenId = line.OrderId,
-                CoursePriceCode = line.ItemCode,
-                TransDateTime = DateTime.Now,
+        //private void AddCourseTimeTransByLine(EOrderLine line)
+        //{
+        //    EUserCourseTimeTrans trans = new EUserCourseTimeTrans
+        //    {
+        //        CourseScheduleType = (CourseScheduleType)line.Ext1,
+        //        TransQty = line.Qty,
+        //        UserOpenId = line.OrderId,
+        //        CoursePriceCode = line.ItemCode,
+        //        TransDateTime = DateTime.Now,
                 
-            };
-            _dbContext.DBUserCourseTimeTrans.Add(trans);
-        }
+        //    };
+        //    _dbContext.DBUserCourseTimeTrans.Add(trans);
+        //}
 
         #endregion
 

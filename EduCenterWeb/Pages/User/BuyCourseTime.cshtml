@@ -4,6 +4,8 @@
     ViewData["Title"] = "BuyCourseTime";
     Layout = "~/Pages/Shared/_EduMainApp.cshtml";
 }
+@Html.AntiForgeryToken()
+
 @functions{
     public string GetTextColor(string PriceCode)
     {
@@ -22,6 +24,7 @@
 <script type="text/javascript" src="~/lib/iconfont.js"></script>
 <link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
 <script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="~/lib/jquery.blockUI/jquery.blockUI.min.js"></script>
 <script src="~/js/EduLib/EditHelper.js"></script>
 <script src="~/js/EduLib/StorageManager.js"></script>
 <script src="~/js/Wap/User/BuyCourseTime.js"></script>
@@ -38,7 +41,6 @@
 
     .Title {
         color: #ff6a00;
- 
     }
 
     .Content {
@@ -61,6 +63,19 @@
         margin-bottom: 10px;
     }
 
+    .CourseSummerPriceTitle {
+        font-weight: bold;
+        border-radius: 4px;
+        color: #ffffff;
+        background-color: #f7bc88;
+        padding-left: 5px;
+        height: 35px;
+        line-height: 35px;
+        width: 100%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
     .PriceList {
         width: 90%;
         display: flex;
@@ -75,7 +90,7 @@
         /* height: 60px; */
         justify-content: space-between;
         border-bottom: solid 1px #f3a657;
-        padding-top: 20px;
+        /*padding-top: 20px;*/
     }
 
     .BtnAreaList {
@@ -118,12 +133,34 @@
         </svg><span>购买课时</span>
     </div>
     <div class="Content">
-        <div class="CourseStandardPriceTitle"><i class="fa fa-list" aria-hidden="true"></i>  课时价格</div>
-        <div class="PriceList">
 
-            @if (Model.PriceList != null)
-            {
-                foreach (var p in Model.PriceList)
+        @if (Model.PriceList != null)
+        {
+            <div class="CourseStandardPriceTitle"><i class="fa fa-list" aria-hidden="true"></i>  标准班价格</div>
+            <div class="PriceList">
+                @foreach (var p in Model.PriceList)
+                {
+                    <div class="PriceItem @GetTextColor(p.PriceCode) ">
+                        <div>@p.PriceName</div>
+                        <div><i class="fa fa-jpy" aria-hidden="true"></i> <span class="CoursePrice">@p.Price</span></div>
+                        <div><span class="CourseQty">@p.Qty</span>课时</div>
+                        <div class="radio radio-info">
+                            <input type="radio" name="PriceItem" id="r_@p.PriceCode" value="@p.PriceCode">
+                            <label for="r_@p.PriceCode">
+                                选择
+                            </label>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+
+        @if (Model.SummerPriceList != null)
+        {
+            <div class="CourseSummerPriceTitle"><i class="fa fa-list" aria-hidden="true"></i> 暑假班价格</div>
+            <div class="PriceList">
+                @foreach (var p in Model.SummerPriceList)
                 {
 
                     <div class="PriceItem @GetTextColor(p.PriceCode) ">
@@ -139,10 +176,9 @@
 
                     </div>
                 }
-            }
+            </div>
+        }
 
-
-        </div>
         <div class="BtnAreaList">
             <button class="btn btn-warning" id="btn_Submit">确认提交</button>
         </div>
@@ -155,18 +191,18 @@
     }
 
 </div>
-    @*<div id="HideData" style="display:none;">
-            <div class="PriceItem">
-                <div>套餐1</div>
-                <div><i class="fa fa-jpy" aria-hidden="true"></i> <span class="CoursePrice">4888</span></div>
-                <div><span class="CourseQty">40</span>课时</div>
-                <div class="radio radio-info">
-                    <input type="radio" name="radio2" id="radio4" value="option2" checked="">
-                    <label for="radio4">
-                        选择
-                    </label>
-                </div>
-
+@*<div id="HideData" style="display:none;">
+        <div class="PriceItem">
+            <div>套餐1</div>
+            <div><i class="fa fa-jpy" aria-hidden="true"></i> <span class="CoursePrice">4888</span></div>
+            <div><span class="CourseQty">40</span>课时</div>
+            <div class="radio radio-info">
+                <input type="radio" name="radio2" id="radio4" value="option2" checked="">
+                <label for="radio4">
+                    选择
+                </label>
             </div>
-        </div>*@
+
+        </div>
+    </div>*@
 
