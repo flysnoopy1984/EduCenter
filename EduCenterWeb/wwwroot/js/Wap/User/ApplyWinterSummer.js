@@ -7,9 +7,16 @@
     var selDay = null
     var selLesson = null;
     var selCode = null;
+    var courseScheduleType = undefined;
 
     Init = function () {
-     
+
+        var msg = GetUrlParam("msg", true);
+        if (msg != undefined) {
+            ShowInfo(msg, null, null, 2);
+        }
+        courseScheduleType = GetUrlParam("type");
+
         $("#btnConfirm").on("click", NextStep);
         callAjax_Query(InitUrl, {}, InitCallBack, "");
      

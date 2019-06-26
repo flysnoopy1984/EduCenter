@@ -179,6 +179,37 @@ flex-direction:column;
     font-weight: bold;
     font-size: 16px;
 }
+#CourseTable{
+
+    width:100%;
+    margin-bottom:20px;
+}
+
+#CourseTable tr th{
+    border:solid 1px #646363;
+    text-align:center;
+
+}
+
+#CourseTable tr td{
+     border:solid 1px #646363;
+     text-align:center;
+     height:50px;   
+     font-size:12px;
+}
+.CourseCellContainer{
+       height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.CourseCell{
+       width: 55%;
+    height: 90%;
+    border-radius: 6px;
+    padding-top: 4px;
+}
+
 </style>
 <style>
     .DayIcon {
@@ -198,39 +229,40 @@ flex-direction:column;
         </div>
     </div>
     <div class="CourseArea">
-        @for (int i = 1; i <= 7; i++)
-        {
-            var courseList = Model.UserCourseList.Where(a => a.Day == i).ToList();
-            if (courseList.Count > 0)
+        <table border="0" cellpadding="0" cellspacing="0" id="CourseTable">
+            <tr>
+                <th width="16%">开课</th>
+                <th width="12%" style="color:#FF3333;">一</th>
+                <th width="12%" style="color:#FFAA33;">二</th>
+                <th width="12%" style="color:#FFFF33;">三</th>
+                <th width="12%" style="color:#99FF33;">四</th>
+                <th width="12%" style="color:#5599FF;">五</th>
+                <th width="12%" style="color:#7744FF;">六</th>
+                <th width="12%" style="color:#E93EFF;">日</th>
+            </tr>
+            @foreach (var time in Model.CourseTime)
             {
-                <div class="CourseRow">
-                    <div class="CourseDay">
-                        <svg class="DayIcon" aria-hidden="true">
-
-                            <use xlink:href="@Model.GetDayIconFont(i)"></use>
-                        </svg>
-                    </div>
-                    <div class="CourseContent">
-                        @foreach (var c in courseList)
-                        {
-                            <div class="OneCourse">
-                                <div class="CourseInfo">
-                                    <div class="CourseName">@c.CourseName</div>
-                                    <div class="CourseTime">@c.Time</div>
-                                </div>
-                                <div class="CourseDetail">
-                                    <div style="margin-bottom:4px;">
-                                        <div>下次开课：</div>
-                                        <div style="font-weight:bold;">@c.NextCourseDate.ToString("yyyy年MM月dd日")</div>
-                                    </div>
-                                    <div style="justify-content:flex-end"><a class="fa fa-eye" aria-hidden="true" href="CourseSingleList?LCode=@c.LessonCode">上课记录</a></div>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
+                <tr>
+                    <td>@time.Value.TimeRange.Substring(0,5)</td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <div class="CourseCellContainer">
+                            <div class="CourseCell bg-primary">美术</div>
+                        </div>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                
             }
-        }
+
+
+        </table>
+
+        <!-- 当前课程 -->
         @if (Model.CurrentCourse != null)
         {
             <div class="CurrentCourse">
@@ -276,6 +308,7 @@ flex-direction:column;
         }
 
     </div>
+    <!-- Log -->
     @if (@Model.UserCourseLogList != null && @Model.UserCourseLogList.Count > 0)
     {
         <div class="CourseLog">

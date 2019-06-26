@@ -230,7 +230,7 @@ namespace EduCenterSrv
 
        
 
-        public void UpdateTecCourse(string tecCode, ECourseSchedule courseSchedule)
+        public void UpdateTecCourse(string tecCode, ECourseSchedule courseSchedule, DateTime startDate)
         {
             var time = StaticDataSrv.CourseTime[courseSchedule.Lesson];
 
@@ -238,7 +238,7 @@ namespace EduCenterSrv
 
             if (tcNum == 0)
             {
-                DateTime startDate = DateTime.Now;
+                ;
                 int dayofWeek = DateSrv.GetSysDayOfWeek(startDate);
                 if (courseSchedule.Day - dayofWeek > 0)
                     startDate = startDate.AddDays(courseSchedule.Day - dayofWeek);

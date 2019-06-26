@@ -32,12 +32,15 @@
         }
     }
 
-    ShowConfirm = function (msg, title, style, yesHandler, noHandler) {
-        if (title == undefined || title==null)
+    ShowConfirm = function (msg, title, style, yesHandler, noHandler, notext, yestext) {
+        if (title == undefined || title == null)
             title = "确认";
         if (style == undefined || style == null)
             style = 'orange';
-
+        if (notext == undefined || notext == null)
+            notext = '不了';
+        if (yestext == undefined || yestext == null)
+            yestext = '是的';
         $.confirm({
             title: title,
             content: msg,
@@ -45,12 +48,13 @@
             buttons: {
               
                 no: {
-                    text: '不了',
+                   
+                    text: notext,
                     btnClass: 'btn-blue',
                     action: noHandler,
                 },
                 yes: {
-                    text: '是的',
+                    text: yestext,
                     btnClass: 'btn-red',
                     action: yesHandler,
                 },

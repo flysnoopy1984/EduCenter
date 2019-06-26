@@ -73,7 +73,7 @@ namespace EduCenterSrv.Common
                 {
                     _CourseTime = new Dictionary<int, ECourseTime>();
                     
-                    _CourseTime.Add(1,new ECourseTime{Lesson = 1,TimeRange = "9:00-10:30",StartTime=9,EndTime=10.5});
+                    _CourseTime.Add(1,new ECourseTime{Lesson = 1,TimeRange = "09:00-10:30",StartTime=9,EndTime=10.5});
                     _CourseTime.Add(2,new ECourseTime { Lesson = 2, TimeRange = "10:30-12:00",StartTime=10.5,EndTime=12 });
                     _CourseTime.Add(3,new ECourseTime { Lesson = 3, TimeRange = "13:00-14:30", StartTime = 13, EndTime = 14.5 });
                     _CourseTime.Add(4,new ECourseTime { Lesson = 4, TimeRange = "14:30-16:00", StartTime = 14.5, EndTime = 16 });
@@ -94,7 +94,7 @@ namespace EduCenterSrv.Common
                 {
                     _TrialTime = new Dictionary<int, ECourseTime>();
 
-                    _TrialTime.Add(1, new ECourseTime { Lesson = 1, TimeRange = "9:00-10:00", StartTime = 9, EndTime = 10 });
+                    _TrialTime.Add(1, new ECourseTime { Lesson = 1, TimeRange = "09:00-10:00", StartTime = 9, EndTime = 10 });
                     _TrialTime.Add(2, new ECourseTime { Lesson = 2, TimeRange = "10:00-11:00", StartTime = 10, EndTime = 11 });
                     _TrialTime.Add(3, new ECourseTime { Lesson = 3, TimeRange = "11:00-12:00", StartTime = 11, EndTime = 12 });
                     _TrialTime.Add(4, new ECourseTime { Lesson = 4, TimeRange = "13:00-14:00", StartTime = 13, EndTime = 14 });

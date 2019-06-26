@@ -326,8 +326,8 @@ namespace EduCenterSrv
                 {
                     UserSrv userSrv = new UserSrv(_dbContext);
                     TecSrv tecSrv = new TecSrv(_dbContext);
-                    if (userSrv.CheckHasUserCourse(openId, courseList[0].CourseScheduleType))
-                        throw new Exception("已经选择过课程!");
+                    if (userSrv.CheckUserCanSelectCourse(openId, courseList[0].CourseScheduleType))
+                        throw new EduException("无法选择，您已经选择过此类课程!，如果疑问，请联系客服");
                     else
                     {
                         foreach (var c in courseList)
@@ -338,12 +338,15 @@ namespace EduCenterSrv
                             var cs = _dbContext.DbCourseSchedule.Where(a => a.LessonCode == c.LessonCode).FirstOrDefault();
                             cs.ApplyNum++;
 
+                           
+
+
                             //获取课程对应的老师
                             var cls = _dbContext.DBCourseInfoClass.Where(s => s.CourseCode == cs.CourseCode).FirstOrDefault();
                             var tecCode = cls.TecCode;
 
                             //更新老师课程
-                            tecSrv.UpdateTecCourse(tecCode, cs);
+                            tecSrv.UpdateTecCourse(tecCode, cs,DateTime.Now);
 
                         }
                         userSrv.AddUserCourse(courseList);
@@ -364,8 +367,6 @@ namespace EduCenterSrv
                 NLogHelper.ErrorTxt($"[UserSelectNewCourses]{ex.Message}");
                 throw ex;
             }
-           
-           
            
             
         }

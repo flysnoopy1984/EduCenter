@@ -8,17 +8,13 @@
     var selDay = null
     var selLesson = null;
     var selCode = null;
-
+    
     Init = function () {
-        //var times = $("#GridWeek tr").length ;
-        //CourseScheduleData = new Object();
-        //for (var i = 1; i < 8; i++) {
-        //    CourseScheduleData[i] = new Object();
-        //    for (var j = 1; j < times; j++) {
-        //        CourseScheduleData[i][j] = new Array();
-        //    }
-        //}
-
+      
+        var msg = GetUrlParam("msg", true);
+        if (msg != undefined) {
+            ShowInfo(msg, null, null, 2);
+        }
         $("#btnConfirm").on("click", NextStep);
 
         callAjax_Query(InitUrl, {}, InitCallBack, "");
@@ -283,40 +279,61 @@
 
     }
 
-    NextStep = function () {
-
-        var jsonObj = [];
-       
+    DoNextStep = function () {
+        var list = new Array();
         $(".SelectedCourseItems .Item").each(function () {
             var item = $(this);
-            var courseCode = item.find(".SelectCourseItemTitle").attr("CourseCode");
+            //    var courseCode = item.find(".SelectCourseItemTitle").attr("CourseCode");
             var list = item.find(".SelectCourseItemContent ul li");
             list.each(function () {
                 var li = $(this);
-                var day = li.attr("day");
-                var lesson = li.attr("lesson");
+                //var day = li.attr("day");
+                //var lesson = li.attr("lesson");
                 var lcode = li.attr("lcode");
 
-                var itemObj = {
-                    "courseCode": courseCode,
-                    "day": day,
-                    "lesson": lesson,
-                    "lcode": lcode
-                };
-                jsonObj.push(itemObj);
+                //var itemObj = {
+                //    "courseCode": courseCode,
+                //    "day": day,
+                //    "lesson": lesson,
+                //    "lcode": lcode
+                //};
+                list.push(lcode);
 
             })
         });
-        sessionStorage.clear();
-        if (jsonObj.length >0) {
-            SetSessonUserApplyCourse(jsonObj);
+        //  sessionStorage.clear();
+        if (list.length > 0) {
+            callAjax_Query(SubmitUrl, {
+                "lessonCodeList": list, "courseScheduleType": 0
+            }, NextCallBack, "", NextError);
 
-            window.location.href = "BuyCourseTime";
+            //  SetSessonUserApplyCourse(jsonObj);
+
+            //  window.location.href = "BuyCourseTime";
         }
         else {
-       
+
             ShowError("请点击选择课程");
         }  
+    }
+    NextStep = function () {
+
+        ShowConfirm("课程时间只能选择一次，请谨慎选择！", null, "red", DoNextStep, undefined,
+            "我再想想",
+            "我已确认"
+        );
+        //  var jsonObj = [];
+      
+    }
+    NextError = function (res) {
+        if (res.IntMsg == -1) {
+            window.location.href = "Login";
+        }
+    }
+    NextCallBack = function (res) {
+        ShowInfo("系统已安排您的课程", null, null, 2, function () {
+            window.location.href = "MyCourse";
+        })
     }
 
     InitCallBack = function (result) {

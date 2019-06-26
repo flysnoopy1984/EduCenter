@@ -20,14 +20,16 @@ namespace EduCenterWeb.Pages.User
     {
         private CourseSrv _CourseSrv;
         private UserSrv _UserSrv;
+        private BusinessSrv _BusinessSrv;
         public List<ECourseTime> CourseTimes { get; set; }
 
        
         public List<ECourseSchedule> CourseScheduleList;
-        public ApplyModel(CourseSrv courseSrv,UserSrv userSrv)
+        public ApplyModel(CourseSrv courseSrv,UserSrv userSrv,BusinessSrv businessSrv)
         {
             _CourseSrv = courseSrv;
             _UserSrv = userSrv;
+            _BusinessSrv = businessSrv;
         }
 
         public List<ECourseSchedule> GetAvaliableCourseList(int day,int lesson)
@@ -51,11 +53,7 @@ namespace EduCenterWeb.Pages.User
             var us = base.GetUserSession();
             if(us!=null)
             {
-                //if (_UserSrv.CheckHasUserCourse(us.OpenId, CourseScheduleType.Standard))
-                //{
-                  
-                //    HttpContext.Response.Redirect("/User/MyCourse?showMsg=1");
-                //}
+            
                 CourseTimes = StaticDataSrv.CourseTime.Values.ToList();
 
                 //获取所有课程信息，并整理Day,Lesson Hashtable
@@ -84,7 +82,7 @@ namespace EduCenterWeb.Pages.User
         }
 
       
-        public IActionResult OnPostSubmit(List<string> lessonCodeList)
+        public IActionResult OnPostSubmit(List<string> lessonCodeList,int courseScheduleType)
         {
             ResultNormal result = new ResultNormal();
             try
@@ -92,17 +90,30 @@ namespace EduCenterWeb.Pages.User
                 var us = base.GetUserSession(false);
                 if(us!=null)
                 {
+                    List<EUserCourse> ucList = new List<EUserCourse>();
                     foreach(var lc in lessonCodeList)
                     {
-                        EUserCourseLog eUserCourseLog = new EUserCourseLog();
-                        
+                        EUserCourse uc = new EUserCourse
+                        {
+                            CourseScheduleType = (CourseScheduleType)courseScheduleType,
+                            CreateDateTime = DateTime.Now,
+                            LessonCode = lc,
+                            UserCourseStatus = UserCourseStatus.Avaliable,
+                            UserOpenId = us.OpenId
+                        };
+                        ucList.Add(uc);
                     }
+                    _BusinessSrv.UserSelectNewCourses(us.OpenId, ucList);
                 }
                 else
                 {
                     result.IntMsg = -1;
                     result.ErrorMsg = "请重新登陆";
                 }
+            }
+            catch(EduException ex)
+            {
+                result.ErrorMsg = ex.Message;
             }
             catch (Exception ex)
             {

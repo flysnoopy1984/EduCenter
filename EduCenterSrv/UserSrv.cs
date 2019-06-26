@@ -121,27 +121,28 @@ namespace EduCenterSrv
         /// <summary>
         /// 根据用户，和类型获取可用的课程
         /// </summary>
-        public List<RUserCourse> GetUserCourseAvaliable(string OpenId, CourseScheduleType CourseScheduleType)
+        public List<RUserCourse> GetUserCourseAvaliable(string OpenId, CourseScheduleType CourseScheduleType, bool onlyAvalable = true)
        {
             var times = StaticDataSrv.CourseTime;
-          
-           var result = _dbContext.DBUserCoures.Join(_dbContext.DbCourseSchedule, uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourse
+
+            var sql = _dbContext.DBUserCoures.Join(_dbContext.DbCourseSchedule, uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourse
             {
-               UserOpenId = uc.UserOpenId,
-               CourseScheduleType = uc.CourseScheduleType,
-               UserCourseStatus = uc.UserCourseStatus,
-               Day = cs.Day,
-               LessonCode = cs.LessonCode,
-               Lesson = cs.Lesson,
-               Time = times[cs.Lesson].TimeRange,
-               CourseName = cs.CourseName,
+                UserOpenId = uc.UserOpenId,
+                CourseScheduleType = uc.CourseScheduleType,
+                UserCourseStatus = uc.UserCourseStatus,
+                Day = cs.Day,
+                LessonCode = cs.LessonCode,
+                Lesson = cs.Lesson,
+                Time = times[cs.Lesson].TimeRange,
+                CourseName = cs.CourseName,
 
             }).Where(a => a.UserOpenId == OpenId &&
-                    a.UserCourseStatus == UserCourseStatus.Avaliable &&
-                    a.CourseScheduleType == CourseScheduleType)
-              .OrderBy(a=>a.Day).ToList();
+                    a.CourseScheduleType == CourseScheduleType);
+            if (onlyAvalable)
+                sql = sql.Where(a => a.UserCourseStatus == UserCourseStatus.Avaliable);
+            sql = sql.OrderBy(a => a.Day);
 
-            return result;
+            return sql.ToList();
        }
 
         public List<RUserCurrentCourse> GetUserCouseLogByLessonCode(string lessonCode,string date)
@@ -165,10 +166,24 @@ namespace EduCenterSrv
                                  
         }
 
-        public bool CheckHasUserCourse(string OpenId, CourseScheduleType CourseScheduleType)
+        public bool CheckUserCanSelectCourse(string OpenId, CourseScheduleType courseScheduleType)
         {
-            int n =  _dbContext.DBUserCoures.Where(a => a.CourseScheduleType == CourseScheduleType && a.UserCourseStatus != UserCourseStatus.WaitingPay).Count();
-            return (n > 0);
+
+           EUserAccount userAccount = GetUserAccount(OpenId);
+           switch(courseScheduleType)
+            {
+                case CourseScheduleType.Group:
+                case CourseScheduleType.Standard:
+                    return userAccount.CanSelectCourse;
+                case CourseScheduleType.Summer:
+                case CourseScheduleType.Winter:
+                    return userAccount.CanSelectSummerWinterCourse;
+            }
+            return false;
+           // int n = _dbContext.DBUserCoures.Where(a => a.UserOpenId == OpenId &&
+           //a.CourseScheduleType == CourseScheduleType &&
+           //a.UserCourseStatus != UserCourseStatus.WaitingPay).Count();
+           // return (n > 0);
         }
 
         public RUserCourse GetCurrentUserCourse(string OpenId, CourseScheduleType CourseScheduleType)
@@ -260,6 +275,40 @@ namespace EduCenterSrv
         {
             _dbContext.DBUserCoures.AddRange(courseList);   
         }
+
+        public List<EUserCourse> GetUserCourseList(string openId, CourseScheduleType courseScheduleType, bool onlyAvalable = false)
+        {
+            var sql = _dbContext.DBUserCoures.Where(a => a.UserOpenId == openId &&
+            a.CourseScheduleType == courseScheduleType);
+            if (onlyAvalable == true)
+                sql = sql.Where(a => a.UserCourseStatus == UserCourseStatus.Avaliable);
+            return sql.ToList();
+        }
+
+        public CourseScheduleType GetCurrentCourseScheduleType(string openId)
+        {
+          
+            ECourseDateRange dr = StaticDataSrv.CourseDateRange.Where(a => a.StartDate <= DateTime.Today &&
+            a.EndDate >= DateTime.Today).FirstOrDefault();
+            if(dr!=null)
+            {
+                EUserAccount userAccount = GetUserAccount(openId);
+                if (dr.CourseScheduleType == CourseScheduleType.Summer &&
+                   userAccount.RemainSummerTime > 0)
+                    return CourseScheduleType.Summer;
+                else if (dr.CourseScheduleType == CourseScheduleType.Winter &&
+                   userAccount.RemainWinterTime > 0)
+                    return CourseScheduleType.Winter;
+
+            }
+            return CourseScheduleType.Standard;
+
+
+
+
+        }
+
+        
         #endregion
 
         #region UserCoureseLog
@@ -591,7 +640,6 @@ namespace EduCenterSrv
         }
         #endregion
 
-
         #region UserAccount
 
         public EUserAccount CreateNewUserAccount(string openId)
@@ -604,6 +652,8 @@ namespace EduCenterSrv
                 RemainSummerTime = 0,
                 RemainWinterTime = 0,
                 RemainCourseTime = 0,
+                CanSelectSummerWinterCourse = true,
+                CanSelectCourse = true,
               
                 UserOpenId = openId,
             };

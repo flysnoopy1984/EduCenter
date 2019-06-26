@@ -38,6 +38,12 @@ namespace EduCenterModel.User
 
         public DateTime WinterDeadLine { get; set; }
 
+        public bool CanSelectCourse { get; set; }
+
+        public bool CanSelectSummerWinterCourse { get; set; }
+
+        
+
 
 
     }

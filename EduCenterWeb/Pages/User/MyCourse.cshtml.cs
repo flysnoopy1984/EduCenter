@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using EduCenterModel.BaseEnum;
+using EduCenterModel.Course;
 using EduCenterModel.User;
 using EduCenterModel.User.Result;
 using EduCenterSrv;
@@ -15,6 +17,8 @@ namespace EduCenterWeb.Pages.User
     public class MyCourseModel : EduBaseAppPageModel
     {
         private UserSrv _UserSrv;
+
+        public Dictionary<int, ECourseTime> CourseTime { get; set; }
         public List<RUserCourse> UserCourseList { get; set; }
 
         public List<RUserCourseLog> UserCourseLogList { get; set; }
@@ -31,11 +35,31 @@ namespace EduCenterWeb.Pages.User
         }
         public void OnGet()
         {
+          
             var us = base.GetUserSession();
             if (us != null)
             {
+                CourseTime = StaticDataSrv.CourseTime;
                 UserCourseLogStatus = BaseEnumSrv.UserCourseLogStatusList;
-                UserCourseList = _UserSrv.GetUserCourseAvaliable(us.OpenId, CourseScheduleType.Standard);
+
+                CourseScheduleType courseScheduleType = _UserSrv.GetCurrentCourseScheduleType(us.OpenId);
+                UserCourseList = _UserSrv.GetUserCourseAvaliable(us.OpenId, courseScheduleType,false);
+                if(UserCourseList.Count == 0)
+                {
+                    if(courseScheduleType == CourseScheduleType.Standard || courseScheduleType== CourseScheduleType.Group)
+                    {
+                        string url = "/User/Apply?msg="+HttpUtility.UrlEncode( "您还没有选择每周课程");
+                        HttpContext.Response.Redirect(url);
+                        return;
+                    }
+                    else if(courseScheduleType == CourseScheduleType.Summer || courseScheduleType == CourseScheduleType.Winter)
+                    {
+                        string url = $"/User/ApplyWinterSummer?type={(int)courseScheduleType}&msg="+ HttpUtility.UrlEncode("您还没有选择假期课程");
+                        HttpContext.Response.Redirect(url);
+                        return;
+                    }
+                         
+                }
                 UserCourseLogList = _UserSrv.GetUserCourseLogHistory(us.OpenId, CourseScheduleType.Standard, 10);
 
                 //计算下一节课的时间
@@ -45,8 +69,8 @@ namespace EduCenterWeb.Pages.User
               
                 }
                 //获取用户下次的课程
-                 var userLog = _UserSrv.GetNextUserCourseLog(us.OpenId, CourseScheduleType.Standard);
-                 if(userLog.CourseDateTime == DateTime.Today.ToString("yyyy-MM-dd"))
+                var userLog = _UserSrv.GetNextUserCourseLog(us.OpenId, CourseScheduleType.Standard);
+                if(userLog.CourseDateTime == DateTime.Today.ToString("yyyy-MM-dd"))
                  {
                     CurrentCourse = new RUserCourseLog
                     {
@@ -56,7 +80,7 @@ namespace EduCenterWeb.Pages.User
                         UserCourseLogStatus = userLog.UserCourseLogStatus,
                     };
                  }
-                 else
+                else
                 {
                     NextCourse = new RUserCourseLog
                     {
@@ -66,19 +90,7 @@ namespace EduCenterWeb.Pages.User
                         UserCourseLogStatus = userLog.UserCourseLogStatus,
                     };
                 }
-             //   CurrentCourse = _UserSrv.GetCurrentUserCourse(us.OpenId, CourseScheduleType.Standard);
-
-                //if (CurrentCourse == null)
-                //{
-                //    //计算用户下节课
-                  
-                //    NextCourse = new RUserCourse
-                //    {
-                //        CourseName = userLog.CourseName,
-                //        Time = DateTime.Parse(userLog.CourseDateTime).ToString("MM月dd日")
-                //    };
-                    
-                //}
+          
             }
             else
                 UserCourseList = new List<RUserCourse>();
