@@ -11,10 +11,10 @@
 
     Init = function () {
 
-        var msg = GetUrlParam("msg", true);
-        if (msg != undefined) {
-            ShowInfo(msg, null, null, 2);
-        }
+        //var msg = GetUrlParam("msg", true);
+        //if (msg != undefined) {
+        //    ShowInfo(msg, null, null, 2);
+        //}
         courseScheduleType = GetUrlParam("type");
 
         $("#btnConfirm").on("click", NextStep);

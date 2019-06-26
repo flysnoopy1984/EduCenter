@@ -98,7 +98,7 @@ namespace EduCenterWeb.Pages.User
                             CourseScheduleType = (CourseScheduleType)courseScheduleType,
                             CreateDateTime = DateTime.Now,
                             LessonCode = lc,
-                            UserCourseStatus = UserCourseStatus.Avaliable,
+                        
                             UserOpenId = us.OpenId
                         };
                         ucList.Add(uc);

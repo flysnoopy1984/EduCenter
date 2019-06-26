@@ -11,10 +11,10 @@
     
     Init = function () {
       
-        var msg = GetUrlParam("msg", true);
-        if (msg != undefined) {
-            ShowInfo(msg, null, null, 2);
-        }
+        //var msg = GetUrlParam("msg", true);
+        //if (msg != undefined) {
+        //    ShowInfo(msg, null, null, 2);
+        //}
         $("#btnConfirm").on("click", NextStep);
 
         callAjax_Query(InitUrl, {}, InitCallBack, "");
@@ -279,50 +279,41 @@
 
     }
 
-    DoNextStep = function () {
-        var list = new Array();
+    DoNextStep = function (datalist) {
+
+        ShowConfirm("课程时间只能选择一次，请谨慎选择！", null, "red", function () {
+
+            callAjax_Query(SubmitUrl, {
+                "lessonCodeList": datalist, "courseScheduleType": 0
+            }, NextCallBack, "", NextError);
+
+        }, undefined,"我再想想","我已确认");
+      
+    }
+    NextStep = function () {
+
+      
+        var datalist = new Array();
         $(".SelectedCourseItems .Item").each(function () {
             var item = $(this);
-            //    var courseCode = item.find(".SelectCourseItemTitle").attr("CourseCode");
             var list = item.find(".SelectCourseItemContent ul li");
             list.each(function () {
                 var li = $(this);
-                //var day = li.attr("day");
-                //var lesson = li.attr("lesson");
+           
                 var lcode = li.attr("lcode");
 
-                //var itemObj = {
-                //    "courseCode": courseCode,
-                //    "day": day,
-                //    "lesson": lesson,
-                //    "lcode": lcode
-                //};
-                list.push(lcode);
+                datalist.push(lcode);
 
             })
         });
-        //  sessionStorage.clear();
-        if (list.length > 0) {
-            callAjax_Query(SubmitUrl, {
-                "lessonCodeList": list, "courseScheduleType": 0
-            }, NextCallBack, "", NextError);
-
-            //  SetSessonUserApplyCourse(jsonObj);
-
-            //  window.location.href = "BuyCourseTime";
+  
+        if (datalist.length > 0) {
+            DoNextStep(datalist);
         }
         else {
 
             ShowError("请点击选择课程");
         }  
-    }
-    NextStep = function () {
-
-        ShowConfirm("课程时间只能选择一次，请谨慎选择！", null, "red", DoNextStep, undefined,
-            "我再想想",
-            "我已确认"
-        );
-        //  var jsonObj = [];
       
     }
     NextError = function (res) {

@@ -9,7 +9,7 @@
         laydate.render({
             elem: '.DateInput',
             eventElem: '#btn_DatePick',
-            min:0,
+            min:1,
             trigger: 'click',
             theme: 'molv',
             done: function (value, date) {

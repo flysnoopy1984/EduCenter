@@ -45,7 +45,7 @@ namespace EduCenterWeb.Pages.User
                 var us = base.GetUserSession(false);
                 if(us !=null)
                 {
-                    result.List = _UserSrv.GetUserCourseByDate(us.OpenId, date, CourseScheduleType.Standard);
+                    result.List = _UserSrv.GetUserCourseByDateForLeave(us.OpenId, date, CourseScheduleType.Standard);
                 }
                 else
                 {

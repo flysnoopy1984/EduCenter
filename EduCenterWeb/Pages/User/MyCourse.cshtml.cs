@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using EduCenterCore.Common.Helper;
 using EduCenterModel.BaseEnum;
+using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterModel.User;
 using EduCenterModel.User.Result;
@@ -19,7 +21,7 @@ namespace EduCenterWeb.Pages.User
         private UserSrv _UserSrv;
 
         public Dictionary<int, ECourseTime> CourseTime { get; set; }
-        public List<RUserCourse> UserCourseList { get; set; }
+      
 
         public List<RUserCourseLog> UserCourseLogList { get; set; }
 
@@ -42,74 +44,85 @@ namespace EduCenterWeb.Pages.User
                 CourseTime = StaticDataSrv.CourseTime;
                 UserCourseLogStatus = BaseEnumSrv.UserCourseLogStatusList;
 
-                CourseScheduleType courseScheduleType = _UserSrv.GetCurrentCourseScheduleType(us.OpenId);
-                UserCourseList = _UserSrv.GetUserCourseAvaliable(us.OpenId, courseScheduleType,false);
-                if(UserCourseList.Count == 0)
-                {
-                    if(courseScheduleType == CourseScheduleType.Standard || courseScheduleType== CourseScheduleType.Group)
-                    {
-                        string url = "/User/Apply?msg="+HttpUtility.UrlEncode( "您还没有选择每周课程");
-                        HttpContext.Response.Redirect(url);
-                        return;
-                    }
-                    else if(courseScheduleType == CourseScheduleType.Summer || courseScheduleType == CourseScheduleType.Winter)
-                    {
-                        string url = $"/User/ApplyWinterSummer?type={(int)courseScheduleType}&msg="+ HttpUtility.UrlEncode("您还没有选择假期课程");
-                        HttpContext.Response.Redirect(url);
-                        return;
-                    }
-                         
-                }
+              
+                //UserCourseList = _UserSrv.GetUserCourseAvaliable(us.OpenId, courseScheduleType);
+                //if(UserCourseList.Count == 0)
+                //{
+                //    if(courseScheduleType == CourseScheduleType.Standard || courseScheduleType== CourseScheduleType.Group)
+                //    {
+                //        string url = "/User/Apply?msg="+HttpUtility.UrlEncode( "您还没有选择每周课程");
+                //        HttpContext.Response.Redirect(url);
+                //        return;
+                //    }
+                //    else if(courseScheduleType == CourseScheduleType.Summer || courseScheduleType == CourseScheduleType.Winter)
+                //    {
+                //        string url = $"/User/ApplyWinterSummer?type={(int)courseScheduleType}&msg="+ HttpUtility.UrlEncode("您还没有选择假期课程");
+                //        HttpContext.Response.Redirect(url);
+                //        return;
+                //    }       
+                //}
+             
+
                 UserCourseLogList = _UserSrv.GetUserCourseLogHistory(us.OpenId, CourseScheduleType.Standard, 10);
 
-                //计算下一节课的时间
-                foreach (var course in UserCourseList)
-                {
-                    course.NextCourseDate = DateSrv.GetNextCourseDate(course.Day);
+                ////计算下一节课的时间
+                //foreach (var course in UserCourseList)
+                //{
+                //    course.NextCourseDate = DateSrv.GetNextCourseDate(course.Day);
               
-                }
-                //获取用户下次的课程
-                var userLog = _UserSrv.GetNextUserCourseLog(us.OpenId, CourseScheduleType.Standard);
-                if(userLog.CourseDateTime == DateTime.Today.ToString("yyyy-MM-dd"))
-                 {
-                    CurrentCourse = new RUserCourseLog
-                    {
-                        CourseName = userLog.CourseName,
-                        CourseTime = userLog.CourseTime,
-                        CourseDateTime = userLog.CourseDateTime,
-                        UserCourseLogStatus = userLog.UserCourseLogStatus,
-                    };
-                 }
-                else
-                {
-                    NextCourse = new RUserCourseLog
-                    {
-                        CourseName = userLog.CourseName,
-                        CourseTime = DateTime.Parse(userLog.CourseDateTime).ToString("MM月dd日"),
-                        CourseDateTime = userLog.CourseDateTime,
-                        UserCourseLogStatus = userLog.UserCourseLogStatus,
-                    };
-                }
+                //}
+                ////获取用户下次的课程
+                //var userLog = _UserSrv.GetNextUserCourseLog(us.OpenId, CourseScheduleType.Standard);
+                //if(userLog.CourseDateTime == DateTime.Today.ToString("yyyy-MM-dd"))
+                // {
+                //    CurrentCourse = new RUserCourseLog
+                //    {
+                //        CourseName = userLog.CourseName,
+                //        CourseTime = userLog.CourseTime,
+                //        CourseDateTime = userLog.CourseDateTime,
+                //        UserCourseLogStatus = userLog.UserCourseLogStatus,
+                //    };
+                // }
+                //else
+                //{
+                //    NextCourse = new RUserCourseLog
+                //    {
+                //        CourseName = userLog.CourseName,
+                //        CourseTime = DateTime.Parse(userLog.CourseDateTime).ToString("MM月dd日"),
+                //        CourseDateTime = userLog.CourseDateTime,
+                //        UserCourseLogStatus = userLog.UserCourseLogStatus,
+                //    };
+                //}
           
             }
-            else
-                UserCourseList = new List<RUserCourse>();
+            //else
+            //    UserCourseList = new List<RUserCourse>();
         }
 
-        public string GetDayIconFont(int day)
+        public IActionResult OnPostInitData()
         {
-            switch(day)
+            ResultList<RUserCourse> result = new ResultList<RUserCourse>();
+            try
             {
-                case 1: return "#icon-zhouyi";
-                case 2: return "#icon-zhouer";
-                case 3: return "#icon-zhousan";
-                case 4: return "#icon-zhousi";
-                case 5: return "#icon-zhouwu";
-                case 6: return "#icon-zhouliu";
-                case 7: return "#icon-zhouri";
+                var us = GetUserSession(false);
+                if(us !=null)
+                {
+                    CourseScheduleType courseScheduleType = _UserSrv.GetCurrentCourseScheduleType(us.OpenId);
+                    result.List = _UserSrv.GetUserCourseAvaliable(us.OpenId, courseScheduleType);
+                    result.IntMsg = (int)courseScheduleType;
+                }
+                else
+                {
+                    result.IntMsg = -1;
+                    result.ErrorMsg = "需要重新登陆";
+                }
             }
-            return "";
-            
+            catch (Exception ex)
+            {
+                result.ErrorMsg = "未能获取数据！请联系客服或稍后再试";
+                NLogHelper.ErrorTxt(ex.Message);
+            }
+            return new JsonResult(result);
         }
     }
 }

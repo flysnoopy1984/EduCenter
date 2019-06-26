@@ -33,14 +33,7 @@ namespace EduCenterSrv
         //    return sql;
         //}
 
-        /// <summary>
-        /// 删除等待支付的用户课程
-        /// </summary>
-        public static string sql_DeleteWaitingPayUserCourse(string userOpenId)
-        {
-            string sql = $"delete from UserCourse where UserOpenId='{userOpenId}' and UserCourseStatus={(int)UserCourseStatus.WaitingPay}";
-            return sql;
-        }
+   
 
 
         /// <summary>
@@ -202,55 +195,9 @@ namespace EduCenterSrv
             return true;
         }
 
-        /// <summary>
-        /// 将等待支付的课程更新到用户课程中
-        /// </summary>
-        /// <returns>返回新增的课程</returns>
-        private List<string> UpdateUserCourse_Old(string userOpenId)
-        {
-            List<string> result = new List<string>();
-
-            List<EUserCourse> allUserCourse = _dbContext.DBUserCoures.Where(a=>a.UserOpenId == userOpenId).ToList();
-            List<EUserCourse> curList = allUserCourse.Where(a=>a.UserCourseStatus != UserCourseStatus.WaitingPay).ToList();
-            List<EUserCourse> waitList = allUserCourse.Where(a => a.UserCourseStatus == UserCourseStatus.WaitingPay).ToList();
-
-            foreach(var waitCourse in waitList)
-            {
-                var curCourse = curList.Where(a => a.LessonCode == waitCourse.LessonCode).FirstOrDefault();
-                if (curCourse == null)
-                {
-                    waitCourse.UserCourseStatus = UserCourseStatus.Avaliable;
-                    result.Add(waitCourse.LessonCode);
-                }  
-                else
-                {
-                    if(curCourse.UserCourseStatus == UserCourseStatus.OutofData)
-                        curCourse.UserCourseStatus = UserCourseStatus.Avaliable;
-
-                    _dbContext.DBUserCoures.Remove(waitCourse);
-                }                   
-            }
-            return result;
-
-        }
 
        
-        private void UpdateUserCourseToAvaliable(string userOpenId)
-        {
-           
-            List<EUserCourse> allUserCourse = _dbContext.DBUserCoures.Where(a => a.UserOpenId == userOpenId && 
-                                                                            a.UserCourseStatus != UserCourseStatus.WaitingPay
-                                                                ).ToList();
-
-            if(allUserCourse.Count>0)
-            {
-                foreach (var course in allUserCourse)
-                {
-                    course.UserCourseStatus = UserCourseStatus.Avaliable;
-                }
-                _dbContext.SaveChanges();
-            }
-        }
+      
 
       
         /// <summary>
@@ -326,7 +273,8 @@ namespace EduCenterSrv
                 {
                     UserSrv userSrv = new UserSrv(_dbContext);
                     TecSrv tecSrv = new TecSrv(_dbContext);
-                    if (userSrv.CheckUserCanSelectCourse(openId, courseList[0].CourseScheduleType))
+                    CourseScheduleType courseScheduleType = courseList[0].CourseScheduleType;
+                    if (!userSrv.CheckUserCanSelectCourse(openId, courseScheduleType))
                         throw new EduException("无法选择，您已经选择过此类课程!，如果疑问，请联系客服");
                     else
                     {
@@ -338,9 +286,6 @@ namespace EduCenterSrv
                             var cs = _dbContext.DbCourseSchedule.Where(a => a.LessonCode == c.LessonCode).FirstOrDefault();
                             cs.ApplyNum++;
 
-                           
-
-
                             //获取课程对应的老师
                             var cls = _dbContext.DBCourseInfoClass.Where(s => s.CourseCode == cs.CourseCode).FirstOrDefault();
                             var tecCode = cls.TecCode;
@@ -350,6 +295,7 @@ namespace EduCenterSrv
 
                         }
                         userSrv.AddUserCourse(courseList);
+                        userSrv.UpdateCanSelectCourse(openId, courseScheduleType, false);
                     }
                     _dbContext.SaveChanges();
 

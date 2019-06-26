@@ -4,17 +4,16 @@
     ViewData["Title"] = "CourseSchedule";
     Layout = "~/Pages/Shared/_EduMainApp.cshtml";
 }
+@using EduCenterModel.User;
 @Html.AntiForgeryToken()
-
-
-
-<script src="~/js/EduLib/Common.js"></script>
-<script type="text/javascript" src="~/lib/iconfont.js"></script>
 
 <link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
 <script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
+<script src="~/js/EduLib/EditHelper.js"></script>
+<script src="~/js/EduLib/Common.js"></script>
 
-<script src="~/js/Wap/User/UserCourse.js"></script>
+<script src="~/js/Wap/User/MyCourse.js"></script>
 
 <style type="text/css">
     .MainContainer {
@@ -28,9 +27,7 @@
 
     .Title {
         color: #ff6a00;
-         background-color: #96dffd;
-   
-       
+        background-color: #96dffd;
     }
 
     .CourseArea {
@@ -39,188 +36,182 @@
         width: 90%;
     }
 
-.CourseArea .CourseRow {
-display: flex;
-justify-content: space-between;
-width: 100%;
-/*border-bottom:groove 1px #808080;*/
-margin-bottom: 30px;
-}
+        .CourseArea .CourseRow {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            /*border-bottom:groove 1px #808080;*/
+            margin-bottom: 30px;
+        }
 
-.CourseArea .CourseRow .CourseContent {
-display: flex;
-width: 75%;
-padding-left: 8px;
-margin-left: 8px;
-flex-direction: column;
-justify-content: space-evenly;
-border-left: groove;
-}
+            .CourseArea .CourseRow .CourseContent {
+                display: flex;
+                width: 75%;
+                padding-left: 8px;
+                margin-left: 8px;
+                flex-direction: column;
+                justify-content: space-evenly;
+                border-left: groove;
+            }
 
-.CourseArea .CourseRow .CourseContent .OneCourse {
-height: 65px;
-display: flex;
-flex-direction: column;
-justify-content: space-evenly;
-margin-bottom:15px;
-}
+                .CourseArea .CourseRow .CourseContent .OneCourse {
+                    height: 65px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-evenly;
+                    margin-bottom: 15px;
+                }
 
-.CourseArea .CourseRow .CourseContent .OneCourse .CourseInfo {
-display: flex;
-justify-content: space-between;
-}
+                    .CourseArea .CourseRow .CourseContent .OneCourse .CourseInfo {
+                        display: flex;
+                        justify-content: space-between;
+                    }
 
-.CourseArea .CourseRow .CourseContent .OneCourse .CourseInfo .CourseName {
-    font-size: 18px;
-    font-weight: bold;
-    color: #8738ee;
-}
+                        .CourseArea .CourseRow .CourseContent .OneCourse .CourseInfo .CourseName {
+                            font-size: 18px;
+                            font-weight: bold;
+                            color: #8738ee;
+                        }
 
-.CourseArea .CourseRow .CourseContent .OneCourse .CourseInfo .CourseTime {
-    font-size: 16px;
-    font-weight: bold;
-    color: #04616e;
-}
+                        .CourseArea .CourseRow .CourseContent .OneCourse .CourseInfo .CourseTime {
+                            font-size: 16px;
+                            font-weight: bold;
+                            color: #04616e;
+                        }
 
-.CourseArea .CourseRow .CourseContent .OneCourse .CourseDetail {
-display: flex;
-width: 100%;
-justify-content: space-between;
-/*font-weight: bold;*/
-color: #646363;
-flex-direction:column;
-}
-.CourseArea .CourseRow .CourseContent .OneCourse .CourseDetail div{
-    display:flex;
-    justify-content:space-between;
-}
+                    .CourseArea .CourseRow .CourseContent .OneCourse .CourseDetail {
+                        display: flex;
+                        width: 100%;
+                        justify-content: space-between;
+                        /*font-weight: bold;*/
+                        color: #646363;
+                        flex-direction: column;
+                    }
+
+                        .CourseArea .CourseRow .CourseContent .OneCourse .CourseDetail div {
+                            display: flex;
+                            justify-content: space-between;
+                        }
 
 
-.CourseArea .NextCourse {
-    display: flex;
-    justify-content: space-between;
-}
+        .CourseArea .NextCourse {
+            display: flex;
+            justify-content: space-between;
+        }
 
-.CourseArea .NextCourse .CourseInfo .CourseName {
-    color: #f57b7b;
-    font-weight: bold;
-    margin-bottom: 10px;
-    font-size:18px;
-}
+            .CourseArea .NextCourse .CourseInfo .CourseName {
+                color: #f57b7b;
+                font-weight: bold;
+                margin-bottom: 10px;
+                font-size: 18px;
+            }
 
-.CourseArea .NextCourse  .CourseInfo .CourseTime {
-    font-weight: bold;
-    font-size: 16px;
-    color: #00288d;
-}
+            .CourseArea .NextCourse .CourseInfo .CourseTime {
+                font-weight: bold;
+                font-size: 16px;
+                color: #00288d;
+            }
 
-.CourseArea .CurrentCourse {
-    display: flex;
-    justify-content: space-between;
-    height:90px;
-}
+        .CourseArea .CurrentCourse {
+            display: flex;
+            justify-content: space-between;
+            height: 90px;
+        }
 
-.CourseArea .CurrentCourse .CourseInfo{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-.CourseArea .CurrentCourse .UserOption{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
+            .CourseArea .CurrentCourse .CourseInfo {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
 
-.CourseArea .CurrentCourse .CourseInfo .CourseName {
-    color: #27af00;
-    font-weight: bold;
-    margin-bottom: 10px;
-    font-size:18px;
-}
+            .CourseArea .CurrentCourse .UserOption {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+            }
 
-.CourseArea .CurrentCourse .CourseInfo .CourseTime {
-    /*font-weight: bold;*/
-    font-size: 16px;
-    color: #00288d;
-}
+            .CourseArea .CurrentCourse .CourseInfo .CourseName {
+                color: #27af00;
+                font-weight: bold;
+                margin-bottom: 10px;
+                font-size: 18px;
+            }
 
-.CourseArea .SplitLine {
-}
+            .CourseArea .CurrentCourse .CourseInfo .CourseTime {
+                /*font-weight: bold;*/
+                font-size: 16px;
+                color: #00288d;
+            }
 
-.CourseLog {
-    width: 100%;
-    margin-top: 40px;
-    overflow-y: auto;
-    min-height: 200px;
-}
+        .CourseArea .SplitLine {
+        }
 
-.SubTitle {
-    display: flex;
-    justify-content: space-between;
-    width: 90%;
-}
+    .CourseLog {
+        width: 100%;
+        margin-top: 40px;
+        overflow-y: auto;
+        min-height: 200px;
+    }
 
-.SubTitleName {
-    padding-left: 5px;
-    padding-bottom: 8px;
-    color: #3d86ff;
-    font-weight: bold;
-    margin-bottom: 10px;
-    margin-left: 10px;
-    border-bottom: solid 1px black;
-}
+    .SubTitle {
+        display: flex;
+        justify-content: space-between;
+        width: 90%;
+    }
 
-.CourseLog .LogTable {
-    width: 95%;
-    margin-left: 10px;
-}
-.CourseStatus{
-    color: #12e209;
-    font-weight: bold;
-    font-size: 16px;
-}
-#CourseTable{
+    .SubTitleName {
+        padding-left: 5px;
+        padding-bottom: 8px;
+        color: #3d86ff;
+        font-weight: bold;
+        margin-bottom: 10px;
+        margin-left: 10px;
+        border-bottom: solid 1px black;
+    }
 
-    width:100%;
-    margin-bottom:20px;
-}
+    .CourseLog .LogTable {
+        width: 95%;
+        margin-left: 10px;
+    }
 
-#CourseTable tr th{
-    border:solid 1px #646363;
-    text-align:center;
+    .CourseStatus {
+        color: #12e209;
+        font-weight: bold;
+        font-size: 16px;
+    }
 
-}
+    #CourseTable {
+        width: 100%;
+        margin-bottom: 20px;
+    }
 
-#CourseTable tr td{
-     border:solid 1px #646363;
-     text-align:center;
-     height:50px;   
-     font-size:12px;
-}
-.CourseCellContainer{
-       height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.CourseCell{
-       width: 55%;
-    height: 90%;
-    border-radius: 6px;
-    padding-top: 4px;
-}
+        #CourseTable tr th {
+            border: solid 1px #646363;
+            text-align: center;
+        }
 
-</style>
-<style>
-    .DayIcon {
-        width: 60px;
-        height: 80px;
-        vertical-align: -0.15em;
-        fill: currentColor;
-        overflow: hidden;
-        /*color:#00d31b;*/
+        #CourseTable tr td {
+            border: solid 1px #646363;
+            text-align: center;
+            height: 50px;
+            font-size: 12px;
+        }
+
+    .CourseCellContainer {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .CourseCell {
+        width: 75%;
+        height: 90%;
+        border-radius: 6px;
+        padding-top: 4px;
     }
 </style>
+
 
 <div class="MainContainer">
     <div class="Title">
@@ -243,20 +234,16 @@ flex-direction:column;
             @foreach (var time in Model.CourseTime)
             {
                 <tr>
-                    <td>@time.Value.TimeRange.Substring(0,5)</td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <div class="CourseCellContainer">
-                            <div class="CourseCell bg-primary">美术</div>
-                        </div>
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>@time.Value.TimeRange.Substring(0, 5)</td>
+                    <td day="1" lesson="@time.Value.Lesson"></td>
+                    <td day="2" lesson="@time.Value.Lesson"></td>
+                    <td day="3" lesson="@time.Value.Lesson"></td>
+                    <td day="4" lesson="@time.Value.Lesson"></td>
+                    <td day="5" lesson="@time.Value.Lesson"></td>
+                    <td day="6" lesson="@time.Value.Lesson"></td>
+                    <td day="7" lesson="@time.Value.Lesson"></td>
                 </tr>
-                
+
             }
 
 
@@ -335,43 +322,22 @@ flex-direction:column;
     }
 
 </div>
+<div id="HideData" style="display:none">
 
+    <div class="CourseCellContainer">
+        <div class="CourseCell bg-primary"></div>
+    </div>
 
-@*<div class="CourseRow">
-        <div class="CourseDay">
-            <svg class="DayIcon" aria-hidden="true">
-                <use xlink:href="#icon-zhouyi"></use>
-            </svg>
+    <div class="CurrentCourse">
+        <div class="CourseInfo">
+            <div class="CourseName">当前：</div>
+            <div class="CourseTime">时间：</div>
         </div>
-        <div class="CourseContent">
-            <div class="OneCourse">
-                <div class="CourseInfo">
-                    <div class="CourseName">书法1</div>
-                    <div class="CourseTime">16：30-20:00</div>
-                </div>
-                <div class="CourseDetail">
-
-                    <div>上次开课：2019-10-6</div>
-
-                    <div>缺席</div>
-                </div>
-            </div>
-
-            <div class="OneCourse">
-                <div class="CourseInfo">
-                    <div class="CourseName">书法1</div>
-                    <div class="CourseTime">16：30-20:00</div>
-                </div>
-                <div class="CourseDetail">
-
-                    <div>上次开课：2019-10-6</div>
-
-                    <div class="SignIn">签到</div>
-                </div>
-            </div>
+        <div class="UserOption">
+            <input id="btn_Leave" type="button" class="btn btn-warning" date="" value="我要请假" />
+            <div></div>
+            <input id="btn_Sign" type="button" class="btn btn-danger" date="" value="我要签到" />
         </div>
 
-
-    </div>*@
-
-
+    </div>
+</div>

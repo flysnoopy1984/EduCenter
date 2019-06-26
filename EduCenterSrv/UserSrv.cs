@@ -51,6 +51,8 @@ namespace EduCenterSrv
             return sql;
         }
 
+       
+
         #endregion
 
         #region UserInfo
@@ -121,7 +123,7 @@ namespace EduCenterSrv
         /// <summary>
         /// 根据用户，和类型获取可用的课程
         /// </summary>
-        public List<RUserCourse> GetUserCourseAvaliable(string OpenId, CourseScheduleType CourseScheduleType, bool onlyAvalable = true)
+        public List<RUserCourse> GetUserCourseAvaliable(string OpenId, CourseScheduleType CourseScheduleType)
        {
             var times = StaticDataSrv.CourseTime;
 
@@ -129,7 +131,6 @@ namespace EduCenterSrv
             {
                 UserOpenId = uc.UserOpenId,
                 CourseScheduleType = uc.CourseScheduleType,
-                UserCourseStatus = uc.UserCourseStatus,
                 Day = cs.Day,
                 LessonCode = cs.LessonCode,
                 Lesson = cs.Lesson,
@@ -138,8 +139,7 @@ namespace EduCenterSrv
 
             }).Where(a => a.UserOpenId == OpenId &&
                     a.CourseScheduleType == CourseScheduleType);
-            if (onlyAvalable)
-                sql = sql.Where(a => a.UserCourseStatus == UserCourseStatus.Avaliable);
+         
             sql = sql.OrderBy(a => a.Day);
 
             return sql.ToList();
@@ -202,13 +202,12 @@ namespace EduCenterSrv
                 UserOpenId = uc.UserOpenId,
                 StartTime = times[cs.Lesson].StartTime,
                 EndTime = times[cs.Lesson].EndTime,
-                UserCourseStatus = uc.UserCourseStatus,
+              
                 CourseScheduleType = uc.CourseScheduleType
             })
             .Where(a => a.Day == dayofWeek &&
             a.CourseScheduleType == CourseScheduleType &&
             a.UserOpenId == OpenId &&
-            a.UserCourseStatus == UserCourseStatus.Avaliable &&
             a.StartTime<=h &&
             a.EndTime>=h).FirstOrDefault();
             return result;
@@ -227,63 +226,12 @@ namespace EduCenterSrv
             return result;
         }
 
-        public RUserCourse GetUserNextCourse(string OpenId, CourseScheduleType CourseScheduleType, List<RUserCourse> userCourses = null)
-        {
-            if (userCourses == null)
-                userCourses = GetUserCourseAvaliable(OpenId, CourseScheduleType);
-            RUserCourse result = null;
-
-            if (userCourses.Count > 0)
-            {
-                result = userCourses[0];
-                if(userCourses.Count>1)
-                {
-                    int curDay = DateSrv.GetDayOfWeek(DateTime.Now);
-                    int minDiff = Math.Abs(result.Day - curDay);
-
-                    List<RUserCourse> TempList = new List<RUserCourse>();
-                    TempList.Add(result);
-
-                    for (int i = 1; i < userCourses.Count; i++)
-                    {
-                        int diff = Math.Abs(userCourses[i].Day - curDay);
-                        if (diff < minDiff)
-                        {
-                            minDiff = diff;
-                            result = userCourses[i];
-                            TempList.Clear();
-                        }
-                        else if(diff == minDiff)
-                        {
-                            TempList.Add(userCourses[i]);
-                        }    
-                    }
-                    if(TempList.Count>1)
-                    {
-                        result = TempList.OrderBy(a => a.Lesson).FirstOrDefault();
-                    }
-                }
-                result.NextCourseDate = DateSrv.GetNextCourseDate(result.Day);
-              
-            }
-
-            return result;
-         
-        }
-
+      
         public void AddUserCourse(List<EUserCourse> courseList)
         {
             _dbContext.DBUserCoures.AddRange(courseList);   
         }
 
-        public List<EUserCourse> GetUserCourseList(string openId, CourseScheduleType courseScheduleType, bool onlyAvalable = false)
-        {
-            var sql = _dbContext.DBUserCoures.Where(a => a.UserOpenId == openId &&
-            a.CourseScheduleType == courseScheduleType);
-            if (onlyAvalable == true)
-                sql = sql.Where(a => a.UserCourseStatus == UserCourseStatus.Avaliable);
-            return sql.ToList();
-        }
 
         public CourseScheduleType GetCurrentCourseScheduleType(string openId)
         {
@@ -308,7 +256,135 @@ namespace EduCenterSrv
 
         }
 
+
+        public RUserShowCourse GetNextUserCourse(string openId,CourseScheduleType courseScheduleType)
+        {
+            var time = StaticDataSrv.CourseTime;
+            //按Day，Lesson排序获取用户所有课程
+            var sql = from uc in _dbContext.DBUserCoures
+                      join cs in _dbContext.DbCourseSchedule on uc.LessonCode equals cs.LessonCode
+                      where uc.UserOpenId == openId && uc.CourseScheduleType == courseScheduleType
+                      orderby cs.Day, cs.Lesson
+                      select new RUserCourse
+                      {
+                          Day = cs.Day,
+                          Lesson = cs.Lesson,
+                          LessonCode = cs.LessonCode,
+                          CourseName = cs.CourseName,
+                          StartTime= time[cs.Lesson].StartTime,
+                          EndTime = time[cs.Lesson].EndTime,
+                          UserOpenId = uc.UserOpenId,
+                      };
+            
+            var list = sql.ToList();
+
+            return RecursionToGetAvaliableCourse(list, DateTime.Now,new RUserShowCourse(true));
+        }
+
+      
+      
         
+        private RUserShowCourse RecursionToGetAvaliableCourse(List<RUserCourse> list,DateTime date, RUserShowCourse result)
+        {
+            var dayofWeek = DateSrv.GetDayOfWeek(date);
+            
+            RUserCourse gotCourse = null;
+            DateTime gotDate = date;
+            //先看今天有没有课
+            var todayCourses = list.Where(a => a.Day == dayofWeek).ToList();
+            if (todayCourses.Count > 0)
+            {
+                var curHour = DateSrv.GetLessonHour(date);
+                //先看当前时间有没有课
+                gotCourse = todayCourses.Where(a => a.StartTime <= curHour && a.EndTime >= curHour).FirstOrDefault();
+                //没有,则比较开始时间大于现在时间的
+                if (gotCourse == null)
+                    gotCourse = todayCourses.Where(a => a.StartTime >= curHour).FirstOrDefault();
+                
+            }
+            if (gotCourse == null)
+            {
+                //找本周后几天的课
+                gotCourse = list.Where(a => a.Day > dayofWeek).OrderBy(a => a.Lesson).FirstOrDefault();
+                //如果没找到，则为下周第一节课
+                if (gotCourse == null)
+                {
+                    gotCourse = list[0];
+                    int diff = 7-(dayofWeek - gotCourse.Day);
+                    gotDate = gotDate.AddDays(diff);
+                }  
+                else
+                {
+                    int diff = gotCourse.Day - dayofWeek;
+                    gotDate = gotDate.AddDays(diff);
+                }
+            }
+            //找到显示的课程,尝试寻找课程记录
+            var uLog = _dbContext.DBUserCourseLog.Where(a => a.UserOpenId == list[0].UserOpenId &&
+                       a.LessonCode == gotCourse.LessonCode &&
+                       a.CourseDateTime == gotDate.ToString("yyyy-MM-dd")).FirstOrDefault();
+
+
+            CourseSkipReason courseSkip = CheckGotCourseIsAvalable(gotDate, uLog);
+            if(courseSkip== CourseSkipReason.NoSkip)
+            {
+                if (uLog == null)
+                {
+                    result.UserCourseLogStatus = UserCourseLogStatus.PreNext;
+                    TimeSpan ts = gotDate.Date - DateTime.Today;
+                    if(ts.Days>=1)
+                        result.CanLeave = true;
+
+                    //  result.CanLeave = true;
+                    // result.CanSign = true;
+                }
+                else
+                {
+                    result.UserCourseLogStatus = uLog.UserCourseLogStatus;
+                }
+                result.NextCourseDate = gotDate.ToString("yyyy-MM-dd");
+                result.NextCourseName = gotCourse.CourseName;
+                result.NextLesson = gotCourse.Lesson;
+            }
+            else
+            {
+                result.CourseSkipList.Add(gotDate.ToString("yyyy-MM-dd"), courseSkip);
+                date = date.AddHours(1.5);
+
+                result = RecursionToGetAvaliableCourse(list, date, result);
+            }
+
+            return result;
+
+        }
+
+        /// <summary>
+        /// 用户请假，老师请假，国假日
+        /// </summary>
+        /// <returns></returns>
+        private CourseSkipReason CheckGotCourseIsAvalable(DateTime courseDate,EUserCourseLog uLog)
+        {
+            if (DateSrv.IsHoliday(courseDate))
+                return CourseSkipReason.Holiday;
+
+            //var uLog =  _dbContext.DBUserCourseLog.Where(a => a.UserOpenId == openId && 
+            //a.LessonCode == LessonCode && 
+            //a.CourseDateTime == courseDate.ToString("yyyy-MM-dd") &&
+            //(a.UserCourseLogStatus == UserCourseLogStatus.Leave || a.UserCourseLogStatus == UserCourseLogStatus.TecLeave)).FirstOrDefault();
+
+            if (uLog == null)
+                return CourseSkipReason.NoSkip;
+            if (uLog.UserCourseLogStatus == UserCourseLogStatus.TecLeave)
+                return CourseSkipReason.TecLeave;
+            if (uLog.UserCourseLogStatus == UserCourseLogStatus.Leave)
+                return CourseSkipReason.UserLeave;
+
+            return CourseSkipReason.NoSkip;
+
+        }
+
+
+
         #endregion
 
         #region UserCoureseLog
@@ -575,15 +651,12 @@ namespace EduCenterSrv
             return result;
         }
 
-        public List<RUserCourseLog> GetUserCourseByDate(string OpenId,string date, CourseScheduleType courseScheduleType)
+        public List<RUserCourseLog> GetUserCourseByDateForLeave(string OpenId,string date, CourseScheduleType courseScheduleType)
         {
             var dayofweek = DateSrv.GetDayOfWeek(DateTime.Parse(date));
 
             List<RUserCourseLog> result = null;
-            //var quc = _dbContext.DBUserCoures.Where(a => a.UserOpenId == OpenId && a.CourseScheduleType == courseScheduleType);
-            //var qulog = _dbContext.DBUserCourseLog.Where(a => a.UserOpenId == OpenId &&
-            //a.CourseScheduleType == courseScheduleType &&
-            //a.CourseDateTime == date);
+       
             var times = StaticDataSrv.CourseTime;
 
             var efSql = from uc in _dbContext.DBUserCoures
@@ -592,7 +665,10 @@ namespace EduCenterSrv
                         join cs in _dbContext.DbCourseSchedule on uc.LessonCode equals cs.LessonCode
                         where uc.UserOpenId == OpenId &&
                               uc.CourseScheduleType == courseScheduleType &&
-                              cs.Day == dayofweek
+                              cs.Day == dayofweek &&
+                              ucul.UserCourseLogStatus != UserCourseLogStatus.SignIn &&
+                              ucul.UserCourseLogStatus != UserCourseLogStatus.Absent
+
                         select new RUserCourseLog
                         {
                             CourseScheduleType = uc.CourseScheduleType,
@@ -669,6 +745,16 @@ namespace EduCenterSrv
                 _dbContext.SaveChanges();
             }
             return result;
+        }
+
+        public void UpdateCanSelectCourse(string openId,CourseScheduleType courseScheduleType,bool isCan)
+        {
+            var userAccount = GetUserAccount(openId);
+            if (courseScheduleType == CourseScheduleType.Standard || courseScheduleType == CourseScheduleType.Group)
+                userAccount.CanSelectCourse = isCan;
+            else
+                userAccount.CanSelectSummerWinterCourse = isCan;
+
         }
         #endregion
 

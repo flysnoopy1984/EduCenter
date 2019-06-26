@@ -33,7 +33,7 @@ namespace EduCenterModel.User
 
         public CourseScheduleType CourseScheduleType { get; set; }
 
-        public UserCourseStatus UserCourseStatus { get; set; }
+        //public UserCourseStatus UserCourseStatus { get; set; }
         /// <summary>
         /// 创建时间
         /// </summary>

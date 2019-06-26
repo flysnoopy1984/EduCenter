@@ -13,6 +13,11 @@ namespace EduCenterSrv.Common
                 curDay = 7;
             return curDay;
         }
+
+        public static double GetLessonHour(DateTime date)
+        {
+            return date.Hour + date.Minute/100;
+        }
         public static DateTime GetNextCourseDate(int day)
         {
             DateTime courseDate = DateTime.Now;
