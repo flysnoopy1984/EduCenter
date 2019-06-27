@@ -12,6 +12,9 @@ namespace EduCenterModel.User.Result
         public string CourseName { get; set; }
 
         public CourseScheduleType CourseScheduleType { get; set; }
+        public string CourseScheduleTypeName { get; set; }
+
+        public UserCourseLogStatus UserCourseLogStatus { get; set; }
 
         public string StartTime { get; set; }
 

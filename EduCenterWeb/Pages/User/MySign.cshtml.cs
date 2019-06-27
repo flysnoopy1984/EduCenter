@@ -37,13 +37,13 @@ namespace EduCenterWeb.Pages.User
 
         public IActionResult OnPostInitPage()
         {
-            ResultObject<RUserSign> result = new ResultObject<RUserSign>();
+            ResultList<RUserSign> result = new ResultList<RUserSign>();
             try
             {
                 var us = base.GetUserSession(false);
                 if (us != null)
                 {
-                    _UserSrv.GetCurrentUserSign(us.OpenId, us.CurrentScheduleType);
+                    result.List =  _UserSrv.GetCurrentUserSign(us.OpenId, us.CurrentScheduleType);
 
 
                 }

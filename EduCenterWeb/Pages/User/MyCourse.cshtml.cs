@@ -63,7 +63,7 @@ namespace EduCenterWeb.Pages.User
                     //获取用户最近课程
                     if (result.Entity.UserCourseList.Count > 0)
                     {
-                        result.Entity.UserShowCourse = _UserSrv.GetNextUserCourse(result.Entity.UserCourseList);
+                        result.Entity.UserShowCourse = _UserSrv.GetNextUserCourse(result.Entity.UserCourseList,DateTime.Now);
 
                     }
                 }

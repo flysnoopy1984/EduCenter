@@ -64,8 +64,10 @@
             color: #216301;
             font-size: 16px;
             font-weight: bold;
+            margin-bottom:30px;
         }
 
+     
     .PreSign button {
         box-shadow: #a28103 0px 0px 4px;
     }
@@ -97,6 +99,10 @@
         .NextSign{
             
         }
+        .splitLine{
+            width:50%;
+         
+        }
 </style>
 
 
@@ -108,8 +114,10 @@
 
 <div class="MainContainer">
     <div class="Title"><i class="fa fa-pencil-square" aria-hidden="true" style="margin-right:10px;"></i>课程签到</div>
-   
-   
+
+
+
+
     @if (@Model.UserCourseLogList != null && @Model.UserCourseLogList.Count > 0)
     {
         <div class="SignLog">
@@ -135,35 +143,39 @@
         </div>
     }
 </div>
-<div id="#HideData" style="display:none">
+<div id="HideData" style="display:none">
     <div class="UnSignArea">
-        <div class="SignInfo">请点击签到！<i class="fa fa-hand-o-down" aria-hidden="true"></i></div>
+        <div class="SignInfo">请点击未签到的课程！<i class="fa fa-hand-o-down" aria-hidden="true"></i></div>
         <div class="PreSign">
             <button class="btn btn-info" id="btn_Sign">
-                <div>2019-10-19</div>
-                <div>美术课</div>
-                <i class="fa fa-sign-in" aria-hidden="true"></i><div>签到</div>
+                <div class="CourseDate">2019-10-19</div>
+                <div class="CourseName">美术课</div>
+                <i class="fa fa-sign-in" aria-hidden="true"></i>
+                <div class="CourseStatus">我要签到</div>
             </button>
         </div>
     </div>
 
+    <hr class="splitLine" />
+
     <div class="SignedArea">
-        <div class="Signed">
-            <button class="btn btn-success">
-                <div>2019-10-19</div>
-                <div>美术课</div>
+        <div class="PreSign">
+            <button class="btn btn-block disabled">
+                <div class="CourseDate">2019-10-19</div>
+                <div class="CourseName">美术课</div>
                 <i class="fa fa-check-circle" aria-hidden="true"></i>
-                <div>已签到</div>
+                <div class="CourseStatus">您已签到</div>
             </button>
         </div>
     </div>
+
 
     <div class="NoCourse">
         <div class="NoCourseInfo">当前没有签到课程</div>
         <button class="btn btn-block text-muted disabled    ">
             <div>下次签到</div>
-            <div>[标准班]美术课</div>
-            <div>2019-02-14 18:00</div>
+            <div class="CourseName">[标准班]美术课</div>
+            <div class="CourseDate">2019-02-14 18:00</div>
         </button>
     </div>
 

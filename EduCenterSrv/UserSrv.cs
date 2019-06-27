@@ -125,8 +125,7 @@ namespace EduCenterSrv
         /// </summary>
         public List<RUserCourse> GetUserCourseAvaliable(string OpenId, CourseScheduleType CourseScheduleType)
        {
-            var times = StaticDataSrv.CourseTime;
-
+        
             var time = StaticDataSrv.CourseTime;
             //按Day，Lesson排序获取用户所有课程
             var sql = from uc in _dbContext.DBUserCoures
@@ -142,7 +141,7 @@ namespace EduCenterSrv
                           StartTime = time[cs.Lesson].StartTime,
                           EndTime = time[cs.Lesson].EndTime,
                           UserOpenId = uc.UserOpenId,
-                          Time = times[cs.Lesson].TimeRange,
+                          Time = time[cs.Lesson].TimeRange,
                           CourseScheduleType = CourseScheduleType,
                       };
 
@@ -150,6 +149,8 @@ namespace EduCenterSrv
  
        }
 
+     
+     
         public List<RUserCurrentCourse> GetUserCouseLogByLessonCode(string lessonCode,string date)
         {
           
@@ -191,9 +192,6 @@ namespace EduCenterSrv
            // return (n > 0);
         }
 
-
-
-      
         public void AddUserCourse(List<EUserCourse> courseList)
         {
             _dbContext.DBUserCoures.AddRange(courseList);   
@@ -222,37 +220,86 @@ namespace EduCenterSrv
 
         }
 
-        public RUserSign GetCurrentUserSign(string openId, CourseScheduleType courseScheduleType)
+        public List<RUserSign> GetCurrentUserSign(string openId, CourseScheduleType courseScheduleType)
         {
-            return null;
-            //RUserShowCourse rUserShowCourse = GetNextUserCourse(openId, courseScheduleType);
-            
-            ////如果因为用户请假，任然允许签到
-            //if(rUserShowCourse.CourseSkipList.Count>0)
-            //{
-            //    foreach(var skipcourse in rUserShowCourse.CourseSkipList)
-            //    {
-            //        if(skipcourse.CourseSkipReason == CourseSkipReason.UserLeave)
-            //        {
+            List<RUserSign> result = new List<RUserSign>();
 
-            //        }
-            //    }
-            //}
-            ////RUserSign result = new RUserSign
-            ////{
-            ////    CanSign = rUserShowCourse.IsCurrent,
-            ////    CourseDate = rUserShowCourse.NextCourseDate,
-            ////    CourseName = rUserShowCourse.NextCourseName,
-            ////    CourseScheduleType = courseScheduleType,
-            ////    StartTime = 
-            ////}
+            string today = DateTime.Now.ToString("yyyy-MM-dd");
+            //先检查今天是否有课
+            var todayCourse = GetUserCourseByDate(openId, today, courseScheduleType);
+            if(todayCourse.Count >0 )
+            {
+                foreach(var c in todayCourse)
+                {
+                    RUserSign rUserSign = new RUserSign
+                    {
+                        CanSign = true,
+                        CourseDate = today,
+                        CourseName = c.CourseName,
+                        CourseScheduleType = courseScheduleType,
+                        CourseScheduleTypeName = BaseEnumSrv.GetCourseScheduleTypeName(courseScheduleType),
+                        StartTime = c.CourseTime.Substring(0, 5),
+                        UserCourseLogStatus = c.UserCourseLogStatus,
+                    };
+                    result.Add(rUserSign);
+                }
+                return result;
+            }
+            else
+            {
+                //从第二天开始寻找下节课
+                RUserShowCourse rUserShowCourse = GetNextUserCourse(openId, courseScheduleType, DateTime.Today.AddDays(1));
+
+                ////如果因为用户请假，任然允许签到
+                if (rUserShowCourse.CourseSkipList.Count > 0)
+                {
+                    foreach (var skipcourse in rUserShowCourse.CourseSkipList)
+                    {
+                        if (skipcourse.CourseSkipReason == CourseSkipReason.UserLeave)
+                        {
+                            RUserSign userSign = new RUserSign()
+                            {
+                                CanSign = false,
+                                CourseName = skipcourse.CourseName,
+                                CourseDate = skipcourse.Date,
+                                CourseScheduleType = courseScheduleType,
+                                CourseScheduleTypeName = BaseEnumSrv.GetCourseScheduleTypeName(courseScheduleType),
+                                StartTime = skipcourse.StartTime,
+                                UserCourseLogStatus = UserCourseLogStatus.Leave,
+                            };
+                            result.Add(userSign);
+                            //if (DateTime.Parse(skipcourse.Date) == DateTime.Today)
+                            //    result.CanSign = true;
+                            break;
+                        }
+                    }
+                }
+                if (result.Count == 0)
+                {
+                    var time = StaticDataSrv.CourseTime;
+                    var startTime = time[rUserShowCourse.NextLesson].TimeRange.Substring(0, 5);
+                    RUserSign userSign = new RUserSign()
+                    {
+                        CanSign = false,
+                        CourseDate = rUserShowCourse.NextCourseDate,
+                        CourseName = rUserShowCourse.NextCourseName,
+                        CourseScheduleType = courseScheduleType,
+                        CourseScheduleTypeName = BaseEnumSrv.GetCourseScheduleTypeName(courseScheduleType),
+                        StartTime = startTime,
+                        UserCourseLogStatus = UserCourseLogStatus.PreNext,
+                    };
+                    result.Add(userSign);
+                    return result;
+                }
+            }
+            return result;
         }
-        public RUserShowCourse GetNextUserCourse(List<RUserCourse> list)
+        public RUserShowCourse GetNextUserCourse(List<RUserCourse> list, DateTime startDate)
         { 
-            return RecursionToGetAvaliableCourse(list, DateTime.Now, new RUserShowCourse(true));
+            return RecursionToGetAvaliableCourse(list, startDate, new RUserShowCourse(true));
         }
 
-        public RUserShowCourse GetNextUserCourse(string openId,CourseScheduleType courseScheduleType)
+        public RUserShowCourse GetNextUserCourse(string openId,CourseScheduleType courseScheduleType,DateTime startDate)
         {
             var time = StaticDataSrv.CourseTime;
             //按Day，Lesson排序获取用户所有课程
@@ -274,7 +321,7 @@ namespace EduCenterSrv
             
             var list = sql.ToList();
 
-            return RecursionToGetAvaliableCourse(list, DateTime.Now,new RUserShowCourse(true));
+            return RecursionToGetAvaliableCourse(list, startDate, new RUserShowCourse(true));
         }
    
         private RUserShowCourse RecursionToGetAvaliableCourse(List<RUserCourse> list,DateTime date, RUserShowCourse result,int level =0)
@@ -362,15 +409,14 @@ namespace EduCenterSrv
                 //处理没有获取的理由
                 RUserSkipCourse rUserSkipCourse = new RUserSkipCourse
                 {
-                 
                     CourseName = gotCourse.CourseName,
                     Date = gotDate.ToString("yyyy-MM-dd"),
-                    StartTime = gotCourse.Time
+                    StartTime = gotCourse.Time.Substring(0,5),
                     CourseSkipReason = courseSkip,
                     CourseSkipReasonName = BaseEnumSrv.GetCourseSkipReasonName(courseSkip),
                 };
                 result.CourseSkipList.Add(rUserSkipCourse);
-
+                //国假日
                 if (courseSkip == CourseSkipReason.Holiday)
                 {
                     var workDay = DateSrv.FindFirstWorkDayAfterHoliday(gotDate.AddDays(1));
@@ -378,6 +424,7 @@ namespace EduCenterSrv
                 }
                 else
                 {
+                    //老师或用户请假
                     //   result.CourseSkipList.Add(gotDate.ToString("yyyy-MM-dd"), courseSkip);
                     var time = StaticDataSrv.CourseTime[gotCourse.Lesson].EndTime+1;
 
@@ -401,11 +448,7 @@ namespace EduCenterSrv
             if (DateSrv.IsHoliday(courseDate))
                 return CourseSkipReason.Holiday;
 
-            //var uLog =  _dbContext.DBUserCourseLog.Where(a => a.UserOpenId == openId && 
-            //a.LessonCode == LessonCode && 
-            //a.CourseDateTime == courseDate.ToString("yyyy-MM-dd") &&
-            //(a.UserCourseLogStatus == UserCourseLogStatus.Leave || a.UserCourseLogStatus == UserCourseLogStatus.TecLeave)).FirstOrDefault();
-
+          
             if (uLog == null)
                 return CourseSkipReason.NoSkip;
             if (uLog.UserCourseLogStatus == UserCourseLogStatus.TecLeave)
@@ -623,7 +666,7 @@ namespace EduCenterSrv
             return result;
         }
 
-        public List<RUserCourseLog> GetUserCourseByDateForLeave(string OpenId,string date, CourseScheduleType courseScheduleType)
+        public List<RUserCourseLog> GetUserCourseByDate(string OpenId,string date, CourseScheduleType courseScheduleType)
         {
             var dayofweek = DateSrv.GetDayOfWeek(DateTime.Parse(date));
 
@@ -646,6 +689,7 @@ namespace EduCenterSrv
                             CourseScheduleType = uc.CourseScheduleType,
                             CourseName = cs.CourseName,
                             Lesson = cs.Lesson,
+                           
                             Day = cs.Day,
                             CourseTime = times[cs.Lesson].TimeRange,
                             UserCourseLogStatus = ucul==null?UserCourseLogStatus.PreNext: ucul.UserCourseLogStatus,
