@@ -22,7 +22,8 @@
         });
         if (closeSec != undefined && closeSec > 0) {
             setTimeout(function () {
-                if (!jc.isClosed()) {
+                if (!jc.isClosed())
+                {
                     jc.close();
                     if (actionHandler)
                         actionHandler();
@@ -198,21 +199,32 @@
 
                 }
                 else {
-                    
-                    ShowError(res.ErrorMsg);
-                    if (AfterError)
-                        AfterError(res);
+                    if (AfterError) {
+                        ShowInfo(res.ErrorMsg, null, "red", 0, function () {
+                            AfterError(res);
+                        });
+                    }
+                    else
+                        ShowError(res.ErrorMsg);
+                    //if (AfterError)
+                    //    AfterError(res);
 
                 }
             },
             error: function (xhr, type) {
                 CloseBlock();
-                ShowError("系统错误");
+           
                 if (AfterError) {
                     var eObj = new Object();
                     eObj.ErrorMsg = "系统错误";
+                    ShowInfo(res.ErrorMsg, null, "red", 0, function () {
+                        AfterError(eObj);
+                    });
+                   
                     AfterError(eObj);
                 }
+                else
+                    ShowError("系统错误");
                    
             }
 

@@ -1,4 +1,5 @@
 ﻿using EduCenterCore.EduFramework;
+using EduCenterModel.BaseEnum;
 using EduCenterModel.Session;
 using EduCenterModel.User;
 using EduCenterSrv;
@@ -33,14 +34,17 @@ namespace EduCenterWeb.Pages
 
        }
 
-        public void SetUserSesion(string openId,string userName,string headerUrl,string phone)
+        public void SetUserSesion(string openId,string userName,
+            string headerUrl,string phone, 
+            CourseScheduleType currentScheduleType)
         {
             UserSession session = new UserSession()
             {
                 OpenId = openId,
                 UserName = userName,
                 HeaderUrl = headerUrl,
-                Phone = phone
+                Phone = phone,
+                CurrentScheduleType = currentScheduleType
 
             };
             var json = JsonConvert.SerializeObject(session);

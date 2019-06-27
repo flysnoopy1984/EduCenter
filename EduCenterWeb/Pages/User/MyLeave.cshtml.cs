@@ -31,7 +31,7 @@ namespace EduCenterWeb.Pages.User
             else
             {
 
-                UserCourseLogList = _UserSrv.GetUserCourseLogList(us.OpenId, CourseScheduleType.Standard, UserCourseLogStatus.Leave);
+                UserCourseLogList = _UserSrv.GetUserCourseLogList(us.OpenId,UserCourseLogStatus.Leave);
             }
         }
 
@@ -45,7 +45,7 @@ namespace EduCenterWeb.Pages.User
                 var us = base.GetUserSession(false);
                 if(us !=null)
                 {
-                    result.List = _UserSrv.GetUserCourseByDateForLeave(us.OpenId, date, CourseScheduleType.Standard);
+                    result.List = _UserSrv.GetUserCourseByDateForLeave(us.OpenId, date, us.CurrentScheduleType);
                 }
                 else
                 {
@@ -71,10 +71,7 @@ namespace EduCenterWeb.Pages.User
                 var us = base.GetUserSession(false);
                 if (us != null)
                 {
-                    //foreach(var c in list)
-                    //{
-                    //    c.UserCourseLogStatus = UserCourseLogStatus.Leave;
-                    //}
+                  
                     _UserSrv.UpdateCourseLogToLeave(list, us.OpenId);
                 }   
                 else
@@ -82,10 +79,11 @@ namespace EduCenterWeb.Pages.User
                     result.IntMsg = -1;
                     result.ErrorMsg = "请重新登陆！";
                 }
-                   
-
-
-
+                  
+            }
+            catch(EduException eex)
+            {
+                result.ErrorMsg = eex.Message;
             }
             catch (Exception ex)
             {

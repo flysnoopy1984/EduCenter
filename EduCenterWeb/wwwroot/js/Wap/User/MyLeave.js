@@ -9,7 +9,7 @@
         laydate.render({
             elem: '.DateInput',
             eventElem: '#btn_DatePick',
-            min:1,
+            min:0,
             trigger: 'click',
             theme: 'molv',
             done: function (value, date) {
@@ -50,9 +50,19 @@
             ShowInfo("请先选择课程");
         }
         else {
-            callAjax(submitLeaveUrl, { "list": list }, SubmitLeaveCallBack,"已获知您的请假申请");
+            callAjax_Query(submitLeaveUrl, { "list": list }, SubmitLeaveCallBack, "", function (res) {
+                if (res.IntMsg == -1) {
+                    window.location.href = "Login";
+                }
+            });
         }
 
+    }
+    SubmitLeaveCallBack = function (result) {
+        ShowInfo("已为您请假", null, null, 2, function () {
+            window.location.href = "MyCourse";
+        });
+        
     }
 
 
@@ -69,10 +79,7 @@
        
     }
 
-    SubmitLeaveCallBack = function (result) {
-        var date = $(".DateInput").text();
-        window.location.href = "MyLeave?date=" + date;
-    }
+ 
 
     GetCourseByDateCallBack = function (result) {
         var list = result.List;
@@ -80,7 +87,7 @@
         root.empty();
 
         if (list.length == 0) {
-            ShowInfo("当天没有课程，请重新选择日期", "");
+            ShowInfo("当天没有可请假课程，请重新选择日期", "");
 
         }
         else {

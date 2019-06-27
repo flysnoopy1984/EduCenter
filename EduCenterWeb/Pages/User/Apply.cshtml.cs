@@ -19,16 +19,16 @@ namespace EduCenterWeb.Pages.User
     public class ApplyModel : EduBaseAppPageModel
     {
         private CourseSrv _CourseSrv;
-        private UserSrv _UserSrv;
+        //private UserSrv _UserSrv;
         private BusinessSrv _BusinessSrv;
         public List<ECourseTime> CourseTimes { get; set; }
 
        
         public List<ECourseSchedule> CourseScheduleList;
-        public ApplyModel(CourseSrv courseSrv,UserSrv userSrv,BusinessSrv businessSrv)
+        public ApplyModel(CourseSrv courseSrv,BusinessSrv businessSrv)
         {
             _CourseSrv = courseSrv;
-            _UserSrv = userSrv;
+     //       _UserSrv = userSrv;
             _BusinessSrv = businessSrv;
         }
 

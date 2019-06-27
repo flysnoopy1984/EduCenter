@@ -7,6 +7,7 @@ using EduCenterCore.Common.Helper;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
+using EduCenterModel.Pages.User;
 using EduCenterModel.User;
 using EduCenterModel.User.Result;
 using EduCenterSrv;
@@ -36,80 +37,35 @@ namespace EduCenterWeb.Pages.User
             _UserSrv = userSrv;
         }
         public void OnGet()
-        {
-          
+        { 
             var us = base.GetUserSession();
             if (us != null)
             {
                 CourseTime = StaticDataSrv.CourseTime;
-                UserCourseLogStatus = BaseEnumSrv.UserCourseLogStatusList;
-
-              
-                //UserCourseList = _UserSrv.GetUserCourseAvaliable(us.OpenId, courseScheduleType);
-                //if(UserCourseList.Count == 0)
-                //{
-                //    if(courseScheduleType == CourseScheduleType.Standard || courseScheduleType== CourseScheduleType.Group)
-                //    {
-                //        string url = "/User/Apply?msg="+HttpUtility.UrlEncode( "您还没有选择每周课程");
-                //        HttpContext.Response.Redirect(url);
-                //        return;
-                //    }
-                //    else if(courseScheduleType == CourseScheduleType.Summer || courseScheduleType == CourseScheduleType.Winter)
-                //    {
-                //        string url = $"/User/ApplyWinterSummer?type={(int)courseScheduleType}&msg="+ HttpUtility.UrlEncode("您还没有选择假期课程");
-                //        HttpContext.Response.Redirect(url);
-                //        return;
-                //    }       
-                //}
-             
-
-                UserCourseLogList = _UserSrv.GetUserCourseLogHistory(us.OpenId, CourseScheduleType.Standard, 10);
-
-                ////计算下一节课的时间
-                //foreach (var course in UserCourseList)
-                //{
-                //    course.NextCourseDate = DateSrv.GetNextCourseDate(course.Day);
-              
-                //}
-                ////获取用户下次的课程
-                //var userLog = _UserSrv.GetNextUserCourseLog(us.OpenId, CourseScheduleType.Standard);
-                //if(userLog.CourseDateTime == DateTime.Today.ToString("yyyy-MM-dd"))
-                // {
-                //    CurrentCourse = new RUserCourseLog
-                //    {
-                //        CourseName = userLog.CourseName,
-                //        CourseTime = userLog.CourseTime,
-                //        CourseDateTime = userLog.CourseDateTime,
-                //        UserCourseLogStatus = userLog.UserCourseLogStatus,
-                //    };
-                // }
-                //else
-                //{
-                //    NextCourse = new RUserCourseLog
-                //    {
-                //        CourseName = userLog.CourseName,
-                //        CourseTime = DateTime.Parse(userLog.CourseDateTime).ToString("MM月dd日"),
-                //        CourseDateTime = userLog.CourseDateTime,
-                //        UserCourseLogStatus = userLog.UserCourseLogStatus,
-                //    };
-                //}
-          
+                UserCourseLogStatus = BaseEnumSrv.UserCourseLogStatusList;        
+                UserCourseLogList = _UserSrv.GetUserCourseLogHistory(us.OpenId, CourseScheduleType.Standard, 10); 
             }
-            //else
-            //    UserCourseList = new List<RUserCourse>();
+           
         }
 
         public IActionResult OnPostInitData()
         {
-            ResultList<RUserCourse> result = new ResultList<RUserCourse>();
+            ResultObject<PMyCourse> result = new ResultObject<PMyCourse>();
             try
             {
                 var us = GetUserSession(false);
-                if(us !=null)
+                if (us != null)
                 {
                     CourseScheduleType courseScheduleType = _UserSrv.GetCurrentCourseScheduleType(us.OpenId);
-                    result.List = _UserSrv.GetUserCourseAvaliable(us.OpenId, courseScheduleType);
+                    //获取用户课程
+                    result.Entity.UserCourseList = _UserSrv.GetUserCourseAvaliable(us.OpenId, courseScheduleType);
                     result.IntMsg = (int)courseScheduleType;
+                    //获取用户最近课程
+                    if (result.Entity.UserCourseList.Count > 0)
+                    {
+                        result.Entity.UserShowCourse = _UserSrv.GetNextUserCourse(result.Entity.UserCourseList);
+
+                    }
                 }
                 else
                 {

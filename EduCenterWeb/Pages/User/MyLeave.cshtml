@@ -48,9 +48,10 @@
         border-bottom: solid 1px black;
     }
 
-    .CourseLog .LogTable {
+    .LeaveLog .LogTable {
         width: 95%;
         margin-left: 10px;
+        font-size:11px;
     }
 
     .DateArea {
@@ -159,10 +160,10 @@ height: 56px;
 <script src="~/js/EduLib/Common.js"></script>
 <link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
 <script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
-
+<script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
 <script src="~/js/EduLib/EditHelper.js"></script>
 <script src="~/lib/laydate/laydate.js"></script>
-<script src="~/js/Wap/User/UserLeave.js"></script>
+<script src="~/js/Wap/User/MyLeave.js"></script>
 <div class="MainContainer">
     <div class="Title">课程请假</div>
     <div class="DateArea">
@@ -181,7 +182,7 @@ height: 56px;
 
         </div>
         <div class="ButtonArea">
-            <button class="btn btn-info" id="btn_SubmitLeave">
+            <button class="btn btn-info btn-sm" id="btn_SubmitLeave">
                 <i class="fa fa-hand-paper-o" style="margin-right:10px;"></i>提交请假申请
             </button>
         </div>
@@ -202,7 +203,7 @@ height: 56px;
                 {
                 <tr>
                     <td>@log.CourseDateTime</td>
-                    <td>@log.CourseName</td>
+                    <td>@log.CourseName [@log.CourseScheduleTypeName]</td>
                     <td>@log.UserCourseLogStatusName</td>
                 </tr>
                 }

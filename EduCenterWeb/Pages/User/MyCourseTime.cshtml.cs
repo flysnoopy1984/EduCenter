@@ -38,7 +38,7 @@ namespace EduCenterWeb.Pages.User
             ResultList<RUserCharge> result = new ResultList<RUserCharge>();
             try
             {
-                var us = base.GetUserSession();
+                var us = base.GetUserSession(false);
                 if (us != null)
                 {
                     result.List = _OrderSrv.QueryChargeOrderList(us.OpenId, 1, 10);
@@ -63,7 +63,7 @@ namespace EduCenterWeb.Pages.User
             ResultList<RUserComsume> result = new ResultList<RUserComsume>();
             try
             {
-                var us = base.GetUserSession();
+                var us = base.GetUserSession(false);
                 if (us != null)
                 {
                     result.List = _UserSrv.QueryUserCourseComsume(us.OpenId, 1, 10);

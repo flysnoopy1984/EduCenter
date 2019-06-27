@@ -42,7 +42,6 @@ namespace EduCenterSrv.Common
           
         }
 
-    
         public static List<ECourseDateRange> CourseDateRange
         {
             get
@@ -50,6 +49,22 @@ namespace EduCenterSrv.Common
                 return _CourseDateRange;
             }
         }
+
+        public static CourseScheduleType CurrentScheduleType
+        {
+            get
+            {
+                ECourseDateRange dr = CourseDateRange.Where(a => a.StartDate <= DateTime.Today &&
+           a.EndDate >= DateTime.Today).FirstOrDefault();
+                if (dr == null)
+                    return CourseScheduleType.Standard;
+                else
+                    return dr.CourseScheduleType;
+            }
+          
+        }
+      
+
         public static Dictionary<int,int> CourseMaxApplyNum
         {
             get
@@ -73,12 +88,12 @@ namespace EduCenterSrv.Common
                 {
                     _CourseTime = new Dictionary<int, ECourseTime>();
                     
-                    _CourseTime.Add(1,new ECourseTime{Lesson = 1,TimeRange = "09:00-10:30",StartTime=9,EndTime=10.3});
+                    _CourseTime.Add(1,new ECourseTime{Lesson = 1,TimeRange = "09:00-10:30",StartTime=9,EndTime=10.5});
                     _CourseTime.Add(2,new ECourseTime { Lesson = 2, TimeRange = "10:30-12:00",StartTime=10.3,EndTime=12 });
-                    _CourseTime.Add(3,new ECourseTime { Lesson = 3, TimeRange = "13:00-14:30", StartTime = 13, EndTime = 14.3 });
-                    _CourseTime.Add(4,new ECourseTime { Lesson = 4, TimeRange = "14:30-16:00", StartTime = 14.3, EndTime = 16 });
-                    _CourseTime.Add(5,new ECourseTime { Lesson = 5, TimeRange = "16:30-18:00", StartTime = 16.3, EndTime = 18 });
-                    _CourseTime.Add(6,new ECourseTime { Lesson = 6, TimeRange = "18:30-20:00", StartTime = 18.3, EndTime = 20 });
+                    _CourseTime.Add(3,new ECourseTime { Lesson = 3, TimeRange = "13:00-14:30", StartTime = 13, EndTime = 14.5 });
+                    _CourseTime.Add(4,new ECourseTime { Lesson = 4, TimeRange = "14:30-16:00", StartTime = 14.5, EndTime = 16 });
+                    _CourseTime.Add(5,new ECourseTime { Lesson = 5, TimeRange = "16:30-18:00", StartTime = 16.5, EndTime = 18 });
+                    _CourseTime.Add(6,new ECourseTime { Lesson = 6, TimeRange = "18:30-20:00", StartTime = 18.5, EndTime = 20 });
                  
                 }
                    

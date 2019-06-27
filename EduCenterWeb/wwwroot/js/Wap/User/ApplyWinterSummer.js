@@ -1,5 +1,6 @@
 ﻿$(function () {
     var InitUrl = "ApplyWinterSummer?handler=InitData";
+    var SubmitUrl = "ApplyWinterSummer?handler=Submit";
 
     //  var CourseScheduleData = null;
     var CourseTime = null;
@@ -7,7 +8,7 @@
     var selDay = null
     var selLesson = null;
     var selCode = null;
-    var courseScheduleType = undefined;
+   // var courseScheduleType = undefined;
 
     Init = function () {
 
@@ -15,7 +16,7 @@
         //if (msg != undefined) {
         //    ShowInfo(msg, null, null, 2);
         //}
-        courseScheduleType = GetUrlParam("type");
+     //   courseScheduleType = GetUrlParam("type");
 
         $("#btnConfirm").on("click", NextStep);
         callAjax_Query(InitUrl, {}, InitCallBack, "");
@@ -280,60 +281,51 @@
 
     }
 
+    DoNextStep = function (datalist) {
+
+        ShowConfirm("假期班时间只能选择一次，请谨慎选择！", null, "red", function () {
+            callAjax_Query(SubmitUrl, {
+                "lessonCodeList": datalist
+            }, NextCallBack, "", NextError);
+
+        }, undefined, "我再想想", "我已确认");
+
+    }
     NextStep = function () {
-
-        var jsonObj = [];
-
+        var datalist = new Array();
         $(".SelectedCourseItems .Item").each(function () {
             var item = $(this);
-            var courseCode = item.find(".SelectCourseItemTitle").attr("CourseCode");
             var list = item.find(".SelectCourseItemContent ul li");
             list.each(function () {
                 var li = $(this);
-                var day = li.attr("day");
-                var lesson = li.attr("lesson");
                 var lcode = li.attr("lcode");
-
-                var itemObj = {
-                    "courseCode": courseCode,
-                    "day": day,
-                    "lesson": lesson,
-                    "lcode": lcode
-                };
-                jsonObj.push(itemObj);
-
+                datalist.push(lcode);
             })
         });
-        sessionStorage.clear();
-        if (jsonObj.length > 0) {
-            SetSessonUserApplyCourse(jsonObj);
-
-            window.location.href = "BuyCourseTime";
+        if (datalist.length > 0) {
+            DoNextStep(datalist);
         }
         else {
 
             ShowError("请点击选择课程");
         }
+
+    }
+
+    NextError = function (res) {
+        if (res.IntMsg == -1) {
+            window.location.href = "Login";
+        }
+    }
+
+    NextCallBack = function (res) {
+        ShowInfo("系统已安排您的课程", null, null, 2, function () {
+            window.location.href = "MyCourse";
+        })
     }
 
     InitCallBack = function (result) {
-        /*
-        var list = result.Entity.CourseScheduleList;
-
-        $.each(list, function (i) {
-            var cs = list[i];
-            CourseScheduleData[cs.Day][cs.Lesson].push(cs);
-        });
-
-        var times = result.Entity.CourseTimeList;
-
-        CourseTime = new Object();
-
-        $.each(times, function (i) {
-            var t = times[i];
-            CourseTime[t.Lesson] = t.TimeRange;
-        });
-        */
+      
         CourseTime = result.Entity.CourseTimeList;
         CourseMaxApplyNum = result.Entity.CourseMaxApplyNum;
         InitUserAction();

@@ -76,6 +76,15 @@ namespace EduCenterSrv.Common
             
         }
 
+        public static DateTime FindFirstWorkDayAfterHoliday(DateTime date)
+        {
+            while (IsHoliday(date))
+            {
+                date = date.AddDays(1);
+            }
+                return date;
+        }
+
         public static int GetSysDayOfWeek(DateTime date)
         {
             int day = (int)date.DayOfWeek;

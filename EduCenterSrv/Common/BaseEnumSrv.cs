@@ -271,7 +271,22 @@ namespace EduCenterSrv.Common
             return "";
         }
 
-  
+        public static string GetCourseSkipReasonName(CourseSkipReason type)
+        {
+            switch (type)
+            {
+                case CourseSkipReason.Holiday:
+                    return "节假日";
+                case CourseSkipReason.TecLeave:
+                    return "老师请假";
+                case CourseSkipReason.UserLeave:
+                    return "您请假";
+
+            }
+            return "";
+        }
+
+
 
         //public static string GetUserCourseLogStatusName(UserCourseLogStatus status)
         //{

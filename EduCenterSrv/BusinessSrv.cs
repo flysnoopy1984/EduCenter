@@ -92,14 +92,10 @@ namespace EduCenterSrv
                 return Order;
 
             }
-            catch (EduException eex)
-            {
-                throw eex;
-            }
             catch (Exception ex)
             {
              //  RollBackTrans();
-                NLogHelper.ErrorTxt($"[PayCourseFirst]{ex.Message}");
+              
                 throw ex;
             }
           
@@ -310,7 +306,7 @@ namespace EduCenterSrv
             catch(Exception ex)
             {
                 RollBackTrans();
-                NLogHelper.ErrorTxt($"[UserSelectNewCourses]{ex.Message}");
+              
                 throw ex;
             }
            

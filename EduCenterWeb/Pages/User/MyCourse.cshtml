@@ -67,17 +67,17 @@
                         justify-content: space-between;
                     }
 
-                        .CourseArea .CourseRow .CourseContent .OneCourse .CourseInfo .CourseName {
-                            font-size: 18px;
-                            font-weight: bold;
-                            color: #8738ee;
-                        }
+                    .CourseArea .CourseRow .CourseContent .OneCourse .CourseInfo .CourseName {
+                        font-size: 18px;
+                        font-weight: bold;
+                        color: #8738ee;
+                    }
 
-                        .CourseArea .CourseRow .CourseContent .OneCourse .CourseInfo .CourseTime {
-                            font-size: 16px;
-                            font-weight: bold;
-                            color: #04616e;
-                        }
+                    .CourseArea .CourseRow .CourseContent .OneCourse .CourseInfo .CourseTime {
+                        font-size: 16px;
+                        font-weight: bold;
+                        color: #04616e;
+                    }
 
                     .CourseArea .CourseRow .CourseContent .OneCourse .CourseDetail {
                         display: flex;
@@ -94,24 +94,7 @@
                         }
 
 
-        .CourseArea .NextCourse {
-            display: flex;
-            justify-content: space-between;
-        }
-
-            .CourseArea .NextCourse .CourseInfo .CourseName {
-                color: #f57b7b;
-                font-weight: bold;
-                margin-bottom: 10px;
-                font-size: 18px;
-            }
-
-            .CourseArea .NextCourse .CourseInfo .CourseTime {
-                font-weight: bold;
-                font-size: 16px;
-                color: #00288d;
-            }
-
+        
         .CourseArea .CurrentCourse {
             display: flex;
             justify-content: space-between;
@@ -129,19 +112,31 @@
                 flex-direction: column;
                 justify-content: space-around;
             }
-
-            .CourseArea .CurrentCourse .CourseInfo .CourseName {
+            .CourseArea .CurrentCourse .CourseInfo .CourseLine
+            {
+                display:flex;
+                align-items: baseline;
+            }
+            .CourseArea .CurrentCourse .CourseInfo .CourseLine .CourseName {
                 color: #27af00;
                 font-weight: bold;
-                margin-bottom: 10px;
-                font-size: 18px;
+                margin-bottom: 5px;
+                font-size: 14px;
+                margin-right:5px;
+            }
+             .CourseArea .CurrentCourse .CourseInfo .CourseLine .CourseStatus {
+                /*font-weight: bold;*/
+                font-size: 12px;
+            
             }
 
             .CourseArea .CurrentCourse .CourseInfo .CourseTime {
                 /*font-weight: bold;*/
-                font-size: 16px;
+                font-size: 14px;
                 color: #00288d;
+                margin-bottom: 5px;
             }
+           
 
         .CourseArea .SplitLine {
         }
@@ -172,13 +167,10 @@
     .CourseLog .LogTable {
         width: 95%;
         margin-left: 10px;
+        font-size:11px;
     }
 
-    .CourseStatus {
-        color: #12e209;
-        font-weight: bold;
-        font-size: 16px;
-    }
+
 
     #CourseTable {
         width: 100%;
@@ -188,6 +180,7 @@
         #CourseTable tr th {
             border: solid 1px #646363;
             text-align: center;
+            height:35px;
         }
 
         #CourseTable tr td {
@@ -209,6 +202,10 @@
         height: 90%;
         border-radius: 6px;
         padding-top: 4px;
+    }
+    .CourseSkipReason{
+       
+        font-size:10px;
     }
 </style>
 
@@ -250,49 +247,9 @@
         </table>
 
         <!-- 当前课程 -->
-        @if (Model.CurrentCourse != null)
-        {
-            <div class="CurrentCourse">
-                <div class="CourseInfo">
-                    <div class="CourseName">当前：@Model.CurrentCourse.CourseName</div>
-                    <div class="CourseTime">时间：@Model.CurrentCourse.CourseTime</div>
-                </div>
-                <div class="UserOption">
-                    @if (Model.NextCourse.UserCourseLogStatus == EduCenterModel.BaseEnum.UserCourseLogStatus.PreNext)
-                    {
-                        <input id="btn_Leave" type="button" class="btn btn-warning" date="@Model.CurrentCourse.CourseDateTime" value="我要请假" />
-                    }
-                    else
-                    {
-                        <div>@Model.UserCourseLogStatus[(int)Model.CurrentCourse.UserCourseLogStatus]</div>
-                    }
-                    <input id="btn_Sign" type="button" class="btn btn-danger" date="@Model.CurrentCourse.CourseDateTime" value="我要签到" />
-                </div>
+        <div class="ShowCourseContainer">
 
-            </div>
-        }
-
-        else if (Model.NextCourse != null)
-        {
-            <div class="NextCourse">
-                <div class="CourseInfo">
-                    <div class="CourseName">下节课：@Model.NextCourse.CourseName</div>
-                    <div class="CourseTime">时间：@Model.NextCourse.CourseTime</div>
-                </div>
-                <div class="UserOption">
-                    @if (Model.NextCourse.UserCourseLogStatus == EduCenterModel.BaseEnum.UserCourseLogStatus.PreNext)
-                    {
-                        <input id="btn_Leave" type="button" class="btn btn-warning" date="@Model.NextCourse.CourseDateTime" value="我要请假" />
-                    }
-                    else
-                    {
-                        <div class="CourseStatus">@Model.UserCourseLogStatus[(int)Model.NextCourse.UserCourseLogStatus]</div>
-                    }
-
-
-                </div>
-            </div>
-        }
+        </div>
 
     </div>
     <!-- Log -->
@@ -312,7 +269,7 @@
                 {
                     <tr>
                         <td>@log.CourseDateTime</td>
-                        <td>@log.CourseName</td>
+                        <td>@log.CourseName [@log.CourseScheduleTypeName]</td>
                         <td>@log.UserCourseLogStatusName</td>
                     </tr>
                 }
@@ -325,19 +282,26 @@
 <div id="HideData" style="display:none">
 
     <div class="CourseCellContainer">
-        <div class="CourseCell bg-primary"></div>
+        <div class="CourseCell"></div>
     </div>
 
     <div class="CurrentCourse">
         <div class="CourseInfo">
-            <div class="CourseName">当前：</div>
-            <div class="CourseTime">时间：</div>
+            <div class="CourseLine">
+                <div class="CourseName"></div>
+                <div class="CourseStatus text-danger"></div>
+            </div>
+            <div class="CourseTime"></div>
+            <div class="CourseSkipReason">
+            </div>
         </div>
         <div class="UserOption">
-            <input id="btn_Leave" type="button" class="btn btn-warning" date="" value="我要请假" />
-            <div></div>
-            <input id="btn_Sign" type="button" class="btn btn-danger" date="" value="我要签到" />
+            <input id="btn_Leave" type="button" class="btn btn-warning btn-sm" date="" value="我要请假" />
+            <input id="btn_Sign" type="button" class="btn btn-danger btn-sm" date="" value="我要签到" />
         </div>
-
     </div>
+
+   
+    <div class="ReasonLine text-muted"></div>
+  
 </div>

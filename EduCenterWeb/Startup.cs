@@ -97,6 +97,8 @@ namespace EduCenterWeb
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+
+           
          
             EduConfigReader.SetConfiguration(Configuration);
             EduEnviroment.SetEnviroment(env);

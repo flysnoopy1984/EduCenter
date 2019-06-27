@@ -23,6 +23,8 @@ namespace EduCenterModel.User.Result
         public int Day { get; set; }
 
         public int Lesson { get; set; }
+
+        public string CourseScheduleTypeName { get; set; }
        
     }
 }

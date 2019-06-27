@@ -10,7 +10,7 @@ namespace EduCenterModel.User.Result
         public RUserShowCourse(bool InitObject = false)
         {
             if (InitObject)
-                CourseSkipList = new Dictionary<string, CourseSkipReason>();
+                CourseSkipList = new List<RUserSkipCourse>();
         }
         public string NextCourseName { get; set; }
 
@@ -18,12 +18,17 @@ namespace EduCenterModel.User.Result
 
         public int NextLesson { get; set; }
 
+        public string LessonCode { get; set; }
+
         public UserCourseLogStatus UserCourseLogStatus { get; set; }
 
+        public string UserCourseLogStatusName { get; set; }
+
+        public bool IsCurrent { get; set; }
         public bool CanLeave { get; set; }
         public bool CanSign { get; set; }
 
-        public Dictionary<string, CourseSkipReason> CourseSkipList { get; set; }
+        public List<RUserSkipCourse> CourseSkipList { get; set; }
        
 
      

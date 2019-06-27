@@ -7,6 +7,7 @@ using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterModel.Pages.User;
+using EduCenterModel.User;
 using EduCenterSrv;
 using EduCenterSrv.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -18,13 +19,15 @@ namespace EduCenterWeb.Pages.User
     {
         public List<ECourseTime> CourseTimes { get; set; }
         private CourseSrv _CourseSrv;
-        private UserSrv _UserSrv;
+        //private UserSrv _UserSrv;
+        private BusinessSrv _BusinessSrv;
 
         public List<ECourseSchedule> CourseScheduleList;
-        public ApplyWinterSummerModel(CourseSrv courseSrv, UserSrv userSrv)
+        public ApplyWinterSummerModel(CourseSrv courseSrv, BusinessSrv businessSrv)
         {
             _CourseSrv = courseSrv;
-            _UserSrv = userSrv;
+            _BusinessSrv = businessSrv;
+           // _UserSrv = userSrv;
         }
 
         public List<ECourseSchedule> GetAvaliableCourseList(int day, int lesson)
@@ -35,7 +38,6 @@ namespace EduCenterWeb.Pages.User
                 {
                     return CourseScheduleList.Where(a => a.Day == day && a.Lesson == lesson).ToList();
                 }
-
             }
             catch
             {
@@ -51,17 +53,18 @@ namespace EduCenterWeb.Pages.User
             {
                 CourseTimes = StaticDataSrv.CourseTime.Values.ToList();
 
-                CourseScheduleList = _CourseSrv.GetCourseScheduleByYearType(DateTime.Now.Year, CourseScheduleType.Summer);
+                
+                CourseScheduleList = _CourseSrv.GetCourseScheduleByYearType(DateTime.Now.Year, StaticDataSrv.CurrentScheduleType);
             }
         }
 
         public IActionResult OnPostInitData()
         {
             ResultObject<PUserApply> result = new ResultObject<PUserApply>();
-            // ResultObject<> result = new ResultObject<Dictionary<int, ECourseTime>>();
+
             try
             {
-                //  result.Entity.CourseScheduleList = _CourseSrv.GetCourseScheduleByYearType(DateTime.Now.Year, CourseScheduleType.Standard);
+
                 result.Entity.CourseTimeList = StaticDataSrv.CourseTime;
                 result.Entity.CourseMaxApplyNum = StaticDataSrv.CourseMaxApplyNum;
 
@@ -70,6 +73,48 @@ namespace EduCenterWeb.Pages.User
             {
                 result.ErrorMsg = "未能获取数据！请联系管理员或稍后再试";
                 NLogHelper.ErrorTxt(ex.Message);
+            }
+            return new JsonResult(result);
+        }
+
+        public IActionResult OnPostSubmit(List<string> lessonCodeList)
+        {
+            ResultNormal result = new ResultNormal();
+            CourseScheduleType courseScheduleType = StaticDataSrv.CurrentScheduleType;
+            try
+            {
+                var us = base.GetUserSession(false);
+                if (us != null)
+                {
+                    List<EUserCourse> ucList = new List<EUserCourse>();
+                    foreach (var lc in lessonCodeList)
+                    {
+                        EUserCourse uc = new EUserCourse
+                        {
+                            CourseScheduleType = courseScheduleType,
+                            CreateDateTime = DateTime.Now,
+                            LessonCode = lc,
+
+                            UserOpenId = us.OpenId
+                        };
+                        ucList.Add(uc);
+                    }
+                    _BusinessSrv.UserSelectNewCourses(us.OpenId, ucList);
+                }
+                else
+                {
+                    result.IntMsg = -1;
+                    result.ErrorMsg = "请重新登陆";
+                }
+            }
+            catch (EduException ex)
+            {
+                result.ErrorMsg = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                result.ErrorMsg = "提交数据错误！请联系管理员或稍后再试";
+                NLogHelper.ErrorTxt($"标准班课程选择[OnPostSubmit]:{ex.Message}");
             }
             return new JsonResult(result);
         }

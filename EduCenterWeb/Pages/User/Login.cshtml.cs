@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EduCenterCore.Common.Helper;
+using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterSrv;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,9 @@ namespace EduCenterWeb.Pages.User
             {
                 var ui = _UserSrv.GetUserInfo("o3nwE0qI_cOkirmh_qbGGG-5G6B0");
 
-                base.SetUserSesion(ui.OpenId,ui.Name, ui.wx_headimgurl,ui.Phone);
+                CourseScheduleType courseScheduleType = _UserSrv.GetCurrentCourseScheduleType(ui.OpenId);
+
+                base.SetUserSesion(ui.OpenId,ui.Name, ui.wx_headimgurl,ui.Phone, courseScheduleType);
             }
             catch (Exception ex)
             {

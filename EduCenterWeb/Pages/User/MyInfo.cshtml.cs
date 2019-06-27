@@ -63,7 +63,7 @@ namespace EduCenterWeb.Pages.User
         public IActionResult OnPostInitChildList()
         {
             ResultList<EUserChild> result = new ResultList<EUserChild>();
-            var us = GetUserSession();
+            var us = GetUserSession(false);
             try
             {
                 result.List = _UserSrv.GetAllChild(us.OpenId);

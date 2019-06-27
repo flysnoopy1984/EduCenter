@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EduCenterCore.Common.Helper;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
@@ -63,9 +64,14 @@ namespace EduCenterWeb.Pages.User
                 }
 
             }
+            catch (EduException eex)
+            {
+                result.ErrorMsg = eex.Message;
+            }
             catch (Exception ex)
             {
-                result.ErrorMsg = ex.Message;
+                result.ErrorMsg = "购买失败，请联系客服！";
+                NLogHelper.ErrorTxt($"购买课时[OnPostBuyCourse]:{ex.Message}");
              
             }
             return new JsonResult(result);
