@@ -70,6 +70,7 @@
      
     .PreSign button {
         box-shadow: #a28103 0px 0px 4px;
+        padding:15px;
     }
 
         .PreSign button div {
@@ -99,10 +100,11 @@
         .NextSign{
             
         }
-        .splitLine{
-            width:50%;
+        hr {
+            width:100%;
          
         }
+      
 </style>
 
 
@@ -115,14 +117,11 @@
 <div class="MainContainer">
     <div class="Title"><i class="fa fa-pencil-square" aria-hidden="true" style="margin-right:10px;"></i>课程签到</div>
 
-
-
-
     @if (@Model.UserCourseLogList != null && @Model.UserCourseLogList.Count > 0)
     {
         <div class="SignLog">
             <div class="SubTitle">
-                <div class="SubTitleName">签到记录[最近10次]</div> <div>更多</div>
+                <div class="SubTitleName">签到记录[最近10次]</div> <div><a href="SignList">更多</a></div>
             </div>
             <table border="0" cellpadding="0" cellspacing="0" class="LogTable">
                 <tr>
@@ -148,23 +147,23 @@
         <div class="SignInfo">请点击未签到的课程！<i class="fa fa-hand-o-down" aria-hidden="true"></i></div>
         <div class="PreSign">
             <button class="btn btn-info" id="btn_Sign">
-                <div class="CourseDate">2019-10-19</div>
-                <div class="CourseName">美术课</div>
-                <i class="fa fa-sign-in" aria-hidden="true"></i>
-                <div class="CourseStatus">我要签到</div>
+                <div class="CourseDate" style="margin-bottom:10px;"></div>
+                <div class="CourseName"></div>
+                <i class="fa fa-sign-in fa-2x" aria-hidden="true" style="margin-top:5px;margin-bottom:5px;"></i>
+                <div class="CourseStatus"></div>
             </button>
         </div>
     </div>
 
-    <hr class="splitLine" />
+    <hr />
 
     <div class="SignedArea">
         <div class="PreSign">
-            <button class="btn btn-block disabled">
-                <div class="CourseDate">2019-10-19</div>
-                <div class="CourseName">美术课</div>
-                <i class="fa fa-check-circle" aria-hidden="true"></i>
-                <div class="CourseStatus">您已签到</div>
+            <button class="btn btn-block disabled" lcode="">
+                <div class="CourseDate" style="margin-bottom:10px;"></div>
+                <div class="CourseName"></div>
+                <i class="fa fa-check-circle fa-2x" aria-hidden="true" style="margin-top:5px;margin-bottom:5px;"></i>
+                <div class="CourseStatus">已签到</div>
             </button>
         </div>
     </div>

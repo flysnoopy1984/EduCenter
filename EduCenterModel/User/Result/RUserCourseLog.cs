@@ -9,6 +9,8 @@ namespace EduCenterModel.User.Result
         public RUserCourseLog()
         {
             UserCourseLogStatus = BaseEnum.UserCourseLogStatus.PreNext;
+            UserLeaveDateTime = DateTime.MinValue;
+            UserSignDateTime = DateTime.MinValue;
         }
 
         public string CourseName { get; set; }
@@ -25,6 +27,25 @@ namespace EduCenterModel.User.Result
         public int Lesson { get; set; }
 
         public string CourseScheduleTypeName { get; set; }
-       
+
+        public string LeaveDateTimeStr
+        {
+            get
+            {
+                return UserLeaveDateTime.ToString("yyyy-MM-dd hh:mm");
+            }
+        }
+
+        public string SignDateTimeStr
+        {
+            get
+            {
+                return UserSignDateTime.ToString("yyyy-MM-dd hh:mm");
+            }
+        }
+
+
+
+
     }
 }

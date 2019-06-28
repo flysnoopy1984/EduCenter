@@ -11,6 +11,8 @@ namespace EduCenterModel.BaseEnum
         ApplyTrial_OverSingleLimit = 201,//超过单节试听课2次
         ApplyTrial_SameTypeExist = 202, //同类型课已经存在试听
 
+        NoCourseTime = 100,
+
 
     }
 }

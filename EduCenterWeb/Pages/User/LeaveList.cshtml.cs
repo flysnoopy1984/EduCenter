@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EduCenterCore.Common.Helper;
+using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.User.Result;
 using EduCenterSrv;
@@ -25,14 +26,14 @@ namespace EduCenterWeb.Pages.User
 
         public IActionResult OnPostQueryList(int pageIndex, int pageSize)
         {
-            ResultList<RUserCourseList> result = new ResultList<RUserCourseList>();
+            ResultList<RUserCourseLog> result = new ResultList<RUserCourseLog>();
             try
             {
                 var us = base.GetUserSession(false);
                 if (us != null)
                 {
                     int totalPages;
-                    result.List = _UserSrv.QueryUserCourseLogList(us.OpenId, out totalPages, null, pageIndex, pageSize);
+                    result.List = _UserSrv.GetUserCourseLogList(us.OpenId, UserCourseLogStatus.Leave, out totalPages, pageIndex, pageSize);
                     result.TotlaPage = totalPages;
                 }
                 else

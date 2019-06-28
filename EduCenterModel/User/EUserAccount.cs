@@ -42,7 +42,13 @@ namespace EduCenterModel.User
 
         public bool CanSelectSummerWinterCourse { get; set; }
 
-        
+        public DateTime BuyDate { get; set; }
+
+        public DateTime SummerBuyDate { get; set; }
+
+        public DateTime WinterBuyDate { get; set; }
+
+
 
 
 

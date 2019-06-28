@@ -30,8 +30,8 @@ namespace EduCenterWeb.Pages.User
                 return;
             else
             {
-
-                UserCourseLogList = _UserSrv.GetUserCourseLogList(us.OpenId,UserCourseLogStatus.Leave);
+                int totalPage;
+                UserCourseLogList = _UserSrv.GetUserCourseLogList(us.OpenId,UserCourseLogStatus.Leave,out totalPage, 1, 10);
             }
         }
 

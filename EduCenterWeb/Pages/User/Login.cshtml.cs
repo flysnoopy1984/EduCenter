@@ -31,9 +31,11 @@ namespace EduCenterWeb.Pages.User
             {
                 var ui = _UserSrv.GetUserInfo("o3nwE0qI_cOkirmh_qbGGG-5G6B0");
 
+                var userAccount = _UserSrv.GetUserAccount("o3nwE0qI_cOkirmh_qbGGG-5G6B0");
+
                 CourseScheduleType courseScheduleType = _UserSrv.GetCurrentCourseScheduleType(ui.OpenId);
 
-                base.SetUserSesion(ui.OpenId,ui.Name, ui.wx_headimgurl,ui.Phone, courseScheduleType);
+                base.SetUserSesion(ui.OpenId,ui.Name, ui.wx_headimgurl,ui.Phone, courseScheduleType,userAccount);
             }
             catch (Exception ex)
             {
@@ -43,5 +45,7 @@ namespace EduCenterWeb.Pages.User
             }
             return new JsonResult(result);
         }
+
+       
     }
 }

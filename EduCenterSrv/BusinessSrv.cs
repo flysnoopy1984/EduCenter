@@ -154,30 +154,9 @@ namespace EduCenterSrv
 
                 //获取订单行,更新课时
                 var line = _dbContext.DBOrderLine.Where(a => a.OrderId == orderId).FirstOrDefault();
-                UpdateCourseTimeByLine(order.CustOpenId, line);
+                UpdateUserAccountByOrderLine(order.CustOpenId, line);
 
-                ////新建课时交易
-                //AddCourseTimeTransByLine(line);
-
-                //更新用户课程表
-                //    var newLessonCode =UpdateUserCourseToAvaliable(order.CustOpenId);
-              //  UpdateUserCourseToAvaliable(order.CustOpenId);
-
-                /*
-                if (newLessonCode.Count>0)
-                {
-                    foreach(var lc in newLessonCode)
-                    {
-                        var cs = _dbContext.DbCourseSchedule.Where(a => a.LessonCode == lc).FirstOrDefault();
-                        cs.ApplyNum++;
-
-                        //更新老师课程表
-                        var cls = _dbContext.DBCourseInfoClass.Where(s => s.CourseCode == cs.CourseCode).FirstOrDefault();
-                        var tecCode = cls.TecCode;
-                        UpdateTecCourse(tecCode, cs);
-                    }
-                }
-                */
+              
           
                 _dbContext.SaveChanges();
                 CommitTrans();
@@ -201,7 +180,7 @@ namespace EduCenterSrv
         /// </summary>
         /// <param name="userOpenId"></param>
         /// <param name="line"></param>
-        private void UpdateCourseTimeByLine(string userOpenId,EOrderLine line)
+        private void UpdateUserAccountByOrderLine(string userOpenId,EOrderLine line)
         {
        
             var userAccount =  _dbContext.DBUserAccount.Where(a => a.UserOpenId == userOpenId).FirstOrDefault();
@@ -218,16 +197,24 @@ namespace EduCenterSrv
                 case CourseScheduleType.Standard:
                     userAccount.RemainCourseTime += line.Qty;
                     userAccount.DeadLine = userAccount.DeadLine.AddYears(1);
+                    if (userAccount.BuyDate == DateTime.MinValue)
+                        userAccount.BuyDate = DateTime.Now;
                     break;
                 case CourseScheduleType.Summer:
                     userAccount.RemainSummerTime += line.Qty;
                     dr = StaticDataSrv.CourseDateRange.Where(a => a.CourseScheduleType == CourseScheduleType.Summer && a.Year == DateTime.Now.Year).FirstOrDefault();
                     userAccount.SummerDeadLine = dr.EndDate;
+
+                    if (userAccount.SummerBuyDate == DateTime.MinValue)
+                        userAccount.SummerBuyDate = DateTime.Now;
+
                     break;
                 case CourseScheduleType.Winter:
                     userAccount.RemainWinterTime += line.Qty;
                     dr = StaticDataSrv.CourseDateRange.Where(a => a.CourseScheduleType == CourseScheduleType.Winter && a.Year == DateTime.Now.Year).FirstOrDefault();
                     userAccount.WinterDeadLine = dr.EndDate;
+                    if (userAccount.WinterBuyDate == DateTime.MinValue)
+                        userAccount.WinterBuyDate = DateTime.Now;
                     break;
                 
             }
@@ -312,9 +299,74 @@ namespace EduCenterSrv
            
             
         }
-       
-      
+
+
         #endregion
+
+        #region 用户课时消耗
+        public void UpdateCourseLogToSigned(string openId, CourseScheduleType courseScheduleType, string lessonCode)
+        {
+            var date = DateTime.Now.ToString("yyyy-MM-dd");
+
+            int result = UpdateUserCourseTimeOnce(openId, courseScheduleType);
+            if(result == -1)
+            {
+                string courseScheduleTypeName = BaseEnumSrv.GetCourseScheduleTypeName(courseScheduleType);
+                throw new EduException($"您的[{courseScheduleTypeName}]课时已用完，请先充值！",EduErrorMessage.NoCourseTime);
+            }
+
+            var log = _dbContext.DBUserCourseLog.Where(a => a.UserOpenId == openId &&
+                                              a.LessonCode == lessonCode &&
+                                              a.CourseDateTime == date &&
+                                              a.CourseScheduleType == courseScheduleType).FirstOrDefault();
+            if (log == null)
+            {
+                log = new EUserCourseLog
+                {
+                    CourseDateTime = date,
+                    CourseScheduleType = courseScheduleType,
+                    CreatedDateTime = DateTime.Now,
+                    LessonCode = lessonCode,
+                    UserCourseLogStatus = UserCourseLogStatus.SignIn,
+                    UserSignDateTime = DateTime.Now,
+                    UserOpenId = openId
+                };
+                _dbContext.DBUserCourseLog.Add(log);
+            }
+            else
+            {
+                log.UserCourseLogStatus = UserCourseLogStatus.SignIn;
+                log.UserSignDateTime = DateTime.Now;
+            }
+
+             _dbContext.SaveChanges();
+        }
+
+        //返回-1 用户余额不足
+        public int UpdateUserCourseTimeOnce(string openId, CourseScheduleType courseScheduleType)
+        {
+            EUserAccount result = _dbContext.DBUserAccount.Where(a => a.UserOpenId == openId).FirstOrDefault();
+
+            switch (courseScheduleType)
+            {
+                case CourseScheduleType.Summer:
+                    if (result.RemainSummerTime == 0) return -1;
+                    else result.RemainSummerTime-=2;
+                    break;
+                case CourseScheduleType.Winter:
+                    if (result.RemainWinterTime == 0) return -1;
+                    else result.RemainWinterTime-=2;
+                    break;
+                default:
+                    if (result.RemainCourseTime == 0) return -1;
+                    else result.RemainCourseTime-=2;
+                    break;
+
+            }
+            return 0;
+
+        }
+        #endregion 
 
 
 

@@ -3,6 +3,7 @@ using EduCenterModel.BaseEnum;
 using EduCenterModel.Session;
 using EduCenterModel.User;
 using EduCenterSrv;
+using EduCenterSrv.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -33,10 +34,24 @@ namespace EduCenterWeb.Pages
              
 
        }
+        private bool IsCourseBuyDate(UserSession us)
+        {
+            DateTime buyDate = DateTime.MinValue;
+            if (us.CurrentScheduleType == CourseScheduleType.Summer)
+                buyDate = us.UserAccount.SummerBuyDate;
+            else if (us.CurrentScheduleType == CourseScheduleType.Winter)
+                buyDate = us.UserAccount.WinterBuyDate;
+            else
+                buyDate = us.UserAccount.BuyDate;
+
+            return buyDate.Date == DateTime.Today;
+
+
+        }
 
         public void SetUserSesion(string openId,string userName,
             string headerUrl,string phone, 
-            CourseScheduleType currentScheduleType)
+            CourseScheduleType currentScheduleType,EUserAccount userAccount)
         {
             UserSession session = new UserSession()
             {
@@ -44,9 +59,12 @@ namespace EduCenterWeb.Pages
                 UserName = userName,
                 HeaderUrl = headerUrl,
                 Phone = phone,
-                CurrentScheduleType = currentScheduleType
-
+                CurrentScheduleType = currentScheduleType,
+                CurrentScheduleTypeName = BaseEnumSrv.GetCourseScheduleTypeName(currentScheduleType),
+                UserAccount = userAccount
             };
+            session.IsBuyCourseToday = IsCourseBuyDate(session);
+
             var json = JsonConvert.SerializeObject(session);
             HttpContext.Session.SetString(EduConstant.UserSessionKey, json);
         }

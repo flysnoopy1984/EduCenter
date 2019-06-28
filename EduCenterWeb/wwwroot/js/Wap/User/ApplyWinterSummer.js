@@ -328,44 +328,12 @@
       
         CourseTime = result.Entity.CourseTimeList;
         CourseMaxApplyNum = result.Entity.CourseMaxApplyNum;
-        InitUserAction();
+   
 
 
     }
 
-    InitUserAction = function () {
-
-        var userApplyList = GetSessonUserApplyCourse();
-
-
-
-        if (userApplyList) {
-            $.each(userApplyList, function (i) {
-
-                var item = userApplyList[i];
-                var gridRoot = null;
-                if (item.day >= 1 && item.day <= 5) gridRoot = $("#GridNormal");
-                else gridRoot = $("#GridWeek");
-
-                var divList = gridRoot.find(".CellContainer[day=" + item.day + "][lesson=" + item.lesson + "] div[lCode=" + item.lcode + "]");
-                $.each(divList, function (i) {
-                    var course = CreateDataObject(item.day, item.lesson, $(this));
-                    CreateSelectCourseInfo(course, i);
-                });
-
-
-                //$.each(csList, function (j) {
-                //    var course = csList[j];
-                //    if (course.CourseCode == item.courseCode) {
-                //        CreateSelectCourseInfo(course, j);
-                //        return false;
-                //    }
-                //});
-            });
-        }
-
-    }
-
+   
     CreateDataObject = function (day, lesson, row) {
         var item = new Object();
         item.CourseCode = $(row).attr("CourseCode");

@@ -8,6 +8,7 @@ using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterModel.Pages.User;
+using EduCenterModel.Session;
 using EduCenterModel.User;
 using EduCenterModel.User.Result;
 using EduCenterSrv;
@@ -32,6 +33,19 @@ namespace EduCenterWeb.Pages.User
 
         public Dictionary<int,string> UserCourseLogStatus { get; set; }
 
+        public string CourseScheduleTypeName
+        {
+            get
+            {
+                var us = base.GetUserSession(false);
+                if(us!=null)
+                {
+                    return us.CurrentScheduleTypeName;
+                }
+                return "";
+            }
+        }
+
         public MyCourseModel(UserSrv userSrv)
         {
             _UserSrv = userSrv;
@@ -43,7 +57,7 @@ namespace EduCenterWeb.Pages.User
             {
                 CourseTime = StaticDataSrv.CourseTime;
                 UserCourseLogStatus = BaseEnumSrv.UserCourseLogStatusList;        
-                UserCourseLogList = _UserSrv.GetUserCourseLogHistory(us.OpenId, CourseScheduleType.Standard, 10); 
+                UserCourseLogList = _UserSrv.GetUserCourseLogHistory(us.OpenId,10); 
             }
            
         }
@@ -56,6 +70,7 @@ namespace EduCenterWeb.Pages.User
                 var us = GetUserSession(false);
                 if (us != null)
                 {
+
                     CourseScheduleType courseScheduleType = _UserSrv.GetCurrentCourseScheduleType(us.OpenId);
                     //获取用户课程
                     result.Entity.UserCourseList = _UserSrv.GetUserCourseAvaliable(us.OpenId, courseScheduleType);
@@ -63,7 +78,10 @@ namespace EduCenterWeb.Pages.User
                     //获取用户最近课程
                     if (result.Entity.UserCourseList.Count > 0)
                     {
-                        result.Entity.UserShowCourse = _UserSrv.GetNextUserCourse(result.Entity.UserCourseList,DateTime.Now);
+                        DateTime startDate = DateTime.Now;
+                        if (us.IsBuyCourseToday)
+                            startDate = startDate.AddDays(1);
+                        result.Entity.UserShowCourse = _UserSrv.GetNextUserCourse(result.Entity.UserCourseList, startDate);
 
                     }
                 }
@@ -80,5 +98,7 @@ namespace EduCenterWeb.Pages.User
             }
             return new JsonResult(result);
         }
+
+      
     }
 }

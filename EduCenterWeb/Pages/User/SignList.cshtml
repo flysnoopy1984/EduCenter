@@ -4,6 +4,124 @@
     ViewData["Title"] = "SignList";
     Layout = "~/Pages/Shared/_EduMainApp.cshtml";
 }
+@Html.AntiForgeryToken()
 
-<h2>SignList</h2>
+<style type="text/css">
+    .MainContainer {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin-left: 10px;
+        margin-right: 10px;
+        height: 100%;
+    }
+
+    .Title {
+        color: #052d01;
+        background-color: #e4fd96;
+    }
+
+    .dataList {
+        width: 90%;
+        font-size: 12px;
+    }
+
+    .OneRecord {
+        height: 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .OneLine {
+        display: flex;
+        justify-content: space-between;
+        /*margin-bottom: 6px;*/
+    }
+
+    .LineColumn {
+        display: flex;
+    }
+
+    hr {
+        margin-bottom: 20px;
+        margin-top: 4px;
+        background: #ffac71;
+    }
+
+    .courseName {
+        font-weight: bold;
+    }
+
+    .courseStatus {
+        color: #2c9403;
+    }
+
+    .couseTime {
+        color: #b0b0b0;
+    }
+
+    .layui-flow-more {
+        text-align: center;
+        height: 40px;
+        line-height: 40px;
+        color: #999999;
+        font-weight: bold;
+    }
+    /*.nodata{
+        text-align:center;
+        height:40px;
+        line-height:40px;
+        color:#999999;
+        font-weight:bold;
+        display:none;
+    }*/
+</style>
+
+@*<link href="~/lib/layui/css/layui.mobile.css" rel="stylesheet" />*@
+<script src="~/lib/layui/layui.js"></script>
+<script src="~/lib/layui/lay/modules/flow.js"></script>
+
+<link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
+<script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
+<script src="~/js/EduLib/EditHelper.js"></script>
+<script src="~/js/Wap/User/SignList.js"></script>
+<div class="MainContainer">
+    <div class="Title">
+        <span class="fa fa-pencil-square" style="margin-right:8px;"></span>签到记录
+    </div>
+
+    <div class="dataList">
+
+    </div>
+
+</div>
+<div id="HideData" style="display:none;">
+
+    <div class="OneRecord">
+        <div class="OneLine">
+            <div class="LineColumn">
+                <div>课程：</div>
+                <div class="courseName">美术-基础</div>
+            </div>
+            <div class="LineColumn">
+                <div>状态：</div>
+                <div class="courseStatus">已签到</div>
+            </div>
+        </div>
+        <div class="OneLine">
+            <div class="LineColumn">
+                <div class="courseScheduleType">标准班</div>
+            </div>
+            <div class="LineColumn">
+                <div>签到时间：</div>
+                <div class="couseTime">2019-06-10 17:00-19:00</div>
+            </div>
+        </div>
+
+    </div>
+    <hr />
+</div>
+
 

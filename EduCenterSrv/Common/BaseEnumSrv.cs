@@ -286,7 +286,21 @@ namespace EduCenterSrv.Common
             return "";
         }
 
-
+        public static string EduErrorMessageName(EduErrorMessage type)
+        {
+            switch(type)
+            {
+                case EduErrorMessage.NoCourseTime:
+                    return "课时余额不足，请去充值!";
+                case EduErrorMessage.ApplyTrial_SameTypeExist:
+                    return "同类型课已经存在试听";
+                case EduErrorMessage.ApplyTrial_OverAllLimit:
+                    return "超过试听课总数6次";
+                case EduErrorMessage.ApplyTrial_OverSingleLimit:
+                    return "超过单节试听课2次";
+            }
+            return "";
+        }
 
         //public static string GetUserCourseLogStatusName(UserCourseLogStatus status)
         //{

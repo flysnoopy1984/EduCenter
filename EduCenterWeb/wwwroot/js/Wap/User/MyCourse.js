@@ -46,6 +46,7 @@
                 }
                 else
                     cell.addClass("bg-primary");
+              
                 td.append(item);
             });
         }

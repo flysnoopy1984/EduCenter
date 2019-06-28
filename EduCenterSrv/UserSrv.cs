@@ -233,6 +233,7 @@ namespace EduCenterSrv
                 {
                     RUserSign rUserSign = new RUserSign
                     {
+                        LessonCode = c.LessonCode,
                         CanSign = true,
                         CourseDate = today,
                         CourseName = c.CourseName,
@@ -240,6 +241,8 @@ namespace EduCenterSrv
                         CourseScheduleTypeName = BaseEnumSrv.GetCourseScheduleTypeName(courseScheduleType),
                         StartTime = c.CourseTime.Substring(0, 5),
                         UserCourseLogStatus = c.UserCourseLogStatus,
+                        UserCourseLogStatusName = c.UserCourseLogStatusName,
+                         
                     };
                     result.Add(rUserSign);
                 }
@@ -259,6 +262,7 @@ namespace EduCenterSrv
                         {
                             RUserSign userSign = new RUserSign()
                             {
+                                LessonCode = skipcourse.LessonCode,
                                 CanSign = false,
                                 CourseName = skipcourse.CourseName,
                                 CourseDate = skipcourse.Date,
@@ -266,6 +270,7 @@ namespace EduCenterSrv
                                 CourseScheduleTypeName = BaseEnumSrv.GetCourseScheduleTypeName(courseScheduleType),
                                 StartTime = skipcourse.StartTime,
                                 UserCourseLogStatus = UserCourseLogStatus.Leave,
+
                             };
                             result.Add(userSign);
                             //if (DateTime.Parse(skipcourse.Date) == DateTime.Today)
@@ -281,6 +286,7 @@ namespace EduCenterSrv
                     RUserSign userSign = new RUserSign()
                     {
                         CanSign = false,
+                      
                         CourseDate = rUserShowCourse.NextCourseDate,
                         CourseName = rUserShowCourse.NextCourseName,
                         CourseScheduleType = courseScheduleType,
@@ -409,6 +415,7 @@ namespace EduCenterSrv
                 //处理没有获取的理由
                 RUserSkipCourse rUserSkipCourse = new RUserSkipCourse
                 {
+                    LessonCode = gotCourse.LessonCode,
                     CourseName = gotCourse.CourseName,
                     Date = gotDate.ToString("yyyy-MM-dd"),
                     StartTime = gotCourse.Time.Substring(0,5),
@@ -437,7 +444,41 @@ namespace EduCenterSrv
             return result;
         }
 
-        
+        public List<RUserCourseLog> GetUserCourseByDate(string OpenId, string date, CourseScheduleType courseScheduleType)
+        {
+            var dayofweek = DateSrv.GetDayOfWeek(DateTime.Parse(date));
+
+            List<RUserCourseLog> result = null;
+
+            var times = StaticDataSrv.CourseTime;
+
+            var efSql = from uc in _dbContext.DBUserCoures
+                        join ul in _dbContext.DBUserCourseLog.Where(a => a.CourseDateTime == date) on uc.LessonCode equals ul.LessonCode into uc_ul
+                        from ucul in uc_ul.DefaultIfEmpty()
+                        join cs in _dbContext.DbCourseSchedule on uc.LessonCode equals cs.LessonCode
+                        where uc.UserOpenId == OpenId &&
+                              uc.CourseScheduleType == courseScheduleType &&
+                              cs.Day == dayofweek
+                        //ucul.UserCourseLogStatus != UserCourseLogStatus.SignIn &&
+                        //ucul.UserCourseLogStatus != UserCourseLogStatus.Absent
+
+                        select new RUserCourseLog
+                        {
+                            CourseScheduleType = uc.CourseScheduleType,
+                            CourseName = cs.CourseName,
+                            Lesson = cs.Lesson,
+
+                            Day = cs.Day,
+                            CourseTime = times[cs.Lesson].TimeRange,
+                            UserCourseLogStatus = ucul == null ? UserCourseLogStatus.PreNext : ucul.UserCourseLogStatus,
+                            LessonCode = uc.LessonCode,
+                            UserCourseLogStatusName = ucul == null ? BaseEnumSrv.UserCourseLogStatusList[(int)UserCourseLogStatus.PreNext] : BaseEnumSrv.UserCourseLogStatusList[(int)ucul.UserCourseLogStatus]
+                        };
+
+            result = efSql.ToList();
+
+            return result;
+        }
 
         /// <summary>
         /// 用户请假，老师请假，国假日
@@ -474,7 +515,7 @@ namespace EduCenterSrv
         /// <param name="CourseScheduleType"></param>
         /// <param name="topnum"></param>
         /// <returns></returns>
-        public List<RUserCourseLog> GetUserCourseLogHistory(string OpenId, CourseScheduleType CourseScheduleType,int topnum =5)
+        public List<RUserCourseLog> GetUserCourseLogHistory(string OpenId, int topnum =5)
         {
 
             var result = _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
@@ -494,8 +535,7 @@ namespace EduCenterSrv
                 })
                 .OrderByDescending(a=>a.CreatedDateTime)
                 .Where(a => a.UserOpenId == OpenId && 
-                        a.CourseScheduleType == CourseScheduleType &&
-                        a.UserCourseLogStatus!= UserCourseLogStatus.PreNext).Take(topnum).ToList();
+                       a.UserCourseLogStatus!= UserCourseLogStatus.PreNext).Take(topnum).ToList();
             return result;
         }
 
@@ -528,12 +568,15 @@ namespace EduCenterSrv
             
             return result;
         }
+
         public List<RUserCourseLog> GetUserCourseLogList(string OpenId,
                                                          UserCourseLogStatus userCourseLogStatus,
-                                                        int pageIndex= 1,int pageSize =20)
+                                                         out int totalPage,
+                                                         int pageIndex= 1,int pageSize =20)
         {
+            totalPage = 1;
 
-            var result = _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
+            var sql = _dbContext.DBUserCourseLog.Join(_dbContext.DbCourseSchedule,
                  uc => uc.LessonCode, cs => cs.LessonCode, (uc, cs) => new RUserCourseLog
                  {
                      UserOpenId = uc.UserOpenId,
@@ -543,14 +586,29 @@ namespace EduCenterSrv
                      CourseName = cs.CourseName,
                      LessonCode = uc.LessonCode,
                      CreatedDateTime = uc.CreatedDateTime,
+                     UserLeaveDateTime = uc.UserLeaveDateTime,
+                     UserSignDateTime =uc.UserSignDateTime,
                      UserCourseLogStatus = uc.UserCourseLogStatus,
                      UserCourseLogStatusName = BaseEnumSrv.UserCourseLogStatusList[(int)uc.UserCourseLogStatus],
 
-                 })
-                .OrderByDescending(a => a.CreatedDateTime)
-                .Where(a => a.UserOpenId == OpenId &&
-                        a.UserCourseLogStatus == userCourseLogStatus).Skip((pageIndex-1)* pageSize).Take(pageSize).ToList();
-            return result;
+                 });
+            if (userCourseLogStatus == UserCourseLogStatus.Leave)
+                sql = sql.OrderByDescending(a => a.UserLeaveDateTime);
+            else if(userCourseLogStatus == UserCourseLogStatus.SignIn)
+                sql = sql.OrderByDescending(a => a.UserSignDateTime);
+            else
+                sql = sql.OrderByDescending(a => a.CreatedDateTime);
+
+            sql = sql.Where(a => a.UserOpenId == OpenId &&
+                       a.UserCourseLogStatus == userCourseLogStatus);
+
+            if(pageSize >10)
+            {
+                totalPage = Convert.ToInt32(sql.Count() / pageSize) + 1;
+            }
+            sql = sql.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            return sql.ToList();
+         
         }
 
         public List<RUserComsume> QueryUserCourseComsume(string OpenId, int pageIndex = 1, int pageSize = 10)
@@ -666,41 +724,7 @@ namespace EduCenterSrv
             return result;
         }
 
-        public List<RUserCourseLog> GetUserCourseByDate(string OpenId,string date, CourseScheduleType courseScheduleType)
-        {
-            var dayofweek = DateSrv.GetDayOfWeek(DateTime.Parse(date));
-
-            List<RUserCourseLog> result = null;
-       
-            var times = StaticDataSrv.CourseTime;
-
-            var efSql = from uc in _dbContext.DBUserCoures
-                        join ul in _dbContext.DBUserCourseLog.Where(a => a.CourseDateTime == date) on uc.LessonCode equals ul.LessonCode into uc_ul
-                        from ucul in uc_ul.DefaultIfEmpty()
-                        join cs in _dbContext.DbCourseSchedule on uc.LessonCode equals cs.LessonCode
-                        where uc.UserOpenId == OpenId &&
-                              uc.CourseScheduleType == courseScheduleType &&
-                              cs.Day == dayofweek 
-                              //ucul.UserCourseLogStatus != UserCourseLogStatus.SignIn &&
-                              //ucul.UserCourseLogStatus != UserCourseLogStatus.Absent
-
-                        select new RUserCourseLog
-                        {
-                            CourseScheduleType = uc.CourseScheduleType,
-                            CourseName = cs.CourseName,
-                            Lesson = cs.Lesson,
-                           
-                            Day = cs.Day,
-                            CourseTime = times[cs.Lesson].TimeRange,
-                            UserCourseLogStatus = ucul==null?UserCourseLogStatus.PreNext: ucul.UserCourseLogStatus,
-                            LessonCode = uc.LessonCode,
-                            UserCourseLogStatusName = ucul == null? BaseEnumSrv.UserCourseLogStatusList[(int)UserCourseLogStatus.PreNext]: BaseEnumSrv.UserCourseLogStatusList[(int)ucul.UserCourseLogStatus]
-                        };
-
-            result = efSql.ToList();
-
-            return result;
-        }
+        
 
         public void UpdateCourseLogToLeave(List<EUserCourseLog> logList,string openId)
         {
@@ -725,7 +749,11 @@ namespace EduCenterSrv
                     _dbContext.DBUserCourseLog.Add(log);
                 }
                 else
+                {
+                    data.UserLeaveDateTime = DateTime.Now;
                     data.UserCourseLogStatus = UserCourseLogStatus.Leave;
+                }
+                    
             }
             _dbContext.SaveChanges();
             
@@ -735,6 +763,8 @@ namespace EduCenterSrv
         {
             _dbContext.DBUserCourseLog.AddRange(list);
         }
+
+       
         #endregion
 
         #region UserAccount
@@ -746,12 +776,17 @@ namespace EduCenterSrv
                 DeadLine = DateTime.MinValue,
                 SummerDeadLine = DateTime.MinValue,
                 WinterDeadLine = DateTime.MinValue,
+
                 RemainSummerTime = 0,
                 RemainWinterTime = 0,
                 RemainCourseTime = 0,
                 CanSelectSummerWinterCourse = true,
                 CanSelectCourse = true,
-              
+
+                BuyDate = DateTime.MinValue,
+                SummerBuyDate = DateTime.MinValue,
+                WinterBuyDate = DateTime.MinValue,
+
                 UserOpenId = openId,
             };
             return eUserAccount;
@@ -777,6 +812,8 @@ namespace EduCenterSrv
                 userAccount.CanSelectSummerWinterCourse = isCan;
 
         }
+
+        
         #endregion
 
         #region UserChild

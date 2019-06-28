@@ -10,7 +10,7 @@ namespace EduCenterModel.User.Result
         public string Date { get; set; }
 
      
-
+        public string LessonCode { get; set; }
         public string CourseName { get; set; }
 
         public CourseSkipReason  CourseSkipReason {get;set;}

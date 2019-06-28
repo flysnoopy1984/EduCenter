@@ -40,7 +40,6 @@ namespace EduCenterWeb.Pages.User
                 WinterPriceList = list.Where(a => a.CourseScheduleType == CourseScheduleType.Winter).ToList();
             }
                
-
         }
 
         public IActionResult OnPostBuyCourse(string priceCode)
@@ -55,7 +54,6 @@ namespace EduCenterWeb.Pages.User
                     var order = _BusinessSrv.PayCourseOrder(us.OpenId, eCoursePrice);
                     _BusinessSrv.PayCourseSuccess(order.OrderId);
                     result.IntMsg = (int)eCoursePrice.CourseScheduleType;
-
                 }
                 else
                 {

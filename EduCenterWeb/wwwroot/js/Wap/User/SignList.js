@@ -1,5 +1,5 @@
 ﻿$(function () {
-    var QueryListUrl = "LeaveList?handler=QueryList";
+    var QueryListUrl = "SignList?handler=QueryList";
     var pageIndex = 1;
     var pageSize = 20;
 
@@ -23,7 +23,7 @@
                             item.find(".courseName").text(d.CourseName);
                             item.find(".courseStatus").text(d.UserCourseLogStatusName);
                             item.find(".courseScheduleType").text(d.CourseScheduleTypeName);
-                            item.find(".couseTime").text(d.LeaveDateTimeStr);
+                            item.find(".couseTime").text(d.SignDateTimeStr);
 
                             html += item.prop("outerHTML");
                             html += "<hr />";
