@@ -64,7 +64,12 @@
     .form-group {
         display: flex;
         justify-content: space-between;
+        width:100%;
     }
+    .form-group > div{
+        flex-grow:1;
+    }
+
 
     .BtnArea {
         width: 100%;
@@ -85,6 +90,7 @@
         padding-bottom: 4px;
         width: 30%;
         text-align: center;
+        font-weight:bold;
     }
 
     .BabyInfoOption {
@@ -133,14 +139,14 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">宝贝名字</label>
+            <label class="col-sm-2 control-label">姓名</label>
             <div class="col-sm-10">
                 <input class="form-control input-sm" id="Name" type="text" value="">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">性别</label>
-            <div class="col-sm-10" style="margin-right: 113px;">
+            <div class="col-sm-10" >
                 <select id="Sex" class="form-control input-sm">
                     <option value="0">男</option>
                     <option value="1">女</option>
@@ -163,14 +169,14 @@
     <div id="SecBaby" class="BabyInfo" style="display:none">
         <div class="BabyInfoTitle  text-primary">第二个宝贝</div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">宝贝名字</label>
+            <label class="col-sm-2 control-label">姓名</label>
             <div class="col-sm-10">
                 <input class="form-control input-sm" id="Name" type="text" value="">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">性别</label>
-            <div class="col-sm-10" style="margin-right: 113px;">
+            <div class="col-sm-10">
                 <select id="Sex" class="form-control input-sm">
                     <option value="0">男</option>
                     <option value="1">女</option>
