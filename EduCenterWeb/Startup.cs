@@ -55,8 +55,8 @@ namespace EduCenterWeb
                      {
                          options.RootDirectory = "/Pages";//默认目录
                                                           //options.Conventions.AddPageRoute("/pages", "/1");//重写URL
-                    options.Conventions.AddPageRoute("/User/Login", "");//默认主页
-                         //options.Conventions.AddPageRoute("/WebBackend/Login", "");
+                 //   options.Conventions.AddPageRoute("/User/Login", "");//默认主页
+                         options.Conventions.AddPageRoute("/WebBackend/Login", "");
                      }); ;
 
       
@@ -70,6 +70,7 @@ namespace EduCenterWeb
             services.AddScoped<UserSrv>();
             services.AddScoped<OrderSrv>();
             services.AddScoped<BusinessSrv>();
+            services.AddScoped<BackendSrv>();
             services.AddScoped<EduCenterSrv.SMS.SMSSrv>();
         }
 

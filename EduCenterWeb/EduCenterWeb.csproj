@@ -37,7 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\WebBackend\User\" />
     <Folder Include="WebAPI\" />
     <Folder Include="wwwroot\Files\QR\InviteTec\" />
     <Folder Include="wwwroot\css\Pages\" />

@@ -17,7 +17,7 @@ namespace EduCenterWeb.Pages
     public class EduBaseAppPageModel:PageModel
     {
       
-       
+     
        public UserSession GetUserSession(bool toLoginIfError = true)
        {
             string json = HttpContext.Session.GetString(EduConstant.UserSessionKey);
@@ -32,7 +32,6 @@ namespace EduCenterWeb.Pages
             }
             return null;
              
-
        }
         private bool IsCourseBuyDate(UserSession us)
         {
@@ -51,7 +50,10 @@ namespace EduCenterWeb.Pages
 
         public void SetUserSesion(string openId,string userName,
             string headerUrl,string phone, 
-            CourseScheduleType currentScheduleType,EUserAccount userAccount)
+            CourseScheduleType currentScheduleType,
+            UserRole userRole,
+            MemberType memberType,
+            EUserAccount userAccount)
         {
             UserSession session = new UserSession()
             {
@@ -61,6 +63,8 @@ namespace EduCenterWeb.Pages
                 Phone = phone,
                 CurrentScheduleType = currentScheduleType,
                 CurrentScheduleTypeName = BaseEnumSrv.GetCourseScheduleTypeName(currentScheduleType),
+                MemeberType = memberType,
+                UserRole = userRole,
                 UserAccount = userAccount
             };
             session.IsBuyCourseToday = IsCourseBuyDate(session);
@@ -75,24 +79,6 @@ namespace EduCenterWeb.Pages
             HttpContext.Session.SetString(EduConstant.UserSessionKey, json);
         }
 
-        public void SetUserSesion(EUserInfo ui)
-        {
-            UserSession session = new UserSession()
-            {
-                OpenId = ui.OpenId,
-                UserName = ui.Name,
-                HeaderUrl = ui.wx_headimgurl,
-                Phone = ui.Phone,
-
-            };
-            var json = JsonConvert.SerializeObject(session);
-            HttpContext.Session.SetString(EduConstant.UserSessionKey, json);
-        }
-
-        public void RefreshSession(string openId,UserSrv userSrv)
-        {
-           var ui =  userSrv.GetUserInfo(openId);
-            SetUserSesion(ui);
-        }
+       
     }
 }

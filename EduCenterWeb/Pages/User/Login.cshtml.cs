@@ -35,7 +35,7 @@ namespace EduCenterWeb.Pages.User
 
                 CourseScheduleType courseScheduleType = _UserSrv.GetCurrentCourseScheduleType(ui.OpenId);
 
-                base.SetUserSesion(ui.OpenId,ui.Name, ui.wx_headimgurl,ui.Phone, courseScheduleType,userAccount);
+                base.SetUserSesion(ui.OpenId,ui.Name, ui.wx_headimgurl,ui.Phone, courseScheduleType,ui.UserRole,ui.MemberType,userAccount);
             }
             catch (Exception ex)
             {
