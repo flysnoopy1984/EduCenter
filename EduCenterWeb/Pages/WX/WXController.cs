@@ -96,7 +96,8 @@ namespace EduCenterWeb.Pages.WX
                                 break;
                             case "scan":
                                 //如果是扫描登录
-                                return ScanHandler();
+                                ScanHandler();
+                                break;
                             case "subscribe":
                                 SubscribeHandler();
                                 break;
@@ -152,17 +153,17 @@ namespace EduCenterWeb.Pages.WX
         /// <summary>
         /// 扫码
         /// </summary>
-        private string ScanHandler()
+        private void ScanHandler()
         {
             NLogHelper.InfoTxt("ScanHandler In");
             EUserInfo ui = _UserSrv.GetUserInfo(_wxMessage.FromUserName);
             if(ui!=null)
             {
-               return _wxMessage.toText("亲爱的" + ui.wx_Name + "，欢迎回来！");
+                _ResultMsg = _wxMessage.toText(WXReplyContent.UserComing(ui.wx_Name));
             }
             else
             {
-                return _wxMessage.toText("您好，" + ui.wx_Name + "，欢迎光临云艺国学教育！");
+                _ResultMsg = _wxMessage.toText(WXReplyContent.NewUserLook(ui.wx_Name));
             }
 
         }
@@ -174,14 +175,16 @@ namespace EduCenterWeb.Pages.WX
         {
             NLogHelper.InfoTxt("SubscribeHandler In");
             EUserInfo ui = _UserSrv.GetUserInfo(_wxMessage.FromUserName);
-            if (ui != null)
+            if (ui== null)
             {
+                var wxUser = WXApi.GetWXUserInfo(_wxMessage.FromUserName);
+                ui = _UserSrv.AddOrUpdateFromWXUser(wxUser);
 
+                _ResultMsg = _wxMessage.toText(WXReplyContent.NewUserAdd(ui.wx_Name));
             }
             else
-            {
+                _ResultMsg = _wxMessage.toText(WXReplyContent.UserComing(ui.wx_Name));
 
-            }
         }
 
      
