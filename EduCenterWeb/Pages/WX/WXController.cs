@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EduCenterCore.Common.Helper;
 using EduCenterCore.WX;
+using EduCenterModel.User;
 using EduCenterModel.WX;
 using EduCenterSrv;
 using Microsoft.AspNetCore.Mvc;
@@ -40,7 +41,7 @@ namespace EduCenterWeb.Pages.WX
               
                 string echostr = Request.Query["echostr"].FirstOrDefault();
 
-                NLogHelper.InfoTxt($"echoStr:{echostr}");
+           //     NLogHelper.InfoTxt($"echoStr:{echostr}");
              
                 return echostr;
 
@@ -65,7 +66,7 @@ namespace EduCenterWeb.Pages.WX
                var memoryStream = new MemoryStream();
                Request.Body.CopyTo(memoryStream);
                string strXml = System.Text.Encoding.Default.GetString(memoryStream.ToArray());
-               NLogHelper.InfoTxt($"strXml:{strXml}");
+             //  NLogHelper.InfoTxt($"strXml:{strXml}");
 
                 if (!string.IsNullOrEmpty(strXml))
                 {
@@ -95,8 +96,7 @@ namespace EduCenterWeb.Pages.WX
                                 break;
                             case "scan":
                                 //如果是扫描登录
-                                ScanHandler();
-                                break;
+                                return ScanHandler();
                             case "subscribe":
                                 SubscribeHandler();
                                 break;
@@ -152,9 +152,19 @@ namespace EduCenterWeb.Pages.WX
         /// <summary>
         /// 扫码
         /// </summary>
-        private void ScanHandler()
+        private string ScanHandler()
         {
-         
+            NLogHelper.InfoTxt("ScanHandler In");
+            EUserInfo ui = _UserSrv.GetUserInfo(_wxMessage.FromUserName);
+            if(ui!=null)
+            {
+               return _wxMessage.toText("亲爱的" + ui.wx_Name + "，欢迎回来！");
+            }
+            else
+            {
+                return _wxMessage.toText("您好，" + ui.wx_Name + "，欢迎光临云艺国学教育！");
+            }
+
         }
 
         /// <summary>
@@ -162,7 +172,16 @@ namespace EduCenterWeb.Pages.WX
         /// </summary>
         private void SubscribeHandler()
         {
-           
+            NLogHelper.InfoTxt("SubscribeHandler In");
+            EUserInfo ui = _UserSrv.GetUserInfo(_wxMessage.FromUserName);
+            if (ui != null)
+            {
+
+            }
+            else
+            {
+
+            }
         }
 
      
