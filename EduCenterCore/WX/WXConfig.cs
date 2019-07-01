@@ -13,12 +13,12 @@ namespace EduCenterCore.WX
         * KEY：商户支付密钥，参考开户邮件设置（必须配置）
         * APPSECRET：公众帐号secert（仅JSAPI支付的时候需要配置）
         */
-        public const string APPID = "wxcc6a60fdad3ef777";
+        public const string APPID = "wx0b7a2be2734e3619";
         public const string MCHID = "1440325302";
         public const string KEY = "buBKTN0v1D52iPGMgtgJ9w9nlieZ5UGS";
-        public const string APPSECRET = "cdaa5cd17593259b442f6036fbc4733d";
-        public const string WXID = "yujiepingtai";
-        public const string ServerIp = "47.100.26.96";
+        public const string APPSECRET = "75d20b508b2366745002ac3d3eb9886f";
+        public const string WXID = "yunyiguoqujiaoyu";
+        public const string ServerIp = "47.101.130.0";
 
         //=======【证书路径设置】===================================== 
         /* 证书路径,注意应该填写绝对路径（仅退款、撤销订单时需要）

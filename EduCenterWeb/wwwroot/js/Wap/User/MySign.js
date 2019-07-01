@@ -4,8 +4,10 @@
     Init = function () {
 
         callAjax_Query(InitPageUrl, {}, InitPageCallBack, "", function (res) {
-           if (res.IntMsg == -1)
+            if (res.IntMsg == -1)
                 window.location.href = "Login";
+            else if (res.IntMsg == -2)
+                window.location.href = "Home";
         });
 
     };

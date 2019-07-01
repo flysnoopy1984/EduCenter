@@ -20,6 +20,7 @@ namespace EduCenterCore.EduFramework
             EduConfig.Version = _Configuration["EduConfig:Version"];
             EduConfig.EduOrg = _Configuration["EduConfig:EduOrg"];
             EduConfig.AppMainSite = _Configuration["EduConfig:AppMainSite"];
+            EduConfig.IsTest = Convert.ToBoolean(_Configuration["EduConfig:IsTest"]);
 
             //EduConfig.WXAppId = _Configuration["EduConfig:WXAppId"];
             //EduConfig.WXSecret = _Configuration["EduConfig:WXSecret"];

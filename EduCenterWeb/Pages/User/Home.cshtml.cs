@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EduCenterWeb.Pages.User
 {
-    public class HomeModel : PageModel
+    public class HomeModel : EduBaseAppPageModel
     {
         public void OnGet()
         {
-
+            GetUserSession();
         }
     }
 }

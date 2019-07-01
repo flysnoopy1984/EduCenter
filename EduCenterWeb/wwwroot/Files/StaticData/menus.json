@@ -1,0 +1,39 @@
+﻿{
+  "button": [
+    {
+      "name": "云艺书院",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "云艺介绍",
+          "url": "http://edu.iqianba.cn/User/Home"
+        },
+        {
+          "type": "view",
+          "name": "我要试听",
+          "url": "http://edu.iqianba.cn/User/ApplyTrial"
+        }
+      ]
+    },
+    {
+      "name": "书院入口",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "我要签到",
+          "url": "http://edu.iqianba.cn/User/MySign"
+        },
+        {
+          "type": "view",
+          "name": "课程表",
+          "url": "http://edu.iqianba.cn/User/MyCourse"
+        },
+        {
+          "type": "view",
+          "name": "课时查询",
+          "url": "http://edu.iqianba.cn/User/MyCourseTime"
+        }
+      ]
+    }
+  ]
+}

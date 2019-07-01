@@ -72,6 +72,31 @@ namespace EduCenterCore.WX
             return token;
         }
 
+        public static AccessToken GetOAuth2AccessTokenFromCode(string code)
+        {
+            try
+            {
+                //构造获取openid及access_token的url
+                WxPayData data = new WxPayData();
+                data.SetValue("appid", WxConfig.APPID);
+                data.SetValue("secret", WxConfig.APPSECRET);
+                data.SetValue("code", code);
+                data.SetValue("grant_type", "authorization_code");
+                string url = "https://api.weixin.qq.com/sns/oauth2/access_token?" + data.ToUrl();
+
+                AccessToken token = HttpHelper.Get<AccessToken>(url);
+                NLogHelper.InfoTxt("GetOAuth2AccessTokenFromCode openId:" + token.openid);
+
+                return token;
+
+            }
+            catch (Exception ex)
+            {
+                NLogHelper.ErrorTxt("GetOAuth2AccessTokenFromCode:" + ex.Message);
+                throw new WxPayException(ex.ToString());
+            }
+        }
+
         /// <summary>
         /// 根据二维码Ticket,下载微信二维码
         /// </summary>

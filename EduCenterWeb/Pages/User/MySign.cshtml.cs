@@ -45,8 +45,15 @@ namespace EduCenterWeb.Pages.User
                 var us = base.GetUserSession(false);
                 if (us != null)
                 {
-                    result.List =  _UserSrv.GetCurrentUserSign(us.OpenId, us.CurrentScheduleType);
+                    if(us.UserRole == UserRole.Visitor)
+                    {
+                        result.ErrorMsg = "您还没有购买课程，请先去购买吧";
+                        result.IntMsg = -2;
+                        return new JsonResult(result);
 
+                    }
+                    result.List =  _UserSrv.GetCurrentUserSign(us.OpenId, us.CurrentScheduleType);
+                    
 
                 }
                 else

@@ -1,0 +1,52 @@
+﻿@page
+@model EduCenterWeb.Pages.WX.MenusModel
+@{
+    Layout = null;
+}
+@Html.AntiForgeryToken()
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Menus</title>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
+    <script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+    <script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
+
+    <script src="~/js/EduLib/EditHelper.js"></script>
+    <script type="text/javascript">
+        function CreateMenu() {
+
+            callAjax_Query("Menus?handler=CreateMenu", {}, function (res) {
+                $("#Msg").text(res.SuccessMsg);
+            });
+        }
+
+                    //function InitMenu() {
+
+                    //    $.ajax({
+                    //        type: "POST",
+                    //        url: "/api/Init/InitItem",
+                    //        data: "",
+                    //        success: function (data) {
+                    //            $("#Msg").text(data);
+                    //        },
+                    //        error: function (ex) {
+                    //            alert(ex.responseText);
+                    //        }
+                    //    });
+                    //}
+
+/**/</script>
+</head>
+<body>
+    <div>
+        <input type="button" value="创建菜单" onclick="CreateMenu();" />
+
+        <div id="Msg"></div>
+    </div>
+</body>
+</html>
+
