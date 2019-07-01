@@ -51,6 +51,14 @@ namespace EduCenterSrv
             return sql;
         }
 
+        public static string sql_UpdateUserChild(string openId,string ChildName)
+        {
+            string sql = $@"update UserInfo 
+                            set ChildName = '{ChildName}'
+                            where OpenId = '{openId}'";
+            return sql;
+        }
+
        
 
         #endregion
@@ -824,11 +832,17 @@ namespace EduCenterSrv
         public void SaveChild(List<EUserChild> list)
         {
             var sql = sql_DeleteAllUserChild(list[0].UserOpenId);
+
+            var sqlChild = sql_UpdateUserChild(list[0].UserOpenId, list.Where(a => a.No == 1).FirstOrDefault().Name);
             try
             {
                 _dbContext.Database.BeginTransaction();
+
                 _dbContext.Database.ExecuteSqlCommand(sql);
                 _dbContext.DBUserChild.AddRange(list);
+
+                _dbContext.Database.ExecuteSqlCommand(sqlChild);
+
                 _dbContext.SaveChanges();
                 _dbContext.Database.CommitTransaction();
             }
@@ -845,7 +859,42 @@ namespace EduCenterSrv
         }
         #endregion
 
-     
+        #region WebBackEnd
+
+        public List<RUserList> QueryUserList(string userName,out int totalPages,int pageIndex=1,int pageSize =20)
+        {
+           
+            var sql = from ui in _dbContext.DBUserInfo
+                      join ua in _dbContext.DBUserAccount on ui.OpenId equals ua.UserOpenId
+                      select new RUserList
+                      {
+                          WxName = ui.Name,
+                          BabyName = ui.ChildName,
+                          userOpenId = ui.OpenId,
+                          MemberType = ui.MemberType,
+                          DeadLineStd = ua.DeadLine.ToString("yyyy-MM-dd"),
+                          DeadLineSummer = ua.SummerDeadLine.ToString("yyyy-MM-dd"),
+                          DeadLineWinter = ua.WinterDeadLine.ToString("yyyy-MM-dd"),
+                          RemainTimeStd = ua.RemainCourseTime,
+                          RemainTimeSummer = ua.RemainSummerTime,
+                          RemainTimeWinter = ua.RemainWinterTime,
+                          AllowChooseStd = ua.CanSelectCourse,
+                          AllChooseWS = ua.CanSelectSummerWinterCourse,
+                      };
+            if(!string.IsNullOrEmpty(userName))
+            {
+                sql = sql.Where(a => a.WxName.Contains(userName));
+            }
+
+            totalPages = Convert.ToInt32(sql.Count() / pageSize) + 1;
+
+            return sql.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+
+
+        }
+        #endregion
+
+
 
 
     }
