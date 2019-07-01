@@ -12,5 +12,7 @@ namespace EduCenterModel.WX
         public string errcode { get; set; }
 
         public string errmsg { get; set; }
+
+        public string openid { get; set; }
     }
 }

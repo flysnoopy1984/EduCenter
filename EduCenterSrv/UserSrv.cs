@@ -57,7 +57,7 @@ namespace EduCenterSrv
 
         #region UserInfo
 
-        public EUserInfo CreateNewUserFromWXUser(WXUserInfo wxUser)
+        private EUserInfo CreateNewUserFromWXUser(WXUserInfo wxUser)
         {
             EUserInfo user = new EUserInfo
             {
@@ -326,6 +326,10 @@ namespace EduCenterSrv
                       };
             
             var list = sql.ToList();
+            if(list.Count == 0)
+            {
+                throw new EduException("您还没有安排课程");
+            }
 
             return RecursionToGetAvaliableCourse(list, startDate, new RUserShowCourse(true));
         }

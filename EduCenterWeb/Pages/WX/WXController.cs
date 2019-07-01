@@ -26,7 +26,7 @@ namespace EduCenterWeb.Pages.WX
 
 
 
-         public WXController(TecSrv TecSrv,UserSrv userSrv)
+        public WXController(TecSrv TecSrv,UserSrv userSrv)
         {
             _TecSrv = TecSrv;
             _UserSrv = userSrv;
@@ -40,7 +40,7 @@ namespace EduCenterWeb.Pages.WX
               
                 string echostr = Request.Query["echostr"].FirstOrDefault();
 
-                NLogHelper.InfoTxt($"echoStr:{echostr}");
+        //        NLogHelper.InfoTxt($"echoStr:{echostr}");
              
                 return echostr;
 
@@ -65,7 +65,7 @@ namespace EduCenterWeb.Pages.WX
                var memoryStream = new MemoryStream();
                Request.Body.CopyTo(memoryStream);
                string strXml = System.Text.Encoding.Default.GetString(memoryStream.ToArray());
-               NLogHelper.InfoTxt($"strXml:{strXml}");
+             //  NLogHelper.InfoTxt($"strXml:{strXml}");
 
                 if (!string.IsNullOrEmpty(strXml))
                 {
@@ -154,7 +154,7 @@ namespace EduCenterWeb.Pages.WX
         /// </summary>
         private void ScanHandler()
         {
-         
+            NLogHelper.InfoTxt($"ScanHandler-Event:{_wxMessage.Event} | EventKey:{_wxMessage.EventKey}");
         }
 
         /// <summary>
@@ -162,12 +162,9 @@ namespace EduCenterWeb.Pages.WX
         /// </summary>
         private void SubscribeHandler()
         {
-           
+            NLogHelper.InfoTxt($"SubscribeHandler-Event:{_wxMessage.Event} | EventKey:{_wxMessage.EventKey}");
         }
 
-     
-
-
-
+        
     }
 }

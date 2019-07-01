@@ -3,8 +3,9 @@
     Init = function () {
         var phone = $("#hUserPhone");
 
+     //   alert(window.history(-1).href);
         if (phone.val() == "" || phone.val() == null) {
-            ShowInfo("请先绑定手机号，谢谢！", null, null, 2, function () {
+            ShowInfo("请先绑定手机号，谢谢！", null, null, 5, function () {
                 window.location.href = "/Independent/RegPhone?rurl=/User/BuyCourseTime";
             });
         }
@@ -23,6 +24,8 @@
                 if (res.IntMsg == -1) {
                     window.location.href = "Login";
                 }
+                else if (res.IntMsg == -2)
+                    window.location.href = "/Independent/RegPhone?rurl=/User/BuyCourseTime";
             })
         }
     }

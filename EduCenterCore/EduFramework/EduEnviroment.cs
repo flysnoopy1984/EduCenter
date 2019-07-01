@@ -25,6 +25,11 @@ namespace EduCenterCore.EduFramework
             get { return _Enviroment.WebRootPath + @"\Files\StaticData\"; }
         }
 
+        public static string Menus_JsonFilePath
+        {
+            get { return _Enviroment.WebRootPath + @"\Files\StaticData\menus.json"; }
+        }
+
         public static string GetQRInviteTecFilePath(string fileName)
         {
             return DicPath_QRInviteTec + fileName;

@@ -38,6 +38,16 @@ namespace EduCenterWeb
             //});
 
 
+            services.AddCors(op =>
+            {
+                op.AddPolicy("any", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+                });
+            });
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
             services.AddSession(o=> 
@@ -45,7 +55,9 @@ namespace EduCenterWeb
                 o.IdleTimeout = TimeSpan.FromMinutes(30);
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                  .AddJsonOptions(opt => {
                      /*DefaultContractResolver 是原样输出，后台属性怎么写的，返回的 json 就是怎样的。
                        CamelCasePropertyNamesContractResolver ：驼峰命名法，首字母小写。如果变量全为大写，比如：NAME，返回的是 name */
@@ -55,11 +67,11 @@ namespace EduCenterWeb
                      {
                          options.RootDirectory = "/Pages";//默认目录
                                                           //options.Conventions.AddPageRoute("/pages", "/1");//重写URL
-                 //   options.Conventions.AddPageRoute("/User/Login", "");//默认主页
-                         options.Conventions.AddPageRoute("/WebBackend/Login", "");
+                    options.Conventions.AddPageRoute("/User/Login", "");//默认主页
+                 //        options.Conventions.AddPageRoute("/WebBackend/Login", "");
                      }); ;
 
-      
+           
             services.AddDbContext<EduDbContext>(
                 op => op.UseSqlServer(Configuration.GetConnectionString("EduCenterDB"), 
                 c => c.MigrationsAssembly("EduCenterWeb")
@@ -99,8 +111,9 @@ namespace EduCenterWeb
                 app.UseHsts();
             }
 
-           
-         
+        //    app.UseCors("any");
+
+
             EduConfigReader.SetConfiguration(Configuration);
             EduEnviroment.SetEnviroment(env);
 

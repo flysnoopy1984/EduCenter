@@ -27,6 +27,8 @@ namespace EduCenterWeb.Pages.User
         }
         public void OnGet()
         {
+            base.GetUserSession();
+
             var list = _CourseSrv.GetAllList();
             var curct = -1;
             CourseDic = new Dictionary<int, List<ECourseInfo>>();

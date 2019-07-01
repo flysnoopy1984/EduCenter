@@ -13,7 +13,7 @@
     }
 
     LoginCallBack = function () {
-        window.location.href = "/User/MyCourse";
+        window.location.href = "/User/Home";
       //  window.history.
     } 
 

@@ -13,6 +13,8 @@ namespace EduCenterCore.EduFramework
 
         public static string Version { get; set; }
 
+        public static bool IsTest { get; set; }
+
         //public static string WXAppId { get; set; }
 
         //public static string WXSecret { get; set; }

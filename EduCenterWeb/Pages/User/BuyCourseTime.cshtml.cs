@@ -50,6 +50,12 @@ namespace EduCenterWeb.Pages.User
                 var us = GetUserSession(false);
                 if(us !=null)
                 {
+                    if(string.IsNullOrEmpty(us.Phone))
+                    {
+                        result.IntMsg = -2;
+                        result.ErrorMsg = "请先绑定您的手机号";
+                        return new JsonResult(result);
+                    }
                     ECoursePrice eCoursePrice =  _CourseSrv.GetCoursePrice(priceCode);
                     var order = _BusinessSrv.PayCourseOrder(us.OpenId, eCoursePrice);
                     _BusinessSrv.PayCourseSuccess(order.OrderId);
