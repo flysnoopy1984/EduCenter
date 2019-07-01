@@ -62,7 +62,7 @@ namespace EduCenterSrv
             EUserInfo user = new EUserInfo
             {
                 OpenId = wxUser.openid,
-                ChildName = "",
+            
                 Name = wxUser.nickname,
                 Sex = wxUser.sex,
                 UserRole = UserRole.Visitor,
@@ -841,7 +841,7 @@ namespace EduCenterSrv
         }
         #endregion
 
-
+     
 
 
     }

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EduCenterWeb.Pages.WebBackend.Course
 {
-    public class CoursePriceModel : PageModel
+    public class CoursePriceModel : EduBasePageModel
     {
         public void OnGet()
         {

@@ -1,6 +1,6 @@
-;(function () {
-	
+﻿;(function () {
 
+    var LoginUrl = "/WebBackend/Login?handler=UserLogin";
 	'use strict';
 
 	// Placeholder 
@@ -45,10 +45,78 @@
 		} , { offset: '85%' } );
 	};
 	// On load
-	$(function(){
-		placeholderFunction();
-		contentWayPoint();
+    $(function () {
 
-	});
+        Init()
+        $("#btnSubmit").on("click", UserLogin);
+     
+    });
+
+    GetSysDate = function () {
+        var myDate = new Date;
+        var year = myDate.getFullYear();
+        var mon = myDate.getMonth() + 1;
+        var day = myDate.getDate();
+
+        return year + "/" + mon + "/" + day;
+
+    }
+
+    UserLogin = function() {
+        var loginName = $("#username").val();
+        var loginPwd = $("#password").val();
+
+        if (loginName == "" || loginPwd=="")
+        {
+            ShowInfo("用户名或密码必须填写", null, null, 1);
+            return;
+        }
+        var data = {
+            "loginName": loginName, "loginPwd": loginPwd
+        };
+        callAjax_Query(LoginUrl,
+            data,
+            function (res) {
+                if ($("#remember").is(":checked")) {
+                    var obj = res.Entity;
+                    var jsonObj = {
+                        "loginName": loginName,
+                        "loginPwd": loginPwd,
+                        "UserRole": obj.UserRole,
+                        "LoginDate": GetSysDate()
+                    };
+                    SetLocal_UserBackend(jsonObj);
+                }
+                else {
+                    RemoveLocal_UserBackend();
+                }
+            
+                window.location.href = "/WebBackend/Home";
+            }
+        );
+    }
+
+ 
+    CheckLocalStorage  = function(){
+        var json = GetLocal_UserBackend();
+        if (json)
+        {
+            $("#remember").attr('checked', 'checked');
+            $("#username").val(json.loginName);
+
+            $("#password").val(json.loginPwd);
+        }
+    }
+
+    Init = function () {
+        placeholderFunction();
+        contentWayPoint();
+
+        CheckLocalStorage();
+
+
+    }
+
+
 
 }());

@@ -1,0 +1,43 @@
+﻿@page
+@model EduCenterWeb.Pages.WebBackend.User.ListModel
+@{
+    ViewData["Title"] = "List";
+    Layout = "~/Pages/Shared/_EduMainPCWeb.cshtml";
+}
+
+<h2>用户列表</h2>
+<style type="text/css">
+    .UserListTable
+    {
+        width:100%;
+    }
+</style>
+<div class="MainContainer">
+    <div class="OptionArea">
+
+    </div>
+    <div class="DataArea">
+        <table id="UserListTable" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <th></th>
+                <th>用户微信名</th>
+                <th>宝贝姓名</th>
+                <th>会员类型</th>
+                <th>标准班剩余课时</th>
+                <th>标准班有效期</th>
+                <th>暑假班剩余课时</th>
+                <th>暑假班有效期</th>
+                <th>寒假班剩余课时</th>
+                <th>寒假班有效期</th>
+                <th>允许选择标准课</th>
+                <th>允许选择假期课</th>
+                <th>其他操作</th>
+            </tr>
+
+        </table>
+
+        <div class="Pager"></div>
+    </div>
+
+
+</div>

@@ -28,6 +28,8 @@ namespace EduCenterModel.User
 
         public UserRole UserRole { get; set; }
 
+        public MemberType MemberType { get; set; }
+
         public int Sex { get; set; }
 
         /*冗余字段*/

@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EduCenterWeb.Pages.WebBackend.Tec
 {
-    public class NewLeaveModel : PageModel
+    public class NewLeaveModel : EduBasePageModel
     {
         public List<STec> TecList { get; set; }
         private TecSrv _TecSrv;

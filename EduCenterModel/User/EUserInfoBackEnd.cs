@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EduCenterModel.BaseEnum;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -27,5 +28,7 @@ namespace EduCenterModel.User
 
         [MaxLength(32)]
         public string UserOpenId { get; set; }
+
+        public UserRole UserRole { get; set; }
     }
 }
