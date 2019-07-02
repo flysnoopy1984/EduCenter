@@ -1,11 +1,11 @@
 ﻿$(function () {
     var RedirectUrl;
-    var wxPayUrl = "";
+    var wxPayUrl = "/api/wxpay/pay";
    
     onBridgeReady = function (json) {
 
-        var qrUserId = $("#qrUserId").val();
-        var OrderNo = json.OrderNo;
+     
+     //   var OrderNo = json.OrderNo;
 
         WeixinJSBridge.invoke(
             'getBrandWCPayRequest',
@@ -16,8 +16,8 @@
                 }
                 else {
                     if (res.err_msg == "get_brand_wcpay_request:ok") {
-                        // alert("支付成功");
-                        window.location.href = "/PP/PaySuccess?qrId=" + qrUserId + "&No=" + OrderNo;
+                         alert("支付成功");
+                     //   window.location.href = "/PP/PaySuccess?qrId=" + qrUserId + "&No=" + OrderNo;
                     }
                     if (res.err_msg == "get_brand_wcpay_request:cancel") {
                         ShowInfo("支付被取消");
@@ -54,11 +54,17 @@
 
     DoWxPay = function () {
 
-        callAjax_Query(wxPayUrl, {}, DoWxPayCallBack);
+        callAjax_Query_API(wxPayUrl, { "ItemDes": "会员服务费", "PayAmount": 1}, DoWxPayCallBack);
        
     }
-    DoWxPayCallBack = function () {
-
+    DoWxPayCallBack = function (json) {
+        if (json.IsSuccess == true) {
+            alert(json.appId);
+          //  onBridgeReady(json);
+        }
+        else {
+            alert(json.ErrorMsg);
+        }
     }
 
     Init();

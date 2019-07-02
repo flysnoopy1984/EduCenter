@@ -275,6 +275,59 @@
         });
     };
 
+    callAjax_Query_API = function (url, data, handler, msg, AfterError) {
+        //if (msg == undefined) msg = "查询中.."
+        ShowBlock(msg);
+
+        $.ajax({
+            type: "post",
+            url: url,
+         
+            contentType:"application/json",
+            data: JSON.stringify(data),
+            dataType:"json",
+
+            success: function (res) {
+
+                CloseBlock();
+                if (res.IsSuccess) {
+                    if (handler != null)
+                        handler(res);
+
+                }
+                else {
+                    if (AfterError) {
+                        ShowInfo(res.ErrorMsg, null, "red", 0, function () {
+                            AfterError(res);
+                        });
+                    }
+                    else
+                        ShowError(res.ErrorMsg);
+                    //if (AfterError)
+                    //    AfterError(res);
+
+                }
+            },
+            error: function (xhr, type) {
+                CloseBlock();
+
+                if (AfterError) {
+                    var eObj = new Object();
+                    eObj.ErrorMsg = "系统错误";
+                    ShowInfo(res.ErrorMsg, null, "red", 0, function () {
+                        AfterError(eObj);
+                    });
+
+                    AfterError(eObj);
+                }
+                else
+                    ShowError("系统错误");
+
+            }
+
+        });
+    };
+
     emptyFields = function (rootId) {
         $("#" + rootId).find("input[type='text']").val("");
     };

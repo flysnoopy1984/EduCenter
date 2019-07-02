@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LitJson;
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
@@ -8,6 +9,7 @@ namespace EduCenterCore.WX
 {
     public class WxPayData
     {
+        public const string SIGN_TYPE_HMAC_SHA256 = "HMAC-SHA256";
         public WxPayData()
         {
 
@@ -161,9 +163,13 @@ namespace EduCenterCore.WX
         }
 
 
-     
+        public string ToJson()
+        {
+            string jsonStr = JsonMapper.ToJson(m_values);
+            return jsonStr;
+        }
 
-      
+
 
         /**
         * @生成签名，详见签名生成算法
