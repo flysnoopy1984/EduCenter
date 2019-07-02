@@ -129,7 +129,7 @@ namespace EduCenterSrv.Common
             switch (key)
             {
                 case CourseType.MS:
-                    return "美术";
+                    return "国画";
                  
                 case CourseType.SF:
                     return "书法";

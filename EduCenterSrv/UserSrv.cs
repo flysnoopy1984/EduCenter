@@ -222,7 +222,6 @@ namespace EduCenterSrv
                 else if (dr.CourseScheduleType == CourseScheduleType.Winter &&
                    userAccount.RemainWinterTime > 0)
                     return CourseScheduleType.Winter;
-
             }
             return CourseScheduleType.Standard;
 
@@ -866,6 +865,7 @@ namespace EduCenterSrv
            
             var sql = from ui in _dbContext.DBUserInfo
                       join ua in _dbContext.DBUserAccount on ui.OpenId equals ua.UserOpenId
+                      orderby ui.CreatedDateTime descending
                       select new RUserList
                       {
                           WxName = ui.Name,

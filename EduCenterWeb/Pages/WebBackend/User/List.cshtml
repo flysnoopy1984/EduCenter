@@ -44,20 +44,43 @@
                 <th>用户微信名</th>
                 <th>宝贝姓名</th>
                 <th>会员类型</th>
+                <th>特殊价格</th>
                 <th>标准班剩余课时</th>
-                <th>标准班有效期</th>
                 <th>暑假班剩余课时</th>
-                <th>暑假班有效期</th>
                 <th>寒假班剩余课时</th>
-                <th>寒假班有效期</th>
-                <th>允许选择标准课</th>
-                <th>允许选择假期课</th>
+                <th>标准班有效期</th>
+                @*<th>暑假班有效期</th>
+                <th>寒假班有效期</th>*@
+                @*<th>允许选择标准课</th>
+        <th>允许选择假期课</th>*@
             </tr>
-
+           
         </table>
 
         <div class="Pager"></div>
     </div>
+</div>
+<div id="HideData" style="display:none">
+    <table>
+        <tr>
+            <td></td>
+            <td><label class="WxName"></label></td>
+            <td><label class="BabyName"></label></td>
+            <td>
+                <select class="MemberType">
+                    <option></option>
+                </select>
+            </td>
+            <td>
+                <input class="form-control SpecialPrice" type="text" />
+            </td>
+            <td>
+                <input class="form-control RemainTimeStd" type="text" />
+            </td>
+            <td><input class="form-control RemainTimeSummer" type="text"></td>
 
-
+            <td><input class="form-control RemainTimeWinter" type="text"></td>
+            <td><input class="form-control DeadLineStd" type="text"></td>
+        </tr>
+    </table>
 </div>

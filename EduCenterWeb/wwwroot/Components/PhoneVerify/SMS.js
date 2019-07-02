@@ -1,6 +1,5 @@
 ﻿$(function () {
    
-
     var InitCount = 60;
     var countDown = InitCount;
 

@@ -32,12 +32,14 @@
 
     BuyCourseCallBack = function (res) {
         //这里和后台做了个约定，如果IntMsg == 0，标准1，summer, 2,winter
-        ShowInfo("购买成功,请选择课时", null, null, 2, function () {
-            if (res.IntMsg == 0)
-                window.location.href = "Apply";
-            else
-                window.location.href = "ApplyWinterSummer?type=" + res.IntMsg;
-        })
+        //ShowInfo("购买成功,请选择课时", null, null, 2, function () {
+        //    if (res.IntMsg == 0)
+        //        window.location.href = "Apply";
+        //    else
+        //        window.location.href = "ApplyWinterSummer?type=" + res.IntMsg;
+        //})
+
+        window.location.href = "PaySelection?rurl=/User/BuyCourseTime";
       
     }
 

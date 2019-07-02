@@ -67,7 +67,7 @@ namespace EduCenterWeb.Pages.WebBackend
                 {
                     result.Entity = eUserInfoBackEnd;
                     SetUserSesion(eUserInfoBackEnd);
-                  //  HttpContext.Response.Redirect("/WebBackend/Home");
+         
                 }
 
             }

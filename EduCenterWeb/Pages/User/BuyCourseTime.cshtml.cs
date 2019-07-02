@@ -56,10 +56,10 @@ namespace EduCenterWeb.Pages.User
                         result.ErrorMsg = "请先绑定您的手机号";
                         return new JsonResult(result);
                     }
-                    ECoursePrice eCoursePrice =  _CourseSrv.GetCoursePrice(priceCode);
-                    var order = _BusinessSrv.PayCourseOrder(us.OpenId, eCoursePrice);
-                    _BusinessSrv.PayCourseSuccess(order.OrderId);
-                    result.IntMsg = (int)eCoursePrice.CourseScheduleType;
+                    //ECoursePrice eCoursePrice =  _CourseSrv.GetCoursePrice(priceCode);
+                    //var order = _BusinessSrv.PayCourseOrder(us.OpenId, eCoursePrice);
+                    //_BusinessSrv.PayCourseSuccess(order.OrderId);
+                    //result.IntMsg = (int)eCoursePrice.CourseScheduleType;
                 }
                 else
                 {

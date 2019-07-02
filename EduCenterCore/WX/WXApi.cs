@@ -107,7 +107,7 @@ namespace EduCenterCore.WX
             string apiUrl = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=" + qrTicket;
 
             bool isExist = File.Exists(saveFullFilePath);
-            if (isExist) return;
+          //  if (isExist) return;
 
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(apiUrl);
             req.Proxy = null;

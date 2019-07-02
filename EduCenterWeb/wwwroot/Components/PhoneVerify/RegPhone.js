@@ -3,10 +3,6 @@
     var submitUrl = "RegPhone?handler=SubmitVerifyCode";
     var RedirectUrl = "";
 
-
-
-   
-
     SMSSuccess = function () {
 
         ShowInfo("手机绑定成功", null, null, 1, function () {

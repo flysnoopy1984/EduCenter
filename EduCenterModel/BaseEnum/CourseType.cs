@@ -11,7 +11,7 @@ namespace EduCenterModel.BaseEnum
         /// </summary>
         SF = 1,
         /// <summary>
-        /// 美术
+        /// 国画
         /// </summary>
         MS = 2,
         /// <summary>

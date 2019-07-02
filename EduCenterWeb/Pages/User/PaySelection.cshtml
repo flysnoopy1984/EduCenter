@@ -1,0 +1,92 @@
+﻿@page
+@model EduCenterWeb.Pages.User.PaySelectionModel
+@{
+    ViewData["Title"] = "PaySelection";
+    Layout = "~/Pages/Shared/_EduMainAppNoMenus.cshtml";
+}
+<link href="~/lib/bootstrap/dist/fonts/font-awesome.min.css" rel="stylesheet" />
+<link href="~/css/Plugs/checkbox_radio.css" rel="stylesheet" />
+<script src="~/js/EduLib/Common.js"></script>
+<script src="~/js/Wap/User/PaySelection.js"></script>
+<style type="text/css">
+    .o2o_header {
+        height: 50px;
+        width: 100%;
+        /*position: absolute;*/
+        top: 0px;
+        text-align: center;
+        line-height: 50px;
+        border: 1px solid #f1f1f1;
+        font-size: 21px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .payselection {
+        display: flex;
+        flex-direction: column;
+        height: 120px;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .payItem {
+        height: 50px;
+        line-height: 50px;
+        padding-left: 10px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .payName {
+        margin-right: 20px;
+    }
+
+    .radio {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    .IconBack {
+        position: absolute;
+        left: 15px;
+        top: 17px;
+    }
+    .btnArea{
+        display:flex;
+        justify-content:center;align-items:center;
+        margin-top:20px;
+    }
+</style>
+<div class="o2o_header">
+    <div class="header_title"><i class="IconBack fa fa-arrow-circle-o-left" aria-hidden="true"></i> 支付方式</div>
+</div>
+
+<div class="payselection">
+    <div class="bg-success payItem">
+        <div class="payName">微信支付</div>
+        <div class="radio radio-danger">
+            <input type="radio" name="radioPay" id="r1" value="wx">
+            <label for="r1">
+
+            </label>
+        </div>
+    </div>
+    <div class="bg-primary payItem">
+        <div class="payName">支付宝支付</div>
+        <div class="radio radio-danger">
+            <input type="radio" name="radioPay" id="r2" value="ali">
+            <label for="r2">
+
+            </label>
+        </div>
+    </div>
+
+
+</div>
+<div class="btnArea">
+    <input type="button" id="btn_Submit" class="btn btn-warning" value="支付" />
+</div>
+
+
