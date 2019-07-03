@@ -17,6 +17,10 @@ namespace EduCenterWeb.Pages
     public class EduBaseAppPageModel:PageModel
     {
       
+        public string jsVersion
+        {
+            get { return EduConfig.Version; }
+        }
      
        public UserSession GetUserSession(bool toLoginIfError = true)
        {

@@ -1,27 +1,26 @@
 ﻿$(function () {
     var RedirectUrl;
     var wxPayUrl = "/api/wxpay/pay";
+    var wxPaySuccessUrl = "/api/wxpay/PaySuccess"
    
     onBridgeReady = function (json) {
 
-     
-     //   var OrderNo = json.OrderNo;
-
+      
         WeixinJSBridge.invoke(
             'getBrandWCPayRequest',
             json,
             function (res) {
+               
                 if (res.err_code) {
-                    alert("错误，请联系管理员");
+                    ShowError("错误，请联系管理员");
                 }
                 else {
                     if (res.err_msg == "get_brand_wcpay_request:ok") {
-                         alert("支付成功");
-                     //   window.location.href = "/PP/PaySuccess?qrId=" + qrUserId + "&No=" + OrderNo;
+                        callAjax_Query(wxPaySuccessUrl, { "OrderId":json.OrderNo})
+                        window.location.href = "PayCourseSuccess";
                     }
                     if (res.err_msg == "get_brand_wcpay_request:cancel") {
-                        ShowInfo("支付被取消");
-
+                        ShowInfo("您已取消支付！");
                     }
                 }
 
@@ -49,22 +48,38 @@
     }
 
     Pay = function () {
-        DoWxPay();
+        var payway = $(".payselection .payItem input[type=radio]:checked").val();
+        if (payway == "wx")
+            DoWxPay();
+        else {
+            ShowInfo("即将开通！");
+        }
     }
 
     DoWxPay = function () {
 
-        callAjax_Query_API(wxPayUrl, { "ItemDes": "会员服务费", "PayAmount": 1}, DoWxPayCallBack);
+        var storageData = GetSessionBuyCourseTime();
+        if (storageData == null || storageData == undefined) {
+            ShowError("无法支付，请返回重新尝试！");
+            return;
+        }
+        callAjax_Query_API(wxPayUrl, {
+            "ItemDes": "课时费用",
+            "PriceCode": storageData.priceCode,
+            "PayAmount": storageData.payAmount,
+            "VIPQty": storageData.VIPQty
+        }, DoWxPayCallBack, function (res) {
+            if (res.IntMsg == -1) {
+                window.location.href = "Login";
+            }
+        });
        
     }
     DoWxPayCallBack = function (json) {
-        if (json.IsSuccess == true) {
-            alert(json.appId);
-          //  onBridgeReady(json);
-        }
-        else {
-            alert(json.ErrorMsg);
-        }
+
+       
+        onBridgeReady(json);
+       
     }
 
     Init();

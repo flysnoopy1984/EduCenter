@@ -71,7 +71,7 @@ namespace EduCenterWeb.Pages.User
                 if (!string.IsNullOrEmpty(accessToken.openid))
                 {
                     string url_userInfo = string.Format("https://api.weixin.qq.com/sns/userinfo?access_token={0}&openid={1}&lang=zh_CN", accessToken.access_token, accessToken.openid);
-                    WXUserInfo wxUser = HttpHelper.Get<WXUserInfo>(url_userInfo,true);
+                    WXUserInfo wxUser = HttpHelper.Get<WXUserInfo>(url_userInfo);
                     EUserInfo ui = _UserSrv.AddOrUpdateFromWXUser(wxUser);
                     WXLoginCallBack(ui);
                 }

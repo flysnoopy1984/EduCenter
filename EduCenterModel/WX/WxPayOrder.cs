@@ -20,9 +20,13 @@ namespace EduCenterModel.WX
 
         public string OrderNo { get; set; }
 
+        public string EduOrderNo { get; set; }
+
         public bool IsSuccess { get; set; }
 
         public string ErrorMsg { get; set; }
+
+        public int IntMsg { get; set; }
 
 
     }

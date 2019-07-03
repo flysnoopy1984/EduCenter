@@ -74,6 +74,8 @@
         var mn = month;
         if (month < 10)
             mn = "0" + month;
+        if (day < 10)
+            day = "0" + day;
         return year + "-" + mn + "-" + day;
     }
 
@@ -89,6 +91,7 @@
                 container.empty();
                
                 if (row == 0 && day == -1) {
+                    //找到每个月的第一天
                     if ((d + 1) == dayofweek) {
                         day = 1;
                         date = ConnectDate(day);

@@ -8,11 +8,12 @@ namespace EduCenterModel.WX
     {
         public string ItemDes { get; set; }
 
-        public float PayAmount { get; set; }
+       public float PayAmount { get; set; }
 
-        /// <summary>
-        /// 买家的OpenId
-        /// </summary>
-        public string OpenId { get; set; }
+        public string PriceCode { get; set; }
+
+        public int VIPQty { get; set; }
+
+
     }
 }

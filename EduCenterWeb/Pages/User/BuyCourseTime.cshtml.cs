@@ -18,6 +18,16 @@ namespace EduCenterWeb.Pages.User
         private BusinessSrv _BusinessSrv;
         private CourseSrv _CourseSrv;
         public UserSession UserSession { get; set; }
+
+        public double VipPrice
+        {
+            get
+            {
+                return UserSession.UserAccount.VIPPrice1;
+            }
+        }
+
+        public List<ECoursePrice> VIPPriceList { get; set; }
         public List<ECoursePrice> PriceList { get; set; }
 
         public List<ECoursePrice> SummerPriceList { get; set; }
@@ -35,16 +45,19 @@ namespace EduCenterWeb.Pages.User
             if(UserSession != null)
             {
                 var list = _CourseSrv.GetCoursePriceList();
+
                 PriceList =list.Where(a=>a.CourseScheduleType ==CourseScheduleType.Standard).ToList();
                 SummerPriceList = list.Where(a => a.CourseScheduleType == CourseScheduleType.Summer).ToList();
                 WinterPriceList = list.Where(a => a.CourseScheduleType == CourseScheduleType.Winter).ToList();
+                if(UserSession.MemeberType == MemberType.VIP)
+                    VIPPriceList = list.Where(a => a.CourseScheduleType == CourseScheduleType.VIP).ToList();
             }
                
         }
 
         public IActionResult OnPostBuyCourse(string priceCode)
         {
-            ResultNormal result = new ResultNormal();
+            ResultObject<ECoursePrice> result = new ResultObject<ECoursePrice>();  
             try
             {
                 var us = GetUserSession(false);
@@ -56,7 +69,8 @@ namespace EduCenterWeb.Pages.User
                         result.ErrorMsg = "请先绑定您的手机号";
                         return new JsonResult(result);
                     }
-                    //ECoursePrice eCoursePrice =  _CourseSrv.GetCoursePrice(priceCode);
+                    ECoursePrice eCoursePrice =  _CourseSrv.GetCoursePrice(priceCode);
+                    result.Entity = eCoursePrice;
                     //var order = _BusinessSrv.PayCourseOrder(us.OpenId, eCoursePrice);
                     //_BusinessSrv.PayCourseSuccess(order.OrderId);
                     //result.IntMsg = (int)eCoursePrice.CourseScheduleType;

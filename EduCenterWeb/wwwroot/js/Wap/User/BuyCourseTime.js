@@ -31,13 +31,20 @@
     }
 
     BuyCourseCallBack = function (res) {
-        //这里和后台做了个约定，如果IntMsg == 0，标准1，summer, 2,winter
-        //ShowInfo("购买成功,请选择课时", null, null, 2, function () {
-        //    if (res.IntMsg == 0)
-        //        window.location.href = "Apply";
-        //    else
-        //        window.location.href = "ApplyWinterSummer?type=" + res.IntMsg;
-        //})
+
+        var priceItem = res.Entity;
+        var priceCode = priceItem.PriceCode;
+        var PayAmount = 0;
+        var vipQty = $("#selCourseQty").val();
+        if (vipQty == undefined || vipQty == 0) {
+            PayAmount = priceItem.Price;
+            vipQty = 0;
+        }
+            
+
+        var storeageData = { "priceCode": priceCode, "VIPQty": vipQty, "payAmount": PayAmount};
+        
+        SetSessionBuyCourseTime(storeageData);
 
         window.location.href = "PaySelection?rurl=/User/BuyCourseTime";
       

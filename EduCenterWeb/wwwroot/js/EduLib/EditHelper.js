@@ -275,9 +275,9 @@
         });
     };
 
-    callAjax_Query_API = function (url, data, handler, msg, AfterError) {
-        //if (msg == undefined) msg = "查询中.."
-        ShowBlock(msg);
+    callAjax_Query_API = function (url, data, handler, AfterError) {
+    
+        ShowBlock();
 
         $.ajax({
             type: "post",
@@ -303,8 +303,7 @@
                     }
                     else
                         ShowError(res.ErrorMsg);
-                    //if (AfterError)
-                    //    AfterError(res);
+                   
 
                 }
             },

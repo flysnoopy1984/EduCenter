@@ -24,8 +24,9 @@
         if (DateFromUrl != undefined) {
             $("#selTecCode").val(tecCodeFromUrl);
             $("#selDate").val(DateFromUrl);
+            $("#CourseDate").text(DateFromUrl);
         }
-      
+        $("#selTecCode").on("change", QueryOneDayCourse);
         QueryOneDayCourse();
    
     }
@@ -44,7 +45,7 @@
 
     QueryOneDayCourseCallBack = function (res) {
         var data = res.List;
-
+        $("#CourseTable tr td .CellContainer").empty();
         $.each(data, function (i) {
             var tc = data[i];
             var html = $("#HideData .CellOneCourse").clone();

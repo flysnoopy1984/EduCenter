@@ -51,12 +51,14 @@ namespace EduCenterWeb.Pages.User
             _UserSrv = userSrv;
         }
         public void OnGet()
-        { 
+        {
+            CourseTime = StaticDataSrv.CourseTime;
+            UserCourseLogStatus = BaseEnumSrv.UserCourseLogStatusList;
+
             var us = base.GetUserSession();
             if (us != null)
             {
-                CourseTime = StaticDataSrv.CourseTime;
-                UserCourseLogStatus = BaseEnumSrv.UserCourseLogStatusList;        
+                      
                 UserCourseLogList = _UserSrv.GetUserCourseLogHistory(us.OpenId,10); 
             }
            

@@ -127,7 +127,7 @@ namespace EduCenterCore.WX
             string url_userInfo = string.Format("https://api.weixin.qq.com/cgi-bin/user/info?access_token={0}&openid={1}",
             accessToken.access_token, OpenId);
           
-            WXUserInfo wxUser = HttpHelper.Get<WXUserInfo>(url_userInfo,true);
+            WXUserInfo wxUser = HttpHelper.Get<WXUserInfo>(url_userInfo);
             return wxUser;
         }
     }

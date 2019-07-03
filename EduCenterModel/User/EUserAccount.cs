@@ -48,6 +48,11 @@ namespace EduCenterModel.User
 
         public DateTime WinterBuyDate { get; set; }
 
+        /// <summary>
+        /// Vip一人一单价
+        /// </summary>
+        public double VIPPrice1 { get; set; }
+
 
 
 

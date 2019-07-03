@@ -1,0 +1,60 @@
+﻿@page
+@model EduCenterWeb.Pages.User.PayCourseSuccessModel
+@{
+    ViewData["Title"] = "PayCourseSuccess";
+    Layout = "~/Pages/Shared/_EduMainAppNoMenus.cshtml";
+}
+
+<style type="text/css">
+    .MainContainer{
+         background:url("/images/BK_APPLogin.png") no-repeat;
+        width: 100%;
+        height: 100vh;
+    }
+    .Info{
+        height:200px;
+        font-size:22px;
+        color:#ff6a00;
+        font-weight:bold;
+        line-height:200px;
+        text-align:center;
+    }
+    .Menus{
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        
+        font-size:12px;
+        width:100%;
+        height:300px;
+    }
+    .item{
+        height:35px;
+        line-height:35px;
+        width:60%;
+        
+        border-radius:10px;
+        padding-left:10px;
+        margin-bottom:10px;
+         color:#e3a66c;
+        font-weight:bold;
+        
+    }
+   
+</style>
+<script type="text/javascript">
+    function GoToPage(url) {
+        window.location.href = url;
+    }
+</script>
+<div class="MainContainer">
+    <div class="Info">恭喜！课时购买成功</div>
+    <div class="Menus">
+        <div class="item bg-danger" onclick="GoToPage('MyCourse')">查看课程</div>
+        <div class="item bg-warning" onclick="GoToPage('MyCourseTime')">剩余课时</div>
+        <div class="item bg-success" onclick="GoToPage('Apply')">课程选择</div>
+    </div>
+    
+</div>
+

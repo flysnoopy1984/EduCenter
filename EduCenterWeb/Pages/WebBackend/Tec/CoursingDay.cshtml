@@ -126,14 +126,14 @@
 <div class="MainContainer">
     <div class="DataFilterBar">
         <div style="width:280px">
-            <svg class="btnIcon" aria-hidden="true" onclick="AddDay();" style="margin-top:2px;">
+            @*<svg class="btnIcon" aria-hidden="true" onclick="AddDay();" style="margin-top:2px;">
                 <use xlink:href="#icon-btnright"></use>
-            </svg>
+            </svg>*@
             <label>日期：</label>
             <input type="button" class="form-control" id="selDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-            <svg class="btnIcon" aria-hidden="true" onclick="DelDay();">
+            @*<svg class="btnIcon" aria-hidden="true" onclick="DelDay();">
                 <use xlink:href="#icon-btnleft"></use>
-            </svg>
+            </svg>*@
         </div>
         <div>
             <label>老师：</label>
@@ -150,7 +150,7 @@
             @*<div class="CourseInfo">2019年6月1日</div>*@
             <table id="CourseTable" border="0" cellpadding="0" cellspacing="0">
                 <tr>
-                    <th width="35%" >@DateTime.Now.ToString("yyyy年MM月dd")</th>
+                    <th width="35%" id="CourseDate">@DateTime.Now.ToString("yyyy年MM月dd")</th>
                     <th width="60%">上课内容</th>
                 </tr>
                 @foreach (var time in Model.CourseTimes)

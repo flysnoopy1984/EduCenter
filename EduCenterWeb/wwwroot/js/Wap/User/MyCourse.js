@@ -107,6 +107,7 @@
         var date = $("#btn_Leave").attr("date");
         window.location.href = "MyLeave?date=" + date;
     }
+
     SignInEvent = function () {
         var date = $("#btn_Leave").attr("date");
         window.location.href = "MySign?date="+date;

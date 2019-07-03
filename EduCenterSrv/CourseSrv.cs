@@ -201,9 +201,15 @@ namespace EduCenterSrv
         #endregion
 
         #region CoursePrice
+        
         public List<ECoursePrice> GetCoursePriceList(bool onlyAvaliable=true)
         {
-           return _dbContext.DBCoursePrice.Where(a => a.RecordStatus == RecordStatus.Normal && a.EffectEndDate>DateTime.Now).ToList();
+           return _dbContext.DBCoursePrice.Where(a => a.RecordStatus == RecordStatus.Normal && 
+                                                      a.EffectEndDate>DateTime.Now 
+                                                     ).ToList();
+            //(a.CourseScheduleType == CourseScheduleType.Standard ||
+            //                                         a.CourseScheduleType == CourseScheduleType.Winter ||
+            //                                         a.CourseScheduleType == CourseScheduleType.Summer)
         }
 
         public ECoursePrice GetCoursePrice(string priceCode)

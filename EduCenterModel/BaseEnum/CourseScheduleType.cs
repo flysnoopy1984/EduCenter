@@ -15,5 +15,7 @@ namespace EduCenterModel.BaseEnum
         SummerWinter =3,
 
         Group =10,
+
+        VIP =20,
     }
 }
