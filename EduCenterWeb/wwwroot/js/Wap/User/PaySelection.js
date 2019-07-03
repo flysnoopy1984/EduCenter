@@ -16,8 +16,10 @@
                 }
                 else {
                     if (res.err_msg == "get_brand_wcpay_request:ok") {
-                        callAjax_Query(wxPaySuccessUrl, { "OrderId":json.OrderNo})
-                        window.location.href = "PayCourseSuccess";
+                        callAjax_Query_API(wxPaySuccessUrl, { "OrderId": json.EduOrderNo }, function () {
+                            window.location.href = "PayCourseSuccess";
+                        })
+                        
                     }
                     if (res.err_msg == "get_brand_wcpay_request:cancel") {
                         ShowInfo("您已取消支付！");

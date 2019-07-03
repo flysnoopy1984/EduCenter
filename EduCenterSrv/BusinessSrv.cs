@@ -141,10 +141,12 @@ namespace EduCenterSrv
         #endregion
 
         #region 购买课时成功
-        public bool PayCourseSuccess(string orderId)
+        public EUserAccount PayCourseSuccess(string orderId)
         {
+            EUserAccount eUserAccount = null;
             try
             {
+                NLogHelper.InfoTxt($"PayCourseSuccess OrderId:{orderId}");
                 BeginTrans();
                 //跟新订单状态
                 var order = _dbContext.DBOrder.Where(a => a.OrderId == orderId && a.OrderStatus == OrderStatus.Created).FirstOrDefault();
@@ -154,10 +156,8 @@ namespace EduCenterSrv
 
                 //获取订单行,更新课时
                 var line = _dbContext.DBOrderLine.Where(a => a.OrderId == orderId).FirstOrDefault();
-                UpdateUserAccountByOrderLine(order.CustOpenId, line);
+                eUserAccount = UpdateUserAccountByOrderLine(order.CustOpenId, line);
 
-              
-          
                 _dbContext.SaveChanges();
                 CommitTrans();
             }
@@ -165,9 +165,9 @@ namespace EduCenterSrv
             {
                 RollBackTrans();
                 NLogHelper.ErrorTxt($"[PayCourseSuccess] {ex.Message}");
-                return false;
+                throw ex;
             }
-            return true;
+            return eUserAccount;
         }
 
 
@@ -180,10 +180,10 @@ namespace EduCenterSrv
         /// </summary>
         /// <param name="userOpenId"></param>
         /// <param name="line"></param>
-        private void UpdateUserAccountByOrderLine(string userOpenId,EOrderLine line)
+        private EUserAccount UpdateUserAccountByOrderLine(string userOpenId,EOrderLine line)
         {
        
-            var userAccount =  _dbContext.DBUserAccount.Where(a => a.UserOpenId == userOpenId).FirstOrDefault();
+            EUserAccount userAccount =  _dbContext.DBUserAccount.Where(a => a.UserOpenId == userOpenId).FirstOrDefault();
             if(userAccount == null)
             {
                 UserSrv userSrv = new UserSrv(_dbContext);
@@ -195,14 +195,19 @@ namespace EduCenterSrv
             switch(courseScheduleType)
             {
                 case CourseScheduleType.Standard:
+                case CourseScheduleType.VIP:
                     userAccount.RemainCourseTime += line.Qty;
-                    userAccount.DeadLine = userAccount.DeadLine.AddYears(1);
                     if (userAccount.BuyDate == DateTime.MinValue)
                         userAccount.BuyDate = DateTime.Now;
+                    if (userAccount.DeadLine == DateTime.MinValue)
+                        userAccount.DeadLine = DateTime.Now;
+                    userAccount.DeadLine = userAccount.DeadLine.AddYears(1);
+                
                     break;
                 case CourseScheduleType.Summer:
                     userAccount.RemainSummerTime += line.Qty;
                     dr = StaticDataSrv.CourseDateRange.Where(a => a.CourseScheduleType == CourseScheduleType.Summer && a.Year == DateTime.Now.Year).FirstOrDefault();
+
                     userAccount.SummerDeadLine = dr.EndDate;
 
                     if (userAccount.SummerBuyDate == DateTime.MinValue)
@@ -218,6 +223,7 @@ namespace EduCenterSrv
                     break;
                 
             }
+            return userAccount;
 
         }
 

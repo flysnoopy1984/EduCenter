@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using EduCenterCore.Common.Helper;
 using EduCenterCore.EduFramework;
 using EduCenterCore.WX;
+using EduCenterModel.Common;
 using EduCenterModel.Session;
+using EduCenterModel.User;
 using EduCenterModel.WX;
 using EduCenterSrv;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +19,7 @@ namespace EduCenterWeb.Pages.WX
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class WXPayController : ControllerBase
+    public class WXPayController : EduBaseApi
     {
         private BusinessSrv _BusinessSrv;
         private CourseSrv _CourseSrv;
@@ -26,21 +28,7 @@ namespace EduCenterWeb.Pages.WX
             _BusinessSrv = businessSrv;
             _CourseSrv = courseSrv;
         }
-        public UserSession GetUserSession(bool toLoginIfError = true)
-        {
-            string json = HttpContext.Session.GetString(EduConstant.UserSessionKey);
-
-            if (!string.IsNullOrEmpty(json))
-                return JsonConvert.DeserializeObject<UserSession>(json);
-            else
-            {
-                if (toLoginIfError)
-                    HttpContext.Response.Redirect("/User/Login");
-
-            }
-            return null;
-
-        }
+      
 
         [HttpPost]
         public WxPayOrder Pay(WxPayInfo wxPayInfo)
@@ -67,6 +55,8 @@ namespace EduCenterWeb.Pages.WX
 
                     jsApiPay.openid = us.OpenId;
                     jsApiPay.total_fee = (int)eCoursePrice.Price * 100;
+
+                    //jsApiPay.total_fee = 1;
 
                     string OrderNo = WxPayApi.GenerateOutTradeNo();
                     var order = _BusinessSrv.PayCourseOrder(us.OpenId, eCoursePrice);
@@ -114,9 +104,24 @@ namespace EduCenterWeb.Pages.WX
         }
 
         [HttpPost]
-        public void PaySuccess(string OrderId)
+        public ResultNormal PaySuccess(WXPaySuccess paySuccess)
         {
-
+            ResultNormal result = new ResultNormal();
+            try
+            {
+                EUserAccount eUserAccount = _BusinessSrv.PayCourseSuccess(paySuccess.OrderId);
+                if (eUserAccount != null)
+                {
+                    var us = GetUserSession(false);
+                    us.UserAccount = eUserAccount;
+                    SetUserSesion(us);
+                }
+            }
+            catch(Exception ex)
+            {
+                result.ErrorMsg = ex.Message;
+            }
+            return result;
         }
 
         [HttpPost]

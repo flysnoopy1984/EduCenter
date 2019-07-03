@@ -71,9 +71,7 @@ namespace EduCenterWeb.Pages.User
                     }
                     ECoursePrice eCoursePrice =  _CourseSrv.GetCoursePrice(priceCode);
                     result.Entity = eCoursePrice;
-                    //var order = _BusinessSrv.PayCourseOrder(us.OpenId, eCoursePrice);
-                    //_BusinessSrv.PayCourseSuccess(order.OrderId);
-                    //result.IntMsg = (int)eCoursePrice.CourseScheduleType;
+                 
                 }
                 else
                 {
