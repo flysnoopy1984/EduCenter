@@ -16,3 +16,9 @@
     text-overflow: clip;
     overflow: hidden;
 }
+
+.TextNoWrap2 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

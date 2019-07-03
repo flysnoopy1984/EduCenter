@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using EduCenterModel.Common;
 using EduCenterModel.User.Result;
 using EduCenterSrv;
+using EduCenterSrv.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -22,15 +23,21 @@ namespace EduCenterWeb.Pages.WebBackend.User
 
         }
 
+        public List<SiKsV> MemberTypeList
+        {
+            get { return BaseEnumSrv.MemberTypeList; }
+        }
+
         public IActionResult OnPostQueryUserList(string userName,int pageIndex,int pageSize)
         {
             ResultList<RUserList> result = new ResultList<RUserList>();
             try
             {
-                int totalPages;
-             
-                result.List = _UserSrv.QueryUserList(userName,out totalPages, pageIndex,pageSize);
-                result.TotlaPage = totalPages;
+                int recordTotal;
+
+
+                result.List = _UserSrv.QueryUserList(userName,out recordTotal, pageIndex,pageSize);
+                result.RecordTotal = recordTotal;
             }
             catch (Exception ex)
             {

@@ -7,7 +7,8 @@
 @section navBar{
     <li><a href="/WebBackend/Home">主页</a></li>
 }
-<h2>用户列表</h2>
+<script src="~/lib/laydate/laydate.js"></script>
+
 <link href="~/lib/layui/css/layui.css" rel="stylesheet" />
 <script src="~/lib/layui/layui.js"></script>
 <script src="~/lib/layui/lay/modules/laypage.js"></script>
@@ -15,40 +16,81 @@
 <script src="~/js/WebBackEnd/User/List.js"></script>
 <style type="text/css">
     .OptionArea {
-        margin: 10px;
+        margin: 20px;
+        display:flex;
     }
 
     #UserListTable {
-        width: 100%;
+      width:1000px;
         font-size: 11px;
     }
 
         #UserListTable tr th {
             border: solid 1px #808080;
             text-align:center;
+             height:34px;
         }
 
         #UserListTable tr td {
             border: solid 1px #808080;
+            height:30px;
+            padding:8px;
+           
         }
+
+        .form-control{
+            width:auto;
+        }
+        .OneField{
+            display:flex;
+            margin-right:20px;
+        }
+         #UserListTable tr td input{
+            height:100%;
+            /*width:90%;*/
+            border:none;
+            outline:none;
+        }
+         .RowOption{
+             display:flex;
+             /*width:100%;*/
+             justify-content:space-around;
+         }
+         .DeadLineStd{width:80px;}
+         table{
+             table-layout:fixed;word-break:break-all;
+         }
+         input[type=number]
+         {
+             width:60px;
+         }
 </style>
 
 <div class="MainContainer">
     <div class="OptionArea">
-        <input id="btnQuery" type="button" class="btn btn-primary btn-sm" value="查询" />
+        <div class="OneField">
+            <div><label>用户：</label></div>
+            <div >
+                <input class="form-control input-sm" id="UserName" type="text" value="">
+            </div>
+        </div>
+     
+        <div>
+            <input id="btnQuery" type="button" class="btn btn-primary btn-sm" value="查询" />
+        </div>
     </div>
     <div class="DataArea">
         <table id="UserListTable" border="0" cellpadding="0" cellspacing="0">
-            <tr>
-                <th width="20%">操作</th>
-                <th>用户微信名</th>
+            <tr id="Header">
+                <th width="200px">操作</th>
+                <th width="150px">用户微信名</th>
                 <th>宝贝姓名</th>
                 <th>会员类型</th>
                 <th>特殊价格</th>
                 <th>标准班剩余课时</th>
                 <th>暑假班剩余课时</th>
                 <th>寒假班剩余课时</th>
-                <th>标准班有效期</th>
+                <th width="122px">标准班有效期</th>
                 @*<th>暑假班有效期</th>
                 <th>寒假班有效期</th>*@
                 @*<th>允许选择标准课</th>
@@ -57,30 +99,45 @@
            
         </table>
 
-        <div class="Pager"></div>
+        <div id="Pager"></div>
     </div>
 </div>
 <div id="HideData" style="display:none">
-    <table>
-        <tr>
-            <td></td>
-            <td><label class="WxName"></label></td>
+    <table id="DataTable">
+        <tr openId="">
+            <td >
+                <div class="RowOption">
+                    <div>
+                        <input type="button" class="btn btn-danger btn-xs" value="课程调整" />
+                    </div>
+                    <div>
+                        <input type="button" class="btn btn-warning btn-xs" value="保存" id="btn_Save"  />
+                    </div>
+                </div>
+            </td>
+            <td><label class="WxName TextNoWrap2"></label></td>
             <td><label class="BabyName"></label></td>
             <td>
                 <select class="MemberType">
-                    <option></option>
+                    @foreach (var mt in Model.MemberTypeList)
+                    {
+                        <option value="@mt.Key">@mt.Value</option>
+                    }
+
                 </select>
             </td>
             <td>
-                <input class="form-control SpecialPrice" type="text" />
+                <input class="VipPrice" type="number" />
             </td>
             <td>
-                <input class="form-control RemainTimeStd" type="text" />
+                <input class="RemainTimeStd" type="number" />
             </td>
-            <td><input class="form-control RemainTimeSummer" type="text"></td>
+            <td><input class="RemainTimeSummer" type="number"></td>
 
-            <td><input class="form-control RemainTimeWinter" type="text"></td>
-            <td><input class="form-control DeadLineStd" type="text"></td>
+            <td><input class="RemainTimeWinter" type="number"></td>
+            <td><input class="DeadLineStd" readonly type="text">
+                <div class="fa fa-calendar fa-2x DatePick" id=""></div>
+            </td>
         </tr>
     </table>
 </div>

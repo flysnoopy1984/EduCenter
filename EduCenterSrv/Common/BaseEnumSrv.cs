@@ -1,4 +1,4 @@
-﻿using EduCenterModel.BaseEnum;
+﻿ using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using System;
 using System.Collections.Generic;
@@ -51,6 +51,29 @@ namespace EduCenterSrv.Common
                 return _UserCourseLogStatusList;
             }
         }
+
+        private static List<SiKsV> _MemberTypeList;
+        public static List<SiKsV> MemberTypeList
+        {
+            get
+            {
+                if(_MemberTypeList == null)
+                {
+                    _MemberTypeList = new List<SiKsV>();
+                    foreach (MemberType mt in Enum.GetValues(typeof(MemberType)))
+                    {
+                        _MemberTypeList.Add(new SiKsV
+                        {
+                            Key = (int)mt,
+                            Value = GetMemberTypeName(mt),
+                        });
+                    }
+
+                }
+                return _MemberTypeList;
+            }
+        }
+
 
         public static string GetUserCourseLogStatusName(UserCourseLogStatus status)
         {
@@ -302,20 +325,18 @@ namespace EduCenterSrv.Common
             return "";
         }
 
-        //public static string GetUserCourseLogStatusName(UserCourseLogStatus status)
-        //{
-        //    switch (status)
-        //    {
-        //        case UserCourseLogStatus.Absent:
-        //            return "缺席";
-        //        case UserCourseLogStatus.PreNext:
-        //            return "准备上课";
-        //        case UserCourseLogStatus.SignIn:
-        //            return "已签到";
-        //        //case UserCourseLogStatus.Started:
-        //        //    return "已签到";
-        //    }
-        //    return "";
-        //}
+        public static string GetMemberTypeName(MemberType memberType)
+        {
+            switch(memberType)
+            {
+                case MemberType.BusinessMember:
+                    return "企业用户";
+                case MemberType.VIP:
+                    return "VIP";
+                case MemberType.Normal:
+                    return "普通会员";
+            }
+            return "";
+        }
     }
 }

@@ -860,7 +860,7 @@ namespace EduCenterSrv
 
         #region WebBackEnd
 
-        public List<RUserList> QueryUserList(string userName,out int totalPages,int pageIndex=1,int pageSize =20)
+        public List<RUserList> QueryUserList(string userName,out int recordTotal, int pageIndex=1,int pageSize =20)
         {
            
             var sql = from ui in _dbContext.DBUserInfo
@@ -872,7 +872,7 @@ namespace EduCenterSrv
                           BabyName = ui.ChildName,
                           userOpenId = ui.OpenId,
                           MemberType = ui.MemberType,
-                          DeadLineStd = ua.DeadLine.ToString("yyyy-MM-dd"),
+                          DeadLineStd = ua.DeadLine == DateTime.MinValue?DateTime.Parse("1900-01-01").ToString("yyyy-MM-dd"): ua.DeadLine.ToString("yyyy-MM-dd"),
                           DeadLineSummer = ua.SummerDeadLine.ToString("yyyy-MM-dd"),
                           DeadLineWinter = ua.WinterDeadLine.ToString("yyyy-MM-dd"),
                           RemainTimeStd = ua.RemainCourseTime,
@@ -880,13 +880,14 @@ namespace EduCenterSrv
                           RemainTimeWinter = ua.RemainWinterTime,
                           AllowChooseStd = ua.CanSelectCourse,
                           AllChooseWS = ua.CanSelectSummerWinterCourse,
+                          VipPrice = ua.VIPPrice1,
                       };
             if(!string.IsNullOrEmpty(userName))
             {
                 sql = sql.Where(a => a.WxName.Contains(userName));
             }
-
-            totalPages = Convert.ToInt32(sql.Count() / pageSize) + 1;
+            recordTotal = sql.Count();
+        //    recordTotal = Convert.ToInt32( / pageSize) + 1;
 
             return sql.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
 

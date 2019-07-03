@@ -15,6 +15,8 @@ namespace EduCenterModel.User.Result
 
         public MemberType MemberType { get; set; }
 
+        public double VipPrice { get; set; }
+
         public double RemainTimeStd { get; set; }
 
         public double RemainTimeSummer { get; set; }
