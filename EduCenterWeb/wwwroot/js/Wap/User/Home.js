@@ -21,20 +21,26 @@
             });
         });
 
-        var map = new BMap.Map("SchoolMap"); 
-        var point = new BMap.Point(121.531031, 31.166735); 
-        map.centerAndZoom(point, 15);  
+        $(".MyArea").css("height", window.screen.height);
+      
+        InitBaiduMap();
+    }
+
+    InitBaiduMap = function () {
+        var map = new BMap.Map("SchoolMap");
+        var point = new BMap.Point(121.531031, 31.166735);
+        map.centerAndZoom(point, 15);
 
         var myIcon = new BMap.Icon("/images/map_logo.png", new BMap.Size(120, 120), {
 
-       
+
         });
 
         var marker = new BMap.Marker(point,
             {
                 offset: new BMap.Size(20, -20),
                 icon: myIcon,
-                title:"我在这里"
+                title: "我在这里"
             }
         );
         map.addOverlay(marker);
@@ -48,7 +54,7 @@
         ////设置label(标注的样式)
         //label.setStyle({
         //    color: "black",
-            
+
         //    fontWeight: "bold",
         //    fontSize: "12px",
         //    height: "30px",
@@ -59,8 +65,6 @@
         //    border: "none"
         //});
         //marker.setLabel(label);
-      
-       
     }
 
     Init();

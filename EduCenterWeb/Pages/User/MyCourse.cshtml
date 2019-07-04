@@ -26,8 +26,10 @@
     }
 
     .Title {
-        color: #ff6a00;
+        color:#3c4c7d;
         background-color: #96dffd;
+          text-align: unset;
+              font-size: 16px;
     }
 
     .CourseArea {
@@ -213,10 +215,10 @@
 <div class="MainContainer">
     <div class="Title">
         <div>
-            <span class="fa fa-calendar" style="margin-right:8px;"></span>我的课程
+            <span class="fa fa-calendar" style="margin-left:8px;"></span>【@Model.CourseScheduleTypeName】我的课程
         </div>
     </div>
-    <div class="CourseTypeInfo">@Model.CourseScheduleTypeName</div>
+    @*<div class="CourseTypeInfo"></div>*@
     <div class="CourseArea">
         <table border="0" cellpadding="0" cellspacing="0" id="CourseTable">
             <tr>

@@ -73,7 +73,7 @@ namespace EduCenterWeb.Pages.User
                 if (us != null)
                 {
 
-                    CourseScheduleType courseScheduleType = _UserSrv.GetCurrentCourseScheduleType(us.OpenId);
+                    CourseScheduleType courseScheduleType = _UserSrv.GetCurrentCourseScheduleType(us.OpenId,us.MemeberType);
                     //获取用户课程
                     result.Entity.UserCourseList = _UserSrv.GetUserCourseAvaliable(us.OpenId, courseScheduleType);
                     result.IntMsg = (int)courseScheduleType;

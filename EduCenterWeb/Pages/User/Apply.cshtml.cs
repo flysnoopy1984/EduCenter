@@ -53,11 +53,11 @@ namespace EduCenterWeb.Pages.User
             var us = base.GetUserSession();
             if(us!=null)
             {
-                if(us.CurrentScheduleType == CourseScheduleType.Summer || us.CurrentScheduleType == CourseScheduleType.Winter)
-                {
-                    HttpContext.Response.Redirect("/User/ApplyWinterSummer");
-                    return;
-                }
+                //if(us.CurrentScheduleType == CourseScheduleType.Summer || us.CurrentScheduleType == CourseScheduleType.Winter)
+                //{
+                //    HttpContext.Response.Redirect("/User/ApplyWinterSummer");
+                //    return;
+                //}
             
                 CourseTimes = StaticDataSrv.CourseTime.Values.ToList();
 

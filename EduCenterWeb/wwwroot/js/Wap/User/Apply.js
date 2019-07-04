@@ -14,8 +14,11 @@
         //var msg = GetUrlParam("msg", true);
         //if (msg != undefined) {
         //    ShowInfo(msg, null, null, 2);
-        //}
+        //
         $("#btnConfirm").on("click", NextStep);
+        $(".switchCourseScheduleType").on("click", function () {
+            window.location.href = "ApplyWinterSummer";
+        })
 
         callAjax_Query(InitUrl, {}, InitCallBack, "");
 

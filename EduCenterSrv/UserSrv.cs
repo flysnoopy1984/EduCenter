@@ -208,7 +208,7 @@ namespace EduCenterSrv
         }
 
 
-        public CourseScheduleType GetCurrentCourseScheduleType(string openId)
+        public CourseScheduleType GetCurrentCourseScheduleType(string openId,MemberType memberType)
         {
           
             ECourseDateRange dr = StaticDataSrv.CourseDateRange.Where(a => a.StartDate <= DateTime.Today &&
@@ -217,13 +217,29 @@ namespace EduCenterSrv
             if(dr!=null)
             {
                 EUserAccount userAccount = GetUserAccount(openId);
+                if(memberType == MemberType.Normal)
+                {
+                    if (dr.CourseScheduleType == CourseScheduleType.Summer &&
+                userAccount.RemainSummerTime > 0)
+                        return CourseScheduleType.Summer;
 
-                if (dr.CourseScheduleType == CourseScheduleType.Summer &&
-                   userAccount.RemainSummerTime > 0)
-                    return CourseScheduleType.Summer;
-                else if (dr.CourseScheduleType == CourseScheduleType.Winter &&
-                   userAccount.RemainWinterTime > 0)
-                    return CourseScheduleType.Winter;
+                    else if (dr.CourseScheduleType == CourseScheduleType.Winter &&
+                       userAccount.RemainWinterTime > 0)
+                        return CourseScheduleType.Winter;
+                }
+                else
+                {
+                    //不能选择，说明用户已经选择过假期课
+                    if(!userAccount.CanSelectSummerWinterCourse)
+                    {
+                        if (dr.CourseScheduleType == CourseScheduleType.Summer)
+                            return CourseScheduleType.Summer;
+                        else if (dr.CourseScheduleType == CourseScheduleType.Winter)
+                            return CourseScheduleType.Winter;
+                    }
+                  
+                }
+             
             }
             return CourseScheduleType.Standard;
 

@@ -121,7 +121,7 @@ namespace EduCenterWeb.Pages.User
         {
            var userAccount = _UserSrv.GetUserAccount(ui.OpenId);
 
-            CourseScheduleType courseScheduleType = _UserSrv.GetCurrentCourseScheduleType(ui.OpenId);
+            CourseScheduleType courseScheduleType = _UserSrv.GetCurrentCourseScheduleType(ui.OpenId,ui.MemberType);
 
             base.SetUserSesion(ui.OpenId, ui.Name, ui.wx_headimgurl, ui.Phone, courseScheduleType, ui.UserRole, ui.MemberType, userAccount);
         }

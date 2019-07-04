@@ -34,7 +34,10 @@
     }
 
     .Title {
-        color: #ff6a00;
+           color: #ff6a00;
+    text-align: unset;
+    margin-top: 35px;
+    margin-bottom: 10px;
     }
 
 
@@ -211,6 +214,11 @@
         font-weight: bold;
         font-size: 24px;
     }
+    .switchCourseScheduleType{
+        position: absolute;
+    top: 16px;
+    left: 20px;
+    }
 </style>
 
 <script src="~/lib/layui/layui.js"></script>
@@ -228,12 +236,13 @@
 <script src="~/js/EduLib/Common.js?v=@Model.jsVersion"></script>
 <script src="~/js/Wap/User/Apply.js?v=@Model.jsVersion"></script>
 
-<div class="MainContainer">
+<div class="MainContainer ">
+    <div class="switchCourseScheduleType text-primary"><i class="fa fa-exchange" aria-hidden="true" style="margin-right:10px"></i>切换到假期班</div>
     <div class="Title">
-        <span class="fa fa-tags">课程选择</span>
+        <span class="fa fa-tags">【标准班】课程</span>
     </div>
 
-    <div class="GridContainder">
+    <div class="GridContainder bg-success">
         <div class="SelectCourseTimeTitle"><i class="fa fa-calendar" aria-hidden="true"></i>  请点击选择您上课的时间</div>
         <div class="layui-tab layui-tab-card">
             <ul class="layui-tab-title">

@@ -317,11 +317,11 @@ namespace EduCenterSrv
         #endregion
 
         #region 用户课时消耗
-        public void UpdateCourseLogToSigned(string openId, CourseScheduleType courseScheduleType, string lessonCode)
+        public void UpdateCourseLogToSigned(string openId,MemberType memberType, CourseScheduleType courseScheduleType, string lessonCode)
         {
             var date = DateTime.Now.ToString("yyyy-MM-dd");
 
-            int result = UpdateUserCourseTimeOnce(openId, courseScheduleType);
+            int result = UpdateUserCourseTimeOnce(openId, memberType, courseScheduleType);
             if(result == -1)
             {
                 string courseScheduleTypeName = BaseEnumSrv.GetCourseScheduleTypeName(courseScheduleType);
@@ -356,26 +356,59 @@ namespace EduCenterSrv
         }
 
         //返回-1 用户余额不足
-        public int UpdateUserCourseTimeOnce(string openId, CourseScheduleType courseScheduleType)
+        public int UpdateUserCourseTimeOnce(string openId,MemberType memberType, CourseScheduleType courseScheduleType)
         {
             EUserAccount result = _dbContext.DBUserAccount.Where(a => a.UserOpenId == openId).FirstOrDefault();
 
-            switch (courseScheduleType)
+            if(memberType == MemberType.Normal)
             {
-                case CourseScheduleType.Summer:
-                    if (result.RemainSummerTime == 0) return -1;
-                    else result.RemainSummerTime-=2;
-                    break;
-                case CourseScheduleType.Winter:
-                    if (result.RemainWinterTime == 0) return -1;
-                    else result.RemainWinterTime-=2;
-                    break;
-                default:
-                    if (result.RemainCourseTime == 0) return -1;
-                    else result.RemainCourseTime-=2;
-                    break;
+                switch (courseScheduleType)
+                {
+                    case CourseScheduleType.Summer:
+                        if (result.RemainSummerTime == 0) return -1;
+                        else result.RemainSummerTime -= 2;
+                        break;
+                    case CourseScheduleType.Winter:
+                        if (result.RemainWinterTime == 0) return -1;
+                        else result.RemainWinterTime -= 2;
+                        break;
+                    default:
+                        if (result.RemainCourseTime == 0) return -1;
+                        else result.RemainCourseTime -= 2;
+                        break;
 
+                }
             }
+            else
+            {
+                switch (courseScheduleType)
+                {
+                    case CourseScheduleType.Summer:
+                        if (result.RemainSummerTime == 0)
+                        {
+                            if (result.RemainCourseTime == 0) return -1;
+                            else result.RemainCourseTime -= 2;
+                        }
+                        else
+                            result.RemainSummerTime -= 2;
+                        break;
+                    case CourseScheduleType.Winter:
+                        if (result.RemainWinterTime == 0)
+                        {
+                            if (result.RemainCourseTime == 0) return -1;
+                            else result.RemainCourseTime -= 2;
+                        } 
+                        else
+                            result.RemainWinterTime -= 2;
+                        break;
+                    default:
+                        if (result.RemainCourseTime == 0) return -1;
+                        else result.RemainCourseTime -= 2;
+                        break;
+
+                }
+            }
+          
             return 0;
 
         }

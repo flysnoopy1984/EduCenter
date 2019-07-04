@@ -34,7 +34,10 @@
     }
 
     .Title {
-        color: #ff6a00;
+        color: #0eca27;
+        text-align: unset;
+        margin-top: 35px;
+        margin-bottom: 10px;
     }
 
 
@@ -215,6 +218,11 @@
     .text-warning {
         color: #ffa200;
     }
+      .switchCourseScheduleType{
+        position: absolute;
+        top: 16px;
+        left: 20px;
+    }
 </style>
 
 
@@ -233,15 +241,16 @@
 <script src="~/js/Wap/User/ApplyWinterSummer.js?v=@Model.jsVersion"></script>
 
 <div class="MainContainer">
+    <div class="switchCourseScheduleType text-primary"><i class="fa fa-exchange" aria-hidden="true" style="margin-right:10px"></i>切换到标准班</div>
     <div class="Title">
-        <span class="fa fa-tags">课程选择</span>
+        <span class="fa fa-tags">【假期班】课程选择</span>
     </div>
 
-    <div class="GridContainder">
+    <div class="GridContainder bg-danger">
         <div class="SelectCourseTimeTitle"><i class="fa fa-calendar" aria-hidden="true"></i>  请点击选择您上课的时间</div>
 
         <div class="layui-tab layui-tab-card">
-            <ul class="layui-tab-title layui-tab-more" >
+            <ul class="layui-tab-title layui-tab-more">
                 <li class="text-primary">一</li>
                 <li class="text-primary">二</li>
                 <li class="text-primary">三</li>
@@ -258,48 +267,48 @@
                     {
                         cls = "layui-show";
                     }
-                <div class="layui-tab-item @cls">
-                    <!--双休日-->
-                    <table id="GridWeek" day="@i" class="CourseGrid" border="0" cellspacing="0" cellpadding="0">
-                        <tr>
-                            <th></th>
-                            <th class="text-warning">@GetDayName(i)</th>
-                        </tr>
-                        @if (Model.CourseTimes != null)
+                    <div class="layui-tab-item @cls">
+                        <!--双休日-->
+                        <table id="GridWeek" day="@i" class="CourseGrid" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <th></th>
+                                <th class="text-warning">@GetDayName(i)</th>
+                            </tr>
+                            @if (Model.CourseTimes != null)
                             {
-                        @foreach (var time in Model.CourseTimes)
+                                @foreach (var time in Model.CourseTimes)
                                 {
 
-                        <tr>
-                            <td style="font-weight:bold">@time.TimeRange</td>
-                            <td>
-                                <div day="@i" lesson="@time.Lesson" class="CellContainer" onclick="selectCourse(this);">
-                                    @*  <div class="noCourse"> <span>无</span><span class="caret"></span></div>*@
-                                    <div class="CellCourseData">
-                                        @try
-                                        {
-                                            var list = Model.GetAvaliableCourseList(i, time.Lesson);
-                                        @foreach (var c in list)
-                                            {
-                                        <div lCode=@c.LessonCode CourseType="@Convert.ToInt32(c.CourseType)" CourseCode="@c.CourseCode" CurUser="@c.ApplyNum">@c.CourseName</div>
-                                            }
-                                        }
-                                        catch
-                                        {
+                                    <tr>
+                                        <td style="font-weight:bold">@time.TimeRange</td>
+                                        <td>
+                                            <div day="@i" lesson="@time.Lesson" class="CellContainer" onclick="selectCourse(this);">
+                                                @*  <div class="noCourse"> <span>无</span><span class="caret"></span></div>*@
+                                                <div class="CellCourseData">
+                                                    @try
+                                                    {
+                                                        var list = Model.GetAvaliableCourseList(i, time.Lesson);
+                                                        @foreach (var c in list)
+                                                        {
+                                                            <div lCode=@c.LessonCode CourseType="@Convert.ToInt32(c.CourseType)" CourseCode="@c.CourseCode" CurUser="@c.ApplyNum">@c.CourseName</div>
+                                                        }
+                                                    }
+                                                    catch
+                                                    {
 
-                                        }
-                                    </div>
+                                                    }
+                                                </div>
 
-                                </div>
-                            </td>
-                        </tr>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 }
                             }
 
 
 
-                    </table>
-                </div>
+                        </table>
+                    </div>
                 }
             </div>
         </div>
