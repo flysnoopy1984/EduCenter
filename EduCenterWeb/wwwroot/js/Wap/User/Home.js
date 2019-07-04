@@ -21,7 +21,7 @@
             });
         });
 
-        $(".MyArea").css("height", window.screen.height);
+        $(".MyArea").css("height", window.screen.height-180);
       
         InitBaiduMap();
     }
