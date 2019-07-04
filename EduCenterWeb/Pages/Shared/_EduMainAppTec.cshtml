@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    @*<meta name="viewport" content="width=device-width" />*@
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>云艺书院</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/fonts/font-awesome.min.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <link href="~/css/Layouts/GlobalShared.css" rel="stylesheet" />
+    <script src="~/lib/jquery.transit/jquery.transit.min.js"></script>
+    <link href="~/Components/LeftMenu/IQBLeftmenu.css" rel="stylesheet" />
+    <script src="~/Components/LeftMenu/IQBLeftmenu.js?v=@Model.jsVersion"></script>
+
+    <style type="text/css">
+        .Title {
+            text-align: center;
+            height: 34px;
+            line-height: 34px;
+            font-size: 20px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            width: 95%;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .sidenav{
+            width:200px;
+             left: -200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="LeftMenu">
+        <i class="fa fa-list-alt" aria-hidden="true"></i>
+        <span>菜单</span>
+    </div>
+    <div>
+
+        <ul id="LeftMainMenu" class="sidenav">
+            <li onclick="GoMenu('/Techer/DayCourse');">
+                <div class="MenuItem">
+                    <i class="fa fa-pencil-square" aria-hidden="true"></i><span><b>当天课程</b></span>
+                </div>
+            </li>
+            <li onclick="GoMenu('/User/MyCourse');">
+                <div class="MenuItem">
+                    <i class="fa fa-refresh" aria-hidden="true"></i><span><b>切换用户身份</b></span>
+                </div>
+            </li>
+            <li onclick="GoMenu('/User/Login?act=refresh');">
+                <div class="MenuItem">
+                    <i class="fa fa-refresh" aria-hidden="true"></i><span><b>重新登陆</b></span>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    @RenderBody()
+
+</body>
+</html>

@@ -4,19 +4,102 @@
     ViewData["Title"] = "Home";
     Layout = "~/Pages/Shared/_EduMainApp.cshtml";
 }
+
+<link href="~/css/Plugs/layui.css" rel="stylesheet" />
+<script src="~/lib/layui/layui.js"></script>
+<script src="~/lib/layui/lay/modules/carousel.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=BtpdIgmjsF6qminTtqHroQDGCM5lmjUU"></script>
+<script src="~/js/Wap/User/Home.js?v=@Model.jsVersion"></script>
 <style type="text/css">
-    .IsComing{
-            display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100vh;
-    font-size:20px;
-    font-weight:bold;
-    background:url("/images/BK_APPLogin.png") no-repeat;
+    .IsComing {
+        display: flex;
+        flex-direction:column;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+       
+        font-size: 20px;
+        font-weight: bold;
+        background: url("/images/BK_APPLogin.png") no-repeat;
+    }
+
+    .BtnList {
+        width: 80%;
+        height: 40px;
+        display: flex;
+        justify-content: space-around;
+        margin-bottom:20px;
+        margin-top:20px;
+    }
+
+    .PageContent {
+        display: flex;
+        flex-direction: column;
+        align-items:flex-start;
+        width:100%;
+        margin-top:45px;
+        /*margin-bottom:20px;*/
+    }
+    .Weiqi{
+        background:url("/images/Bar/Weiqi.png") no-repeat;
+        background-size:cover;
+       
+        
+    }
+    .Guohua{
+        background:url("/images/Bar/Guohua.png") no-repeat;
+        background-size:cover;
+    }
+    .Shufa{
+        background:url("/images/Bar/Shufa.png") no-repeat;
+        background-size:cover;
+    }
+    #HomeBar{
+            box-shadow: #191913 0px 0px 4px;
+    }
+ 
+    .subTitle{
+        margin-top:10px;
+        margin-bottom:10px;
+        /*height:35px;
+        line-height:35px;*/
+        border-radius:4px;
+        font-size:14px;
+           color: #5e6b80;
+       align-self:flex-start;
+           align-self: flex-start;
+    padding-left: 20px;
+        
+    }
+       .MyArea{
+        width:100%;
+        height:200px;
+        margin-bottom:30px;
+        /*background:#ffd800;*/
     }
 </style>
+
 <div class="IsComing text-primary">
-    正在努力，敬请期待！
+    @*正在努力，敬请期待！*@
+    <div class="PageContent">
+        <div class="layui-carousel" id="HomeBar">
+            <div carousel-item>
+                <div class="Weiqi"></div>
+                <div class="Guohua"></div>
+                <div class="Shufa"></div>
+            </div>
+        </div>
+    </div>
+    <div class="BtnList">
+        <input type="button" id="btnTrial" class="btn btn-warning" value="我要试听" />
+        <input type="button" id="btnBuyTime" class="btn btn-success" value="购买课程" />
+    </div>
+    <div class="subTitle">
+        <i class="fa fa-arrow-circle-down" style="margin-right:10px;" aria-hidden="true"></i>我们在这里
+        <div>上海市 高青路 2671号(家乐福1楼)</div>
+    </div>
+
+    <div class="MyArea" id="SchoolMap"></div>
+
 </div>
 

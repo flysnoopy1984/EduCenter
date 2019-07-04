@@ -13,7 +13,7 @@
     <link href="~/css/Layouts/GlobalShared.css" rel="stylesheet" />
     <script src="~/lib/jquery.transit/jquery.transit.min.js"></script>
     <link href="~/Components/LeftMenu/IQBLeftmenu.css" rel="stylesheet" />
-    <script src="~/Components/LeftMenu/IQBLeftmenu.js"></script>
+    <script src="~/Components/LeftMenu/IQBLeftmenu.js?v=@Model.jsVersion"></script>
 
     <style type="text/css">
     .Title {
@@ -35,6 +35,7 @@
         <span>菜单</span>
     </div>
     <div>
+        
         <ul id="LeftMainMenu" class="sidenav">
             <li onclick="GoMenu('MySign');">
                 <div class="MenuItem">
@@ -76,9 +77,14 @@
                     <i class="fa fa-user" aria-hidden="true"></i><span><b>我的信息</b></span>
                 </div>
             </li>
+            <li onclick="GoMenu('Login?act=refresh');">
+                <div class="MenuItem">
+                    <i class="fa fa-refresh" aria-hidden="true"></i><span><b>重新登陆</b></span>
+                </div>
+            </li>
         </ul>
     </div>
-
+   
     @RenderBody()
 
 </body>

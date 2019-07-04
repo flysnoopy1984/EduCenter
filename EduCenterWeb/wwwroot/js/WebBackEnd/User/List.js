@@ -3,6 +3,7 @@
     var pageIndex = 1;
     var pageSize = 20;
     var QueryUserListUrl = "List?handler=QueryUserList";
+    var UpdateUserUrl = "List?handler=UpdateUser";
 
     Init = function () {
         layui.use('laypage', function () {
@@ -41,7 +42,7 @@
             tr.find(".RemainTimeStd").val(data.RemainTimeStd);
             tr.find(".RemainTimeSummer").val(data.RemainTimeSummer);
             tr.find(".RemainTimeWinter").val(data.RemainTimeWinter);
-
+            tr.find(".UserRole").text(data.UserRoleName);
             tr.find("#btn_Save").on("click", SaveUser);
 
             var DeadLineStd = tr.find(".DeadLineStd");
@@ -61,23 +62,8 @@
                 trigger: 'click',
               
             });
-
-            //$("#btnDate" + i).on('click', function (e) { //假设 test1 是一个按钮
-            //    laydate.render({
-
-            //        elem: "#btnDate" + i,
-            //        show: true,
-            //        closeStop: "#btnDate" + i,
-            //        isInitValue: false,
-            //        value: data.DeadLineStd
-            //    });
-            //});
-
            
         });
-
-      
-        
 
         glaypage.render({
             elem: 'Pager',
@@ -89,14 +75,33 @@
                     pageIndex = obj.curr;
                     QueryUserList();
                 }
-
             }
         });
     }
 
     SaveUser = function (e) {
-        var openId = $(e.currentTarget).closest("tr").attr("openId");
-        ShowInfo(openId);
+        var obj = $(e.currentTarget);
+        var tr = obj.closest("tr");
+
+        var data = {
+            "OpenId": tr.attr("openId"),
+            "MemberType": tr.find(".MemberType").val(),
+            "VipPrice": tr.find(".VipPrice").val(),
+            "RemainTimeStd": tr.find(".RemainTimeStd").val(),
+            "RemainTimeSummer": tr.find(".RemainTimeSummer").val(),
+            "RemainTimeWinter": tr.find(".RemainTimeWinter").val(),
+            "RemainTimeWinter": tr.find(".RemainTimeWinter").val(),
+            "DeadLineStd": tr.find(".DeadLineStd").val()
+        }
+
+        callAjax_Query(UpdateUserUrl, data, SaveUserCallBack);
+      //  ShowInfo(openId);
+
+    }
+    SaveUserCallBack = function (res) {
+
+        ShowInfo("保存成功");
+
     }
 
     Init();

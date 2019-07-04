@@ -114,6 +114,7 @@ namespace EduCenterWeb.Pages.WX
                 {
                     var us = GetUserSession(false);
                     us.UserAccount = eUserAccount;
+                    us.UserRole = EduCenterModel.BaseEnum.UserRole.Member;
                     SetUserSesion(us);
                 }
             }

@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EduCenterModel", "EduCenter
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EduCenterSrv", "EduCenterSrv\EduCenterSrv.csproj", "{E78D2687-382F-4289-B2AD-7FAEB4AAC83D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduCenterConsole", "EduCenterConsole\EduCenterConsole.csproj", "{25B6244F-0055-4B04-AC92-4D48E6C5FC47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EduCenterConsole", "EduCenterConsole\EduCenterConsole.csproj", "{25B6244F-0055-4B04-AC92-4D48E6C5FC47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

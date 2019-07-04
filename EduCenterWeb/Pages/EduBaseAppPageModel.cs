@@ -16,13 +16,19 @@ namespace EduCenterWeb.Pages
 {
     public class EduBaseAppPageModel:PageModel
     {
+        
       
         public string jsVersion
         {
             get { return EduConfig.Version; }
         }
-     
-       public UserSession GetUserSession(bool toLoginIfError = true)
+
+        public void ClearUserSession()
+        {
+            HttpContext.Session.Remove(EduConstant.UserSessionKey);
+        }
+
+        public UserSession GetUserSession(bool toLoginIfError = true)
        {
             string json = HttpContext.Session.GetString(EduConstant.UserSessionKey);
 

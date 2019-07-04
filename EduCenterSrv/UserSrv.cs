@@ -2,6 +2,7 @@
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.User;
+using EduCenterModel.User.In;
 using EduCenterModel.User.Result;
 using EduCenterModel.WX;
 using EduCenterSrv.Common;
@@ -125,6 +126,7 @@ namespace EduCenterSrv
             return _dbContext.DBUserInfo.Where(a => a.OpenId == openId).FirstOrDefault();
         }
 
+       
         #endregion
 
         #region UserCourese
@@ -878,6 +880,7 @@ namespace EduCenterSrv
                           RemainTimeStd = ua.RemainCourseTime,
                           RemainTimeSummer = ua.RemainSummerTime,
                           RemainTimeWinter = ua.RemainWinterTime,
+                          UserRoleName = BaseEnumSrv.GetUserRoleName(ui.UserRole), 
                           AllowChooseStd = ua.CanSelectCourse,
                           AllChooseWS = ua.CanSelectSummerWinterCourse,
                           VipPrice = ua.VIPPrice1,
@@ -893,6 +896,27 @@ namespace EduCenterSrv
 
 
         }
+
+        public bool UpdateUserData(InUserData userData)
+        {
+            var ui = _dbContext.DBUserInfo.Where(a => a.OpenId == userData.OpenId).FirstOrDefault();
+            ui.MemberType = userData.MemberType;
+
+            var ua = GetUserAccount(userData.OpenId);
+            ua.VIPPrice1 = userData.VipPrice;
+            ua.RemainCourseTime = userData.RemainTimeStd;
+            ua.RemainSummerTime = userData.RemainTimeSummer;
+            ua.RemainWinterTime = userData.RemainTimeWinter;
+
+            if(userData.DeadLineStd != "1900-01-01")
+                ua.DeadLine = DateTime.Parse(userData.DeadLineStd);
+
+            _dbContext.SaveChanges();
+
+            return true;
+            //  ui.UserRole
+        }
+
         #endregion
 
 

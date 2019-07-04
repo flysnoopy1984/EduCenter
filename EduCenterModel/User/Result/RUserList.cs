@@ -15,6 +15,11 @@ namespace EduCenterModel.User.Result
 
         public MemberType MemberType { get; set; }
 
+        /// <summary>
+        /// 查看是否购买过课时
+        /// </summary>
+        public string UserRoleName { get; set; }
+
         public double VipPrice { get; set; }
 
         public double RemainTimeStd { get; set; }

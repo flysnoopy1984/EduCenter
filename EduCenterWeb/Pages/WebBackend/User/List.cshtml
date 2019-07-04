@@ -21,7 +21,7 @@
     }
 
     #UserListTable {
-      width:1000px;
+      width:1200px;
         font-size: 11px;
     }
 
@@ -85,6 +85,7 @@
                 <th width="200px">操作</th>
                 <th width="150px">用户微信名</th>
                 <th>宝贝姓名</th>
+                <th>用户类型</th>
                 <th>会员类型</th>
                 <th>特殊价格</th>
                 <th>标准班剩余课时</th>
@@ -117,6 +118,9 @@
             </td>
             <td><label class="WxName TextNoWrap2"></label></td>
             <td><label class="BabyName"></label></td>
+            <td>
+                <label class="UserRole"></label>
+            </td>
             <td>
                 <select class="MemberType">
                     @foreach (var mt in Model.MemberTypeList)

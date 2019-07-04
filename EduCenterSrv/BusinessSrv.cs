@@ -158,6 +158,13 @@ namespace EduCenterSrv
                 var line = _dbContext.DBOrderLine.Where(a => a.OrderId == orderId).FirstOrDefault();
                 eUserAccount = UpdateUserAccountByOrderLine(order.CustOpenId, line);
 
+                var ui = _dbContext.DBUserInfo.Where(a => a.OpenId == order.CustOpenId).FirstOrDefault();
+                if(ui.UserRole == UserRole.Visitor)
+                {
+                    ui.UserRole = UserRole.Member;
+                }
+               
+
                 _dbContext.SaveChanges();
                 CommitTrans();
             }

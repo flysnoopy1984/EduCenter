@@ -8,11 +8,15 @@
 
     UserLogin = function () {
 
-        callAjax_Query(urlLogin, {}, LoginCallBack, "登陆中");
+        callAjax_Query(urlLogin, {}, LoginCallBack, "");
        
     }
 
-    LoginCallBack = function () {
+    LoginCallBack = function (res) {
+        if (res.IntMsg == 10)
+            window.location.href = "/Teacher/DayCourse";
+        else
+
         window.location.href = "/User/Home";
       //  window.history.
     } 

@@ -65,7 +65,15 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 20px;
+        margin-top: 40px;
+    }
+    #btn_Submit{
+       
+        font-family: "微软雅黑";
+
+    }
+    .bg-gray{
+        background:#cccbcb;
     }
 </style>
 <div class="o2o_header">
@@ -73,16 +81,16 @@
 </div>
 
 <div class="payselection">
-    <div class="bg-success payItem">
+    <div class="bg-primary payItem">
         <div class="payName">微信支付</div>
         <div class="radio radio-danger">
-            <input type="radio" name="radioPay" id="r1" value="wx">
+            <input type="radio" name="radioPay" id="r1" value="wx" checked>
             <label for="r1">
 
             </label>
         </div>
     </div>
-    <div class="bg-primary payItem">
+    <div class="bg-gray payItem">
         <div class="payName">支付宝支付</div>
         <div class="radio radio-danger">
             <input type="radio" name="radioPay" id="r2" value="ali">
@@ -95,7 +103,7 @@
 
 </div>
 <div class="btnArea">
-    <input type="button" id="btn_Submit" class="btn btn-warning" value="支付" />
+    <input type="button" id="btn_Submit" class="btn btn-success btn-lg" value="开始支付" />
 </div>
 
 

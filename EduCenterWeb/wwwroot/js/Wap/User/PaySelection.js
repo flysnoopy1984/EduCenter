@@ -54,7 +54,7 @@
         if (payway == "wx")
             DoWxPay();
         else {
-            ShowInfo("即将开通！");
+            ShowInfo("暂未开通，敬请期待！");
         }
     }
 

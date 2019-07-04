@@ -33,6 +33,11 @@
         $("#TimeFilterTable tr").on("click", TimeSelectedEvent);
     }
 
+    StartLoading = function () {
+        $(".buttonArea").hide();
+        $(".TimeFilter").slideUp();
+    }
+
     LoadingDone = function () {
         $(".buttonArea").show();
         $(".TimeFilter").slideDown();
@@ -49,11 +54,22 @@
 
     }
 
+   
+
     GetTrialList = function () {
-        var date = $(".DateInput").text();
+
+        StartLoading();
+
+        var dateStr = $(".DateInput").text();
         var courseCode = $("#selCourseCode").val();
 
-        if (date != "" && courseCode != "-1") {
+        var date = new Date(dateStr);
+        var day = date.getDay();
+        if (day == 1 || day == 2) {
+            ShowInfo("周一，周二没有试听课",null,null,2);
+            return;
+        }
+        if (dateStr != "" && courseCode != "-1") {
             LoadingDone();
         }
 

@@ -18,9 +18,9 @@
         else
         {
 
-       //     $(".sidenav").css("display", "unset");
-        
-            $(".sidenav").transition({ x: '150px' });
+            //     $(".sidenav").css("display", "unset");
+          //  alert( );
+            $(".sidenav").transition({ x: $(".sidenav").css("width") });
          //   $(".sidenav b").css("opacity", "1");
          //   $(".sidenav b").transition({ x: '0px' });
          
@@ -31,6 +31,8 @@
     InitMenu = function (Id) {
    //     $(".sidenav").transition({ x: '-150px' });
         $(Id).on("click", switchMenu);
+
+
     }
     GoMenu = function (url) {
        // alert(url);

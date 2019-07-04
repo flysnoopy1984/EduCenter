@@ -92,7 +92,7 @@
             var lessonNo = cellRow.attr("no");
             var cellText = cellRow.find(".cellText");
             var rId = cellRow.attr("rId");
-
+            var cName = cellRow.attr("cName");
             var day = cellRow.parent().attr("day");
             var lesson = cellRow.parent().attr("lesson");
         //    var lessonCode = year + "_" + day + "_" + lesson + "_" + cCode + "_" + lessonNo;
@@ -102,7 +102,7 @@
 
             var courseSchedule = {
                 "CourseCode": cCode,
-                "CourseName": cellText.text(),
+                "CourseName": cName,
                 "Id":rId,
                // "TecCode": tecCode,
                 "Year": year,
@@ -176,6 +176,7 @@
         cellRow.attr("no", no);
         cellRow.attr("cType", cType);
         cellRow.attr("rId", rId);
+        cellRow.attr("cName", cName);
         var cellText = cellRow.find(".cellText");
 
         cellText.text(cName + "(" + applyNum + ")");

@@ -114,11 +114,11 @@ namespace EduCenterWeb.Pages.Test
                     UserOpenId = openId,
                 });
 
-                var order = _busSrv.PayCourseOrder(openId, cp);
+                //var order = _busSrv.PayCourseOrder(openId, cp);
 
-                _busSrv.PayCourseSuccess(order.OrderId);
+                //_busSrv.PayCourseSuccess(order.OrderId);
 
-                _busSrv.UserSelectNewCourses(openId, eUserCourses);
+                //_busSrv.UserSelectNewCourses(openId, eUserCourses);
             }
             catch(Exception ex)
             {

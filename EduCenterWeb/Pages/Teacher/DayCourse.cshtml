@@ -1,0 +1,62 @@
+﻿@page
+@model EduCenterWeb.Pages.Teacher.DayCourseModel
+@{
+    ViewData["Title"] = "DayCourse";
+    Layout = "~/Pages/Shared/_EduMainAppTec.cshtml";
+}
+<script src="~/js/Wap/Tec/DayCourse.js?v=@Model.jsVersion"></script>
+<style type="text/css">
+     .MainContainer {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin-left: 10px;
+        margin-right: 10px;
+        height: 100%;
+    }
+
+  .Title {
+        color: #864b00;
+        background-color: #fdec96;
+      
+       
+    }
+
+  .DateArea {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        height: 40px;
+    }
+
+        .DateArea .CalendarPicker {
+            display: flex;
+            color: #9da09b;
+        }
+
+        .DateArea .DateLabel {
+            font-weight: bold;
+            line-height: 40px;
+        }
+
+        .DateArea .CalendarPicker .DateInput {
+            border-bottom: solid 1px #808080;
+            width: 150px;
+            line-height: 40px;
+            padding-left: 15px;
+            color: #12aa21;
+            font-size: 16px;
+            font-weight: bold;
+        }
+</style>
+<div class="MainContainer">
+    <div class="Title">课程</div>
+    <div class="DateArea">
+        <div class="DateLabel">选择日期：</div>
+        <div class="CalendarPicker">
+            <div class="DateInput"></div>
+            <div class="fa fa-calendar fa-2x" id="btn_DatePick"></div>
+        </div>
+    </div>
+</div>
+

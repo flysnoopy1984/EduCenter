@@ -327,7 +327,7 @@ namespace EduCenterSrv.Common
 
         public static string GetMemberTypeName(MemberType memberType)
         {
-            switch(memberType)
+            switch (memberType)
             {
                 case MemberType.BusinessMember:
                     return "企业用户";
@@ -338,5 +338,26 @@ namespace EduCenterSrv.Common
             }
             return "";
         }
+        public static string GetUserRoleName(UserRole userRole)
+        {
+            switch(userRole)
+            {
+                case UserRole.Admin:
+                    return "管理员";
+                case UserRole.Assist:
+                    return "前台";
+                case UserRole.Member:
+                    return "会员";
+                case UserRole.Sales:
+                    return "销售/推广";
+                case UserRole.Teacher:
+                    return "老师";
+                case UserRole.Visitor:
+                    return "访客";
+                 
+            }
+            return "";
+        }
+     
     }
 }

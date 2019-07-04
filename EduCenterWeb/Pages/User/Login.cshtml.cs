@@ -27,8 +27,19 @@ namespace EduCenterWeb.Pages.User
         }
         public void OnGet()
         {
+          
+            string act = HttpContext.Request.Query["act"];
+            if(!string.IsNullOrEmpty(act))
+            {
+                if(act == "refresh")
+                {
+                    ClearUserSession();
+                }
+            }
+
             if (!EduConfig.IsTest)
                 LoginWX();
+
         }
 
        // [EnableCors("any")]
@@ -43,13 +54,17 @@ namespace EduCenterWeb.Pages.User
                     var us = GetUserSession(false);
                     if (us == null)
                         result.ErrorMsg = "登陆失败,请联系客服";
+                    
                 }
                 else
                 {
                     var ui = _UserSrv.GetUserInfo("oh6cV1QhPLj6XPesheYUQ4XtuGTs");
                     WXLoginCallBack(ui);
                 }
-                   
+                //if (result.IsSuccess)
+                //    result.IntMsg = 10;
+
+
 
             }
             catch (Exception ex)
