@@ -53,6 +53,8 @@ namespace EduCenterModel.User
         /// </summary>
         public double VIPPrice1 { get; set; }
 
+       
+
 
 
 

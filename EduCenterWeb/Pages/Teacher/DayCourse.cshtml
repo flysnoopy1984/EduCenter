@@ -4,10 +4,15 @@
     ViewData["Title"] = "DayCourse";
     Layout = "~/Pages/Shared/_EduMainAppTec.cshtml";
 }
-    <script src="~/lib/laydate/laydate.js"></script>
+@Html.AntiForgeryToken()
+<script src="~/lib/laydate/laydate.js"></script>
+<link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
+<script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
+<script src="~/js/EduLib/EditHelper.js?v=@Model.jsVersion"></script>
 <script src="~/js/Wap/Tec/DayCourse.js?v=@Model.jsVersion"></script>
 <style type="text/css">
-     .MainContainer {
+    .MainContainer {
         display: flex;
         align-items: center;
         flex-direction: column;
@@ -16,19 +21,17 @@
         height: 100%;
     }
 
-  .Title {
+    .Title {
         color: #864b00;
         background-color: #fdec96;
-      
-       
     }
 
-  .DateArea {
+    .DateArea {
         width: 100%;
         display: flex;
         justify-content: center;
         height: 40px;
-        margin-bottom:20px;
+        margin-bottom: 20px;
     }
 
         .DateArea .CalendarPicker {
@@ -50,30 +53,39 @@
             font-size: 16px;
             font-weight: bold;
         }
-        .AllCourse{
-            width:95%;
 
-        }
-        .CourseTitle{
-            display:flex;
-            justify-content:space-between;
-            padding-left:10px;
-            padding-right:10px;
-            padding-top:2px;
-            padding-bottom:2px;
-            border-radius:8px;
-        }
-        .UserInfoList{
-            margin-top:10px;
-        }
-        .OneUser{
-            display:flex;
-            justify-content:space-between;
-            margin-bottom:4px;
-        }
-        .UserName{
+    .AllCourse {
+        width: 95%;
+    }
 
-        }
+    .CourseTitle {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        border-radius: 8px;
+    }
+
+    .UserInfoList {
+        margin-top: 10px;
+        display:flex;
+        flex-direction:column;
+        width:95%;
+    }
+    .btnRefresh{
+        align-self:flex-end;
+    }
+
+    .OneUser {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+    }
+
+    .UserName {
+    }
 </style>
 <div class="MainContainer">
     <div class="Title">课程</div>
@@ -85,32 +97,30 @@
         </div>
     </div>
     <div class="AllCourse">
-    
-      
+       
+
 
     </div>
 </div>
 <div id="HideData" style="display:none;">
-    <div id="OneCourseData">
+    <div class="OneCourseData">
         <div class="CourseTitle bg-primary">
             <div class="CouseInfo">【美术课】 12:30开始</div>
-            <div class="SwitchDetail">学生详情<i class="fa fa-caret-left" style="margin-left:5px;"></i></div>
+            <div class="SwitchDetail" lCode="">学生详情<i class="fa fa-caret-left" style="margin-left:5px;"></i></div>
         </div>
+        <div class="UserInfoList">
 
+        </div>
         <hr />
     </div>
 
-    <div class="UserInfoList">
-        <div class="OneUser">
-            <div class="UserName">学生姓名:xxx</div>
-            <div class="">已签到</div>
-        </div>
-        <div class="OneUser">
-            <div class="UserName">学生姓名:xxx</div>
-            <div class="">已签到</div>
-        </div>
+
+    <div class="OneUser">
+        <div class="UserName">学生姓名:xxx</div>
+        <div class="UserStatus ">已签到</div>
     </div>
 
+    <div class="btnRefresh"><input type="button" class="btn btn-warning btn-sm" value="刷新" /></div>
 
 </div>
 

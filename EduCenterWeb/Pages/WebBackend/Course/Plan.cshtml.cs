@@ -113,7 +113,12 @@ namespace EduCenterWeb.Pages.WebBackend.Course
                         result.ErrorMsg = "已经有用户报名，不能删除此课程";
                     }
                     else
+                    {
                         _CourseSrv.DeleteCourseSchdule(DelObj);
+                        _CourseSrv.SaveChanges();
+
+                    }
+                        
                 }
             }
             catch(Exception ex)

@@ -39,7 +39,7 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
             try
             {
                
-                result.List = _TecSrv.GetOneDayCourse(tecCode, date, CourseScheduleType.Standard);
+                result.List = _TecSrv.GetOneDayCourse(tecCode, date);
                 foreach (var c in result.List)
                 {
                     c.CoursingStatusName = BaseEnumSrv.GetCoursingStatusName(c.CoursingStatus);

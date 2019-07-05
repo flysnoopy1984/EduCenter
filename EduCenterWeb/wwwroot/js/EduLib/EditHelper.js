@@ -177,7 +177,7 @@
       
     };
 
-    callAjax_Query = function (url, data, handler, msg,AfterError) {
+    callAjax_Query = function (url, data, handler, msg,AfterError,errorShowSec) {
         //if (msg == undefined) msg = "查询中.."
         ShowBlock(msg);
 
@@ -200,7 +200,9 @@
                 }
                 else {
                     if (AfterError) {
-                        ShowInfo(res.ErrorMsg, null, "red", 0, function () {
+                        if (errorShowSec == undefined)
+                            errorShowSec = 1;
+                        ShowInfo(res.ErrorMsg, null, "red", errorShowSec, function () {
                             AfterError(res);
                         });
                     }

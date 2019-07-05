@@ -43,7 +43,7 @@ namespace EduCenterWeb.Pages
             return null;
              
        }
-        private bool IsCourseBuyDate(UserSession us)
+        private bool IsCourseStartDate(UserSession us)
         {
             DateTime buyDate = DateTime.MinValue;
             if (us.CurrentScheduleType == CourseScheduleType.Summer)
@@ -58,11 +58,12 @@ namespace EduCenterWeb.Pages
 
         }
 
-        public void SetUserSesion(string openId,string userName,
+        public UserSession SetUserSesion(string openId,string userName,
             string headerUrl,string phone, 
             CourseScheduleType currentScheduleType,
             UserRole userRole,
             MemberType memberType,
+            bool courseSkipToday,
             EUserAccount userAccount)
         {
             UserSession session = new UserSession()
@@ -75,12 +76,14 @@ namespace EduCenterWeb.Pages
                 CurrentScheduleTypeName = BaseEnumSrv.GetCourseScheduleTypeName(currentScheduleType),
                 MemeberType = memberType,
                 UserRole = userRole,
+                CourseSkipToday = courseSkipToday,
                 UserAccount = userAccount
             };
-            session.IsBuyCourseToday = IsCourseBuyDate(session);
-
+           
             var json = JsonConvert.SerializeObject(session);
             HttpContext.Session.SetString(EduConstant.UserSessionKey, json);
+
+            return session;
         }
         public void SetUserSesion(UserSession session)
         {
@@ -88,6 +91,8 @@ namespace EduCenterWeb.Pages
             var json = JsonConvert.SerializeObject(session);
             HttpContext.Session.SetString(EduConstant.UserSessionKey, json);
         }
+
+        
 
        
     }

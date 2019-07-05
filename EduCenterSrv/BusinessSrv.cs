@@ -260,7 +260,7 @@ namespace EduCenterSrv
         /// 用户选择课程
         /// </summary>
         /// <param name="courseList"></param>
-        public void UserSelectNewCourses(string openId,List<EUserCourse> courseList)
+        public void UserSelectNewCourses(string openId,List<EUserCourse> courseList, CourseScheduleType courseScheduleType,bool useRightNow = false)
         {
             try
             {
@@ -269,13 +269,17 @@ namespace EduCenterSrv
                 {
                     UserSrv userSrv = new UserSrv(_dbContext);
                     TecSrv tecSrv = new TecSrv(_dbContext);
-                    CourseScheduleType courseScheduleType = courseList[0].CourseScheduleType;
+                  //  CourseScheduleType courseScheduleType = courseList[0].CourseScheduleType;
                     if (!userSrv.CheckUserCanSelectCourse(openId, courseScheduleType))
                         throw new EduException("无法选择，您已经选择过此类课程!，如果疑问，请联系客服");
                     else
                     {
+
                         foreach (var c in courseList)
                         {
+                            if (userSrv.CheckUserHasThisCourse(openId, c.LessonCode))
+                                continue;
+
                             c.UserOpenId = openId;
 
                             //更新课程总人数
@@ -287,10 +291,13 @@ namespace EduCenterSrv
                             var tecCode = cls.TecCode;
 
                             //更新老师课程
-                            tecSrv.UpdateTecCourse(tecCode, cs,DateTime.Now);
+                            tecSrv.UpdateTecCourse(tecCode, cs,DateTime.Now, useRightNow);
+
+                            //添加用户课程
+                            userSrv.AddUserCourse(c);
 
                         }
-                        userSrv.AddUserCourse(courseList);
+                        
                         userSrv.UpdateCanSelectCourse(openId, courseScheduleType, false);
                     }
                     _dbContext.SaveChanges();

@@ -40,7 +40,7 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
             ResultObject<Dictionary<string, List<RTecCourse>>> result = new ResultObject<Dictionary<string, List<RTecCourse>>>();
             try
             {
-                var list =  _TecSrv.GetTecCourse(tecCode, CourseScheduleType.Standard,year,month);
+                var list =  _TecSrv.GetTecCourse(tecCode,year,month);
                 foreach(var c in list)
                 {
                     try

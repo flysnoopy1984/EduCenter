@@ -12,6 +12,8 @@ namespace EduCenterModel.Session
        
         public string OpenId { get; set; }
 
+        public string TecCode { get; set; }
+
         public string UserName { get; set; }
 
         public string HeaderUrl { get; set; }
@@ -27,14 +29,53 @@ namespace EduCenterModel.Session
         public EUserAccount UserAccount { get; set; }
 
         /// <summary>
-        /// 是否今天第一次购买课时，课程下节课计算从第二天开始
+        /// 课时是否跳过今天
         /// </summary>
-        public bool IsBuyCourseToday { get; set; }
+        public bool CourseSkipToday { get; set; }
 
         /// <summary>
         /// 会员类型
         /// </summary>
         public MemberType MemeberType { get; set; }
+
+        public static int NeedRecharge(UserSession us, CourseScheduleType courseScheduleType)
+        {
+            if(us.MemeberType != MemberType.VIP)
+            {
+               if(courseScheduleType ==  CourseScheduleType.Summer && us.UserAccount.RemainSummerTime <=0)
+               {
+                    return -1;
+               }
+               else if (courseScheduleType == CourseScheduleType.Winter && us.UserAccount.RemainWinterTime <= 0)
+               {
+                    return -1;
+               }
+               else
+                {
+                    if (courseScheduleType == CourseScheduleType.Standard && us.UserAccount.RemainCourseTime <= 0)
+                        return -1;
+                }
+            }
+            else
+            {
+                if (courseScheduleType == CourseScheduleType.Summer && us.UserAccount.RemainSummerTime <= 0
+                    && us.UserAccount.RemainCourseTime <= 0)
+                {
+                    return -2;
+                }
+                else if (courseScheduleType == CourseScheduleType.Winter && us.UserAccount.RemainWinterTime <= 0
+                    && us.UserAccount.RemainCourseTime <= 0)
+                {
+                    return -2;
+                }
+                else
+                {
+                    if (courseScheduleType == CourseScheduleType.Standard && us.UserAccount.RemainCourseTime <= 0)
+                        return -2;
+                }
+            }
+            return 0;
+        }
 
     }
 }

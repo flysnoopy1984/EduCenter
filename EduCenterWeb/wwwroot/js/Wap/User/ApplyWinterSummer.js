@@ -65,9 +65,7 @@
                     btnClass: 'btn-info',
                     action: function () {
                         DeleteSameTimeCourse(selDay, selLesson, true);
-                        //var checkedNo = $(this).val();
-                        //var checkeditem = csList[checkedNo];
-                        //DeleteSelectCourseInfo(checkeditem.Day, checkeditem.Lesson, checkeditem.LessonCode);
+                     
                     }
                 },
                 OK: {
@@ -282,9 +280,18 @@
     DoNextStep = function (datalist) {
 
         ShowConfirm("假期班时间只能选择一次，请谨慎选择！", null, "red", function () {
-            callAjax_Query(SubmitUrl, {
-                "lessonCodeList": datalist
-            }, NextCallBack, "", NextError);
+            ShowConfirm("是否当天生效？如生效，当天课时将计费！", null, null, function () {
+                callAjax_Query(SubmitUrl, {
+                    "lessonCodeList": datalist,
+                    "useRightNow":true,
+                }, NextCallBack, "", NextError,2);
+
+            }, function () {
+                    callAjax_Query(SubmitUrl, {
+                        "lessonCodeList": datalist,
+                        "useRightNow":false,
+                    }, NextCallBack, "", NextError,2);
+            });
 
         }, undefined, "我再想想", "我已确认");
 
@@ -314,6 +321,9 @@
         if (res.IntMsg == -1) {
             window.location.href = "Login";
         }
+        else if (res.IntMsg == -2)
+            window.location.href = "BuyCourseTime";
+
     }
 
     NextCallBack = function (res) {

@@ -17,7 +17,9 @@ namespace EduCenterModel.User
         public EUserCourse()
         {
             CreateDateTime = DateTime.Now;
-         
+        
+
+
         }
 
         [Key]
@@ -38,6 +40,8 @@ namespace EduCenterModel.User
         /// 创建时间
         /// </summary>
         public DateTime CreateDateTime { get; set; }
+
+        public bool UseRightNow { get; set; }
 
        
 

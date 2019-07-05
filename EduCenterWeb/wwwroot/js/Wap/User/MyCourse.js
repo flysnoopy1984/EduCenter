@@ -10,7 +10,9 @@
         callAjax_Query(InitDataUrl, {}, InitDataCallBack, "", function (res) {
             if (res.IntMsg == -1)
                 window.location.href = "Login";
-        });
+            if (res.IntMsg == -2)
+                window.location.href = "BuyCourseTime";
+        },2);
 
     };
 

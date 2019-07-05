@@ -102,6 +102,7 @@
                 item.append("<hr />");
                 $(".ConsumeList .DataList").append(item);
             });
+           
         }
         $(".DataList").slideDown();
     }

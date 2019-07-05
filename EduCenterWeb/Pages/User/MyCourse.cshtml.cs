@@ -74,6 +74,17 @@ namespace EduCenterWeb.Pages.User
                 {
 
                     CourseScheduleType courseScheduleType = _UserSrv.GetCurrentCourseScheduleType(us.OpenId,us.MemeberType);
+                    var needRecharge = UserSession.NeedRecharge(us, courseScheduleType);
+                    if (needRecharge < 0)
+                    {
+                        var csTypeName = BaseEnumSrv.GetCourseScheduleTypeName(courseScheduleType);
+                        string errorMsg = $"您的{csTypeName}余额不足，请先去充值";
+                        if (needRecharge == -2) errorMsg = $"您的余额不足，请先去充值";
+                        result.ErrorMsg = errorMsg;
+                        result.IntMsg = -2;
+                        return new JsonResult(result);
+                    }
+
                     //获取用户课程
                     result.Entity.UserCourseList = _UserSrv.GetUserCourseAvaliable(us.OpenId, courseScheduleType);
                     result.IntMsg = (int)courseScheduleType;
@@ -81,11 +92,12 @@ namespace EduCenterWeb.Pages.User
                     if (result.Entity.UserCourseList.Count > 0)
                     {
                         DateTime startDate = DateTime.Now;
-                        if (us.IsBuyCourseToday)
+                        if (us.CourseSkipToday)
                             startDate = startDate.AddDays(1);
                         result.Entity.UserShowCourse = _UserSrv.GetNextUserCourse(result.Entity.UserCourseList, startDate);
 
                     }
+                
                 }
                 else
                 {

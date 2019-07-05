@@ -80,6 +80,11 @@ namespace EduCenterSrv
             return _dbContext.DBTecInfo.Where<ETecInfo>(a => a.Code == code).FirstOrDefault();
         }
 
+        public ETecInfo GetByOpenId(string openId)
+        {
+            return _dbContext.DBTecInfo.Where<ETecInfo>(a => a.UserOpenId == openId).FirstOrDefault();
+        }
+
         /// <summary>
         /// 更新基本信息
         /// </summary>
@@ -174,8 +179,9 @@ namespace EduCenterSrv
 
         #region TecCourse
 
-        public List<RTecCourse> GetOneDayCourse(string tecCode,DateTime date,CourseScheduleType CourseScheduleType)
+        public List<RTecCourse> GetOneDayCourse(string tecCode, string date)
         {
+         
             var times = StaticDataSrv.CourseTime;
             var linq = _dbContext.DBTecCourse.Select(a => new RTecCourse
             {
@@ -183,54 +189,63 @@ namespace EduCenterSrv
                 CourseName = a.CourseName,
                 TecCode = a.TecCode,
                 CourseDateTime = a.CourseDateTime,
-                CourseScheduleType = a.CourseScheduleType,
-                Lesson  =a.Lesson,
+                //CourseScheduleType = a.CourseScheduleType,
+                Lesson = a.Lesson,
                 CoursingStatus = a.CoursingStatus,
                 LessonCode = a.LessonCode
-              
-
             })
+            .OrderBy(a=>a.Lesson)
             .Where(a => a.TecCode == tecCode &&
-                        a.CourseDateTime.Date == date.Date &&
-                        a.CourseScheduleType == CourseScheduleType);
+                        a.CourseDateTime.Date.ToString("yyyy-MM-dd") == date
+                       );
+            if (StaticDataSrv.CurrentScheduleType == CourseScheduleType.Standard)
+            {
+                linq =linq.Where(a => a.CourseScheduleType == CourseScheduleType.Standard);
+            }
 
             var result = linq.ToList();
-               
-         
+
+
             return result;
         }
+        public List<RTecCourse> GetOneDayCourse(string tecCode,DateTime date)
+        {
+            var dateStr = date.ToString("yyyy-MM-dd");
+            return GetOneDayCourse(tecCode, dateStr);
+        }
       
-        public List<RTecCourse> GetTecCourse(string tecCode, CourseScheduleType CourseScheduleType,int year,int month)
+        public List<RTecCourse> GetTecCourse(string tecCode, int year,int month)
         {
             var times = StaticDataSrv.CourseTime;
-            var result = _dbContext.DBTecCourse.Join(_dbContext.DbCourseSchedule, tc => tc.LessonCode, cs => cs.LessonCode, (tc, cs) => new RTecCourse
+            var linq = _dbContext.DBTecCourse.Join(_dbContext.DbCourseSchedule, tc => tc.LessonCode, cs => cs.LessonCode, (tc, cs) => new RTecCourse
             {
                 Day = tc.Day,
                 CourseName = tc.CourseName,
                 CourseDateTime = tc.CourseDateTime,
                 CoursingStatus = tc.CoursingStatus,
-                CourseScheduleType = tc.CourseScheduleType,
+                //CourseScheduleType = tc.CourseScheduleType,
                 TecCode = tc.TecCode,
                 Lesson = tc.Lesson,
                 TimeRange = times[tc.Lesson].TimeRange,
+               
                 ApplyNum = cs.ApplyNum,
                 LessonCode = cs.LessonCode,
                 CoursingStatusName = BaseEnumSrv.GetCoursingStatusName(tc.CoursingStatus),
-                
-
             })
             .OrderBy(a => a.Lesson)
             .Where(a => a.CourseDateTime.Year == year &&
                     a.CourseDateTime.Month == month &&
-                    a.TecCode == tecCode &&
-                    a.CourseScheduleType == CourseScheduleType).ToList();
-
+                    a.TecCode == tecCode
+                   );
+            if (StaticDataSrv.CurrentScheduleType == CourseScheduleType.Standard)
+            {
+                linq = linq.Where(a => a.CourseScheduleType == CourseScheduleType.Standard);
+            }
+            var result = linq.ToList();
             return result;
         }
 
-       
-
-        public void UpdateTecCourse(string tecCode, ECourseSchedule courseSchedule, DateTime startDate)
+        public void UpdateTecCourse(string tecCode, ECourseSchedule courseSchedule, DateTime startDate,bool useRightNow)
         {
             var time = StaticDataSrv.CourseTime[courseSchedule.Lesson];
 
@@ -240,10 +255,24 @@ namespace EduCenterSrv
             {
                 ;
                 int dayofWeek = DateSrv.GetSysDayOfWeek(startDate);
-                if (courseSchedule.Day - dayofWeek > 0)
+                
+                if (courseSchedule.Day - dayofWeek >= 0)
                     startDate = startDate.AddDays(courseSchedule.Day - dayofWeek);
                 else
                     startDate = startDate.AddDays(7 - (dayofWeek - courseSchedule.Day));
+
+                //如果不立刻启用
+                if(!useRightNow)
+                {
+                    //如果是当天，则跳过
+                    if(startDate.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"))
+                    {
+                        startDate = startDate.AddDays(7);
+                    }
+                    
+                }
+                    
+
 
                 DateTime endDate = new DateTime(startDate.Year, 12, 31);
                 while (startDate <= endDate)
@@ -254,7 +283,7 @@ namespace EduCenterSrv
                         _dbContext.DBTecCourse.Add(new ETecCourse
                         {
                             CourseDateTime = startDate,
-                            CourseScheduleType = courseSchedule.CourseScheduleType,
+                            //CourseScheduleType = courseSchedule.CourseScheduleType,
                             CoursingStatus = TecCoursingStatus.Normal,
                             LessonCode = courseSchedule.LessonCode,
                             Day = courseSchedule.Day,

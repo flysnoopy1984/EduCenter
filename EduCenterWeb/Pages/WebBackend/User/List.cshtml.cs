@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.User.In;
 using EduCenterModel.User.Result;
@@ -53,6 +54,11 @@ namespace EduCenterWeb.Pages.WebBackend.User
             ResultNormal result = new ResultNormal();
             try
             {
+                if(userData.MemberType == MemberType.VIP && userData.VipPrice <=0)
+                {
+                    result.ErrorMsg = "VIP 价格没有设置";
+                    return new JsonResult(result);
+                }
                 _UserSrv.UpdateUserData(userData);
 
             }

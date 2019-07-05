@@ -74,7 +74,30 @@ namespace EduCenterSrv.Common
             }
         }
 
+        public static string GetUserCourseLogStatusNameForTec(UserCourseLogStatus status)
+        {
+            string v = "";
+            switch (status)
+            {
+                case UserCourseLogStatus.Absent:
+                    v = "学生缺席";
+                    break;
+                case UserCourseLogStatus.PreNext:
+                    v = "未签到";
+                    break;
+                case UserCourseLogStatus.SignIn:
+                    v = "已签到";
+                    break;
+                case UserCourseLogStatus.Leave:
+                    v = "申请请假";
+                    break;
+                case UserCourseLogStatus.TecLeave:
+                    v = "老师请假，课程取消";
+                    break;
 
+            }
+            return v;
+        }
         public static string GetUserCourseLogStatusName(UserCourseLogStatus status)
         {
             string v = "";

@@ -10,5 +10,8 @@ namespace EduCenterModel.Pages.User
         public List<RUserCourse> UserCourseList { get; set; }
 
         public RUserShowCourse UserShowCourse { get; set; }
+
+        //是否有余额
+        public bool hasRemainAmount { get; set; }
     }
 }

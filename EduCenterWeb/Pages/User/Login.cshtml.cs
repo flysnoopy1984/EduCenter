@@ -7,6 +7,7 @@ using EduCenterCore.EduFramework;
 using EduCenterCore.WX;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
+using EduCenterModel.Session;
 using EduCenterModel.User;
 using EduCenterModel.WX;
 using EduCenterSrv;
@@ -20,10 +21,11 @@ namespace EduCenterWeb.Pages.User
     public class LoginModel : EduBaseAppPageModel
     {
         private UserSrv _UserSrv;
-
-        public LoginModel(UserSrv userSrv)
+        private TecSrv _TecSrv;
+        public LoginModel(UserSrv userSrv, TecSrv tecSrv)
         {
             _UserSrv = userSrv;
+            _TecSrv = tecSrv;
         }
         public void OnGet()
         {
@@ -46,13 +48,14 @@ namespace EduCenterWeb.Pages.User
         public IActionResult OnPostUserLogin()
         {
             ResultNormal result = new ResultNormal();
+            UserSession userSession = null;
             try
             {
 
                 if (!EduConfig.IsTest)
                 {
-                    var us = GetUserSession(false);
-                    if (us == null)
+                    userSession = GetUserSession(false);
+                    if (userSession == null)
                         result.ErrorMsg = "登陆失败,请联系客服";
                     
                 }
@@ -60,8 +63,21 @@ namespace EduCenterWeb.Pages.User
                 {
                     var ui = _UserSrv.GetUserInfo("oh6cV1QhPLj6XPesheYUQ4XtuGTs");
                     WXLoginCallBack(ui);
+                    userSession = GetUserSession(false);
                 }
-                //if (result.IsSuccess)
+              
+                if (result.IsSuccess)
+                {
+                    if (userSession.UserRole == UserRole.Teacher)
+                    {
+                        var tec = _TecSrv.GetByOpenId(userSession.OpenId);
+                        if(tec!=null)
+                        {
+                            userSession.TecCode = tec.Code;
+                            SetUserSesion(userSession);
+                        }
+                    }
+                }
                 //    result.IntMsg = 10;
 
 
@@ -123,7 +139,11 @@ namespace EduCenterWeb.Pages.User
 
             CourseScheduleType courseScheduleType = _UserSrv.GetCurrentCourseScheduleType(ui.OpenId,ui.MemberType);
 
-            base.SetUserSesion(ui.OpenId, ui.Name, ui.wx_headimgurl, ui.Phone, courseScheduleType, ui.UserRole, ui.MemberType, userAccount);
+            bool isSkipTodayCourse = _UserSrv.IsSkipTodayUserCourse(ui.OpenId);
+
+            base.SetUserSesion(ui.OpenId, ui.Name, ui.wx_headimgurl, ui.Phone, courseScheduleType, ui.UserRole, ui.MemberType, isSkipTodayCourse, userAccount);
+
+           
         }
     }
 }

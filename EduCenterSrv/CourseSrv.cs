@@ -185,6 +185,13 @@ namespace EduCenterSrv
             return _dbContext.DbCourseSchedule.Where(a => a.Year == year && a.CourseScheduleType == scheduleType).ToList();
         }
 
+        public List<ECourseSchedule> GetSWCourseScheduleByYear(int year)
+        {
+            return _dbContext.DbCourseSchedule.Where(a => a.Year == year 
+            && (a.CourseScheduleType ==  CourseScheduleType.Summer || 
+            a.CourseScheduleType == CourseScheduleType.Standard)).ToList();
+        }
+
         public ECourseSchedule GetCourseSchedule(string LessonCode)
         {
             return _dbContext.DbCourseSchedule.Where(a => a.LessonCode == LessonCode).FirstOrDefault();

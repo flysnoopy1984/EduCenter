@@ -8,6 +8,7 @@ using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterModel.Pages.User;
+using EduCenterModel.Session;
 using EduCenterModel.User;
 using EduCenterSrv;
 using EduCenterSrv.Common;
@@ -53,12 +54,8 @@ namespace EduCenterWeb.Pages.User
             var us = base.GetUserSession();
             if(us!=null)
             {
-                //if(us.CurrentScheduleType == CourseScheduleType.Summer || us.CurrentScheduleType == CourseScheduleType.Winter)
-                //{
-                //    HttpContext.Response.Redirect("/User/ApplyWinterSummer");
-                //    return;
-                //}
-            
+               
+             
                 CourseTimes = StaticDataSrv.CourseTime.Values.ToList();
 
                 //获取所有课程信息，并整理Day,Lesson Hashtable
@@ -70,10 +67,9 @@ namespace EduCenterWeb.Pages.User
         public IActionResult OnPostInitData()
         {
             ResultObject<PUserApply> result = new ResultObject<PUserApply>();
-           // ResultObject<> result = new ResultObject<Dictionary<int, ECourseTime>>();
+         
             try
             {
-              //  result.Entity.CourseScheduleList = _CourseSrv.GetCourseScheduleByYearType(DateTime.Now.Year, CourseScheduleType.Standard);
                 result.Entity.CourseTimeList = StaticDataSrv.CourseTime;
                 result.Entity.CourseMaxApplyNum = StaticDataSrv.CourseMaxApplyNum;
 
@@ -87,7 +83,7 @@ namespace EduCenterWeb.Pages.User
         }
 
       
-        public IActionResult OnPostSubmit(List<string> lessonCodeList,int courseScheduleType)
+        public IActionResult OnPostSubmit(List<string> lessonCodeList,bool useRightNow=false)
         {
             ResultNormal result = new ResultNormal();
             try
@@ -95,20 +91,34 @@ namespace EduCenterWeb.Pages.User
                 var us = base.GetUserSession(false);
                 if(us!=null)
                 {
+                    var needRecharge = UserSession.NeedRecharge(us, StaticDataSrv.CurrentScheduleType);
+                    if (needRecharge < 0)
+                    {
+                        string errorMsg = $"您的余额不足，请去充值";
+                        result.ErrorMsg = errorMsg;
+                        result.IntMsg = -2;
+                        return new JsonResult(result);
+
+                    }
                     List<EUserCourse> ucList = new List<EUserCourse>();
                     foreach(var lc in lessonCodeList)
                     {
                         EUserCourse uc = new EUserCourse
                         {
-                            CourseScheduleType = (CourseScheduleType)courseScheduleType,
+                            CourseScheduleType =  CourseScheduleType.Standard,
                             CreateDateTime = DateTime.Now,
                             LessonCode = lc,
-                        
+                            UseRightNow = useRightNow,
                             UserOpenId = us.OpenId
                         };
                         ucList.Add(uc);
                     }
-                    _BusinessSrv.UserSelectNewCourses(us.OpenId, ucList);
+                    _BusinessSrv.UserSelectNewCourses(us.OpenId, ucList, CourseScheduleType.Standard, useRightNow);
+
+                    //更新Session是否跳过当天
+                    us.CourseSkipToday = useRightNow;
+                 
+                    SetUserSesion(us);
                 }
                 else
                 {

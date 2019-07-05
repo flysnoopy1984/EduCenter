@@ -68,9 +68,6 @@
                     btnClass: 'btn-info',
                     action: function () {
                         DeleteSameTimeCourse(selDay, selLesson,true);
-                        //var checkedNo = $(this).val();
-                        //var checkeditem = csList[checkedNo];
-                        //DeleteSelectCourseInfo(checkeditem.Day, checkeditem.Lesson, checkeditem.LessonCode);
                     }
                 },
                 OK: {
@@ -284,15 +281,24 @@
 
     DoNextStep = function (datalist) {
 
-        ShowConfirm("课程时间只能选择一次，请谨慎选择！", null, "red", function () {
+        ShowConfirm("假期班时间只能选择一次，请谨慎选择！", null, "red", function () {
+            ShowConfirm("是否当天生效？如生效，当天课时将计费！", null, null, function () {
+                callAjax_Query(SubmitUrl, {
+                    "lessonCodeList": datalist,
+                    "useRightNow": true,
+                }, NextCallBack, "", NextError,2);
 
-            callAjax_Query(SubmitUrl, {
-                "lessonCodeList": datalist, "courseScheduleType": 0
-            }, NextCallBack, "", NextError);
+            }, function () {
+                callAjax_Query(SubmitUrl, {
+                    "lessonCodeList": datalist,
+                    "useRightNow": false,
+                }, NextCallBack, "", NextError,2);
+            });
 
-        }, undefined,"我再想想","我已确认");
-      
+        }, undefined, "我再想想", "我已确认");
+
     }
+
     NextStep = function () {
 
       
@@ -323,6 +329,8 @@
         if (res.IntMsg == -1) {
             window.location.href = "Login";
         }
+        else if (res.IntMsg == -2)
+            window.location.href = "BuyCourseTime";
     }
     NextCallBack = function (res) {
         ShowInfo("系统已安排您的课程", null, null, 2, function () {
@@ -331,23 +339,8 @@
     }
 
     InitCallBack = function (result) {
-        /*
-        var list = result.Entity.CourseScheduleList;
 
-        $.each(list, function (i) {
-            var cs = list[i];
-            CourseScheduleData[cs.Day][cs.Lesson].push(cs);
-        });
-
-        var times = result.Entity.CourseTimeList;
-
-        CourseTime = new Object();
-
-        $.each(times, function (i) {
-            var t = times[i];
-            CourseTime[t.Lesson] = t.TimeRange;
-        });
-        */
+      
         CourseTime = result.Entity.CourseTimeList;
         CourseMaxApplyNum = result.Entity.CourseMaxApplyNum;
       //  InitUserAction();
@@ -355,38 +348,6 @@
     
     }
 
-    InitUserAction = function () {
-
-        //var userApplyList = GetSessonUserApplyCourse();
-
-      
-
-        //if (userApplyList) {
-        //    $.each(userApplyList, function (i) {
-
-        //        var item = userApplyList[i];
-        //        var gridRoot = null;
-        //        if (item.day >= 1 && item.day <= 5) gridRoot = $("#GridNormal");
-        //        else gridRoot = $("#GridWeek"); 
-
-        //        var divList = gridRoot.find(".CellContainer[day=" + item.day + "][lesson=" + item.lesson + "] div[lCode=" + item.lcode+"]");
-        //        $.each(divList, function (i) {
-        //            var course = CreateDataObject(item.day, item.lesson, $(this));
-        //            CreateSelectCourseInfo(course, i);
-        //        });
-                
-           
-        //        //$.each(csList, function (j) {
-        //        //    var course = csList[j];
-        //        //    if (course.CourseCode == item.courseCode) {
-        //        //        CreateSelectCourseInfo(course, j);
-        //        //        return false;
-        //        //    }
-        //        //});
-        //    });
-        //}
-        
-    }
 
     CreateDataObject =function(day,lesson,row)
     {

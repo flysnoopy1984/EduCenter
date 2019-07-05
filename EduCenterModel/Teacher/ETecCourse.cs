@@ -24,6 +24,9 @@ namespace EduCenterModel.Teacher
 
         public string TecCode { get; set; }
 
+        /// <summary>
+        /// 暂时没有意义，对于老师标准班的课到了暑假就是暑假班
+        /// </summary>
         public CourseScheduleType CourseScheduleType { get; set; }
 
         public TecCoursingStatus CoursingStatus { get; set; }

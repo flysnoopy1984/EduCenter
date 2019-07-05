@@ -159,33 +159,32 @@ namespace EduCenterSrv
  
        }
 
-     
-     
+ 
         public List<RUserCurrentCourse> GetUserCouseLogByLessonCode(string lessonCode,string date)
         {
           
             var efSql = from uc in _dbContext.DBUserCoures.Where(a => a.LessonCode == lessonCode)
-                        join ui in _dbContext.DBUserInfo on uc.UserOpenId equals ui.OpenId
-                        join ul in _dbContext.DBUserCourseLog on uc.LessonCode equals ul.LessonCode into uc_ul
+                        join ul in _dbContext.DBUserCourseLog.Where(a=>a.CourseDateTime == date) on uc.LessonCode equals ul.LessonCode into uc_ul
                         from ucul in uc_ul.DefaultIfEmpty()
-                        .Where(a=>a.LessonCode == lessonCode && a.CourseDateTime == date)
+                        join ui in _dbContext.DBUserInfo on uc.UserOpenId equals ui.OpenId
                         select new RUserCurrentCourse
                         {
                             UserOpenId = ui.OpenId,
                             LessonCode = uc.LessonCode,
-                            SignDateTime = ucul.UserSignDateTime.ToString("yyyy-MM-dd hh:mm"),
-                            UserCourseLogStatus = ucul.UserCourseLogStatus,
-                            UserCourseLogStatusName = BaseEnumSrv.GetUserCourseLogStatusName(ucul.UserCourseLogStatus),
+                            SignDateTime =ucul==null? "":ucul.UserSignDateTime.ToString("yyyy-MM-dd hh:mm"),
+                            UserCourseLogStatus = ucul == null? UserCourseLogStatus.PreNext:ucul.UserCourseLogStatus,
+                            UserCourseLogStatusName = ucul==null?"无":BaseEnumSrv.GetUserCourseLogStatusNameForTec(ucul.UserCourseLogStatus),
                             UserName = ui.Name,
                         };
             return efSql.ToList();
                                  
         }
 
-        public bool CheckUserCanSelectCourse(string OpenId, CourseScheduleType courseScheduleType)
+        #region 用户选择课程时Check
+        public bool CheckUserCanSelectCourse(string openId, CourseScheduleType courseScheduleType)
         {
 
-           EUserAccount userAccount = GetUserAccount(OpenId);
+           EUserAccount userAccount = GetUserAccount(openId);
            switch(courseScheduleType)
             {
                 case CourseScheduleType.Group:
@@ -201,10 +200,31 @@ namespace EduCenterSrv
            //a.UserCourseStatus != UserCourseStatus.WaitingPay).Count();
            // return (n > 0);
         }
+        public bool CheckUserHasThisCourse(string openId,string LessonCode)
+        {
+            int count = _dbContext.DBUserCoures.Where(a => a.UserOpenId == openId && a.LessonCode == LessonCode).Count();
+            return (count > 0);
+        }
+
+        //检测是否要跳过今天课时
+        public bool IsSkipTodayUserCourse(string openId)
+        {
+            int c =_dbContext.DBUserCoures.Where(a => a.UserOpenId == openId &&
+            a.CreateDateTime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd") &&
+            a.UseRightNow == false).Count();
+
+            return c > 0;
+
+        }
+        #endregion
 
         public void AddUserCourse(List<EUserCourse> courseList)
         {
             _dbContext.DBUserCoures.AddRange(courseList);   
+        }
+        public void AddUserCourse(EUserCourse course)
+        {
+            _dbContext.DBUserCoures.Add(course);
         }
 
 
@@ -245,6 +265,7 @@ namespace EduCenterSrv
 
         }
 
+        //用户签到
         public List<RUserSign> GetCurrentUserSign(string openId, CourseScheduleType courseScheduleType)
         {
             List<RUserSign> result = new List<RUserSign>();
@@ -496,7 +517,6 @@ namespace EduCenterSrv
                             CourseScheduleType = uc.CourseScheduleType,
                             CourseName = cs.CourseName,
                             Lesson = cs.Lesson,
-
                             Day = cs.Day,
                             CourseTime = times[cs.Lesson].TimeRange,
                             UserCourseLogStatus = ucul == null ? UserCourseLogStatus.PreNext : ucul.UserCourseLogStatus,
@@ -618,6 +638,7 @@ namespace EduCenterSrv
                      UserLeaveDateTime = uc.UserLeaveDateTime,
                      UserSignDateTime =uc.UserSignDateTime,
                      UserCourseLogStatus = uc.UserCourseLogStatus,
+                    
                      UserCourseLogStatusName = BaseEnumSrv.UserCourseLogStatusList[(int)uc.UserCourseLogStatus],
 
                  });
@@ -689,7 +710,7 @@ namespace EduCenterSrv
                             Day = cs.Day,
                             Lesson = cs.Lesson,
                             CourseName = cs.CourseName,
-                            CourseScheduleType = cs.CourseScheduleType,
+                            CourseScheduleType = uc.CourseScheduleType,
                             LessonCode = cs.LessonCode,
                             StartTime = times[cs.Lesson].StartTime,
                             EndTime = times[cs.Lesson].EndTime,

@@ -7,6 +7,7 @@ using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterModel.Pages.User;
+using EduCenterModel.Session;
 using EduCenterModel.User;
 using EduCenterSrv;
 using EduCenterSrv.Common;
@@ -52,9 +53,7 @@ namespace EduCenterWeb.Pages.User
             if (us != null)
             {
                 CourseTimes = StaticDataSrv.CourseTime.Values.ToList();
-
-                
-                CourseScheduleList = _CourseSrv.GetCourseScheduleByYearType(DateTime.Now.Year, StaticDataSrv.CurrentScheduleType);
+                CourseScheduleList = _CourseSrv.GetSWCourseScheduleByYear(DateTime.Now.Year);
             }
         }
 
@@ -64,9 +63,9 @@ namespace EduCenterWeb.Pages.User
 
             try
             {
-
                 result.Entity.CourseTimeList = StaticDataSrv.CourseTime;
                 result.Entity.CourseMaxApplyNum = StaticDataSrv.CourseMaxApplyNum;
+
 
             }
             catch (Exception ex)
@@ -77,7 +76,7 @@ namespace EduCenterWeb.Pages.User
             return new JsonResult(result);
         }
 
-        public IActionResult OnPostSubmit(List<string> lessonCodeList)
+        public IActionResult OnPostSubmit(List<string> lessonCodeList,bool useRightNow = false)
         {
             ResultNormal result = new ResultNormal();
             CourseScheduleType courseScheduleType = StaticDataSrv.CurrentScheduleType;
@@ -86,6 +85,17 @@ namespace EduCenterWeb.Pages.User
                 var us = base.GetUserSession(false);
                 if (us != null)
                 {
+                    var needRecharge = UserSession.NeedRecharge(us, StaticDataSrv.CurrentScheduleType);
+                    if (needRecharge < 0)
+                    {
+                        var csTypeName = BaseEnumSrv.GetCourseScheduleTypeName(StaticDataSrv.CurrentScheduleType);
+                        string errorMsg = $"您的{csTypeName}余额不足，请先去充值";
+                        if (needRecharge == -2) errorMsg = $"您的余额不足，请先去充值";
+                        result.ErrorMsg = errorMsg;
+                        result.IntMsg = -2;
+                        return new JsonResult(result);
+                    }
+
                     List<EUserCourse> ucList = new List<EUserCourse>();
                     foreach (var lc in lessonCodeList)
                     {
@@ -94,12 +104,17 @@ namespace EduCenterWeb.Pages.User
                             CourseScheduleType = courseScheduleType,
                             CreateDateTime = DateTime.Now,
                             LessonCode = lc,
-
+                            UseRightNow = useRightNow,
                             UserOpenId = us.OpenId
                         };
                         ucList.Add(uc);
                     }
-                    _BusinessSrv.UserSelectNewCourses(us.OpenId, ucList);
+                    _BusinessSrv.UserSelectNewCourses(us.OpenId, ucList, courseScheduleType, useRightNow);
+                    //更新Session是否跳过当天
+                    us.CourseSkipToday = useRightNow;
+                   
+                    us.CurrentScheduleType = StaticDataSrv.CurrentScheduleType;
+                    SetUserSesion(us);
                 }
                 else
                 {
