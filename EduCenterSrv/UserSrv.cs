@@ -904,11 +904,12 @@ namespace EduCenterSrv
            
             var sql = from ui in _dbContext.DBUserInfo
                       join ua in _dbContext.DBUserAccount on ui.OpenId equals ua.UserOpenId
-                      orderby ui.CreatedDateTime descending
+                      orderby ui.CreatedDateTime
                       select new RUserList
                       {
                           WxName = ui.Name,
                           BabyName = ui.ChildName,
+                          RealName = ui.RealName,
                           userOpenId = ui.OpenId,
                           MemberType = ui.MemberType,
                           DeadLineStd = ua.DeadLine == DateTime.MinValue?DateTime.Parse("1900-01-01").ToString("yyyy-MM-dd"): ua.DeadLine.ToString("yyyy-MM-dd"),
@@ -938,6 +939,7 @@ namespace EduCenterSrv
         {
             var ui = _dbContext.DBUserInfo.Where(a => a.OpenId == userData.OpenId).FirstOrDefault();
             ui.MemberType = userData.MemberType;
+            ui.RealName = userData.RealName;
 
             var ua = GetUserAccount(userData.OpenId);
             ua.VIPPrice1 = userData.VipPrice;

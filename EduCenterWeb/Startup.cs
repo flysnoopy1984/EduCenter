@@ -52,7 +52,7 @@ namespace EduCenterWeb
 
             services.AddSession(o=> 
             {
-                o.IdleTimeout = TimeSpan.FromMinutes(30);
+                o.IdleTimeout = TimeSpan.FromHours(1);
             });
 
 

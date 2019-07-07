@@ -20,6 +20,9 @@ namespace EduCenterModel.User
         [MaxLength(32)]
         public string OpenId { get; set; }
 
+        [MaxLength(10)]
+        public string RealName { get; set; }
+
         [MaxLength(40)]
         public string Name { get; set; }
 

@@ -21,6 +21,8 @@ namespace EduCenterModel.User.In
 
         public string DeadLineStd { get; set; }
 
+        public string RealName { get; set; }
+
 
     }
 }

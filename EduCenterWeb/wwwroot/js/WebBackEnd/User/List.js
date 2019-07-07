@@ -6,11 +6,19 @@
     var UpdateUserUrl = "List?handler=UpdateUser";
 
     Init = function () {
+
         layui.use('laypage', function () {
             glaypage = layui.laypage;
         });
 
-        $("#btnQuery").on("click", QueryUserList);
+        $("#btnQuery").on("click", btnQuery);
+
+        btnQuery();
+    }
+    btnQuery = function () {
+
+        pageIndex = 1;
+        QueryUserList();
     }
     QueryUserList = function () {
         var UserName = $("#UserName").val();
@@ -36,6 +44,7 @@
            
             tr.attr("openId", data.userOpenId);
             tr.find(".WxName").text(data.WxName);
+            tr.find(".RealName").val(data.RealName);
             tr.find(".BabyName").text(data.BabyName);
             tr.find(".MemberType").val(data.MemberType);
             tr.find(".VipPrice").val(data.VipPrice);
@@ -64,19 +73,26 @@
             });
            
         });
-
+      
         glaypage.render({
             elem: 'Pager',
             layout: ['prev', 'page', 'next', 'count', 'skip'],
             limit: pageSize,
             count: res.RecordTotal,
+            curr: pageIndex,
             jump: function (obj, first) {
+               
                 if (!first) {
                     pageIndex = obj.curr;
                     QueryUserList();
+                   
                 }
+                //else
+                //    pageIndex++;
             }
         });
+        
+      
     }
 
     SaveUser = function (e) {
@@ -91,7 +107,8 @@
             "RemainTimeSummer": tr.find(".RemainTimeSummer").val(),
             "RemainTimeWinter": tr.find(".RemainTimeWinter").val(),
             "RemainTimeWinter": tr.find(".RemainTimeWinter").val(),
-            "DeadLineStd": tr.find(".DeadLineStd").val()
+            "DeadLineStd": tr.find(".DeadLineStd").val(),
+            "RealName":tr.find(".RealName").val(),
         }
 
         callAjax_Query(UpdateUserUrl, data, SaveUserCallBack);

@@ -20,6 +20,8 @@ namespace EduCenterWeb.Pages.User
     {
         public List<ECourseTime> CourseTimes { get; set; }
         private CourseSrv _CourseSrv;
+
+        public ECourseDateRange WSRange { get; set; }
         //private UserSrv _UserSrv;
         private BusinessSrv _BusinessSrv;
 
@@ -28,6 +30,8 @@ namespace EduCenterWeb.Pages.User
         {
             _CourseSrv = courseSrv;
             _BusinessSrv = businessSrv;
+            WSRange = StaticDataSrv.CourseDateRange.Where(a => a.Year == DateTime.Now.Year
+            && a.CourseScheduleType == StaticDataSrv.CurrentScheduleType).FirstOrDefault();
            // _UserSrv = userSrv;
         }
 

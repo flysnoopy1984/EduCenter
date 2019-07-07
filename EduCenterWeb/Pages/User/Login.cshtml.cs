@@ -61,7 +61,7 @@ namespace EduCenterWeb.Pages.User
                 }
                 else
                 {
-                    var ui = _UserSrv.GetUserInfo("oh6cV1QhPLj6XPesheYUQ4XtuGTs");
+                    var ui = _UserSrv.GetUserInfo("oh6cV1dh0hjoGEizCoKH1KU70UwQ");
                     WXLoginCallBack(ui);
                     userSession = GetUserSession(false);
                 }
@@ -75,10 +75,12 @@ namespace EduCenterWeb.Pages.User
                         {
                             userSession.TecCode = tec.Code;
                             SetUserSesion(userSession);
+                            result.IntMsg = 10;
+
                         }
                     }
                 }
-                //    result.IntMsg = 10;
+                //    
 
 
 

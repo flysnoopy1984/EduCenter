@@ -34,10 +34,13 @@
     }
 
     .Title {
-        color: #0eca27;
-        text-align: unset;
-        margin-top: 35px;
-        margin-bottom: 10px;
+           color: #a96700;
+    text-align: unset;
+    margin-top: 40px;
+    margin-bottom: 10px;
+    width: 100%;
+    padding-left: 10px;
+    background-color: #fdedd6;
     }
 
 
@@ -246,7 +249,7 @@
         <span class="fa fa-tags">【假期班】课程选择</span>
     </div>
 
-    <div class="GridContainder bg-danger">
+    <div class="GridContainder">
         <div class="SelectCourseTimeTitle"><i class="fa fa-calendar" aria-hidden="true"></i>  请点击选择您上课的时间</div>
 
         <div class="layui-tab layui-tab-card">
@@ -278,7 +281,8 @@
                             {
                                 @foreach (var time in Model.CourseTimes)
                                 {
-
+                                    //暑假班最后一节课跳过
+                                    if (time.Lesson == 6){ continue; }
                                     <tr>
                                         <td style="font-weight:bold">@time.TimeRange</td>
                                         <td>
@@ -350,5 +354,10 @@
     <div class="noCourse"><span>无</span><span class="caret"></span></div>
 
     <div class="CellCourse"><span class="cellName">美术1</span><span class="caret"></span></div>
+    @if (Model.WSRange != null)
+    {
+<div id="NoticeInfo">这是假期班选课，假期班期间【@Model.WSRange.StartDate.ToString("yyyy-MM-dd") 到 @Model.WSRange.EndDate.ToString("yyyy-MM-dd")】</div>
+    }
+
 </div>
 

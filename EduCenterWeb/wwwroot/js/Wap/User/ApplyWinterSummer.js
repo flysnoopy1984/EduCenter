@@ -18,6 +18,10 @@
 
         $("#btnConfirm").on("click", NextStep);
         callAjax_Query(InitUrl, {}, InitCallBack, "");
+        if ($("#HideData #NoticeInfo").length > 0) {
+            ShowInfo($("#HideData #NoticeInfo").text(), null, null);
+        }
+      
      
     }
 

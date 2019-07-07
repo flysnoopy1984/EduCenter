@@ -11,9 +11,14 @@ namespace EduCenterModel.User.Result
 
         public string WxName { get; set; }
 
+        public string RealName { get; set; }
+
         public string BabyName { get; set; }
 
+
         public MemberType MemberType { get; set; }
+
+       
 
         /// <summary>
         /// 查看是否购买过课时
