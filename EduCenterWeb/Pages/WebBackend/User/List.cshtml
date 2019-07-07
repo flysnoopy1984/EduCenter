@@ -8,10 +8,12 @@
     <li><a href="/WebBackend/Home">主页</a></li>
 }
 <script src="~/lib/laydate/laydate.js"></script>
+<script src="~/lib/layer-v3.1.1/layer/layer.js"></script>
 
 <link href="~/lib/layui/css/layui.css" rel="stylesheet" />
 <script src="~/lib/layui/layui.js"></script>
 <script src="~/lib/layui/lay/modules/laypage.js"></script>
+
 
 <script src="~/js/WebBackEnd/User/List.js?v=@Model.jsVersion"></script>
 <style type="text/css">
@@ -64,7 +66,10 @@
          {
              width:60px;
          }
-         .RealName{width:60px;}
+        .RealName{width:60px;}
+        .BabyName{
+            cursor:pointer;
+        }
          
 </style>
 
@@ -112,7 +117,7 @@
             <td>
                 <div class="RowOption">
                     <div>
-                        <input type="button" class="btn btn-danger btn-xs" value="课程调整" />
+                        <input type="button" class="btn btn-danger btn-xs" value="课程调整" id="btn_AdjustCourse" />
                     </div>
                     <div>
                         <input type="button" class="btn btn-warning btn-xs" value="保存" id="btn_Save" />
@@ -121,7 +126,7 @@
             </td>
             <td><label class="WxName TextNoWrap2"></label></td>
             <td><input class="RealName" type="text" /></td>
-            <td><label class="BabyName"></label></td>
+            <td onclick="CreateBabyInfoForm(this);"><label class="BabyName text-info">暂无</label></td>
             <td>
                 <label class="UserRole"></label>
             </td>

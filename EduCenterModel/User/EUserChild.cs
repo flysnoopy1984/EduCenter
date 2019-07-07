@@ -22,7 +22,7 @@ namespace EduCenterModel.User
         [MaxLength(32)]
         public string UserOpenId { get; set; }
 
-        [MaxLength(20)]
+        [MaxLength(10)]
         public string Name { get; set; }
 
         public int Sex { get; set; }

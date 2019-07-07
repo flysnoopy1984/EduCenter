@@ -1,0 +1,146 @@
+﻿@page
+@model EduCenterWeb.Pages.WebBackend.User.BabyInfoModel
+@{
+    ViewData["Title"] = "BabyInfo";
+    Layout = "~/Pages/Shared/_EduWebDialog.cshtml";
+}
+@Html.AntiForgeryToken()
+<link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
+<script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
+<script src="~/js/EduLib/EditHelper.js"></script>
+<script src="~/lib/laydate/laydate.js"></script>
+<script src="~/lib/layer-v3.1.1/layer/layer.js"></script>
+<script src="~/js/WebBackEnd/User/BabyInfo.js"></script>
+<style type="text/css">
+    .MainContainer {
+        margin: 10px;
+    }
+
+    .SubTitle {
+        padding-right: 10px;
+        padding-left: 10px;
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+        height: 35px;
+        line-height: 35px;
+    }
+
+    .OneBaby {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .oneRow {
+        display: flex;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .btnList {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    #AddBaby {
+        cursor: pointer;
+    }
+
+    .DelButton {
+        /*display: flex;*/
+        align-items: baseline;
+        justify-content: space-between;
+        cursor: pointer;
+        display: none;
+    }
+</style>
+<div class="MainContainer">
+    <div class="btnList">
+        <input id="btn_Save" type="button" class="btn btn-warning btn-sm" value="保存" />
+    </div>
+
+    <div class="SubTitle text-primary bg-info">
+        <div>
+            宝贝信息
+        </div>
+        <div id="AddBaby">
+            <i class="fa fa-plus-square" aria-hidden="true"></i>
+            添加宝贝
+
+        </div>
+    </div>
+    <div class="AllBaby">
+        @*<div class="OneBaby">
+                <div class="DelButton">
+                    <div class="BabyNo"></div>
+                    <div>
+                        <i class="fa fa-minus-square" aria-hidden="true" style="padding-right:5px;"> 删除</i>
+                    </div>
+                </div>
+                <div class="oneRow">
+                    <label class="layui-field-title">姓名：</label>
+                    <div><input type="text" class="bName layui-elem-field" /></div>
+                </div>
+                <div class="oneRow">
+                    <label class="layui-field-title">性别：</label>
+                    <div class="bSex">
+                        <input id="r_male" type="radio" name="sex" class="layui-form-radio" value="0" checked />
+                        <label for="r_male">男</label>
+                        <input id="r_famale" type="radio" name="sex" class="layui-form-radio" value="1" />
+                        <label for="r_famale">女</label>
+                    </div>
+                </div>
+                <div class="oneRow">
+                    <label class="layui-field-title">年龄：</label>
+                    <div><input type="number" class="bAge layui-elem-field" /></div>
+                </div>
+                <div class="oneRow">
+                    <label class="layui-field-title">生日：</label>
+                    <div><input type="text" class="BabyBirthday layui-elem-field" /></div>
+                </div>
+                <hr />
+            </div>*@
+
+
+    </div>
+</div>
+<div id="HideData" style="display:none">
+    <div class="OneBaby">
+        <div class="DelButton">
+            <div class="BabyNo"></div>
+            <div>
+                <i class="fa fa-minus-square" aria-hidden="true" style="padding-right:5px;"> 删除</i>
+            </div>
+        </div>
+        <div class="oneRow">
+            <label class="layui-field-title">姓名：</label>
+            <div><input type="text" class="bName layui-elem-field" /></div>
+        </div>
+        <div class="oneRow">
+            <label class="layui-field-title">性别：</label>
+            <div>
+                <select class="bSex">
+                    <option value="0" selected>男</option>
+                    <option value="1">女</option>
+                </select>
+                @*<input id="r_male" type="radio" name="sex" class="layui-form-radio" value="0" checked="checked" />
+                    <label for="r_male">男</label>
+                    <input id="r_famale" type="radio" name="sex" class="layui-form-radio" value="1" />
+                    <label for="r_famale">女</label>*@
+            </div>
+        </div>
+        <div class="oneRow">
+            <label class="layui-field-title">年龄：</label>
+            <div><input type="number" class="bAge layui-elem-field" /></div>
+        </div>
+        <div class="oneRow">
+            <label class="layui-field-title">生日：</label>
+            <div><input type="text" class="BabyBirthday layui-elem-field" /></div>
+        </div>
+        <hr />
+    </div>
+</div>
+
+
+

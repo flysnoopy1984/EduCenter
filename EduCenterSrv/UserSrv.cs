@@ -869,11 +869,19 @@ namespace EduCenterSrv
         #region UserChild
         public void SaveChild(List<EUserChild> list)
         {
-            var sql = sql_DeleteAllUserChild(list[0].UserOpenId);
-
-            var sqlChild = sql_UpdateUserChild(list[0].UserOpenId, list.Where(a => a.No == 1).FirstOrDefault().Name);
+         
             try
             {
+                var sql = sql_DeleteAllUserChild(list[0].UserOpenId);
+                string childName = "";
+                for (int i=0;i<list.Count;i++)
+                {
+                    childName += list[i].Name ;
+                    if (i< list.Count-1)
+                        childName += "/";
+                }
+                var sqlChild = sql_UpdateUserChild(list[0].UserOpenId, childName);
+
                 _dbContext.Database.BeginTransaction();
 
                 _dbContext.Database.ExecuteSqlCommand(sql);
@@ -904,7 +912,7 @@ namespace EduCenterSrv
            
             var sql = from ui in _dbContext.DBUserInfo
                       join ua in _dbContext.DBUserAccount on ui.OpenId equals ua.UserOpenId
-                      orderby ui.CreatedDateTime
+                      orderby ui.Id descending
                       select new RUserList
                       {
                           WxName = ui.Name,

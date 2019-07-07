@@ -157,7 +157,7 @@
         layer.open({
             type: 2,
             title: '创建教师请假',
-            shadeClose: true,
+            shadeClose: false,
             shade: 0.8,
             area: ['600px', '80%'],
             content: 'NewLeave' //iframe的url

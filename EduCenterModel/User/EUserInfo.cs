@@ -36,7 +36,7 @@ namespace EduCenterModel.User
         public int Sex { get; set; }
 
         /*冗余字段*/
-        [MaxLength(10)]
+        [MaxLength(50)]
         public string ChildName { get; set; }
 
         [MaxLength]

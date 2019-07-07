@@ -1,7 +1,7 @@
 ﻿$(function () {
     var glaypage;
     var pageIndex = 1;
-    var pageSize = 20;
+    var pageSize = 15;
     var QueryUserListUrl = "List?handler=QueryUserList";
     var UpdateUserUrl = "List?handler=UpdateUser";
 
@@ -45,14 +45,15 @@
             tr.attr("openId", data.userOpenId);
             tr.find(".WxName").text(data.WxName);
             tr.find(".RealName").val(data.RealName);
-            tr.find(".BabyName").text(data.BabyName);
+            if (data.BabyName)
+                tr.find(".BabyName").text(data.BabyName);
             tr.find(".MemberType").val(data.MemberType);
             tr.find(".VipPrice").val(data.VipPrice);
             tr.find(".RemainTimeStd").val(data.RemainTimeStd);
             tr.find(".RemainTimeSummer").val(data.RemainTimeSummer);
             tr.find(".RemainTimeWinter").val(data.RemainTimeWinter);
             tr.find(".UserRole").text(data.UserRoleName);
-            tr.find("#btn_Save").on("click", SaveUser);
+            
 
             var DeadLineStd = tr.find(".DeadLineStd");
             DeadLineStd.attr("id", "showDate" + i);
@@ -60,6 +61,9 @@
 
             var dateBtn = DeadLineStd.next();
             dateBtn.attr("id", "btnDate" + i);
+
+            tr.find("#btn_Save").on("click", SaveUser);
+            tr.find("#btn_AdjustCourse").on("click", AdjustCourse);
 
             header.after(tr);
 
@@ -94,7 +98,11 @@
         
       
     }
-
+    //课程调整
+    AdjustCourse = function (e) {
+        ShowInfo("开发中!");
+    }
+    //保存
     SaveUser = function (e) {
         var obj = $(e.currentTarget);
         var tr = obj.closest("tr");
@@ -119,6 +127,35 @@
 
         ShowInfo("保存成功");
 
+    }
+
+    //宝贝信息
+    CreateBabyInfoForm = function (obj) {
+        //var obj = $(e.currentTarget);
+        var tr = $(obj).closest("tr");
+
+        layer.open({
+            type: 2,
+            title: '宝贝信息',
+            shadeClose: false,
+            shade: 0.8,
+            area: ['600px', '80%'],
+            content: 'BabyInfo?openId=' + tr.attr("openId") //iframe的url
+        });
+    }
+
+    CloseBabyInfoForm = function (openId, BabyName) {
+
+        layer.closeAll("iframe");
+        if (BabyName) {
+            
+            var tr = $("#UserListTable tr[openId=" + openId + "]");
+            tr.find(".BabyName").text(BabyName);
+
+        }
+        //var date = $(".StartDateInput").text();
+        //var tecCode = 
+      //  window.location.href = "BabyInfo";
     }
 
     Init();
