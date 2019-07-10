@@ -70,7 +70,18 @@
 
     RequireVerifyCode = function (e) {
 
-     
+        //if (befEvent) {
+        //    var befEventResult = befEvent();
+        //    if (befEventResult == false) return;
+         
+        //}
+        var userRealName = $("#userRealName").val();
+        if (userRealName == '') {
+            alert("您的称呼不能为空!");
+            $("#userRealName").focus();
+            return false;
+        }
+
         var Phone = PhoneCtrl.val();
         if (Phone == '') {
             alert("手机号不能为空!");
@@ -159,7 +170,7 @@
                 xhr.setRequestHeader("XSRF-TOKEN",
                     $('input:hidden[name="__RequestVerificationToken"]').val());
             },
-            data: { "mobilePhone": Phone, "Code": Code },
+            data: { "mobilePhone": Phone, "Code": Code, "userRealName": $("#userRealName").val() },
             url: SubmitVerifyCodeUrl,
             success: function (res) {
 

@@ -23,6 +23,11 @@ namespace EduCenterModel.Course.Result
 
         public string TrialLogStatusName { get; set; }
 
+        public string UserPhone { get; set; }
+
+        public string WXName { get; set; }
+        public string UserRealName { get; set; }
+
 
 
     }

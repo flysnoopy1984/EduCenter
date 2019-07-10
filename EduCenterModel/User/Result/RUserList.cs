@@ -19,7 +19,7 @@ namespace EduCenterModel.User.Result
         public MemberType MemberType { get; set; }
 
        
-
+        public UserRole UserRole { get; set; }
         /// <summary>
         /// 查看是否购买过课时
         /// </summary>

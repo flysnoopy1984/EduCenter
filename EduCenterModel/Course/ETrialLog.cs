@@ -57,6 +57,8 @@ namespace EduCenterModel.Course
         /// 用户打分
         /// </summary>
         public int UserRank { get; set; } 
+
+      
        
     }
 }

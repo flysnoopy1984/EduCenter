@@ -36,8 +36,10 @@ namespace EduCenterWeb.Pages.User
                 if(TrialLogList !=null)
                 {
                     CurrentTrialList = TrialLogList.Where(a=>a.TrialDateTime>= DateTime.Today).ToList();
+
                     if (CurrentTrialList.Count == 0) CurrentTrialList = null;
 
+                    //将用户没有来的设置状态
                     var checkList = TrialLogList.Where(a => a.TrialDateTime < DateTime.Today && 
                                                        (a.TrialLogStatus == TrialLogStatus.UserApply ||
                                                        a.TrialLogStatus == TrialLogStatus.TecConfirm)).ToList();

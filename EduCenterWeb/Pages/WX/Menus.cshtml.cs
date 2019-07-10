@@ -31,7 +31,7 @@ namespace EduCenterWeb.Pages.WX
                 {
                     menuStr = sr.ReadToEnd();
                 }
-                result.SuccessMsg = HttpHelper.RequestUrlSendMsg(posturl, HttpHelper.HttpMethod.Post, menuStr);
+                result.SuccessMsg = HttpHelper.RequestUrlSendMsg(posturl, HttpHelper.HttpMethod.Post, menuStr, "application/json");
             }
             catch (Exception ex)
             {

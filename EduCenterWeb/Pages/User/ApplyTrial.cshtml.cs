@@ -7,6 +7,7 @@ using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterModel.Course.Result;
+using EduCenterModel.Session;
 using EduCenterSrv;
 using EduCenterSrv.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,8 @@ namespace EduCenterWeb.Pages.User
     {
         private CourseSrv _CourseSrv;
 
+        public UserSession UserSession { get; set; }
+
         public Dictionary<int, ECourseTime> TrialTime { get; set; }
         public Dictionary<int, List<ECourseInfo>> CourseDic { get; set; }
 
@@ -27,7 +30,7 @@ namespace EduCenterWeb.Pages.User
         }
         public void OnGet()
         {
-            base.GetUserSession();
+            UserSession = base.GetUserSession();
 
             var list = _CourseSrv.GetAllList();
             var curct = -1;
@@ -69,7 +72,7 @@ namespace EduCenterWeb.Pages.User
                         ETrialLog log = new ETrialLog
                         {
                             OpenId = us.OpenId,
-                            UserName = us.UserName,
+                            //UserName = us.UserName,
                             TecCode = cls.TecCode,
                             TecName = cls.TecName,
                             CourseCode = cls.CourseCode,

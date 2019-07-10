@@ -50,7 +50,7 @@ namespace EduCenterWeb.Pages.Independent
             
         }
 
-        public IActionResult OnPostSubmitVerifyCode(string mobilePhone,string Code)
+        public IActionResult OnPostSubmitVerifyCode(string mobilePhone,string Code,string userRealName)
         {
             ResultObject<OutSMS> result = new ResultObject<OutSMS>();
             try
@@ -59,7 +59,7 @@ namespace EduCenterWeb.Pages.Independent
                 if(result.Entity.SMSVerifyStatus == SMSVerifyStatus.Success)
                 {
                     var us = GetUserSession(false);
-                    DoUpdateUserPhone(us.OpenId,mobilePhone);
+                    DoUpdateUserSimpleInfo(us.OpenId,mobilePhone, userRealName);
                 }
             }
             catch(Exception ex)
@@ -71,9 +71,10 @@ namespace EduCenterWeb.Pages.Independent
             
         }
 
-        private void DoUpdateUserPhone(string openId,string phone)
+        private void DoUpdateUserSimpleInfo(string openId,string phone,string userRealName)
         {
-            _userSrv.UpdateUserPhone(openId, phone);
+            _userSrv.UpdateUserSimpleInfo(openId, phone, userRealName);
+
             var us = GetUserSession(false);
             us.Phone = phone;
             SetUserSesion(us);

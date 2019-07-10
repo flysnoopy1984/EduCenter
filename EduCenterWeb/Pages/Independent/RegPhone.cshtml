@@ -131,6 +131,24 @@
             left: 15px;
             top: 17px;
         }
+         .FieldArea {
+            width: 100%;
+            height: 50px;
+            border-bottom: 1px solid #dddddd;
+            margin-top: 25px;
+        }
+
+        .FieldArea_input {
+            width: 50%;
+            font-weight: bold;
+            display: inline-block !important;
+            vertical-align: middle;
+            margin-top: 7px;
+            border: 0px;
+            padding-left: 10px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0);
+        }
     </style>
 </head>
 <body>
@@ -138,14 +156,20 @@
         <i class="IconBack fa fa-arrow-circle-o-left" aria-hidden="true"></i> <div class="header_title">手机绑定</div>
     </div>
     <div class="o2o_content" id="main">
-        <!-- 获取验证码 -->
+
+        <div class="FieldArea">
+            <input id="userRealName" type="text" placeholder="您的称呼" class="FieldArea_input text-primary" />
+           
+        </div>
+
         <div id="get_phone_check">
             <input id="phone_num" type="tel" placeholder="请输入手机号" class="get_phone_check_input text-primary" />
             <div id="phone_clear" class="input_clear" onclick="clearPhone();"></div>
             <button type="button" class="btn btn-warning get_phone_btn" id="btn_GetVerifyCode">获取验证码</button>
-
         </div>
-        <!-- 确认验证 -->
+
+
+
         <div id="verify_phone_check">
             <input id="code_num" type="tel" placeholder="请输入验证码" class="get_phone_check_input text-success" />
             <div id="code_clear" class="input_clear" onclick="clearCode();"></div>

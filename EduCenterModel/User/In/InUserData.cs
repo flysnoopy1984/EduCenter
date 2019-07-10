@@ -10,6 +10,7 @@ namespace EduCenterModel.User.In
         public string OpenId { get; set; }
 
         public MemberType MemberType { get; set; }
+        public UserRole UserRole { get; set; }
 
         public double VipPrice { get; set; }
 

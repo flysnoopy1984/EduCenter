@@ -61,7 +61,7 @@ namespace EduCenterWeb.Pages.User
                 }
                 else
                 {
-                    var ui = _UserSrv.GetUserInfo("oh6cV1dh0hjoGEizCoKH1KU70UwQ");
+                    var ui = _UserSrv.GetUserInfo("oh6cV1QhPLj6XPesheYUQ4XtuGTs");
                     WXLoginCallBack(ui);
                     userSession = GetUserSession(false);
                 }
@@ -80,9 +80,7 @@ namespace EduCenterWeb.Pages.User
                         }
                     }
                 }
-                //    
-
-
+ 
 
             }
             catch (Exception ex)
@@ -123,7 +121,7 @@ namespace EduCenterWeb.Pages.User
                     data.SetValue("state", "1" + "#wechat_redirect");
                     string url = "https://open.weixin.qq.com/connect/oauth2/authorize?" + data.ToUrl();
                   //  HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-                    NLogHelper.InfoTxt($"LoginWX 请求:{url}");
+                 //  NLogHelper.InfoTxt($"LoginWX 请求:{url}");
                     HttpContext.Response.Redirect(url);
                 }
                 catch(Exception ex)

@@ -248,33 +248,41 @@ namespace EduCenterSrv
         public List<RTrialLog> QueryTrialLogList_BackEnd(string fromDate,string toDate,out int RecordTotal,string tecCode=null, int pageIndex = 0,int pageSize =20)
         {
             List<RTrialLog> result = null;
-            var sql = _dbContext.DBTrialLog.
-                  Where(a => a.TrialDateTime>= DateTime.Parse(fromDate) && a.TrialDateTime <=DateTime.Parse(toDate));
-            if(!string.IsNullOrEmpty(tecCode))
+            var times = StaticDataSrv.TrialTime;
+            var sql = from tl in _dbContext.DBTrialLog
+                      join ui in _dbContext.DBUserInfo on tl.OpenId equals ui.OpenId
+                      where tl.TrialDateTime >= DateTime.Parse(fromDate) &&
+                      tl.TrialDateTime <= DateTime.Parse(toDate)
+                      select new RTrialLog
+                      {
+                          Id = tl.Id,
+                          ApplyDateTime = tl.ApplyDateTime,
+                          TrialDateTime = tl.TrialDateTime,
+                          CourseCode = tl.CourseCode,
+                          CourseName = tl.CourseName,
+                          TecCode = tl.TecCode,
+                          TecName = tl.TecName,
+                          OpenId = ui.OpenId,
+                          //UserName = a.UserName,
+                          WXName = ui.Name,
+                          UserRealName = ui.RealName,
+                          
+                          UserPhone =ui.Phone,
+                          TrialLogStatus = tl.TrialLogStatus,
+                          TrialLogStatusName = BaseEnumSrv.GetTrialLogStatusName(tl.TrialLogStatus),
+                          TrialTimeStr = times[tl.Lesson].TimeRange,
+                      };
+
+
+            if (!string.IsNullOrEmpty(tecCode))
             {
                 sql = sql.Where(a => a.TecCode == tecCode);
             }
             RecordTotal = sql.Count();
 
             sql = sql.OrderByDescending(a => a.TrialDateTime);
-            var times = StaticDataSrv.TrialTime;
-            result = sql.Select(a => new RTrialLog
-            {
-                Id = a.Id,
-                ApplyDateTime = a.ApplyDateTime,
-                TrialDateTime = a.TrialDateTime,
-                CourseCode = a.CourseCode,
-                CourseName = a.CourseName,
-                TecCode = a.TecCode,
-                TecName = a.TecName,
-                OpenId = a.OpenId,
-                UserName = a.UserName,
-                TrialLogStatus = a.TrialLogStatus,
-                TrialLogStatusName = BaseEnumSrv.GetTrialLogStatusName(a.TrialLogStatus),
-                TrialTimeStr = times[a.Lesson].TimeRange,
-
-
-            }).Skip((pageIndex-1) * pageSize).Take(pageSize).ToList();
+           
+            result = sql.Skip((pageIndex-1) * pageSize).Take(pageSize).ToList();
           
            
             return result;

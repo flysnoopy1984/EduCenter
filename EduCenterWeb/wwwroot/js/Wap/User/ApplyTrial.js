@@ -2,6 +2,14 @@
 
     var SubmitTrialUrl = "ApplyTrial?handler=SubmitTrial";
     Init = function () {
+
+        var phone = $("#hUserPhone");
+        if (phone.val() == "" || phone.val() == null) {
+            ShowInfo("请先留下您的联系方式，便于工作人员联系您，谢谢！", null, null, 5, function () {
+                window.location.href = "/Independent/RegPhone?rurl=/User/ApplyTrial";
+            });
+        }
+
         var sysDate = new Date();
         var year = sysDate.getFullYear();
         var month = sysDate.getMonth() + 1;

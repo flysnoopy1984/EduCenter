@@ -128,7 +128,14 @@
             <td><input class="RealName" type="text" /></td>
             <td onclick="CreateBabyInfoForm(this);"><label class="BabyName text-info">暂无</label></td>
             <td>
-                <label class="UserRole"></label>
+         
+                <select class="UserRole">
+                    @foreach (var ur in Model.UserRoleList)
+                    {
+                        <option value="@ur.Key">@ur.Value</option>
+                    }
+
+                </select>
             </td>
             <td>
                 <select class="MemberType">

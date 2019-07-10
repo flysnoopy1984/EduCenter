@@ -24,7 +24,9 @@
             window.location.href = RedirectUrl;
         })
 
-        InitSMS("phone_num", "code_num", "btn_GetVerifyCode", "btn_ConfirmVerifyCode", 45, SMSSuccess, null, null, reqUrl, submitUrl);
+        InitSMS("phone_num", "code_num", "btn_GetVerifyCode", "btn_ConfirmVerifyCode", 45, SMSSuccess,
+            //before Event
+           null, null, reqUrl, submitUrl);
     }
 
 

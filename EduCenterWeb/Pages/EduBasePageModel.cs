@@ -17,6 +17,10 @@ namespace EduCenterWeb.Pages
 {
     public class EduBasePageModel: PageModel
     {
+        public string jsVersion
+        {
+            get { return EduConfig.Version; }
+        }
         public BackendSession GetBackendSession(bool toLoginIfError = true)
         {
             string json = HttpContext.Session.GetString(EduConstant.BackendSessionKey);

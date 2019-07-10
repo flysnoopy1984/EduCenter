@@ -30,36 +30,11 @@
         });
        
         var tecCode = $("#selTecCode").val();
-        //var fDate = $(".StartDateInput").text();
-        //var tDate = $(".EndDateInput").text();
-
-
+    
         QueryTrialData(tecCode, fdateText, tdateText);
 
 
     }
-
-   
-    //getLayuiDateStr = function (date) {
-    //    var year = date.year;
-    //    var month = date.month;
-    //    var monthName = month;
-    //    if (month < 10)
-    //        monthName = "0" + month;
-    //    var day = date.date;
-    //    return year + "-" + monthName + "-" + day;
-
-    //}
-    //getDateRangeStr = function (fdate, tdate) {
-    //    if (fdate.month == tdate.month && fdate.date > tdate.date) {
-    //        return getLayuiDateStr(tdate) + "-" + getLayuiDateStr(fdate);
-    //    }
-    //    else if (fdate.month > tdate.month) {
-    //        return getLayuiDateStr(tdate) + "-" + getLayuiDateStr(fdate);
-    //    }
-    //    else
-    //        return getLayuiDateStr(fdate) + "-" + getLayuiDateStr(tdate);
-    //}
 
     LayDataSelect = function (value, fdate, edate) {
         var tecCode = $("#selTecCode").val();
@@ -68,20 +43,14 @@
 
      
         QueryTrialData(tecCode, fDate, tDate);
-       // var dateRange = getDateRangeStr(fdate, edate);
-       //// dateRangectrl.config.value = '2019-06-19 - 2019-06-20';
-       // value = '2019-06-19 - 2019-06-20';
-       // laydate.render(value);
-       // $(".DateInput").text('2019-06-19 - 2019-06-20');
+      
     }
 
     QueryTrialData = function (tecCode, fDate, tDate) {
 
         layui.use('table', function () {
              table = layui.table;
-            //var tecCode = $("#selTecCode").val();
-            //var fDate = $(".StartDateInput").text();
-            //var tDate = $(".EndDateInput").text();
+   
             //第一个实例
             table.render({
                 elem: '#CourseList',
@@ -119,10 +88,11 @@
                 cols: [[ //表头
                    
                     { field: 'Id', title: 'ID', width: 80,hide:true, },
-                    { field: 'UserName', title: '申请用户', width: 135, },
+                    { field: 'UserRealName', title: '用户', width: 135, },
+                    { field: 'UserPhone', title: '联系方式', width: 135, },
                     { field: 'CourseName', title: '课程名', width: 135, },
-                    { field: 'TrialDateStr', title: '试听课日期', width: 135, },
-                    { field: 'TrialTimeStr', title: '时间', width: 135, },
+                    { field: 'TrialDateStr', title: '试听课日期', width: 135, edit: 'text'},
+                    { field: 'TrialTimeStr', title: '时间', width: 135, edit: 'select' },
                     { field: 'TecName', title: '课程老师', width: 135, },
                     {
                         field: 'TrialLogStatusName',

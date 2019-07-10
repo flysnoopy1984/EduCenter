@@ -74,6 +74,28 @@ namespace EduCenterSrv.Common
             }
         }
 
+        private static List<SiKsV> _UserRoleList;
+        public static List<SiKsV> UserRoleList
+        {
+            get
+            {
+                if (_UserRoleList == null)
+                {
+                    _UserRoleList = new List<SiKsV>();
+                    foreach (UserRole ur in Enum.GetValues(typeof(UserRole)))
+                    {
+                        _UserRoleList.Add(new SiKsV
+                        {
+                            Key = (int)ur,
+                            Value = GetUserRoleName(ur),
+                        });
+                    }
+
+                }
+                return _UserRoleList;
+            }
+        }
+
         public static string GetUserCourseLogStatusNameForTec(UserCourseLogStatus status)
         {
             string v = "";

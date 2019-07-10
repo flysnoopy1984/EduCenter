@@ -32,9 +32,9 @@ namespace EduCenterSrv
             return sql;
         }
 
-        public static string sql_UpdateUserPhone(string openId,string phone)
+        public static string sql_UpdateUserSimpleInfo(string openId,string phone,string realName)
         {
-            string sql = $"update UserInfo set Phone = {phone} where OpenId='{openId}'";
+            string sql = $@"update UserInfo set Phone = '{phone}',RealName='{realName}' where OpenId='{openId}'";
             return sql;
         }
 
@@ -114,9 +114,9 @@ namespace EduCenterSrv
             return user;
         }
 
-        public bool UpdateUserPhone(string openId,string phone)
+        public bool UpdateUserSimpleInfo(string openId,string phone,string realName)
         {
-            var sql = sql_UpdateUserPhone(openId, phone);
+            var sql = sql_UpdateUserSimpleInfo(openId, phone,realName);
             _dbContext.Database.ExecuteSqlCommand(sql);
             return true;
         }
@@ -926,11 +926,14 @@ namespace EduCenterSrv
                           RemainTimeStd = ua.RemainCourseTime,
                           RemainTimeSummer = ua.RemainSummerTime,
                           RemainTimeWinter = ua.RemainWinterTime,
+                          UserRole =ui.UserRole,
                           UserRoleName = BaseEnumSrv.GetUserRoleName(ui.UserRole), 
                           AllowChooseStd = ua.CanSelectCourse,
                           AllChooseWS = ua.CanSelectSummerWinterCourse,
                           VipPrice = ua.VIPPrice1,
-                      };
+                      }
+                      
+                      ;
             if(!string.IsNullOrEmpty(userName))
             {
                 sql = sql.Where(a => a.WxName.Contains(userName));
@@ -948,7 +951,7 @@ namespace EduCenterSrv
             var ui = _dbContext.DBUserInfo.Where(a => a.OpenId == userData.OpenId).FirstOrDefault();
             ui.MemberType = userData.MemberType;
             ui.RealName = userData.RealName;
-
+            ui.UserRole = userData.UserRole;
             var ua = GetUserAccount(userData.OpenId);
             ua.VIPPrice1 = userData.VipPrice;
             ua.RemainCourseTime = userData.RemainTimeStd;

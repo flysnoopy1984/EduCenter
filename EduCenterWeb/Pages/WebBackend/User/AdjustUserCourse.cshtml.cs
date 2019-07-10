@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace EduCenterWeb.Pages.WebBackend.User
+{
+    public class AdjustUserCourseModel : PageModel
+    {
+        public void OnGet()
+        {
+
+        }
+    }
+}

@@ -36,6 +36,7 @@
         var header = $("#UserListTable #Header");
 
         $("#UserListTable tr td").remove();
+        var root = null;
 
         $.each(dataList, function (i) {
             var data = dataList[i];
@@ -52,7 +53,7 @@
             tr.find(".RemainTimeStd").val(data.RemainTimeStd);
             tr.find(".RemainTimeSummer").val(data.RemainTimeSummer);
             tr.find(".RemainTimeWinter").val(data.RemainTimeWinter);
-            tr.find(".UserRole").text(data.UserRoleName);
+            tr.find(".UserRole").val(data.UserRole);
             
 
             var DeadLineStd = tr.find(".DeadLineStd");
@@ -64,8 +65,16 @@
 
             tr.find("#btn_Save").on("click", SaveUser);
             tr.find("#btn_AdjustCourse").on("click", AdjustCourse);
-
-            header.after(tr);
+            if (root == null) {
+                header.after(tr);
+                root = tr;
+            }
+            else {
+                root.after(tr);
+                root = tr;
+            }
+                
+                
 
             laydate.render({
                 elem: "#showDate" + i,
@@ -110,6 +119,7 @@
         var data = {
             "OpenId": tr.attr("openId"),
             "MemberType": tr.find(".MemberType").val(),
+            "UserRole": tr.find(".UserRole").val(),
             "VipPrice": tr.find(".VipPrice").val(),
             "RemainTimeStd": tr.find(".RemainTimeStd").val(),
             "RemainTimeSummer": tr.find(".RemainTimeSummer").val(),

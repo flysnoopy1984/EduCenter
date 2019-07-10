@@ -66,7 +66,7 @@ namespace EduCenterWeb.Pages.WX
                var memoryStream = new MemoryStream();
                Request.Body.CopyTo(memoryStream);
                string strXml = System.Text.Encoding.Default.GetString(memoryStream.ToArray());
-             //  NLogHelper.InfoTxt($"strXml:{strXml}");
+           //    NLogHelper.InfoTxt($"WXEntry Message:{strXml}");
 
                 if (!string.IsNullOrEmpty(strXml))
                 {
@@ -78,34 +78,19 @@ namespace EduCenterWeb.Pages.WX
                     _EventKey = _wxMessage.EventKey;
                     if (!string.IsNullOrEmpty(_EventKey))
                     {
-                        //微信消息规则
+                        //邀请码微信消息规则
                         if (_EventKey.StartsWith("qrscene_"))
                             _EventKey = _EventKey.Substring(8);
-     
-                        if(_EventKey.StartsWith(WxConfig.QR_Invite))
+                        //老师邀请码
+                        if (_EventKey.StartsWith(WxConfig.QR_Invite))
                             InviteQRHandler();
+                        else
+                            //Click 菜单
+                            HandlerStdMessage();
                     }    
                     else
                     {
-                        switch (_wxMessage.Event)
-                        {
-                            case "view":
-                                break;
-                            case "click":
-                                MenuClickHandler();
-                                break;
-                            case "scan":
-                                //如果是扫描登录
-                                ScanHandler();
-                                break;
-                            case "subscribe":
-                                SubscribeHandler();
-                                break;
-                            default:
-                                return _wxMessage.toText(WXReplyContent.DefaultMsessage());
-                             
-
-                        }
+                        HandlerStdMessage();
                     }
                    
                 }
@@ -117,6 +102,30 @@ namespace EduCenterWeb.Pages.WX
             }
 
             return _ResultMsg;
+        }
+
+        public void HandlerStdMessage()
+        {
+            switch (_wxMessage.Event)
+            {
+                case "view":
+                    break;
+                case "click":
+                    MenuClickHandler();
+                    break;
+                case "scan":
+                    //如果是扫描登录
+                    ScanHandler();
+                    break;
+                case "subscribe":
+                    SubscribeHandler();
+                    break;
+                default:
+                    _ResultMsg = _wxMessage.toText(WXReplyContent.DefaultMsessage());
+                    break;
+              
+                      
+            }
         }
 
         /// <summary>
@@ -142,20 +151,13 @@ namespace EduCenterWeb.Pages.WX
             } 
         }
 
-        /// <summary>
-        /// 菜单点击
-        /// </summary>
-        private void MenuClickHandler()
-        {
-
-        }
-
+       
         /// <summary>
         /// 扫码
         /// </summary>
         private void ScanHandler()
         {
-            NLogHelper.InfoTxt("ScanHandler In");
+           
             EUserInfo ui = _UserSrv.GetUserInfo(_wxMessage.FromUserName);
             if(ui!=null)
             {
@@ -187,7 +189,40 @@ namespace EduCenterWeb.Pages.WX
 
         }
 
-     
+        /// <summary>
+        /// 菜单点击
+        /// </summary>
+        private void MenuClickHandler()
+        {
+            string key = _wxMessage.EventKey;
+            NLogHelper.InfoTxt("MenuClickHandler:" + key);
+            switch (key)
+            {
+                case "intro_100":
+                    IntroduceYunYi();
+                    
+                    break;
+            }
+        }
+
+        private void IntroduceYunYi()
+        {
+            try
+            {
+                string url = @"http://mp.weixin.qq.com/s?__biz=MzU3NDk2NjE1MQ==&mid=100000013&idx=1&sn=1b9b19525f6a60329e1e4315f5c40ec5&chksm=7d2b11e54a5c98f3485c9a6ff1394b9397f90b06c72e41d919473cba592d8cb05e6832d3b233#rd";
+                string picUrl = @"http://mmbiz.qpic.cn/mmbiz_jpg/Ct0QBXEFiaJkACbLKbpDy8ql5rBoDUHBS0SOic6bHQ0gUYagFibCdYykZeibHGG9LiaJ2JgWTtGOAx0mH8FZfKL3CyA/0?wx_fmt=jpeg";
+                _ResultMsg = _wxMessage.toPicText(picUrl, url, "欢饮光临云艺国学教育","云艺国学教育");
+               // NLogHelper.InfoTxt("Menu:" + _ResultMsg);
+            }
+            catch (Exception ex)
+            {
+                NLogHelper.ErrorTxt("Menu:" + ex.Message);
+            }
+           
+        }
+
+
+
 
 
 

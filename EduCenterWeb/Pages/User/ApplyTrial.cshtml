@@ -15,8 +15,9 @@
 <link href="~/css/Plugs/layui.css" rel="stylesheet" />
 <script src="~/lib/layui/layui.js"></script>
 <script src="~/lib/layui/lay/modules/form.js"></script>
-<script src="~/js/Wap/User/ApplyTrial.js?v=@Model.jsVersion"></script>
 <script src="~/js/EduLib/EditHelper.js?v=@Model.jsVersion"></script>
+<script src="~/js/Wap/User/ApplyTrial.js?v=@Model.jsVersion"></script>
+
 <style type="text/css">
     .MainContainer {
         display: flex;
@@ -96,13 +97,19 @@
 
     .MyTrialList {
     }
+    /*.UserInfo{
+        display:flex;
+        align-items: baseline;
+    }*/
 </style>
-
-
 
 <div class="MainContainer">
     <div class="Title"><i class="fa fa-telegram" aria-hidden="true" style="margin-right:10px;"></i>试听申请</div>
     <div class="FilterArea">
+        @*<div class="UserInfo">
+            <label style="margin-right:10px;">您的称呼</label>
+            <div><input type="text" class="form-control" id="UserRealName" /></div>
+        </div>*@
         <div class="layui-form CourseFilter">
             <div class="CourseLabel">课程选择</div>
             <div class="layui-form-item">
@@ -129,6 +136,7 @@
                 <div class="fa fa-calendar fa-2x" id="btn_DatePick"></div>
             </div>
         </div>
+
         <div class="TimeFilter">
             <table id="TimeFilterTable" border="0" cellpadding="0" cellspacing="0">
                 <tr>
@@ -158,5 +166,13 @@
             </button>
         </div>
     </div>
+</div>
+
+<div id="HideData" style="display:none;">
+    @if (@Model.UserSession != null)
+    {
+        <input type="hidden" id="hUserPhone" value="@Model.UserSession.Phone" />
+    }
+
 </div>
 

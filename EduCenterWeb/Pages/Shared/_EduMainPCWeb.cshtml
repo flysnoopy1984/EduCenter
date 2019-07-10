@@ -44,41 +44,13 @@
         <div class="navbar-collapse collapse templatemo-sidebar">
             <ul class="templatemo-sidebar-menu">
                 @*<li>
-                        <form class="navbar-form">
-                            <input type="text" class="form-control" id="templatemo_search_box" placeholder="Search...">
-                            <span class="btn btn-default">Go</span>
-                        </form>
-                    </li>*@
+            <form class="navbar-form">
+                <input type="text" class="form-control" id="templatemo_search_box" placeholder="Search...">
+                <span class="btn btn-default">Go</span>
+            </form>
+        </li>*@
 
                 <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
-                <li class="sub open active">
-                    <a href="javascript:;" onclick="SwitchMenu(this);">
-                        <i class="fa fa-database"></i> 主数据 <div class="pull-right"><span class="caret"></span></div>
-                    </a>
-                    <ul class="templatemo-submenu">
-                        <li><a href="/WebBackEnd/MasterData/Tec"><i class="fa fa-users"></i>教师管理</a></li>
-                        <li><a href="/WebBackEnd/MasterData/Course"><i class="fa fa-users"></i>课程管理</a></li>
-                        <li><a href="/WebBackEnd/MasterData/GlobalConfig"><i class="fa fa-users"></i>全局设置</a></li>
-                    </ul>
-                </li>
-                <li class="sub open active">
-                    <a href="javascript:;" onclick="SwitchMenu(this);">
-                        <i class="fa fa-database"></i> 报名排课 <div class="pull-right"><span class="caret"></span></div>
-                    </a>
-                    <ul class="templatemo-submenu">
-                        <li><a href="/WebBackEnd/Course/Plan"><i class="fa fa-users"></i>排课查询</a></li>
-                    </ul>
-                </li>
-                <li class="sub open active">
-                    <a href="javascript:;" onclick="SwitchMenu(this);">
-                        <i class="fa fa-database"></i> 教师情况 <div class="pull-right"><span class="caret"></span></div>
-                    </a>
-                    <ul class="templatemo-submenu">
-                        <li><a href="/WebBackEnd/Tec/CoursingDay"><i class="fa fa-users"></i>日课程</a></li>
-                        <li><a href="/WebBackEnd/Tec/CoursingStand"><i class="fa fa-users"></i>月标准班</a></li>
-                        <li><a href="/WebBackEnd/Tec/Leave"><i class="fa fa-users"></i>教师请假</a></li>
-                    </ul>
-                </li>
                 <li class="sub open active">
                     <a href="javascript:;" onclick="SwitchMenu(this);">
                         <i class="fa fa-database"></i>用户情况<div class="pull-right"><span class="caret"></span></div>
@@ -88,6 +60,35 @@
                         <li><a href="/WebBackEnd/User/List"><i class="fa fa-users"></i>用户信息查询</a></li>
                     </ul>
                 </li>
+                <li class="sub open">
+                    <a href="javascript:;" onclick="SwitchMenu(this);">
+                        <i class="fa fa-database"></i> 主数据 <div class="pull-right"><span class="caret"></span></div>
+                    </a>
+                    <ul class="templatemo-submenu">
+                        <li><a href="/WebBackEnd/MasterData/Tec"><i class="fa fa-users"></i>教师管理</a></li>
+                        <li><a href="/WebBackEnd/MasterData/Course"><i class="fa fa-users"></i>课程管理</a></li>
+                        <li><a href="/WebBackEnd/MasterData/GlobalConfig"><i class="fa fa-users"></i>全局设置</a></li>
+                    </ul>
+                </li>
+                <li class="sub open ">
+                    <a href="javascript:;" onclick="SwitchMenu(this);">
+                        <i class="fa fa-database"></i> 报名排课 <div class="pull-right"><span class="caret"></span></div>
+                    </a>
+                    <ul class="templatemo-submenu">
+                        <li><a href="/WebBackEnd/Course/Plan"><i class="fa fa-users"></i>排课查询</a></li>
+                    </ul>
+                </li>
+                <li class="sub open ">
+                    <a href="javascript:;" onclick="SwitchMenu(this);">
+                        <i class="fa fa-database"></i> 教师情况 <div class="pull-right"><span class="caret"></span></div>
+                    </a>
+                    <ul class="templatemo-submenu">
+                        <li><a href="/WebBackEnd/Tec/CoursingDay"><i class="fa fa-users"></i>日课程</a></li>
+                        <li><a href="/WebBackEnd/Tec/CoursingStand"><i class="fa fa-users"></i>月标准班</a></li>
+                        <li><a href="/WebBackEnd/Tec/Leave"><i class="fa fa-users"></i>教师请假</a></li>
+                    </ul>
+                </li>
+
             </ul>
         </div>
         <div class="templatemo-content-wrapper">

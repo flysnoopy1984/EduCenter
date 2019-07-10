@@ -2,8 +2,6 @@
     var BuyCourseUrl = "BuyCourseTime?handler=BuyCourse"
     Init = function () {
         var phone = $("#hUserPhone");
-
-     //   alert(window.history(-1).href);
         if (phone.val() == "" || phone.val() == null) {
             ShowInfo("请先绑定手机号，谢谢！", null, null, 5, function () {
                 window.location.href = "/Independent/RegPhone?rurl=/User/BuyCourseTime";

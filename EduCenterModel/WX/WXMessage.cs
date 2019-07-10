@@ -93,7 +93,7 @@ namespace EduCenterModel.WX
 
         }
 
-        public string toPicText(string picUrl, string url, string desc = "点击获取酷炫二维码标记", string title = "收款二维码")
+        public string toPicText(string picUrl, string url, string desc = "云艺国学教育", string title = "云艺国学教育")
         {
 
             string xml = @"<xml>

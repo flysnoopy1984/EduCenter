@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EduCenterWeb.Pages.WebBackend.User
 {
-    public class ListModel : EduBaseAppPageModel
+    public class ListModel : EduBasePageModel
     {
         private UserSrv _UserSrv;
         public ListModel(UserSrv userSrv)
@@ -28,6 +28,11 @@ namespace EduCenterWeb.Pages.WebBackend.User
         public List<SiKsV> MemberTypeList
         {
             get { return BaseEnumSrv.MemberTypeList; }
+        }
+        
+         public List<SiKsV> UserRoleList
+        {
+            get { return BaseEnumSrv.UserRoleList; }
         }
 
         public IActionResult OnPostQueryUserList(string userName,int pageIndex,int pageSize)
