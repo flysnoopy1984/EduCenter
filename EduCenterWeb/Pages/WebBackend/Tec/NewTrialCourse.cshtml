@@ -1,0 +1,119 @@
+﻿@page
+@model EduCenterWeb.Pages.WebBackend.Tec.NewTrialCourseModel
+@{
+    ViewData["Title"] = "NewTrialCourse";
+    Layout = "~/Pages/Shared/_EduWebDialog.cshtml";
+}
+<script src="~/lib/laydate/laydate.js"></script>
+@*<link href="~/css/Plugs/layui.css" rel="stylesheet" />*@
+<link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
+<script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
+
+<script src="~/js/WebBackEnd/Tec/NewTrialCourse.js?v=@Model.jsVersion"></script>
+<style type="text/css">
+    .MainContainer {
+        margin: 10px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .SubTitle {
+        padding-right: 10px;
+        padding-left: 10px;
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+        height: 35px;
+        line-height: 35px;
+    }
+
+    .oneRow {
+        display: flex;
+  margin:20px;
+        justify-content: space-between;
+        width: 65%;
+        align-items:baseline;
+    }
+
+    .btnList {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        align-self: center;
+    }
+
+  .bTrialDate{
+          width: 157px;
+  }
+  .eduSelect{
+      width:174px;
+      height:26px;
+  }
+</style>
+<div class="MainContainer">
+
+    @*<div class="SubTitle text-primary bg-info">
+            <div>
+                试听课
+            </div>
+        </div>*@
+    <div class="Content">
+
+        <div class="oneRow">
+            <label class="layui-field-title">用户姓名：</label>
+            <div><input type="text" class="bUserName layui-elem-field" /></div>
+        </div>
+        <div class="oneRow">
+            <label class="layui-field-title">课程名：</label>
+            <div>
+                <select id="selCourseCode" class="eduSelect">
+                    <option value="-1">请选择</option>
+
+                    @foreach (var cl in @Model.CourseDic)
+                    {
+                        string typeName = EduCenterSrv.Common.BaseEnumSrv.GetCourseTypeName(cl.Key);
+                        <optgroup label="@typeName" class="layui-select-group">
+                            @foreach (var c in cl.Value)
+                            {
+                                <option value="@c.Code">@c.Name</option>
+                            }
+                        </optgroup>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="oneRow">
+            <label class="layui-field-title">试听课日期：</label>
+            <div>
+                <input type="text" class="bTrialDate layui-elem-field" />
+                <i class="fa fa-calendar fa btnCalendarIcon" id="btn_DatePick"></i>
+            </div>
+            
+        </div>
+        <div class="oneRow">
+            <label class="layui-field-title">试听课时间：</label>
+            <div>
+               
+                <select id="selCourseTime" class="eduSelect">
+                    <option value="-1">请选择</option>
+                    @foreach (var time in Model.TrialTime)
+                    {
+                        <option value="@time.Key">@time.Value.TimeRange</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="oneRow">
+            <label class="layui-field-title">课程老师：</label>
+            <div><input type="text" class="bTecName layui-elem-field" /></div>
+        </div>
+        <div class="oneRow">
+            <label class="layui-field-title">状态：</label>
+            <div><input type="text" class="bStatus layui-elem-field" /></div>
+        </div>
+    </div>
+    <div class="btnList">
+        <input id="btn_Save" type="button" class="btn btn-warning btn-sm" value="保存" />
+    </div>
+</div>
+

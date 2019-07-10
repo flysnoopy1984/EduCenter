@@ -61,7 +61,7 @@ namespace EduCenterWeb.Pages.User
                 }
                 else
                 {
-                    var ui = _UserSrv.GetUserInfo("oh6cV1QhPLj6XPesheYUQ4XtuGTs");
+                    var ui = _UserSrv.GetUserInfo("oh6cV1dh0hjoGEizCoKH1KU70UwQ");
                     WXLoginCallBack(ui);
                     userSession = GetUserSession(false);
                 }

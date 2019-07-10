@@ -111,7 +111,7 @@
     }
 </style>
 <script type="text/javascript" src="~/lib/iconfont.js"></script>
-
+<script src="~/lib/layer-v3.1.1/layer/layer.js"></script>
 <link href="~/lib/layui/css/layui.css" rel="stylesheet" />
 
 <script src="~/lib/laydate/laydate.js"></script>
@@ -150,9 +150,10 @@
         <table id="CourseList" lay-filter="AdminOption"></table>
         <script type="text/html" id="TableToolBar">
             {{#  if(d.TrialLogStatus == 10){ }}
-            <input type="button" class="layui-btn btn-success layui-btn-xs" lay-event="confirm" value="确认申请" />
+            <input type="button" class="layui-btn  layui-btn-xs" lay-event="confirm" value="确认申请" />
             @*<input type="button" class="layui-btn layui-btn-xs" value="取消" />*@
             {{#  } }}
+            <input type="button" class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit" value="编辑" />
         </script>
     </div>
 </div>

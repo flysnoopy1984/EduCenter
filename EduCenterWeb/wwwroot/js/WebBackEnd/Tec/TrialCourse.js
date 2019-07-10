@@ -28,6 +28,8 @@
             value: tdateText,
             isInitValue: false
         });
+
+        $("#selTecCode").on("change", LayDataSelect);
        
         var tecCode = $("#selTecCode").val();
     
@@ -36,7 +38,8 @@
 
     }
 
-    LayDataSelect = function (value, fdate, edate) {
+ 
+    LayDataSelect = function () {
         var tecCode = $("#selTecCode").val();
          var fDate = $(".StartDateInput").text();
         var tDate = $(".EndDateInput").text();
@@ -108,7 +111,7 @@
                     },
               
                     { field: 'ApplyDateTimeStr', title: '申请时间', width: 150, },
-                    { fixed: 'right', width: 120, align: 'center', toolbar: '#TableToolBar' },
+                    { fixed: 'right', width: 140, align: 'center', toolbar: '#TableToolBar' },
                    
                 ]]
                
@@ -118,12 +121,15 @@
                 var data = obj.data; //获得当前行数据
                 var layEvent = obj.event; //获得 lay-event 对应的值
                 if (layEvent == "confirm") {
-                  
+
                     UpdateLogStatus(data.Id);
                     //obj.update({
                     //    TrialLogStatus: 11,
                     //    TrialLogStatusName: "已安排",
                     //});
+                }
+                else if (layEvent == "edit") {
+                    EditTrialCourse(data.Id);
                 }
             });
         });
@@ -139,6 +145,34 @@
             table.reload("tableCourseList");
         }
      
+    }
+
+    //详细信息
+    EditTrialCourse = function (Id) {
+        //var obj = $(e.currentTarget);
+    
+        layer.open({
+            type: 2,
+            title: '试听课',
+            shadeClose: false,
+            shade: 0.8,
+            area: ['500px', '80%'],
+            content: 'NewTrialCourse?Id=' + Id //iframe的url
+        });
+    }
+
+    CloseTrialCourse = function (openId, BabyName) {
+
+        layer.closeAll("iframe");
+        if (BabyName) {
+
+            var tr = $("#UserListTable tr[openId=" + openId + "]");
+            tr.find(".BabyName").text(BabyName);
+
+        }
+        //var date = $(".StartDateInput").text();
+        //var tecCode = 
+        //  window.location.href = "BabyInfo";
     }
  
     Init();
