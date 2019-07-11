@@ -5,17 +5,17 @@
     Layout = "~/Pages/Shared/_EduMainPCWeb.cshtml";
 }
 @section navBar{
-    <li><a href="/Home">主页</a></li>
+    <li><a href="/WebBackend/Home">主页</a></li>
 }
 @functions{
     public string GetTextColor(CourseScheduleType type)
     {
         switch (type)
         {
-          
-            case  CourseScheduleType.Winter: return "text-info";
-          
-            case  CourseScheduleType.Summer: return "text-danger";
+
+            case CourseScheduleType.Winter: return "text-info";
+
+            case CourseScheduleType.Summer: return "text-danger";
 
 
 
@@ -85,7 +85,7 @@
             <div class="DateRangeLine">
                 @foreach (var dr in range.Value)
                 {
-                   
+
                     <div class="DateRange @GetTextColor(dr.CourseScheduleType)">
                         <div class="Name">@dr.CourseDateRangeName</div>
                         <div class="Date">

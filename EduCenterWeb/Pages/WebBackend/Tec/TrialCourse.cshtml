@@ -5,7 +5,7 @@
     Layout = "~/Pages/Shared/_EduMainPCWeb.cshtml";
 }
 @section navBar{
-    <li><a href="/Home">主页</a></li>
+    <li><a href="/WebBackend/Home">主页</a></li>
 }
 
 <style>
@@ -149,11 +149,15 @@
     <div class="DataContent">
         <table id="CourseList" lay-filter="AdminOption"></table>
         <script type="text/html" id="TableToolBar">
+            <input type="button" class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit" value="编辑" />
             {{#  if(d.TrialLogStatus == 10){ }}
             <input type="button" class="layui-btn  layui-btn-xs" lay-event="confirm" value="确认申请" />
             @*<input type="button" class="layui-btn layui-btn-xs" value="取消" />*@
-            {{#  } }}
-            <input type="button" class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit" value="编辑" />
+            {{#  } else { if(d.WxRemindCount ==0){ }}
+            <input type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="wxRemind" value="微信提醒" />
+            {{#  } else { }}
+            <input type="button" disabled class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="wxRemind" value="已经提醒" />
+            {{#  } } }}
         </script>
     </div>
 </div>

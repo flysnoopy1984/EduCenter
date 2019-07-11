@@ -5,7 +5,7 @@
     Layout = "~/Pages/Shared/_EduMainPCWeb.cshtml";
 }
 @section navBar{
-    <li><a href="/Home">主页</a></li>
+    <li><a href="/WebBackend/Home">主页</a></li>
 }
 
 <link href="~/css/Plugs/LoadingIcon.css" rel="stylesheet" />
@@ -19,66 +19,67 @@
         flex-direction: column;
     }
 
-.MainContainer .DataFilterBar {
-    display: flex;
-    height: 34px;
-    line-height: 34px;
-    width: 50%;
-    justify-content: space-around;
-    margin-bottom: 20px;
-}
-
-.MainContainer .DataFilterBar div {
-    display: flex;
-    justify-content: space-around;
-    width:40%;
-}
-.MainContainer .DataFilterBar div .form-control{
-    width:80%;
-}
-.MainContainer .DataFilterBar div #selDate{
-    text-align:left;
-}
-
-.MainContainer  .TecCourseArea
-{
-    margin-bottom:50px;
-}
-.MainContainer  .TecCourseArea .CourseInfo
-{
-    text-align:center;
-    height: 40px;
-    line-height: 40px;
-    font-size: 30px;
-    color: #4d79f9;
-    text-decoration: underline;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.MainContainer  .TecCourseArea tr th {
-            border: solid 1px #808080;
-            text-align: center;
-            height: 30px;
-            line-height: 30px;
+        .MainContainer .DataFilterBar {
+            display: flex;
+            height: 34px;
+            line-height: 34px;
+            width: 50%;
+            justify-content: space-around;
+            margin-bottom: 20px;
         }
 
-.MainContainer  .TecCourseArea tr td {
-            border: solid 1px #808080;
-            text-align: center;
-            height: 120px;
-   
- }
-.MainContainer  .TecCourseArea .CellContainer:hover{
-    background-color:#68cafe;
-}
+            .MainContainer .DataFilterBar div {
+                display: flex;
+                justify-content: space-around;
+                width: 40%;
+            }
 
-.MainContainer  .TecCourseArea .CellContainer{
-    display:flex;
-    flex-direction:column;
-    height:100%;
-    cursor:pointer;
-}
+                .MainContainer .DataFilterBar div .form-control {
+                    width: 80%;
+                }
+
+                .MainContainer .DataFilterBar div #selDate {
+                    text-align: left;
+                }
+
+        .MainContainer .TecCourseArea {
+            margin-bottom: 50px;
+        }
+
+            .MainContainer .TecCourseArea .CourseInfo {
+                text-align: center;
+                height: 40px;
+                line-height: 40px;
+                font-size: 30px;
+                color: #4d79f9;
+                text-decoration: underline;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+
+            .MainContainer .TecCourseArea tr th {
+                border: solid 1px #808080;
+                text-align: center;
+                height: 30px;
+                line-height: 30px;
+            }
+
+            .MainContainer .TecCourseArea tr td {
+                border: solid 1px #808080;
+                text-align: center;
+                height: 120px;
+            }
+
+            .MainContainer .TecCourseArea .CellContainer:hover {
+                background-color: #68cafe;
+            }
+
+            .MainContainer .TecCourseArea .CellContainer {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                cursor: pointer;
+            }
 </style>
 
 <div class="MainContainer">
@@ -90,7 +91,7 @@
         <div>
             <label>老师：</label>
             <select id="selTecCode" class="form-control">
-              
+
                 @foreach (var tec in Model.TecList)
                 {
                     <option value="@tec.Code">@tec.Name</option>
@@ -110,15 +111,15 @@
                 <th>周六</th>
                 <th>周日</th>
             </tr>
-      
-            @for (int j=0;j<6;j++)
+
+            @for (int j = 0; j < 6; j++)
             {
                 <tr>
                     @for (int i = 0; i < 7; i++)
                     {
                         <td width="13%" class="CourseCell">
                             <div class="CellContainer" day="@(i+1)" lesson="">
-                                
+
 
                             </div>
                         </td>

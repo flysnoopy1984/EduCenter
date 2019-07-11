@@ -1,13 +1,14 @@
 ﻿$(function () {
     var QueryTrialLogUrl = "TrialCourse?handler=QueryTrialLog";
     var UpdateTrialLogStatusUrl = "TrialCourse?handler=ConfirmTrialStatus";
+    var WxRemindUrl = "TrialCourse?handler=WxRemind";
     var table;
     Init = function () {
         var sysDate = new Date();
     
         var fdateText = getDateStr(sysDate);
         var tdate = new Date(sysDate)
-        tdate.setDate(tdate.getDate() + 1);
+        tdate.setDate(tdate.getDate() + 5);
         var tdateText = getDateStr(tdate);
 
     
@@ -111,7 +112,7 @@
                     },
               
                     { field: 'ApplyDateTimeStr', title: '申请时间', width: 150, },
-                    { fixed: 'right', width: 140, align: 'center', toolbar: '#TableToolBar' },
+                    { fixed: 'right', width: 180, align: 'center', toolbar: '#TableToolBar' },
                    
                 ]]
                
@@ -123,13 +124,13 @@
                 if (layEvent == "confirm") {
 
                     UpdateLogStatus(data.Id);
-                    //obj.update({
-                    //    TrialLogStatus: 11,
-                    //    TrialLogStatusName: "已安排",
-                    //});
+                  
                 }
                 else if (layEvent == "edit") {
                     EditTrialCourse(data.Id);
+                }
+                else if (layEvent == "wxRemind") {
+                    wxRemind(data.Id);
                 }
             });
         });
@@ -161,18 +162,18 @@
         });
     }
 
-    CloseTrialCourse = function (openId, BabyName) {
+    CloseTrialCourse = function () {
 
         layer.closeAll("iframe");
-        if (BabyName) {
+        LayDataSelect();
+    }
 
-            var tr = $("#UserListTable tr[openId=" + openId + "]");
-            tr.find(".BabyName").text(BabyName);
-
-        }
-        //var date = $(".StartDateInput").text();
-        //var tecCode = 
-        //  window.location.href = "BabyInfo";
+    //wxRemind
+    wxRemind = function (Id) {
+        callAjax_Query(WxRemindUrl, { "Id": Id }, function () {
+            ShowInfo("提醒已发送成功", null, null, 1);
+        })
+       
     }
  
     Init();

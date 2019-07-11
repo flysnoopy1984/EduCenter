@@ -1,4 +1,5 @@
 ﻿using EduCenterCore.Common.Helper;
+using EduCenterModel.Common;
 using EduCenterModel.WX;
 using Newtonsoft.Json;
 using System;
@@ -130,5 +131,28 @@ namespace EduCenterCore.WX
             WXUserInfo wxUser = HttpHelper.Get<WXUserInfo>(url_userInfo);
             return wxUser;
         }
+
+        #region 发送模板消息
+
+        public static ResultNormal SendTemplateMessage<T>(T data) where T:class
+        {
+            ResultNormal result = new ResultNormal();
+            try
+            {
+                string accessToken = getAccessToken().access_token;
+                string strUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + accessToken;
+                string template = JsonConvert.SerializeObject(data);
+                result.SuccessMsg = HttpHelper.RequestUrlSendMsg(strUrl, HttpHelper.HttpMethod.Post, template, "application/json");
+
+            }
+            catch(Exception ex)
+            {
+                result.ErrorMsg = ex.Message;
+
+            }
+
+            return result;
+        }
+        #endregion
     }
 }

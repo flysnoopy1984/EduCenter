@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EduCenterCore.WX;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterModel.Course.Result;
 using EduCenterModel.Teacher;
 using EduCenterModel.User.Result;
+using EduCenterModel.WX.MessageTemplate;
 using EduCenterSrv;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -57,6 +59,32 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
             {
 
                  _CourseSrv.UpdateTrialStatus(Id, TrialLogStatus.TecConfirm);
+            }
+            catch (Exception ex)
+            {
+                result.ErrorMsg = ex.Message;
+            }
+
+            return new JsonResult(result);
+        }
+
+        public IActionResult OnPostWxRemind(long Id)
+        {
+            ResultNormal result = new ResultNormal();
+            try
+            {
+
+                var trial = _CourseSrv.GetTrialLogById(Id);
+
+                //微信发送
+                UserTrialRemindTemplate data = new UserTrialRemindTemplate();
+                data = data.GenerateData(trial.OpenId, trial);
+                result = WXApi.SendTemplateMessage<UserTrialRemindTemplate>(data);
+                if(result.IsSuccess)
+                {
+                    _CourseSrv.AddTrialRemindCount(Id);
+                }
+
             }
             catch (Exception ex)
             {

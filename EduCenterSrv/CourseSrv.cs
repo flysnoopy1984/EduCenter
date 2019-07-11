@@ -47,6 +47,14 @@ namespace EduCenterSrv
                             where Id={Id}";
             return sql;
         }
+
+        public static string sql_AddTrialLogWXRemindCount(long Id)
+        {
+            string sql = $@"update [TrialLog] 
+                            set WxRemindCount = WxRemindCount+1
+                            where Id={Id}";
+            return sql;
+        }
         #endregion
 
         public List<SiKsV> GetCourseType()
@@ -232,6 +240,41 @@ namespace EduCenterSrv
         #endregion
 
         #region TrialLog
+
+        public RTrialLog GetTrialLogById(long Id)
+        {
+            var times = StaticDataSrv.TrialTime;
+            var sql = from tl in _dbContext.DBTrialLog
+                      join ui in _dbContext.DBUserInfo on tl.OpenId equals ui.OpenId
+                      where tl.Id == Id
+                      select new RTrialLog
+                      {
+                          Id = tl.Id,
+                          ApplyDateTime = tl.ApplyDateTime,
+                          TrialDateTime = tl.TrialDateTime,
+                          CourseCode = tl.CourseCode,
+                          CourseName = tl.CourseName,
+                          TecCode = tl.TecCode,
+                          TecName = tl.TecName,
+                          OpenId = ui.OpenId,
+                          CourseType = tl.CourseType,
+                          WXName = ui.Name,
+                          UserRealName = ui.RealName,
+                          Lesson =tl.Lesson,
+                          UserPhone = ui.Phone,
+                          TrialLogStatus = tl.TrialLogStatus,
+                          TrialLogStatusName = BaseEnumSrv.GetTrialLogStatusName(tl.TrialLogStatus),
+                          TrialTimeStr = times[tl.Lesson].TimeRange,
+                      };
+            return sql.FirstOrDefault();
+        }
+
+        public ETrialLog GetTrialLog(long Id)
+        {
+            return _dbContext.DBTrialLog.Where(a => a.Id == Id).FirstOrDefault();
+        }
+
+
         public List<ETrialLog> QueryTrialLogList(string openId,string CourseCode=null, string date=null)
         {
 
@@ -263,10 +306,10 @@ namespace EduCenterSrv
                           TecCode = tl.TecCode,
                           TecName = tl.TecName,
                           OpenId = ui.OpenId,
-                          //UserName = a.UserName,
+                          WxRemindCount = tl.WxRemindCount,
                           WXName = ui.Name,
                           UserRealName = ui.RealName,
-                          
+                         
                           UserPhone =ui.Phone,
                           TrialLogStatus = tl.TrialLogStatus,
                           TrialLogStatusName = BaseEnumSrv.GetTrialLogStatusName(tl.TrialLogStatus),
@@ -291,6 +334,12 @@ namespace EduCenterSrv
         public void  UpdateTrialStatus(ETrialLog log)
         {
             _dbContext.DBTrialLog.Update(log);
+        }
+
+        public void AddTrialRemindCount(long Id)
+        {
+            var sql = sql_AddTrialLogWXRemindCount(Id);
+            _dbContext.Database.ExecuteSqlCommand(sql);
         }
 
         public void UpdateTrialStatus(long Id,TrialLogStatus status)

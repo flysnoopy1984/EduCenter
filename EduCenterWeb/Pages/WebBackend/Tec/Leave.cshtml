@@ -5,7 +5,7 @@
     Layout = "~/Pages/Shared/_EduMainPCWeb.cshtml";
 }
 @section navBar{
-    <li><a href="/Home">主页</a></li>
+    <li><a href="/WebBackend/Home">主页</a></li>
 }
 
 <style type="text/css">
@@ -58,45 +58,54 @@
             color: #00ce1d;
             font-weight: bold;
         }
-    .DataContent{
 
+    .DataContent {
     }
-    .DataContent .TableData{
-        height:450px;
-        margin-top:20px;
-        margin-bottom:20px;
-        
-    }
-    .DataContent .TableData #TableLeave{
-        width: 80%;
-        margin: 20px;
-    }
-    #TableLeave tr th{ border:solid 1px #808080;
-                       height:24px;
-                       line-height:24px;
-                       padding-left:8px;
-    }
-    #TableLeave tr td{ border:solid 1px #808080;
-                       height:30px;
-                       line-height:30px;
-                        padding-left:8px;
 
+        .DataContent .TableData {
+            height: 450px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+            .DataContent .TableData #TableLeave {
+                width: 80%;
+                margin: 20px;
+            }
+
+    #TableLeave tr th {
+        border: solid 1px #808080;
+        height: 24px;
+        line-height: 24px;
+        padding-left: 8px;
     }
-    #Pager{margin-left:20px;}
-    
+
+    #TableLeave tr td {
+        border: solid 1px #808080;
+        height: 30px;
+        line-height: 30px;
+        padding-left: 8px;
+    }
+
+    #Pager {
+        margin-left: 20px;
+    }
+
 
     .DataContent .DataMsg {
-        height:450px;
-        line-height:450px;
-        text-align:center;
-        display:none;
+        height: 450px;
+        line-height: 450px;
+        text-align: center;
+        display: none;
     }
-    .DetailLessonList{
-        display:flex;
+
+    .DetailLessonList {
+        display: flex;
     }
-    .DetailLessonList div{
-        margin-right:10px;
-    }
+
+        .DetailLessonList div {
+            margin-right: 10px;
+        }
 </style>
 <style type="text/css">
     .TitleIcon {
@@ -167,7 +176,7 @@
                     <th>请假类型</th>
                     <th width="50%">具体课程</th>
                 </tr>
-                
+
             </table>
             <div id="Pager"></div>
         </div>
@@ -175,7 +184,7 @@
     </div>
 </div>
 <div id="HideData" style="display:none">
-   <div class="DetailLessonList">
-      
-   </div>
+    <div class="DetailLessonList">
+
+    </div>
 </div>

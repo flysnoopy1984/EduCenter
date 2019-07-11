@@ -37,8 +37,7 @@ namespace EduCenterModel.Course
         [MaxLength(32)]
         public string OpenId { get; set; }
 
-        [MaxLength(50)]
-        public string UserName { get; set; }
+
 
         public int Lesson { get; set; }
         public DateTime TrialDateTime { get; set; }
@@ -57,6 +56,8 @@ namespace EduCenterModel.Course
         /// 用户打分
         /// </summary>
         public int UserRank { get; set; } 
+
+        public int WxRemindCount { get; set; }
 
       
        

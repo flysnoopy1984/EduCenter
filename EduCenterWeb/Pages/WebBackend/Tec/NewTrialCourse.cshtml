@@ -31,9 +31,12 @@
     .oneRow {
         display: flex;
   margin:20px;
-        justify-content: space-between;
-        width: 65%;
+        /*justify-content: space-between;*/
+        /*width: 70%;*/
         align-items:baseline;
+    }
+    .oneRow >label{
+        width:120px;
     }
 
     .btnList {
@@ -42,26 +45,27 @@
         align-self: center;
     }
 
-  .bTrialDate{
-          width: 157px;
-  }
-  .eduSelect{
-      width:174px;
-      height:26px;
+.eduSelect {
+    height:26px;
+    }
+  .TopButtonList{
+          text-align: end;
   }
 </style>
 <div class="MainContainer">
 
-    @*<div class="SubTitle text-primary bg-info">
-            <div>
-                试听课
-            </div>
-        </div>*@
+  
     <div class="Content">
-
+        <div class="TopButtonList">
+            <input id="btn_Save" type="button" class="btn btn-warning btn-sm" value="保存" />
+        </div>
         <div class="oneRow">
-            <label class="layui-field-title">用户姓名：</label>
-            <div><input type="text" class="bUserName layui-elem-field" /></div>
+            <label>用户称呼：</label>
+            <div><input type="text" class="bUserName" /></div>
+        </div>
+        <div class="oneRow">
+            <label>联系方式：</label>
+            <div><input type="text" class="bUserPhone" /></div>
         </div>
         <div class="oneRow">
             <label class="layui-field-title">课程名：</label>
@@ -86,14 +90,14 @@
             <label class="layui-field-title">试听课日期：</label>
             <div>
                 <input type="text" class="bTrialDate layui-elem-field" />
-                <i class="fa fa-calendar fa btnCalendarIcon" id="btn_DatePick"></i>
+                <i class="fa fa-calendar fa" id="btn_DatePick"></i>
             </div>
-            
+
         </div>
         <div class="oneRow">
             <label class="layui-field-title">试听课时间：</label>
             <div>
-               
+
                 <select id="selCourseTime" class="eduSelect">
                     <option value="-1">请选择</option>
                     @foreach (var time in Model.TrialTime)
@@ -103,17 +107,20 @@
                 </select>
             </div>
         </div>
-        <div class="oneRow">
+        @*<div class="oneRow">
             <label class="layui-field-title">课程老师：</label>
-            <div><input type="text" class="bTecName layui-elem-field" /></div>
-        </div>
+            <div class="bTecName"></div>
+        </div>*@
         <div class="oneRow">
             <label class="layui-field-title">状态：</label>
-            <div><input type="text" class="bStatus layui-elem-field" /></div>
+            <div class="bStatus"></div>
         </div>
     </div>
     <div class="btnList">
-        <input id="btn_Save" type="button" class="btn btn-warning btn-sm" value="保存" />
+        <input id="btn_Close" type="button" class="btn btn-primary btn-sm" value="关闭" />
     </div>
+    
 </div>
+<input type="hidden" id="TrialId" />
+<input type="hidden" id="UserOpenId" />
 

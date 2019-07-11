@@ -281,7 +281,7 @@ namespace EduCenterSrv.Common
                 case TrialLogStatus.TecConfirm:
                     return "已安排";
                 case TrialLogStatus.UserApply:
-                    return "已申请";
+                    return "用户申请";
                 case TrialLogStatus.UserNotCome:
                     return "未参加";
              

@@ -4,14 +4,16 @@ using EduCenterSrv.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EduCenterWeb.Migrations
 {
     [DbContext(typeof(EduDbContext))]
-    partial class EduDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190711064550_0711-1")]
+    partial class _07111
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -237,6 +239,9 @@ namespace EduCenterWeb.Migrations
 
                     b.Property<string>("UserComment")
                         .HasMaxLength(400);
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(50);
 
                     b.Property<int>("UserRank");
 

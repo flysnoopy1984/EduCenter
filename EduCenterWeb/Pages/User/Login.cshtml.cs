@@ -44,7 +44,25 @@ namespace EduCenterWeb.Pages.User
 
         }
 
-       // [EnableCors("any")]
+        //自定登陆，并跳转
+        public void OnGetLoginTransfer(string openId,string toPage)
+        {
+           
+            var ui = _UserSrv.GetUserInfo(openId);
+            if(ui!=null)
+            {
+                WXLoginCallBack(ui);
+                if(!string.IsNullOrEmpty(toPage))
+                {
+                    HttpContext.Response.Redirect("/User/"+ toPage);
+                }
+            }
+            else
+            {
+                HttpContext.Response.Redirect("/User/Login");
+            }
+        }
+
         public IActionResult OnPostUserLogin()
         {
             ResultNormal result = new ResultNormal();
@@ -61,7 +79,8 @@ namespace EduCenterWeb.Pages.User
                 }
                 else
                 {
-                    var ui = _UserSrv.GetUserInfo("oh6cV1dh0hjoGEizCoKH1KU70UwQ");
+                    //oh6cV1QhPLj6XPesheYUQ4XtuGTs
+                    var ui = _UserSrv.GetUserInfo("oh6cV1QhPLj6XPesheYUQ4XtuGTs");
                     WXLoginCallBack(ui);
                     userSession = GetUserSession(false);
                 }

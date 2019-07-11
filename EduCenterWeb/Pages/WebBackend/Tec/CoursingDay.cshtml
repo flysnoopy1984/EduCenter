@@ -5,7 +5,7 @@
     Layout = "~/Pages/Shared/_EduMainPCWeb.cshtml";
 }
 @section navBar{
-    <li><a href="/Home">主页</a></li>
+    <li><a href="/WebBackend/Home">主页</a></li>
 }
 
 @*<link href="~/css/Plugs/LoadingIcon.css" rel="stylesheet" />*@
@@ -15,92 +15,94 @@
 <script type="text/javascript" src="~/lib/iconfont.js"></script>
 <script src="~/js/WebBackEnd/Tec/CoursingDay.js"></script>
 <style type="text/css">
-.MainContainer {
-    display: flex;
-    flex-direction: column;
-}
+    .MainContainer {
+        display: flex;
+        flex-direction: column;
+    }
 
-.MainContainer .DataFilterBar {
-    display: flex;
-    height: 34px;
-    line-height: 34px;
-    width: 450px;
-    justify-content: space-around;
-    margin-bottom: 20px;
-}
+        .MainContainer .DataFilterBar {
+            display: flex;
+            height: 34px;
+            line-height: 34px;
+            width: 450px;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
 
-.MainContainer .DataFilterBar div {
-    display: flex;
-    justify-content: space-around;
-   
-}
+            .MainContainer .DataFilterBar div {
+                display: flex;
+                justify-content: space-around;
+            }
 
-.MainContainer .DataFilterBar div #selDate{
-    text-align:left;
-    width:120px;
-}
+                .MainContainer .DataFilterBar div #selDate {
+                    text-align: left;
+                    width: 120px;
+                }
 
-.MainContainer .DataFilterBar div #selTecCode{
-    text-align:left;
-    width:120px;
-}
+                .MainContainer .DataFilterBar div #selTecCode {
+                    text-align: left;
+                    width: 120px;
+                }
 
-.MainContainer .DataContent{
-    display: flex;
-    margin-bottom:50px;
-}
-.MainContainer .CourseArea{
-    flex-grow:1
-}
-.MainContainer .CourseArea #CourseTable{
-    width:100%;
-}
-.MainContainer .CourseArea #CourseTable tr th{
-    height:28px;
-    line-height:28px;
-    border:1px solid #808080;
-    text-align:center;
-    
-}
+        .MainContainer .DataContent {
+            display: flex;
+            margin-bottom: 50px;
+        }
 
-.MainContainer .CourseArea #CourseTable tr td{
-    height:100px;
-    border:1px solid #808080;
-    padding:8px;
+        .MainContainer .CourseArea {
+            flex-grow: 1
+        }
 
-}
-.MainContainer .CourseArea #CourseTable tr td .CellContainer{
-    height:100%;
-}
+            .MainContainer .CourseArea #CourseTable {
+                width: 100%;
+            }
 
-.MainContainer .CourseArea #CourseTable tr td .CellContainer .CellOneCourse{
-    display:flex;
-   justify-content: space-evenly;
-   padding-bottom:5px;
-    width:100%;
-    cursor:pointer;
-}
+                .MainContainer .CourseArea #CourseTable tr th {
+                    height: 28px;
+                    line-height: 28px;
+                    border: 1px solid #808080;
+                    text-align: center;
+                }
 
-.MainContainer .UserArea{
-    flex-grow:8;
-    margin-left:20px;
-  
-}
-.MainContainer .UserArea #UserTable{
-    width:80%;
-}
-.MainContainer .UserArea #UserTable tr th{
-    height:28px;
-    line-height:28px;
-    border:1px solid #808080;
-    text-align:center;
-}
+                .MainContainer .CourseArea #CourseTable tr td {
+                    height: 100px;
+                    border: 1px solid #808080;
+                    padding: 8px;
+                }
 
-.MainContainer .UserArea #UserTable tr td{
-    height:30px;
-    border:1px solid #808080;
-    padding:8px;
-}
+                    .MainContainer .CourseArea #CourseTable tr td .CellContainer {
+                        height: 100%;
+                    }
+
+                        .MainContainer .CourseArea #CourseTable tr td .CellContainer .CellOneCourse {
+                            display: flex;
+                            justify-content: space-evenly;
+                            padding-bottom: 5px;
+                            width: 100%;
+                            cursor: pointer;
+                        }
+
+        .MainContainer .UserArea {
+            flex-grow: 8;
+            margin-left: 20px;
+        }
+
+            .MainContainer .UserArea #UserTable {
+                width: 80%;
+            }
+
+                .MainContainer .UserArea #UserTable tr th {
+                    height: 28px;
+                    line-height: 28px;
+                    border: 1px solid #808080;
+                    text-align: center;
+                }
+
+                .MainContainer .UserArea #UserTable tr td {
+                    height: 30px;
+                    border: 1px solid #808080;
+                    padding: 8px;
+                }
 </style>
 
 <style type="text/css">
@@ -127,13 +129,13 @@
     <div class="DataFilterBar">
         <div style="width:280px">
             @*<svg class="btnIcon" aria-hidden="true" onclick="AddDay();" style="margin-top:2px;">
-                <use xlink:href="#icon-btnright"></use>
-            </svg>*@
+                    <use xlink:href="#icon-btnright"></use>
+                </svg>*@
             <label>日期：</label>
             <input type="button" class="form-control" id="selDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
             @*<svg class="btnIcon" aria-hidden="true" onclick="DelDay();">
-                <use xlink:href="#icon-btnleft"></use>
-            </svg>*@
+                    <use xlink:href="#icon-btnleft"></use>
+                </svg>*@
         </div>
         <div>
             <label>老师：</label>
@@ -160,7 +162,7 @@
                         <td>
                             <div class="CellContainer" lesson="@time.Lesson">
                                 @*<div class="CellOneCourse"><div>[美术-初级]</div> <div>李老师</div> <div>*请假*</div></div>
-                                <div class="CellOneCourse"><div>[美术-初级]</div> <div>李老师</div> <div>*请假*</div></div>*@
+                                    <div class="CellOneCourse"><div>[美术-初级]</div> <div>李老师</div> <div>*请假*</div></div>*@
 
                             </div>
                         </td>
@@ -176,7 +178,7 @@
                     <th>用户状态</th>
                     <th>签到时间</th>
                 </tr>
-              
+
             </table>
         </div>
     </div>
@@ -194,5 +196,5 @@
             <td class="SignDate"></td>
         </tr>
     </table>
-  
+
 </div>
