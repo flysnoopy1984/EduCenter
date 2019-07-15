@@ -209,9 +209,26 @@ namespace EduCenterWeb.Pages.WX
             {
                 case "intro_100":
                     IntroduceYunYi();
-                    
+                    break;
+                case "ApplyTrial":
+                    menu_ApplyTrial();
+                    break;
+                case "SalesInvite":
+                    menu_SalesInvite();
                     break;
             }
+        }
+
+        private void menu_ApplyTrial()
+        {
+            string openId = _wxMessage.FromUserName;
+            HttpContext.Response.Redirect($"/User/Login?handler=LoginTransfer&openId={openId}&toPage=/User/ApplyTrial");
+        }
+
+        private void menu_SalesInvite()
+        {
+            string openId = _wxMessage.FromUserName;
+            HttpContext.Response.Redirect($"/User/Login?handler=LoginTransfer&openId={openId}&toPage=/Sales/Invite");
         }
 
         private void IntroduceYunYi()

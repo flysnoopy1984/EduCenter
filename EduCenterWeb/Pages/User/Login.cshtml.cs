@@ -54,7 +54,7 @@ namespace EduCenterWeb.Pages.User
                 WXLoginCallBack(ui);
                 if(!string.IsNullOrEmpty(toPage))
                 {
-                    HttpContext.Response.Redirect("/User/"+ toPage);
+                    HttpContext.Response.Redirect(toPage);
                 }
             }
             else

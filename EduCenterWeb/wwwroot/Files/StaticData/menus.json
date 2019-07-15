@@ -4,9 +4,9 @@
       "name":"云艺大厅",
       "sub_button": [
         {
-          "type": "view",
+          "type": "click",
           "name": "我要试听",
-          "url": "http://edu.iqianba.cn/User/ApplyTrial"
+          "key": "ApplyTrial"
         },
         {
           "type": "view",
@@ -34,9 +34,9 @@
       "name": "我的云艺",
       "sub_button": [
         {
-          "type": "view",
+          "type": "click",
           "name": "邀请码",
-          "url": "http://edu.iqianba.cn/Sales/Invite"
+          "key": "SalesInvite"
         }
        
       ]
