@@ -68,6 +68,46 @@ namespace EduCenterWeb.Pages.User
             }
         }
 
+        public void OnGetLoginTransfer2(string toPage)
+        {
+            if (!string.IsNullOrEmpty(HttpContext.Request.Query["code"]))
+            {
+                string code = HttpContext.Request.Query["code"];
+                var accessToken = WXApi.GetOAuth2AccessTokenFromCode(code);
+                if (!string.IsNullOrEmpty(accessToken.openid))
+                {
+                    var ui = _UserSrv.GetUserInfo(accessToken.openid);
+                    if (ui != null)
+                    {
+                        WXLoginCallBack(ui);
+                        if (!string.IsNullOrEmpty(toPage))
+                        {
+                            HttpContext.Response.Redirect(toPage);
+                        }
+                    }
+                    else
+                    {
+                        HttpContext.Response.Redirect("/User/Login");
+                    }
+                }    
+            }
+            else
+            {
+                var redirect_uri = System.Web.HttpUtility.UrlEncode($"http://edu.iqianba.cn/User/Login?handler=LoginTransfer2&toPage={toPage}", System.Text.Encoding.UTF8);
+                WxPayData data = new WxPayData();
+                data.SetValue("appid", WxConfig.APPID);
+                data.SetValue("redirect_uri", redirect_uri);
+                data.SetValue("response_type", "code");
+                data.SetValue("scope", "snsapi_base");
+                data.SetValue("state", "1" + "#wechat_redirect");
+                string url = "https://open.weixin.qq.com/connect/oauth2/authorize?" + data.ToUrl();
+
+                HttpContext.Response.Redirect(url);
+            }
+
+         
+        }
+
         public IActionResult OnPostUserLogin()
         {
             ResultNormal result = new ResultNormal();
@@ -116,6 +156,12 @@ namespace EduCenterWeb.Pages.User
             return new JsonResult(result);
         }
 
+        private void GetUserOpenId(string toPage)
+        {
+         
+          
+        }
+
         private void LoginWX()
         {
             if (!string.IsNullOrEmpty(HttpContext.Request.Query["code"]))
@@ -141,11 +187,9 @@ namespace EduCenterWeb.Pages.User
                     data.SetValue("redirect_uri", redirect_uri);
                     data.SetValue("response_type", "code");
                     data.SetValue("scope", "snsapi_userinfo");
-
                     data.SetValue("state", "1" + "#wechat_redirect");
                     string url = "https://open.weixin.qq.com/connect/oauth2/authorize?" + data.ToUrl();
-                  //  HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-                 //  NLogHelper.InfoTxt($"LoginWX 请求:{url}");
+             
                     HttpContext.Response.Redirect(url);
                 }
                 catch(Exception ex)

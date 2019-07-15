@@ -132,6 +132,8 @@ namespace EduCenterCore.WX
             return wxUser;
         }
 
+        
+
         #region 发送模板消息
 
         public static ResultNormal SendTemplateMessage<T>(T data) where T:class
