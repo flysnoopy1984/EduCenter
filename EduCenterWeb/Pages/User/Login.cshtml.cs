@@ -44,7 +44,12 @@ namespace EduCenterWeb.Pages.User
 
         }
 
-        //自定登陆，并跳转
+        /// <summary>
+        /// 自定登陆，并跳转
+        /// WX试听课提醒，直接跳转
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <param name="toPage"></param>
         public void OnGetLoginTransfer(string openId,string toPage)
         {
            

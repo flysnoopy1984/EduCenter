@@ -1,8 +1,12 @@
 ﻿$(function () {
     var urlLogin = "/user/Login?handler=UserLogin";
+    //微信菜单会传值过来
+    var Transfer;
     Init = function () {
         $("#btnWxLogin").on("click", UserLogin);
         $("#btnLogin").on("click", UserLogin);
+
+
       
     }
 
