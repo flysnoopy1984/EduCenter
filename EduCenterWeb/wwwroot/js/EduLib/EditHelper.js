@@ -177,6 +177,10 @@
       
     };
 
+    aq = function (url, data, handler, AfterError, errorShowSec) {
+        callAjax_Query(url, data, handler,"", AfterError, errorShowSec);
+    }
+
     callAjax_Query = function (url, data, handler, msg,AfterError,errorShowSec) {
         //if (msg == undefined) msg = "查询中.."
         ShowBlock(msg);

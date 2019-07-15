@@ -90,7 +90,7 @@ namespace EduCenterSrv
         /// 添加或更新微信用户，微信相关字段总是更新
         /// </summary>
         /// <param name="wxUser"></param>
-        public EUserInfo AddOrUpdateFromWXUser(WXUserInfo wxUser)
+        public EUserInfo AddOrUpdateFromWXUser(WXUserInfo wxUser,bool isSave = true)
         {
 
             EUserInfo user = _dbContext.DBUserInfo
@@ -108,7 +108,7 @@ namespace EduCenterSrv
             if(user.Id>0)
                 _dbContext.DBUserInfo.Update(user);
         
-
+            if(isSave)
             _dbContext.SaveChanges();
 
             return user;
@@ -124,6 +124,11 @@ namespace EduCenterSrv
         public EUserInfo GetUserInfo(string openId)
         {
             return _dbContext.DBUserInfo.Where(a => a.OpenId == openId).FirstOrDefault();
+        }
+
+        public bool IsExistUser(string openId)
+        {
+            return _dbContext.DBUserInfo.Where(a => a.OpenId == openId).Count()>0;
         }
 
        

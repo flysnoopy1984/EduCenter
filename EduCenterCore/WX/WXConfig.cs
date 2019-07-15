@@ -58,6 +58,7 @@ namespace EduCenterCore.WX
         public const string QR_Invite = "QRInvite";
         public const string QR_Invite_TecPre = QR_Invite+"_Tec";
 
-       
+        public const string QR_Invite_User = QR_Invite + "_User";
+
     }
 }

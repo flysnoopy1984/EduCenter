@@ -38,6 +38,7 @@ namespace EduCenterSrv.Common
         {
             GlobalSrv srv = new GlobalSrv(db);
 
+
             _CourseDateRange = srv.GetCourseDateRangeList();
           
         }

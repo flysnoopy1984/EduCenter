@@ -1,15 +1,19 @@
-﻿using EduCenterCore.Common.Helper;
+﻿using System;
+
+using EduCenterCore.Common.Helper;
 using EduCenterCore.EduFramework;
+using EduCenterCore.WX;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterModel.Order;
 using EduCenterModel.Teacher;
 using EduCenterModel.User;
+using EduCenterModel.WX;
 using EduCenterSrv.Common;
 using EduCenterSrv.DataBase;
 using Microsoft.EntityFrameworkCore;
-using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -419,7 +423,26 @@ namespace EduCenterSrv
             return 0;
 
         }
-        #endregion 
+        #endregion
+
+        #region 邀请用户
+        public EUserInfo InvitedUserComing(WXMessage wxMessage,string ownOpenId)
+        {
+            UserSrv userSrv = new UserSrv(_dbContext);
+            SalesSrv salesSrv = new SalesSrv(_dbContext);
+            //如果是老用户，不能绑定邀请
+            if (!userSrv.IsExistUser(wxMessage.FromUserName))
+                salesSrv.BindUser(ownOpenId, wxMessage.FromUserName);
+
+            var wxUser = WXApi.GetWXUserInfo(wxMessage.FromUserName);
+            EUserInfo user = userSrv.AddOrUpdateFromWXUser(wxUser, false);
+
+            _dbContext.SaveChanges();
+            return user;
+
+        }
+        #endregion
+
 
 
 

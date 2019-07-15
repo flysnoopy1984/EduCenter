@@ -19,7 +19,7 @@ namespace EduCenterModel.Course
 
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         [MaxLength(20)]

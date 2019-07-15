@@ -11,7 +11,7 @@ namespace EduCenterModel.Teacher
     public class ETecInfo: ECMasterDataModel
     {
        
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         [Key]

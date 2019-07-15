@@ -1,14 +1,12 @@
 ﻿using EduCenterModel.Common;
 using EduCenterModel.Course;
+using EduCenterModel.QR;
 using EduCenterModel.Order;
 using EduCenterModel.Teacher;
 using EduCenterModel.User;
 using EduCenterSrv.SMS;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using EduCenterModel.Sales;
 
 namespace EduCenterSrv.DataBase
 {
@@ -52,17 +50,17 @@ namespace EduCenterSrv.DataBase
 
         public DbSet<EOrderLine> DBOrderLine { get; set; }
 
-        //public  DbSet<EUserCourseTime> DBUserCourseTime { get; set; }
-
-        //public DbSet<EUserCourseTimeTrans> DBUserCourseTimeTrans { get; set; }
-
+     
         public DbSet<ETrialLog> DBTrialLog { get; set; }
 
         public DbSet<EHoliday> DBHoliday { get; set; }
 
-        public DbSet<ETecOffDay> DBTecOffDay { get; set; }
-
+     
         public DbSet<ECourseDateRange> DBCourseDateRange { get; set; }
+
+        public DbSet<EQRInvite> DBQRInvite { get; set; }
+
+        public DbSet<EInviteLog> DBInviteLog { get; set; }
 
         //SMS Begin
         public DbSet<ESMSLog> DBSMSLog { get; set; }
@@ -72,5 +70,7 @@ namespace EduCenterSrv.DataBase
         //SMS End
 
         
+
+
     }
 }

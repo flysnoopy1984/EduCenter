@@ -4,14 +4,16 @@ using EduCenterSrv.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EduCenterWeb.Migrations
 {
     [DbContext(typeof(EduDbContext))]
-    partial class EduDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190715054515_0715-4")]
+    partial class _07154
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -314,27 +316,6 @@ namespace EduCenterWeb.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("QRInvite");
-                });
-
-            modelBuilder.Entity("EduCenterModel.Sales.EInviteLog", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("InviteStatus");
-
-                    b.Property<DateTime>("InvitedDateTime");
-
-                    b.Property<string>("InvitedOpenId")
-                        .HasMaxLength(32);
-
-                    b.Property<string>("OwnOpenId")
-                        .HasMaxLength(32);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("InviteLog");
                 });
 
             modelBuilder.Entity("EduCenterModel.Teacher.ETecCourse", b =>

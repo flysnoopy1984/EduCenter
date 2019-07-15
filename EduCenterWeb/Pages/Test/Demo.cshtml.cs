@@ -71,6 +71,8 @@ namespace EduCenterWeb.Pages.Test
                 AccessToken accessToken = WXApi.getAccessToken();
                 WXQRResult result = WXApi.getQR(WxConfig.QR_Invite_TecPre, accessToken.access_token);
                 WXApi.DownLoadWXQR(result.ticket, qrDownFilePath);
+
+
                 QRHelper.AddBKForQR(bkFilePath, qrDownFilePath, finalFilePath);
             }
             catch(Exception ex)

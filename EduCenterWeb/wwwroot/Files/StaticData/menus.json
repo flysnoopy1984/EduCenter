@@ -16,13 +16,29 @@
       ]
     },
     {
-      "name":"云艺书院",
+      "name": "云艺书院",
       "sub_button": [
         {
-          "type":"view",
-          "name":"进入书院",
-          "url":"http://edu.iqianba.cn/User/MyCourse"
+          "type": "view",
+          "name": "进入书院",
+          "url": "http://edu.iqianba.cn/User/MyCourse"
+        },
+        {
+          "type": "view",
+          "name": "用户手册",
+          "url": "http://mp.weixin.qq.com/s?__biz=MzU3NDk2NjE1MQ==&mid=100000028&idx=1&sn=4146ed60a3d7d93038b1499bb53926ee&chksm=7d2b11f44a5c98e278a2cf6604b6b703d30f7ad1a06a9a45507b3c912128df49723c9f35646c#"
         }
+      ]
+    },
+    {
+      "name": "我的云艺",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "邀请码",
+          "url": "http://edu.iqianba.cn/Sales/Invite"
+        }
+       
       ]
     }
   ]

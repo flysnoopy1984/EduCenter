@@ -4,14 +4,16 @@ using EduCenterSrv.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EduCenterWeb.Migrations
 {
     [DbContext(typeof(EduDbContext))]
-    partial class EduDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190715042559_0715-3")]
+    partial class _07153
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -292,10 +294,7 @@ namespace EduCenterWeb.Migrations
 
                     b.Property<DateTime>("CreateDateTime");
 
-                    b.Property<string>("FileWithLogoPath")
-                        .HasMaxLength(128);
-
-                    b.Property<string>("FinalFilePath")
+                    b.Property<string>("FilePath")
                         .HasMaxLength(128);
 
                     b.Property<int>("InviteQRType");
@@ -314,27 +313,6 @@ namespace EduCenterWeb.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("QRInvite");
-                });
-
-            modelBuilder.Entity("EduCenterModel.Sales.EInviteLog", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("InviteStatus");
-
-                    b.Property<DateTime>("InvitedDateTime");
-
-                    b.Property<string>("InvitedOpenId")
-                        .HasMaxLength(32);
-
-                    b.Property<string>("OwnOpenId")
-                        .HasMaxLength(32);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("InviteLog");
                 });
 
             modelBuilder.Entity("EduCenterModel.Teacher.ETecCourse", b =>

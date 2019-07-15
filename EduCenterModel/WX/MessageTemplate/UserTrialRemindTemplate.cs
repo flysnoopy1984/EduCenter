@@ -33,7 +33,7 @@ namespace EduCenterModel.WX.MessageTemplate
             };
           
 
-            string url = WebUrl + $"&openid={toUserOpenId}&toPage=MyTrial";
+            string url = WebUrl + $"&openid={toUserOpenId}&toPage=/User/MyTrial";
 
             UserTrialRemindTemplate obj = base.InitObject(toUserOpenId, url, "r71THWj2pi0o5FeWVBfLlkgkkgAXq7A2um59w4QYVuA");
             obj.data = data;

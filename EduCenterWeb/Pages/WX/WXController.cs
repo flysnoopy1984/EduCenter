@@ -24,13 +24,15 @@ namespace EduCenterWeb.Pages.WX
 
         private TecSrv _TecSrv;
         private UserSrv _UserSrv;
+        private BusinessSrv _BusinessSrv;
 
 
 
-         public WXController(TecSrv TecSrv,UserSrv userSrv)
+         public WXController(TecSrv TecSrv,UserSrv userSrv, BusinessSrv businessSrv)
         {
             _TecSrv = TecSrv;
             _UserSrv = userSrv;
+            _BusinessSrv = businessSrv;
         }
         // GET: api/<controller>
         [HttpGet]
@@ -66,7 +68,7 @@ namespace EduCenterWeb.Pages.WX
                var memoryStream = new MemoryStream();
                Request.Body.CopyTo(memoryStream);
                string strXml = System.Text.Encoding.Default.GetString(memoryStream.ToArray());
-           //    NLogHelper.InfoTxt($"WXEntry Message:{strXml}");
+               NLogHelper.InfoTxt($"WXEntry Message:{strXml}");
 
                 if (!string.IsNullOrEmpty(strXml))
                 {
@@ -81,7 +83,7 @@ namespace EduCenterWeb.Pages.WX
                         //邀请码微信消息规则
                         if (_EventKey.StartsWith("qrscene_"))
                             _EventKey = _EventKey.Substring(8);
-                        //老师邀请码
+                        //邀请码
                         if (_EventKey.StartsWith(WxConfig.QR_Invite))
                             InviteQRHandler();
                         else
@@ -143,6 +145,13 @@ namespace EduCenterWeb.Pages.WX
                     _TecSrv.NewTecFromUser(user);
                     _ResultMsg = _wxMessage.toText(WXReplyContent.NewTec(user.Name));
                 }
+                else if (_EventKey.StartsWith(WxConfig.QR_Invite_User))
+                {
+                    var ownOpenId = _EventKey.Split("_")[2];
+                    var user = _BusinessSrv.InvitedUserComing(_wxMessage, ownOpenId);
+                 
+                    _ResultMsg = _wxMessage.toText(WXReplyContent.NewUserAdd(user.Name));
+                }
               
             }
             catch(Exception ex)
@@ -151,7 +160,7 @@ namespace EduCenterWeb.Pages.WX
             } 
         }
 
-       
+      
         /// <summary>
         /// 扫码
         /// </summary>

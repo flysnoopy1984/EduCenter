@@ -14,7 +14,7 @@ namespace EduCenterModel.User
     public class EUserAccount: ECBaseModel
     {
       
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Key]

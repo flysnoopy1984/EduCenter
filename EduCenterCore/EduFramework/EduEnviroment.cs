@@ -12,14 +12,28 @@ namespace EduCenterCore.EduFramework
         {
             _Enviroment = Enviroment;
         }
+      
         public static string DicPath_QRInviteTec
         {
             get { return _Enviroment.WebRootPath + @"\Files\QR\InviteTec\"; }
         }
+
+        public static string DicPath_QRInviteUser
+        {
+            get { return _Enviroment.WebRootPath + @"\Files\QR\InviteUser\"; }
+        }
+
+        public static string VirPath_QRInviteUser
+        {
+            get { return "/files/QR/InviteUser/"; }
+        }
+
         public static string DicPath_QR
         {
             get { return _Enviroment.WebRootPath + @"\Files\QR\"; }
         }
+       
+
         public static string DicPath_StaticData
         {
             get { return _Enviroment.WebRootPath + @"\Files\StaticData\"; }
@@ -28,6 +42,11 @@ namespace EduCenterCore.EduFramework
         public static string Menus_JsonFilePath
         {
             get { return _Enviroment.WebRootPath + @"\Files\StaticData\menus.json"; }
+        }
+
+        public static string GetQRInviteUserFilePath(string fileName)
+        {
+            return DicPath_QRInviteUser + fileName;
         }
 
         public static string GetQRInviteTecFilePath(string fileName)

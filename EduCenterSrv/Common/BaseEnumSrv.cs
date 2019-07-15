@@ -403,6 +403,20 @@ namespace EduCenterSrv.Common
             }
             return "";
         }
-     
+        public static string GetInviteStatusName(InviteStatus inviteStatus)
+        {
+            switch (inviteStatus)
+            {
+                case InviteStatus.BindPhone:
+                    return "手机已绑定";
+                case InviteStatus.Invited:
+                    return "邀请加入";
+                case InviteStatus.Paied:
+                    return "已支付";
+            }
+            return "";
+        }
+
+
     }
 }

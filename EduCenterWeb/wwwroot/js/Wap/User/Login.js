@@ -16,8 +16,7 @@
         if (res.IntMsg == 10)
             window.location.href = "/Teacher/DayCourse";
         else
-
-        window.location.href = "/User/Home";
+            window.location.href = "/User/Home";
       //  window.history.
     } 
 

@@ -37,7 +37,7 @@ namespace EduCenterWeb
             //    options.MinimumSameSitePolicy = SameSiteMode.None;
             //});
 
-
+        
             services.AddCors(op =>
             {
                 op.AddPolicy("any", builder =>
@@ -71,9 +71,9 @@ namespace EduCenterWeb
                       //  options.Conventions.AddPageRoute("/WebBackend/Login", "");
                      }); ;
 
-           
+
             services.AddDbContext<EduDbContext>(
-                op => op.UseSqlServer(Configuration.GetConnectionString("EduCenterDB"), 
+                op => op.UseSqlServer(Configuration.GetConnectionString("EduCenterDB"),
                 c => c.MigrationsAssembly("EduCenterWeb")
                 ));
 
@@ -84,6 +84,8 @@ namespace EduCenterWeb
             services.AddScoped<BusinessSrv>();
             services.AddScoped<BackendSrv>();
             services.AddScoped<EduCenterSrv.SMS.SMSSrv>();
+            services.AddScoped<SalesSrv>();
+           
         }
 
         public static void InitGlobalData(IApplicationBuilder applicationBuilder)
@@ -127,9 +129,9 @@ namespace EduCenterWeb
 
             app.UseSession();
             app.UseMvc();
-
-            InitGlobalData(app);
             StaticDataSrv.Init();
+            InitGlobalData(app);
+          
 
 
         
