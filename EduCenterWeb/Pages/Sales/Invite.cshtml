@@ -5,6 +5,7 @@
     Layout = "~/Pages/Shared/_EduMainApp.cshtml";
 }
 @Html.AntiForgeryToken()
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 <link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
 <script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
 <script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
@@ -14,16 +15,19 @@
     /*Lay Out*/
     .MainContent {
         background-image: url('/images/bk_applogin.png');
+       
         background-repeat: no-repeat;
         display: flex;
         flex-direction: column;
         width: 100%;
-        height: 100vh;
+      
+      height: 100vh;
+        align-items:center;
     }
     /* Login Area */
     .QRArea {
-        flex-grow: 4;
-     
+        /*flex-grow: 3;*/
+     height: 60%;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -34,6 +38,7 @@
     .LogArea {
         flex-grow: 6;
         text-align: center;
+        width:95%;
      /*background-color:#ff6a00;*/
     }
 
@@ -50,17 +55,27 @@
         /*border:solid 1px #808080;*/
     }
     #LogTable{
-        width:95%;
+        width:100%;
     }
     .SubTitle{
         height:28px;
         line-height:28px;
         border-radius:4px;
-        padding:4px;
-        background-color:#0094ff;
+        padding-left:4px;
+        padding-right:8px;
+        background-color:#fae685;
         display:flex;
         justify-content:space-between;
-        width:95%;
+        width:100%;
+        color:#663a00;
+        margin-bottom:5px;
+
+    }
+    .SharedButtons{
+        display:flex;
+        justify-content:space-around;
+        width:80%;
+        margin-bottom:10px;
     }
 </style>
 <div class="MainContent">
@@ -74,16 +89,24 @@
             <label class="text-primary">我的邀请码</label>
             <img class="QRImg" src="@Model.QRInvite.FileWithLogoPath" />
 
+
         }
 
     </div>
+    @*@if (Model.QRInvite != null)
+    {
+        <div class="SharedButtons">
+            <input id="btnShareToPerson" type="button" class="btn btn-warning" value="分享给朋友" />
+            <input id="btnShareToGroup" type="button" class="btn btn-success" value="分享朋友圈" />
+        </div>
+    }*@
 
     @if (Model.InviteLog != null && Model.InviteLog.Count > 0)
     {
         <div class="LogArea">
             <div class="SubTitle">
                 <div>
-                    我的邀请
+                    最近邀请
                 </div>
                 <div><a onclick="ShowLogDetail()">[更多]</a></div>
             </div>
@@ -93,7 +116,14 @@
                     <th>邀请时间</th>
                     <th>状态</th>
                 </tr>
-                <tr></tr>
+                @foreach (var log in Model.InviteLog)
+                {
+                    <tr>
+                        <td><div class="TextNoWrap2" style="width:120px;">@log.InvitedWxName</div></td>
+                        <td width="30%">@log.InvitedDateTimeStr</td>
+                        <td width="30%">@log.InviteStatusName</td>
+                    </tr>
+                }
             </table>
         </div>
     }

@@ -22,10 +22,12 @@ namespace EduCenterWeb.Pages.User
     {
         private UserSrv _UserSrv;
         private TecSrv _TecSrv;
-        public LoginModel(UserSrv userSrv, TecSrv tecSrv)
+        private BusinessSrv _BusinessSrv;
+        public LoginModel(UserSrv userSrv, TecSrv tecSrv,BusinessSrv businessSrv)
         {
             _UserSrv = userSrv;
             _TecSrv = tecSrv;
+            _BusinessSrv = businessSrv;
         }
         public void OnGet()
         {
@@ -37,6 +39,14 @@ namespace EduCenterWeb.Pages.User
                 {
                     ClearUserSession();
                 }
+                //else if(act == "Invite")
+                //{
+                //    string ownOpenId = HttpContext.Request.Query["OwnOpenId"];
+                //    if(!string.IsNullOrEmpty(ownOpenId))
+                //    {
+                //      //  WXApi.getAccessToken();
+                //    }
+                //}
             }
 
             if (!EduConfig.IsTest)
@@ -70,44 +80,50 @@ namespace EduCenterWeb.Pages.User
 
         public void OnGetLoginTransfer2(string toPage)
         {
-            if (!string.IsNullOrEmpty(HttpContext.Request.Query["code"]))
-            {
-                string code = HttpContext.Request.Query["code"];
-                var accessToken = WXApi.GetOAuth2AccessTokenFromCode(code);
-                if (!string.IsNullOrEmpty(accessToken.openid))
-                {
-                    var ui = _UserSrv.GetUserInfo(accessToken.openid);
-                    if (ui != null)
-                    {
-                        WXLoginCallBack(ui);
-                        if (!string.IsNullOrEmpty(toPage))
-                        {
-                            HttpContext.Response.Redirect(toPage);
-                        }
-                    }
-                    else
-                    {
-                        HttpContext.Response.Redirect("/User/Login");
-                    }
-                }    
-            }
-            else
-            {
-                var redirect_uri = System.Web.HttpUtility.UrlEncode($"http://edu.iqianba.cn/User/Login?handler=LoginTransfer2&toPage={toPage}", System.Text.Encoding.UTF8);
-                WxPayData data = new WxPayData();
-                data.SetValue("appid", WxConfig.APPID);
-                data.SetValue("redirect_uri", redirect_uri);
-                data.SetValue("response_type", "code");
-                data.SetValue("scope", "snsapi_base");
-                data.SetValue("state", "1" + "#wechat_redirect");
-                string url = "https://open.weixin.qq.com/connect/oauth2/authorize?" + data.ToUrl();
+            //if (!string.IsNullOrEmpty(HttpContext.Request.Query["code"]))
+            //{
+            //    string code = HttpContext.Request.Query["code"];
+            //    var accessToken = WXApi.GetOAuth2AccessTokenFromCode(code);
 
-                HttpContext.Response.Redirect(url);
-            }
+            //    if (!string.IsNullOrEmpty(accessToken.openid))
+            //    {
+            //        var ui = _UserSrv.GetUserInfo(accessToken.openid);
 
-         
+            //        if (ui != null)
+            //        {
+            //            WXLoginCallBack(ui);
+            //            if (!string.IsNullOrEmpty(toPage))
+            //            {
+            //                HttpContext.Response.Redirect(toPage);
+            //            }
+            //        }
+            //        else
+            //        {
+            //            HttpContext.Response.Redirect("/User/Login");
+            //        }
+            //    }    
+            //}
+            //else
+            //{
+            //    var redirect_uri = System.Web.HttpUtility.UrlEncode($"http://edu.iqianba.cn/User/Login?handler=LoginTransfer2&toPage={toPage}", System.Text.Encoding.UTF8);
+            //    WxPayData data = new WxPayData();
+            //    data.SetValue("appid", WxConfig.APPID);
+            //    data.SetValue("redirect_uri", redirect_uri);
+            //    data.SetValue("response_type", "code");
+            //    data.SetValue("scope", "snsapi_base");
+            //    data.SetValue("state", "1" + "#wechat_redirect");
+            //    string url = "https://open.weixin.qq.com/connect/oauth2/authorize?" + data.ToUrl();
+
+            //    HttpContext.Response.Redirect(url);
+            //}
+
+            LoginWX(toPage);
         }
 
+        /// <summary>
+        /// 页面登陆按钮点击
+        /// </summary>
+        /// <returns></returns>
         public IActionResult OnPostUserLogin()
         {
             ResultNormal result = new ResultNormal();
@@ -124,7 +140,7 @@ namespace EduCenterWeb.Pages.User
                 }
                 else
                 {
-                    //oh6cV1QhPLj6XPesheYUQ4XtuGTs
+                    //oh6cV1ZcN2GzbZpaYELK8Uv3a2rU
                     var ui = _UserSrv.GetUserInfo("oh6cV1QhPLj6XPesheYUQ4XtuGTs");
                     WXLoginCallBack(ui);
                     userSession = GetUserSession(false);
@@ -156,32 +172,57 @@ namespace EduCenterWeb.Pages.User
             return new JsonResult(result);
         }
 
-        private void GetUserOpenId(string toPage)
+     
+        private EUserInfo TryInvitedUserComing(string OpenId, WXUserInfo wXUser)
         {
-         
-          
+            var act = HttpContext.Request.Query["act"];
+            EUserInfo ui = null;
+            if (act == "Invite")
+            {
+                string ownOpenId = HttpContext.Request.Query["OwnOpenId"];
+                if(!string.IsNullOrEmpty(ownOpenId))
+                {
+                    ui = _BusinessSrv.InvitedUserComing(OpenId, ownOpenId, wXUser);
+                   
+                }
+            }
+            return ui;
         }
 
-        private void LoginWX()
+        private void LoginWX(string toPage=null)
         {
             if (!string.IsNullOrEmpty(HttpContext.Request.Query["code"]))
             {
                 //获取code码，以获取openid和access_token
                 string code = HttpContext.Request.Query["code"];
+              //  NLogHelper.InfoTxt($"LoginWX-Query:{HttpContext.Request.QueryString}");
                 var accessToken = WXApi.GetOAuth2AccessTokenFromCode(code);
                 if (!string.IsNullOrEmpty(accessToken.openid))
                 {
                     string url_userInfo = string.Format("https://api.weixin.qq.com/sns/userinfo?access_token={0}&openid={1}&lang=zh_CN", accessToken.access_token, accessToken.openid);
                     WXUserInfo wxUser = HttpHelper.Get<WXUserInfo>(url_userInfo);
-                    EUserInfo ui = _UserSrv.AddOrUpdateFromWXUser(wxUser);
+
+                    EUserInfo ui = TryInvitedUserComing(accessToken.openid, wxUser);
+                   if (ui== null)
+                   {
+                        ui = _UserSrv.AddOrUpdateFromWXUser(wxUser);
+                   }
+
                     WXLoginCallBack(ui);
+
+                    if (!string.IsNullOrEmpty(toPage))
+                    {
+                        HttpContext.Response.Redirect(toPage);
+                    }
+
                 }
             }
             else
             {
                 try
                 {
-                    var redirect_uri = System.Web.HttpUtility.UrlEncode("http://edu.iqianba.cn/User/Login", System.Text.Encoding.UTF8);
+                    var reUrl = $"http://edu.iqianba.cn/User/Login{Request.QueryString}";
+                    var redirect_uri = System.Web.HttpUtility.UrlEncode(reUrl, System.Text.Encoding.UTF8);
                     WxPayData data = new WxPayData();
                     data.SetValue("appid", WxConfig.APPID);
                     data.SetValue("redirect_uri", redirect_uri);

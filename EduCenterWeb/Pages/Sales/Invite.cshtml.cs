@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EduCenterCore.Common.Helper;
+using EduCenterCore.WX;
 using EduCenterModel.Common;
 using EduCenterModel.QR;
 using EduCenterModel.Sales.Result;
@@ -31,11 +32,27 @@ namespace EduCenterWeb.Pages.Sales
             {
                 QRInvite = _SalesSrv.GetQRInvite(us.OpenId);
 
-                int totalcount;
-                InviteLog = _SalesSrv.QueryInviteLog(us.OpenId, out totalcount, 1, 5);
+                if (QRInvite!=null)
+                {
+                    int totalcount;
+                    InviteLog = _SalesSrv.QueryInviteLog(us.OpenId, out totalcount, 1, 5);
+
+                 //   InitWxConfig();
+                }
+                 
+                
             }
                 
         }
+
+        //private void InitWxConfig()
+        //{
+        //    var url = HttpContext.Request.Host+"/Sales/Invite";
+        //    var p = WXApi.eduGetJsConfig(url);
+
+        //}
+
+     
 
         public IActionResult OnPostGenerateQR()
         {

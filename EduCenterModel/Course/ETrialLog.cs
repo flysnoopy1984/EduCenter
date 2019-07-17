@@ -46,6 +46,10 @@ namespace EduCenterModel.Course
 
         public TrialLogStatus TrialLogStatus { get; set; }
 
+        //[MaxLength(32)]
+        //public string SalesOpenId { get; set; }
+
+
         [MaxLength(400)]
         /// <summary>
         /// 用户评论

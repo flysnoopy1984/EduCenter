@@ -18,6 +18,8 @@ namespace EduCenterModel.BaseEnum
 
         Assist = 30,
 
+        //Manager =50,
+
         Admin = 100,
 
     }

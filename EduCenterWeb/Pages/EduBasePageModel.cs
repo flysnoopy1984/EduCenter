@@ -17,6 +17,10 @@ namespace EduCenterWeb.Pages
 {
     public class EduBasePageModel: PageModel
     {
+        public EduBasePageModel()
+        {
+           
+        }
         public string jsVersion
         {
             get { return EduConfig.Version; }
@@ -34,12 +38,10 @@ namespace EduCenterWeb.Pages
 
             }
             return null;
-
         }
 
         public override void OnPageHandlerExecuting(PageHandlerExecutingContext context)
         {
-           
             base.OnPageHandlerExecuting(context);
             string json = HttpContext.Session.GetString(EduConstant.BackendSessionKey);
             if (string.IsNullOrEmpty(json))
@@ -51,6 +53,12 @@ namespace EduCenterWeb.Pages
                 var session = JsonConvert.DeserializeObject<BackendSession>(json);
                 if((int)session.UserRole <30)
                     context.HttpContext.Response.Redirect("/WebBackend/Login");
+            }
+
+            var us = GetBackendSession(false);
+            if (us != null)
+            {
+                this.ViewData["UserRole"] = (int)us.UserRole;
             }
         }
     }

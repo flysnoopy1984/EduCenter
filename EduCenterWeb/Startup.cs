@@ -50,9 +50,10 @@ namespace EduCenterWeb
             });
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
-            services.AddSession(o=> 
+            services.AddSession(options => 
             {
-                o.IdleTimeout = TimeSpan.FromHours(1);
+                options.IdleTimeout = TimeSpan.FromDays(30);
+            
             });
 
 

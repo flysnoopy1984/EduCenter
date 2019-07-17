@@ -5,9 +5,9 @@
 
         callAjax_Query(InitPageUrl, {}, InitPageCallBack, "", function (res) {
             if (res.IntMsg == -1)
-                window.location.href = "Login";
+                window.location.href = "/User/Login";
             else if (res.IntMsg == -2)
-                window.location.href = "Home";
+                window.location.href = "/User/BuyCourseTime";
         });
 
     };

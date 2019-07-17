@@ -4,16 +4,42 @@
     var pageSize = 15;
     var QueryUserListUrl = "List?handler=QueryUserList";
     var UpdateUserUrl = "List?handler=UpdateUser";
-
+   
     Init = function () {
+
+       
 
         layui.use('laypage', function () {
             glaypage = layui.laypage;
         });
 
         $("#btnQuery").on("click", btnQuery);
+        $("#btnQueryReset").on("click", resetQuery);
+        //从试听课过来的action
+        var act = GetUrlParam("act");
+        if (act == "q") {
+            var openId = GetUrlParam("openId");
+            QueryUserSingle(openId);
+        }
+        else
+            btnQuery();
+    }
 
+    resetQuery = function () {
+        $("#selMemberType").val("-1");
+        $("#selUserRole").val("-1");
+        $("#BabyName").val("");
+        $("#UserName").val("");
         btnQuery();
+    }
+    //只查询某个OpenId的用户
+    QueryUserSingle = function (openId) {
+        var data = {
+            "userOpenId": openId,
+            "pageIndex": pageIndex,
+            "pageSize": pageSize
+        };
+        callAjax_Query(QueryUserListUrl, data, QueryUserListCallBack);
     }
     btnQuery = function () {
 
@@ -22,8 +48,14 @@
     }
     QueryUserList = function () {
         var UserName = $("#UserName").val();
+        var BabyName = $("#BabyName").val();
+        var selUserRole = $("#selUserRole").val();
+        var selMemberType = $("#selMemberType").val();
         var data = {
             "userName": UserName,
+            "babyName": BabyName,
+            "userRole": selUserRole,
+            "memberType": selMemberType,
             "pageIndex": pageIndex,
             "pageSize": pageSize
 
@@ -40,8 +72,12 @@
 
         $.each(dataList, function (i) {
             var data = dataList[i];
-
+           
             var tr = $("#HideData #DataTable tr").clone();
+
+            if (data.UserRole == 1) {
+                tr.addClass("MemberLine");
+            }
            
             tr.attr("openId", data.userOpenId);
             tr.find(".WxName").text(data.WxName);
@@ -54,7 +90,9 @@
             tr.find(".RemainTimeSummer").val(data.RemainTimeSummer);
             tr.find(".RemainTimeWinter").val(data.RemainTimeWinter);
             tr.find(".UserRole").val(data.UserRole);
-            
+            tr.find(".wxJoinDateTime").text(data.WXJoinDateTime);
+
+            tr.find(".SalesName").text(data.SalesName);
 
             var DeadLineStd = tr.find(".DeadLineStd");
             DeadLineStd.attr("id", "showDate" + i);
@@ -73,9 +111,7 @@
                 root.after(tr);
                 root = tr;
             }
-                
-                
-
+            
             laydate.render({
                 elem: "#showDate" + i,
                 eventElem: "#btnDate" + i,

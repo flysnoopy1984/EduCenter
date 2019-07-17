@@ -42,7 +42,7 @@ namespace EduCenterWeb.Pages.User
                     {
                         c.UserOpenId = us.OpenId;
                     }
-                    _UserSrv.SaveChild(list);
+                    _UserSrv.SaveChildList(list);
                 }
                 else
                 {

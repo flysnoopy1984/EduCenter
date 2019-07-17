@@ -28,7 +28,21 @@ namespace EduCenterModel.Course.Result
         public string WXName { get; set; }
         public string UserRealName { get; set; }
 
+        public string SalesOpenId { get; set; }
+        public string SalesName { get; set; }
 
+        public void InitFromETrialLog(ETrialLog obj)
+        {
+            this.TecCode = obj.TecCode;
+            this.TecName = obj.TecName;
+            this.TrialDateTime = obj.TrialDateTime;
+            this.ApplyDateTime = obj.ApplyDateTime;
+            this.Lesson = obj.Lesson;
+            this.OpenId = obj.OpenId;
+            this.CourseType = obj.CourseType;
+            this.CourseName = obj.CourseName;
+            this.TrialLogStatus = obj.TrialLogStatus;
+        }
 
     }
 }

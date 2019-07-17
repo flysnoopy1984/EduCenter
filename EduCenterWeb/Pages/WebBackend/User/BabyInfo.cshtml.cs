@@ -45,7 +45,7 @@ namespace EduCenterWeb.Pages.WebBackend.User
 
             try
             {
-                _UserSrv.SaveChild(list);
+                _UserSrv.SaveChildList(list);
 
             }
             catch (Exception ex)

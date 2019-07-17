@@ -60,6 +60,18 @@
             <input id="btn_Save" type="button" class="btn btn-warning btn-sm" value="保存" />
         </div>
         <div class="oneRow">
+            <label class="layui-field-title">接待人：</label>
+            <div class="bSalesName">
+                <select id="selSalesName">
+                    <option value="">自助完成</option>
+                    @foreach (var ui in Model.SalesUserList)
+                    {
+                        <option value="@ui.OpenId">@ui.RealName</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="oneRow">
             <label>用户称呼：</label>
             <div><input type="text" class="bUserName" /></div>
         </div>
@@ -107,10 +119,7 @@
                 </select>
             </div>
         </div>
-        @*<div class="oneRow">
-            <label class="layui-field-title">课程老师：</label>
-            <div class="bTecName"></div>
-        </div>*@
+
         <div class="oneRow">
             <label class="layui-field-title">状态：</label>
             <div class="bStatus"></div>

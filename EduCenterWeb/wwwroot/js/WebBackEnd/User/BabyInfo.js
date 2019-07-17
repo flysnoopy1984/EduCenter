@@ -24,8 +24,8 @@
  
 
     AddBaby = function () {
-        if (babyCount == 3) {
-            ShowInfo("最多添加3个宝贝");
+        if (babyCount == 2) {
+            ShowInfo("最多添加2个宝贝");
             return;
         }
         var html = $("#HideData .OneBaby").clone();

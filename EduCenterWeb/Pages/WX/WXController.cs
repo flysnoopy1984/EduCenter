@@ -26,8 +26,6 @@ namespace EduCenterWeb.Pages.WX
         private UserSrv _UserSrv;
         private BusinessSrv _BusinessSrv;
 
-
-
          public WXController(TecSrv TecSrv,UserSrv userSrv, BusinessSrv businessSrv)
         {
             _TecSrv = TecSrv;
@@ -111,6 +109,7 @@ namespace EduCenterWeb.Pages.WX
             switch (_wxMessage.Event)
             {
                 case "view":
+                //    _wxMessage.EventKey
                     break;
                 case "click":
                     MenuClickHandler();
@@ -148,7 +147,7 @@ namespace EduCenterWeb.Pages.WX
                 else if (_EventKey.StartsWith(WxConfig.QR_Invite_User))
                 {
                     var ownOpenId = _EventKey.Split("_")[2];
-                    var user = _BusinessSrv.InvitedUserComing(_wxMessage, ownOpenId);
+                    var user = _BusinessSrv.InvitedUserComing(_wxMessage.FromUserName, ownOpenId);
                  
                     _ResultMsg = _wxMessage.toText(WXReplyContent.NewUserAdd(user.Name));
                 }

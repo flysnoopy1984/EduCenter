@@ -6,7 +6,7 @@
         {
           "type": "view",
           "name": "我要试听",
-          "url": "http://edu.iqianba.cn/User/Login?hanlder=LoginTransfer2&toPage=/User/ApplyTrial"
+          "url": "http://edu.iqianba.cn/User/Login?handler=LoginTransfer2&toPage=/User/ApplyTrial"
         },
         {
           "type": "view",
@@ -36,7 +36,7 @@
         {
           "type": "view",
           "name": "邀请码",
-          "url": "http://edu.iqianba.cn/User/Login?hanlder=LoginTransfer2&toPage=/Sales/Invite"
+          "url": "http://edu.iqianba.cn/User/Login?handler=LoginTransfer2&toPage=/Sales/Invite"
         }
        
       ]

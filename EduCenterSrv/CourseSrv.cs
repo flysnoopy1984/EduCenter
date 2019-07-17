@@ -294,6 +294,8 @@ namespace EduCenterSrv
             var times = StaticDataSrv.TrialTime;
             var sql = from tl in _dbContext.DBTrialLog
                       join ui in _dbContext.DBUserInfo on tl.OpenId equals ui.OpenId
+                      join sales in _dbContext.DBUserInfo on ui.SalesOpenId equals sales.OpenId into salesUser
+                      from sui in salesUser.DefaultIfEmpty()
                       where tl.TrialDateTime >= DateTime.Parse(fromDate) &&
                       tl.TrialDateTime <= DateTime.Parse(toDate)
                       select new RTrialLog
@@ -306,9 +308,11 @@ namespace EduCenterSrv
                           TecCode = tl.TecCode,
                           TecName = tl.TecName,
                           OpenId = ui.OpenId,
+                        
+                          SalesName = sui == null? "自助完成":sui.RealName,
                           WxRemindCount = tl.WxRemindCount,
                           WXName = ui.Name,
-                          UserRealName = ui.RealName,
+                          UserRealName = ui.ChildName,
                          
                           UserPhone =ui.Phone,
                           TrialLogStatus = tl.TrialLogStatus,

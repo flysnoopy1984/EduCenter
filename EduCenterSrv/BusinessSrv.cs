@@ -425,20 +425,52 @@ namespace EduCenterSrv
         }
         #endregion
 
-        #region 邀请用户
-        public EUserInfo InvitedUserComing(WXMessage wxMessage,string ownOpenId)
+        #region 用户
+        /// <summary>
+        /// 被邀请用户首次进入公众号，绑定关系
+        /// wxUser 因为获取方式不同
+        /// </summary>
+        /// <param name="wxMessage"></param>
+        /// <param name="ownOpenId"></param>
+        /// <returns></returns>
+        public EUserInfo InvitedUserComing(string InvitedOpenId,string ownOpenId, WXUserInfo wxUser = null)
         {
             UserSrv userSrv = new UserSrv(_dbContext);
             SalesSrv salesSrv = new SalesSrv(_dbContext);
             //如果是老用户，不能绑定邀请
-            if (!userSrv.IsExistUser(wxMessage.FromUserName))
-                salesSrv.BindUser(ownOpenId, wxMessage.FromUserName);
+            if (!userSrv.IsExistUser(InvitedOpenId))
+                salesSrv.BindUser(ownOpenId, InvitedOpenId);
 
-            var wxUser = WXApi.GetWXUserInfo(wxMessage.FromUserName);
+            if(wxUser == null)
+                wxUser = WXApi.GetWXUserInfo(InvitedOpenId);
             EUserInfo user = userSrv.AddOrUpdateFromWXUser(wxUser, false);
 
             _dbContext.SaveChanges();
             return user;
+
+        }
+        public bool UserRegisterByPhone(string openId, string phone, string babyName)
+        {
+            try
+            {
+                var updatePhoneSql = UserSrv.sql_UpdateUserPhone(openId, phone);
+                _dbContext.Database.BeginTransaction();
+                //更新用户手机号
+                _dbContext.Database.ExecuteSqlCommand(updatePhoneSql);
+
+                UserSrv userSrv = new UserSrv(_dbContext);
+                //添加宝贝，同时更新用户表中宝贝名显示字段
+                userSrv.AddNewSimpleChild(openId, babyName);
+                _dbContext.SaveChanges();
+                _dbContext.Database.CommitTransaction();
+            }
+            catch(Exception ex)
+            {
+                _dbContext.Database.RollbackTransaction();
+                throw ex;
+            }
+            return true;
+          
 
         }
         #endregion

@@ -32,9 +32,9 @@ namespace EduCenterSrv
             return sql;
         }
 
-        public static string sql_UpdateUserSimpleInfo(string openId,string phone,string realName)
+        public static string sql_UpdateUserPhone(string openId,string phone)
         {
-            string sql = $@"update UserInfo set Phone = '{phone}',RealName='{realName}' where OpenId='{openId}'";
+            string sql = $@"update UserInfo set Phone = '{phone}' where OpenId='{openId}'";
             return sql;
         }
 
@@ -114,12 +114,21 @@ namespace EduCenterSrv
             return user;
         }
 
-        public bool UpdateUserSimpleInfo(string openId,string phone,string realName)
-        {
-            var sql = sql_UpdateUserSimpleInfo(openId, phone,realName);
-            _dbContext.Database.ExecuteSqlCommand(sql);
-            return true;
-        }
+        ///// <summary>
+        ///// 用户手机注册，留下电话和宝贝姓名
+        ///// </summary>
+        ///// <param name="openId"></param>
+        ///// <param name="phone"></param>
+        ///// <param name="babyName"></param>
+        ///// <returns></returns>
+        //public bool UserRegisterByPhone(string openId,string phone,string babyName)
+        //{
+        //    var sql = sql_UpdateUserPhone(openId, phone);
+        //    _dbContext.Database.ExecuteSqlCommand(sql);
+
+        //  //  SaveChild()
+        //    return true;
+        //}
 
         public EUserInfo GetUserInfo(string openId)
         {
@@ -872,21 +881,62 @@ namespace EduCenterSrv
         #endregion
 
         #region UserChild
-        public void SaveChild(List<EUserChild> list)
+
+        public void AddNewSimpleChild(string openId,string childName)
+        {
+            var list = GetAllChild(openId);
+            EUserChild child = new EUserChild()
+            {
+                UserOpenId = openId,
+                Name = childName,
+                No = list.Count+1,
+
+            };
+            //如果已经有2个孩子，删除一个
+            if(list.Count>=2)
+            {
+                child.No = 2;
+                var removeItem = list[list.Count - 1];
+                _dbContext.DBUserChild.Remove(removeItem);
+                list.Remove(removeItem);
+            }
+            _dbContext.DBUserChild.Add(child);
+
+            //新孩子+到list中，计算ShowName
+            list.Add(child);
+            var sqlChild = GetSQL_ShowUserChildName(list);
+            _dbContext.Database.ExecuteSqlCommand(sqlChild);
+        }
+
+        public string GetSQL_ShowUserChildName(List<EUserChild> list)
+        {
+            string childName = "";
+            for (int i = 0; i < list.Count; i++)
+            {
+                childName += list[i].Name;
+                if (i < list.Count - 1)
+                    childName += "/";
+            }
+            var sqlChild = sql_UpdateUserChild(list[0].UserOpenId, childName);
+
+            return sqlChild;
+        }
+
+        public void SaveChildList(List<EUserChild> list)
         {
          
             try
             {
                 var sql = sql_DeleteAllUserChild(list[0].UserOpenId);
-                string childName = "";
-                for (int i=0;i<list.Count;i++)
-                {
-                    childName += list[i].Name ;
-                    if (i< list.Count-1)
-                        childName += "/";
-                }
-                var sqlChild = sql_UpdateUserChild(list[0].UserOpenId, childName);
-
+                //string childName = "";
+                //for (int i=0;i<list.Count;i++)
+                //{
+                //    childName += list[i].Name ;
+                //    if (i< list.Count-1)
+                //        childName += "/";
+                //}
+                //var sqlChild = sql_UpdateUserChild(list[0].UserOpenId, childName);
+                var sqlChild = GetSQL_ShowUserChildName(list);
                 _dbContext.Database.BeginTransaction();
 
                 _dbContext.Database.ExecuteSqlCommand(sql);
@@ -912,11 +962,20 @@ namespace EduCenterSrv
 
         #region WebBackEnd
 
-        public List<RUserList> QueryUserList(string userName,out int recordTotal, int pageIndex=1,int pageSize =20)
+        public List<RUserList> QueryUserList(string userName,
+            string babyName,
+            int userRole,
+            int memberType,
+            string userOpenId,
+            out int recordTotal, 
+            int pageIndex=1,
+            int pageSize =20)
         {
-           
+
             var sql = from ui in _dbContext.DBUserInfo
                       join ua in _dbContext.DBUserAccount on ui.OpenId equals ua.UserOpenId
+                      join sales in _dbContext.DBUserInfo on ui.SalesOpenId equals sales.OpenId into salesUser
+                      from sui in salesUser.DefaultIfEmpty()
                       orderby ui.Id descending
                       select new RUserList
                       {
@@ -925,28 +984,51 @@ namespace EduCenterSrv
                           RealName = ui.RealName,
                           userOpenId = ui.OpenId,
                           MemberType = ui.MemberType,
-                          DeadLineStd = ua.DeadLine == DateTime.MinValue?DateTime.Parse("1900-01-01").ToString("yyyy-MM-dd"): ua.DeadLine.ToString("yyyy-MM-dd"),
+                          DeadLineStd = ua.DeadLine == DateTime.MinValue ? DateTime.Parse("1900-01-01").ToString("yyyy-MM-dd") : ua.DeadLine.ToString("yyyy-MM-dd"),
                           DeadLineSummer = ua.SummerDeadLine.ToString("yyyy-MM-dd"),
                           DeadLineWinter = ua.WinterDeadLine.ToString("yyyy-MM-dd"),
                           RemainTimeStd = ua.RemainCourseTime,
                           RemainTimeSummer = ua.RemainSummerTime,
                           RemainTimeWinter = ua.RemainWinterTime,
-                          UserRole =ui.UserRole,
-                          UserRoleName = BaseEnumSrv.GetUserRoleName(ui.UserRole), 
+                          UserRole = ui.UserRole,
+                          UserRoleName = BaseEnumSrv.GetUserRoleName(ui.UserRole),
                           AllowChooseStd = ua.CanSelectCourse,
                           AllChooseWS = ua.CanSelectSummerWinterCourse,
                           VipPrice = ua.VIPPrice1,
+                          WXJoinDateTime = ui.CreatedDateTime.ToString("yyyy-MM-dd"),
+                          SalesName = sui == null ? "自助完成" : sui.Name
                       }
-                      
                       ;
-            if(!string.IsNullOrEmpty(userName))
+            if(!string.IsNullOrEmpty(userOpenId))
             {
-                sql = sql.Where(a => a.WxName.Contains(userName));
+                sql = sql.Where(a => a.userOpenId == userOpenId);
             }
+            else
+            {
+                if (!string.IsNullOrEmpty(userName))
+                {
+                    sql = sql.Where(a => a.WxName.Contains(userName));
+                }
+
+                if (!string.IsNullOrEmpty(babyName))
+                {
+                    sql = sql.Where(a => a.BabyName.Contains(babyName));
+                }
+                if (userRole != -1)
+                {
+                    sql = sql.Where(a => a.UserRole == (UserRole)userRole);
+                }
+                if (memberType != -1)
+                {
+                    sql = sql.Where(a => a.MemberType == (MemberType)memberType);
+                }
+               
+            }
+
             recordTotal = sql.Count();
-        //    recordTotal = Convert.ToInt32( / pageSize) + 1;
 
             return sql.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+
 
 
         }
@@ -957,6 +1039,10 @@ namespace EduCenterSrv
             ui.MemberType = userData.MemberType;
             ui.RealName = userData.RealName;
             ui.UserRole = userData.UserRole;
+            if(ui.MemberType == MemberType.VIP && ui.UserRole == UserRole.Visitor)
+            {
+                ui.UserRole = UserRole.Member;
+            }
             var ua = GetUserAccount(userData.OpenId);
             ua.VIPPrice1 = userData.VipPrice;
             ua.RemainCourseTime = userData.RemainTimeStd;
@@ -972,6 +1058,10 @@ namespace EduCenterSrv
             //  ui.UserRole
         }
 
+        public List<EUserInfo> GetSalesUserList()
+        {
+            return _dbContext.DBUserInfo.Where(a => a.UserRole == UserRole.Sales || a.OpenId == "oh6cV1dh0hjoGEizCoKH1KU70UwQ").ToList();
+        }
         #endregion
 
 

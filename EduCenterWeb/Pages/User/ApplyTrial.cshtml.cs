@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EduCenterCore.Common.Helper;
+using EduCenterCore.WX;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterModel.Course.Result;
 using EduCenterModel.Session;
+using EduCenterModel.WX.MessageTemplate;
 using EduCenterSrv;
 using EduCenterSrv.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -18,15 +20,17 @@ namespace EduCenterWeb.Pages.User
     public class ApplyTrialModel : EduBaseAppPageModel
     {
         private CourseSrv _CourseSrv;
+        private TecSrv _TecSrv;
 
         public UserSession UserSession { get; set; }
 
         public Dictionary<int, ECourseTime> TrialTime { get; set; }
         public Dictionary<int, List<ECourseInfo>> CourseDic { get; set; }
 
-        public ApplyTrialModel(CourseSrv courseSrv)
+        public ApplyTrialModel(CourseSrv courseSrv,TecSrv tecSrv)
         {
             _CourseSrv = courseSrv;
+            _TecSrv = tecSrv;
         }
         public void OnGet()
         {
@@ -55,6 +59,7 @@ namespace EduCenterWeb.Pages.User
         public IActionResult OnPostSubmitTrial(string courseCode,int Lesson,string date)
         {
             ResultNormal result = new ResultNormal();
+            var times = StaticDataSrv.TrialTime;
             try
             {
                 var us = base.GetUserSession(false);
@@ -86,6 +91,9 @@ namespace EduCenterWeb.Pages.User
                         };
                         _CourseSrv.AddTrial(log);
                         _CourseSrv.SaveChanges();
+
+                    
+                       
                     }
                    
                     

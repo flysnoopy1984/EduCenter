@@ -13,8 +13,6 @@
 <link href="~/lib/layui/css/layui.css" rel="stylesheet" />
 <script src="~/lib/layui/layui.js"></script>
 <script src="~/lib/layui/lay/modules/laypage.js"></script>
-
-
 <script src="~/js/WebBackEnd/User/List.js?v=@Model.jsVersion"></script>
 <style type="text/css">
     .OptionArea {
@@ -23,7 +21,7 @@
     }
 
     #UserListTable {
-      width:1200px;
+      width:100%;
         font-size: 11px;
     }
 
@@ -46,7 +44,15 @@
         .OneField{
             display:flex;
             margin-right:20px;
+            align-items: baseline;
         }
+        .OneField input{
+            height:28px;
+            line-height:28px;
+        }
+         .OneField select{
+              height:28px;
+         }
          #UserListTable tr td input{
             height:100%;
             /*width:90%;*/
@@ -70,6 +76,9 @@
         .BabyName{
             cursor:pointer;
         }
+        .MemberLine{
+            background-color:#faf18d;
+        }
          
 </style>
 
@@ -77,13 +86,45 @@
     <div class="OptionArea">
         <div class="OneField">
             <div><label>微信名：</label></div>
-            <div >
-                <input class="form-control input-sm" id="UserName" type="text" value="">
+            <div>
+                <input id="UserName" type="text" value="">
             </div>
         </div>
-     
+        <div class="OneField">
+            <div><label>宝贝姓名：</label></div>
+            <div>
+                <input id="BabyName" style="width:100px" type="text" value="">
+            </div>
+        </div>
+        <div class="OneField">
+            <div><label>用户身份：</label></div>
+            <div>
+                <select id="selUserRole">
+                    <option value="-1" selected>全部</option>
+                    @foreach (var ur in Model.UserRoleList)
+                    {
+                        <option value="@ur.Key">@ur.Value</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="OneField">
+            <div><label>会员类型：</label></div>
+            <div>
+                <select id="selMemberType">
+                    <option value="-1" selected>全部</option>
+                    @foreach (var mt in Model.MemberTypeList)
+                    {
+                        <option value="@mt.Key">@mt.Value</option>
+                    }
+                </select>
+            </div>
+        </div>
+
         <div>
             <input id="btnQuery" type="button" class="btn btn-primary btn-sm" value="查询" />
+            <input id="btnQueryReset" type="button" class="btn btn-danger btn-sm" value="重置" />
         </div>
     </div>
     <div class="DataArea">
@@ -93,15 +134,17 @@
                 <th width="150px">用户微信名</th>
                 <th>家长姓名</th>
                 <th>宝贝姓名</th>
-                <th>用户类型</th>
+                <th>用户身份</th>
                 <th>会员类型</th>
                 <th>特殊价格</th>
-                <th>标准班剩余课时</th>
-                <th>暑假班剩余课时</th>
-                <th>寒假班剩余课时</th>
+                <th>【标】课时</th>
+                <th>【暑】课时</th>
+                <th>【寒】课时</th>
+                <th>关注时间</th>
                 <th width="122px">标准班有效期</th>
+                <th width="122px">接待人</th>
                 @*<th>暑假班有效期</th>
-                <th>寒假班有效期</th>*@
+        <th>寒假班有效期</th>*@
                 @*<th>允许选择标准课</th>
         <th>允许选择假期课</th>*@
             </tr>
@@ -117,8 +160,8 @@
             <td>
                 <div class="RowOption">
                     @*<div>
-                        <input type="button" class="btn btn-danger btn-xs" value="课程调整" id="btn_AdjustCourse" />
-                    </div>*@
+                    <input type="button" class="btn btn-danger btn-xs" value="课程调整" id="btn_AdjustCourse" />
+                </div>*@
                     <div>
                         <input type="button" class="btn btn-warning btn-xs" value="保存" id="btn_Save" />
                     </div>
@@ -128,7 +171,7 @@
             <td><input class="RealName" type="text" /></td>
             <td onclick="CreateBabyInfoForm(this);"><label class="BabyName text-info">暂无</label></td>
             <td>
-         
+
                 <select class="UserRole">
                     @foreach (var ur in Model.UserRoleList)
                     {
@@ -141,7 +184,7 @@
                 <select class="MemberType">
                     @foreach (var mt in Model.MemberTypeList)
                     {
-                    <option value="@mt.Key">@mt.Value</option>
+                        <option value="@mt.Key">@mt.Value</option>
                     }
 
                 </select>
@@ -155,10 +198,13 @@
             <td><input class="RemainTimeSummer" type="number"></td>
 
             <td><input class="RemainTimeWinter" type="number"></td>
+            <td><label class="wxJoinDateTime"></label></td>
+
             <td>
                 <input class="DeadLineStd" readonly type="text">
                 <div class="fa fa-calendar fa-2x DatePick" id=""></div>
             </td>
+            <td><label class="SalesName"></label></td>
         </tr>
     </table>
 </div>

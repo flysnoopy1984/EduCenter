@@ -20,6 +20,12 @@ namespace EduCenterModel.User
         [MaxLength(32)]
         public string OpenId { get; set; }
 
+        /// <summary>
+        /// 试听课销售接待人（空则是自助）
+        /// </summary>
+        [MaxLength(32)]
+        public string SalesOpenId { get; set; }
+
         [MaxLength(10)]
         public string RealName { get; set; }
 

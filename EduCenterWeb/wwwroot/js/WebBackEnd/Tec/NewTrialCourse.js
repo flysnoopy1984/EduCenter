@@ -33,7 +33,7 @@
             $(".Content .bUserPhone").val(data.UserPhone);
             $(".Content #selCourseCode").val(data.CourseCode);
             $(".Content .bTrialDate").val(data.TrialDateStr);
-
+            $(".Content #selSalesName").val(data.SalesName);
             $(".Content #selCourseTime").val(data.Lesson);
           
             $(".Content .bStatus").text(data.TrialLogStatusName);
@@ -49,12 +49,17 @@
         data.UserPhone = $(".Content .bUserPhone").val();
         data.CourseCode = $(".Content #selCourseCode").val();
         data.TrialDateTime = $(".Content .bTrialDate").val();
+        data.SalesOpenId = $(".Content #selSalesName").val();
+        data.SalesName = $(".Content #selSalesName option:selected").text();
         data.OpenId = $("#UserOpenId").val();
         data.Lesson = $(".Content #selCourseTime").val();
         data.Id = $("#TrialId").val();
 
-        callAjax_Query(UpdateTrialUrl, { "updateTrial": data }, function () {
-            ShowInfo("修改成功", null, null, 1, function () {
+        callAjax_Query(UpdateTrialUrl, { "updateTrial": data }, function (res) {
+            var msg = "保存成功";
+            if (res.IntMsg == 10)
+                msg += ",并已通知老师";
+            ShowInfo(msg, null, null, 1, function () {
                 parent.CloseTrialCourse();
             });
         })

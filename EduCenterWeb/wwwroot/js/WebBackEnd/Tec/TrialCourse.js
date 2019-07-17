@@ -92,12 +92,19 @@
                 cols: [[ //表头
                    
                     { field: 'Id', title: 'ID', width: 80,hide:true, },
-                    { field: 'UserRealName', title: '用户', width: 135, },
+                    {
+                        field: 'UserRealName', title: '宝贝名称',
+                        templet: function (d) {
+                            return "<a class='FieldChildName' onclick=toUserInfo('" + d.OpenId + "')>" + d.UserRealName + "</a>";
+                        },
+                        width: 135,
+                    },
                     { field: 'UserPhone', title: '联系方式', width: 135, },
-                    { field: 'CourseName', title: '课程名', width: 135, },
-                    { field: 'TrialDateStr', title: '试听课日期', width: 135, edit: 'text'},
-                    { field: 'TrialTimeStr', title: '时间', width: 135, edit: 'select' },
-                    { field: 'TecName', title: '课程老师', width: 135, },
+                    { field: 'CourseName', title: '课程名', width: 90, },
+                    { field: 'TrialDateStr', title: '试听课日期', width: 120,},
+                    { field: 'TrialTimeStr', title: '时间', width: 120,},
+                    { field: 'TecName', title: '课程老师', width: 90, },
+                    { field: 'SalesName', title: '接待人',width: 90,},
                     {
                         field: 'TrialLogStatusName',
                         title: '状态',
@@ -136,8 +143,13 @@
         });
     }
 
+    toUserInfo = function (OpenId) {
+        window.location.href = "/WebBackend/User/List?act=q&openId="+OpenId;
+    }
+
     UpdateLogStatus = function (Id) {
-        callAjax_Query_NoBlock(UpdateTrialLogStatusUrl, {"Id":Id}, UpdateLogStatusCallBack)
+        ShowInfo("请点击编辑选择接待人!");
+      //  callAjax_Query_NoBlock(UpdateTrialLogStatusUrl, {"Id":Id}, UpdateLogStatusCallBack)
     }
 
     UpdateLogStatusCallBack = function (res) {

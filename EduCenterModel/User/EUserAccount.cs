@@ -25,11 +25,7 @@ namespace EduCenterModel.User
 
         public DateTime DeadLine { get; set; }
 
-        //public double TotalCourseTime
-        //{
-        //    get; set;
-        //}
-
+     
         public double RemainSummerTime { get; set; }
 
         public DateTime SummerDeadLine { get; set; }
@@ -52,6 +48,8 @@ namespace EduCenterModel.User
         /// Vip一人一单价
         /// </summary>
         public double VIPPrice1 { get; set; }
+
+        public double RewardsTime { get; set; }
 
        
 

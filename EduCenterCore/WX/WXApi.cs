@@ -7,7 +7,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
+using WxPayAPI;
 
 namespace EduCenterCore.WX
 {
@@ -86,7 +88,6 @@ namespace EduCenterCore.WX
                 string url = "https://api.weixin.qq.com/sns/oauth2/access_token?" + data.ToUrl();
 
                 AccessToken token = HttpHelper.Get<AccessToken>(url);
-                NLogHelper.InfoTxt("GetOAuth2AccessTokenFromCode openId:" + token.openid);
 
                 return token;
 
@@ -122,9 +123,11 @@ namespace EduCenterCore.WX
 
         }
 
-        public static WXUserInfo GetWXUserInfo(string OpenId)
+        public static WXUserInfo GetWXUserInfo(string OpenId,AccessToken accessToken = null)
         {
-            AccessToken accessToken = getAccessToken();
+            if(accessToken == null)
+                accessToken = getAccessToken();
+
             string url_userInfo = string.Format("https://api.weixin.qq.com/cgi-bin/user/info?access_token={0}&openid={1}",
             accessToken.access_token, OpenId);
           
@@ -154,6 +157,66 @@ namespace EduCenterCore.WX
             }
 
             return result;
+        }
+        #endregion
+
+        #region JSAPI
+
+        public static Jsapi_Ticket GetJSAPI()
+        {
+            var accessToken = getAccessToken();
+            string ticketUrl = $"https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={accessToken.access_token}&type=jsapi";
+
+            Jsapi_Ticket ticket = HttpHelper.Get<Jsapi_Ticket>(ticketUrl);
+            return ticket;
+
+        }
+        //public static WxPayData eduGetJsConfig(string url)
+        //{
+        //    Jsapi_Ticket ticket = GetJSAPI();
+
+        //    WxPayData jsApiParam = new WxPayData();
+        //    jsApiParam.SetValue("appId", WxConfig.APPID);
+        //    jsApiParam.SetValue("timeStamp", WxPayApi.GenerateTimeStamp());
+        //    jsApiParam.SetValue("nonceStr", WxPayApi.GenerateNonceStr());
+        //    jsApiParam.SetValue("jsapi_ticket", ticket.ticket);
+        //    jsApiParam.SetValue("url", url);
+        //    string preSignStr = jsApiParam.ToUrl();
+        //    jsApiParam.SetValue("signature", preSignStr.Sha1());
+
+
+        //    return jsApiParam;
+        //}
+        public static WxJsAPIEntity eduGetJsConfig(string url)
+        {
+            Jsapi_Ticket ticket = GetJSAPI();
+            WxJsAPIEntity result = new WxJsAPIEntity()
+            {
+                appId = WxConfig.APPID,
+                timestamp = WxPayApi.GenerateTimeStamp(),
+                nonceStr = WxPayApi.GenerateNonceStr(),
+
+            };
+
+            string signStr = $@"jsapi_ticket={ticket.ticket}&noncestr={result.nonceStr}&timestamp={result.timestamp}&url={url}";
+            result.signature = signStr.Sha1();
+            NLogHelper.InfoTxt($"SignStr:{signStr}");
+            NLogHelper.InfoTxt($"signature:{result.signature}");
+            return result;
+        }
+
+        public static string Sha1(this string str)
+        {
+            var buffer = Encoding.UTF8.GetBytes(str);
+            var data = SHA1.Create().ComputeHash(buffer);
+
+            var sb = new StringBuilder();
+            foreach (var t in data)
+            {
+                sb.Append(t.ToString("X2"));
+            }
+
+            return sb.ToString();
         }
         #endregion
     }

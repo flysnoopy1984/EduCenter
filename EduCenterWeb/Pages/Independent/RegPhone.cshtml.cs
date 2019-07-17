@@ -14,11 +14,11 @@ namespace EduCenterWeb.Pages.Independent
     public class RegPhoneModel : EduBaseAppPageModel
     {
         private SMSSrv _smsSrv;
-        private UserSrv _userSrv;
-        public RegPhoneModel(SMSSrv smsSrv,UserSrv userSrv)
+        private BusinessSrv _BusinessSrv;
+        public RegPhoneModel(SMSSrv smsSrv, BusinessSrv businessSrv)
         {
             _smsSrv = smsSrv;
-            _userSrv = userSrv;
+            _BusinessSrv = businessSrv;
         }
         public void OnGet()
         {
@@ -50,7 +50,7 @@ namespace EduCenterWeb.Pages.Independent
             
         }
 
-        public IActionResult OnPostSubmitVerifyCode(string mobilePhone,string Code,string userRealName)
+        public IActionResult OnPostSubmitVerifyCode(string mobilePhone,string Code,string BabyName)
         {
             ResultObject<OutSMS> result = new ResultObject<OutSMS>();
             try
@@ -59,21 +59,28 @@ namespace EduCenterWeb.Pages.Independent
                 if(result.Entity.SMSVerifyStatus == SMSVerifyStatus.Success)
                 {
                     var us = GetUserSession(false);
-                    DoUpdateUserSimpleInfo(us.OpenId,mobilePhone, userRealName);
+                    DoUpdateUserSimpleInfo(us.OpenId,mobilePhone, BabyName);
                 }
             }
             catch(Exception ex)
             {
-                result.ErrorMsg = "系统错误。验证短信失败！";
+                result.ErrorMsg = "系统错误。请联系客服！";
                 NLogHelper.ErrorTxt($"验证校验码[OnPostSubmitVerifyCode]:{ex.Message}");
             }
             return new JsonResult(result);
             
         }
 
-        private void DoUpdateUserSimpleInfo(string openId,string phone,string userRealName)
+        /// <summary>
+        /// 注册时更新用户孩子姓名
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <param name="phone"></param>
+        /// <param name="BabyName"></param>
+        private void DoUpdateUserSimpleInfo(string openId,string phone,string BabyName)
         {
-            _userSrv.UpdateUserSimpleInfo(openId, phone, userRealName);
+           
+            _BusinessSrv.UserRegisterByPhone(openId, phone, BabyName);
 
             var us = GetUserSession(false);
             us.Phone = phone;

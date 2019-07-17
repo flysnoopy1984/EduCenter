@@ -21,6 +21,8 @@ namespace EduCenterModel.User
         [MaxLength(30)]
         public string LoginName { get; set; }
 
+      
+
         [MaxLength(30)]
         public string LoginPwd { get; set; }
 

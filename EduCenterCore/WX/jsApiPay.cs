@@ -67,5 +67,7 @@ namespace EduCenterCore.WX
          
             return jsApiParam;
         }
+
+       
     }
 }

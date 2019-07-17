@@ -42,5 +42,9 @@ namespace EduCenterModel.User.Result
         public bool AllowChooseStd { get; set; }
 
         public bool AllChooseWS { get; set; }
+
+        public string WXJoinDateTime { get; set; }
+
+        public string SalesName { get; set; }
     }
 }

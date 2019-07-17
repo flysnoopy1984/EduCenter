@@ -25,25 +25,41 @@ namespace EduCenterWeb.Pages.WebBackend.User
 
         }
 
+        private List<SiKsV> _MemberTypeList;
         public List<SiKsV> MemberTypeList
         {
-            get { return BaseEnumSrv.MemberTypeList; }
-        }
-        
-         public List<SiKsV> UserRoleList
-        {
-            get { return BaseEnumSrv.UserRoleList; }
+            get {
+                if(_MemberTypeList == null)
+                    _MemberTypeList = BaseEnumSrv.MemberTypeList;
+                return _MemberTypeList;
+            }
         }
 
-        public IActionResult OnPostQueryUserList(string userName,int pageIndex,int pageSize)
+        private List<SiKsV> _UserRoleList;
+         public List<SiKsV> UserRoleList
+        {
+            get {
+                if(_UserRoleList == null)
+                    _UserRoleList = BaseEnumSrv.UserRoleList.Where(a => a.Key <= 20).ToList();
+                return _UserRoleList;
+            }
+        }
+
+        public IActionResult OnPostQueryUserList(string userName,
+            string babyName,
+            int userRole,
+            int memberType,
+            string userOpenId,
+            int pageIndex,
+            int pageSize)
         {
             ResultList<RUserList> result = new ResultList<RUserList>();
             try
             {
                 int recordTotal;
 
-
-                result.List = _UserSrv.QueryUserList(userName,out recordTotal, pageIndex,pageSize);
+                result.List = _UserSrv.QueryUserList(userName,babyName,userRole, memberType, userOpenId,
+                    out recordTotal, pageIndex,pageSize);
                 result.RecordTotal = recordTotal;
             }
             catch (Exception ex)

@@ -77,7 +77,7 @@
         //}
         var userRealName = $("#userRealName").val();
         if (userRealName == '') {
-            alert("您的称呼不能为空!");
+            alert("宝贝姓名不能为空!");
             $("#userRealName").focus();
             return false;
         }
@@ -170,7 +170,7 @@
                 xhr.setRequestHeader("XSRF-TOKEN",
                     $('input:hidden[name="__RequestVerificationToken"]').val());
             },
-            data: { "mobilePhone": Phone, "Code": Code, "userRealName": $("#userRealName").val() },
+            data: { "mobilePhone": Phone, "Code": Code, "BabyName": $("#BabyName").val() },
             url: SubmitVerifyCodeUrl,
             success: function (res) {
 
