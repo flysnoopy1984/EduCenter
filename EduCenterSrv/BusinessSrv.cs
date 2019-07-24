@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using EduCenterModel.Sales;
 
 namespace EduCenterSrv
 {
@@ -145,12 +146,13 @@ namespace EduCenterSrv
         #endregion
 
         #region 购买课时成功
-        public EUserAccount PayCourseSuccess(string orderId)
+        public EUserAccount PayCourseSuccess(WXPaySuccess wXPaySuccess)
         {
             EUserAccount eUserAccount = null;
             try
             {
-                NLogHelper.InfoTxt($"PayCourseSuccess OrderId:{orderId}");
+                string orderId = wXPaySuccess.OrderId;
+            //    NLogHelper.InfoTxt($"PayCourseSuccess OrderId:{orderId}");
                 BeginTrans();
                 //跟新订单状态
                 var order = _dbContext.DBOrder.Where(a => a.OrderId == orderId && a.OrderStatus == OrderStatus.Created).FirstOrDefault();
@@ -166,6 +168,14 @@ namespace EduCenterSrv
                 if(ui.UserRole == UserRole.Visitor)
                 {
                     ui.UserRole = UserRole.Member;
+                }
+                //如果是JSPay
+                if(wXPaySuccess.IsJSPay)
+                {
+                    ui.MemberType = MemberType.VIP;
+                    eUserAccount.VIPPrice1 = Math.Round(line.Price/line.Qty, 2);
+
+
                 }
                
 
@@ -328,9 +338,14 @@ namespace EduCenterSrv
         #endregion
 
         #region 用户课时消耗
-        public void UpdateCourseLogToSigned(string openId,MemberType memberType, CourseScheduleType courseScheduleType, string lessonCode)
+        public EUserCourseLog UpdateCourseLogToSigned(string openId,
+            MemberType memberType, 
+            CourseScheduleType courseScheduleType, 
+            string lessonCode,
+            DateTime signDate,
+            bool needSave = true)
         {
-            var date = DateTime.Now.ToString("yyyy-MM-dd");
+            var date = signDate.ToString("yyyy-MM-dd");
 
             int result = UpdateUserCourseTimeOnce(openId, memberType, courseScheduleType);
             if(result == -1)
@@ -362,8 +377,9 @@ namespace EduCenterSrv
                 log.UserCourseLogStatus = UserCourseLogStatus.SignIn;
                 log.UserSignDateTime = DateTime.Now;
             }
-
+            if(needSave)
              _dbContext.SaveChanges();
+            return log;
         }
 
         //返回-1 用户余额不足
@@ -437,13 +453,16 @@ namespace EduCenterSrv
         {
             UserSrv userSrv = new UserSrv(_dbContext);
             SalesSrv salesSrv = new SalesSrv(_dbContext);
+            if (wxUser == null)
+                wxUser = WXApi.GetWXUserInfo(InvitedOpenId);
+
+            EUserInfo owner = null;
             //如果是老用户，不能绑定邀请
             if (!userSrv.IsExistUser(InvitedOpenId))
-                salesSrv.BindUser(ownOpenId, InvitedOpenId);
+                owner = salesSrv.BindUser(ownOpenId, InvitedOpenId);
 
-            if(wxUser == null)
-                wxUser = WXApi.GetWXUserInfo(InvitedOpenId);
-            EUserInfo user = userSrv.AddOrUpdateFromWXUser(wxUser, false);
+          
+            EUserInfo user = userSrv.AddOrUpdateFromWXUser(wxUser, owner, false);
 
             _dbContext.SaveChanges();
             return user;
@@ -475,6 +494,7 @@ namespace EduCenterSrv
         }
         #endregion
 
+      
 
 
 

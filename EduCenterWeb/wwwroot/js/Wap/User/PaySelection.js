@@ -16,8 +16,9 @@
                 }
                 else {
                     if (res.err_msg == "get_brand_wcpay_request:ok") {
-                        callAjax_Query_API(wxPaySuccessUrl, { "OrderId": json.EduOrderNo }, function () {
-                            window.location.href = "PayCourseSuccess";
+                        callAjax_Query_API(wxPaySuccessUrl,
+                            {"OrderId": json.EduOrderNo,"IsJSPay":false }, function () {
+                                window.location.href = "/User/PayCourseSuccess";
                         })
                         
                     }

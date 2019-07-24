@@ -15,6 +15,7 @@ using System.Drawing;
 using EduCenterModel.Sales.Result;
 using EduCenterSrv.Common;
 using EduCenterModel.Sales;
+using EduCenterModel.User;
 
 namespace EduCenterSrv
 {
@@ -84,6 +85,29 @@ namespace EduCenterSrv
             return true;
         }
 
+
+        public RInviteLog GetInviteLogById(long Id)
+        {
+            var sql = from log in _dbContext.DBInviteLog
+                      join ui in _dbContext.DBUserInfo on log.InvitedOpenId equals ui.OpenId
+                      where log.Id == Id
+                      select new RInviteLog
+                      {
+                          InvitedDateTime = log.InvitedDateTime,
+                          InvitedOpenId = log.InvitedOpenId,
+                          InvitedWxName = ui.Name,
+                          InviteStatus = log.InviteStatus,
+                          InviteStatusName = BaseEnumSrv.GetInviteStatusName(log.InviteStatus),
+                          OwnOpenId = log.OwnOpenId,
+                          Id = log.Id
+                      };
+            return sql.FirstOrDefault();
+        }
+
+        public EInviteLog GetInviteLogByInvitedOpenId(string invitedOpenId)
+        {
+            return _dbContext.DBInviteLog.Where(a => a.InvitedOpenId == invitedOpenId).FirstOrDefault();
+        }
         public List<RInviteLog> QueryInviteLog(string openId, out int totalPage, int pageIndex = 1,int pageSize =20)
         {
             var sql = from log in _dbContext.DBInviteLog
@@ -97,6 +121,7 @@ namespace EduCenterSrv
                           InviteStatus = log.InviteStatus,
                           InviteStatusName = BaseEnumSrv.GetInviteStatusName(log.InviteStatus),
                           OwnOpenId = log.OwnOpenId,
+                          Id = log.Id
                       };
 
             int totalCount = sql.Count();
@@ -110,21 +135,61 @@ namespace EduCenterSrv
         }
 
         //先会判断是否被邀请过
-        public void BindUser(string ownOpenId,string invitedOpenId)
+        public EUserInfo BindUser(string ownOpenId,string invitedOpenId)
         {
             var count = _dbContext.DBInviteLog.Where(a => a.InvitedOpenId == invitedOpenId).Count();
-            if(count == 0)
+            EUserInfo owner = null;
+            if (count == 0)
             {
+                owner = _dbContext.DBUserInfo.Where(a => a.OpenId == ownOpenId).FirstOrDefault();
                 EInviteLog log = new EInviteLog
                 {
                     InvitedDateTime = DateTime.Now,
                     InvitedOpenId = invitedOpenId,
                     InviteStatus = InviteStatus.Invited,
-                    OwnOpenId = ownOpenId
+                    OwnOpenId = ownOpenId,
+                    OwnName = owner.Name,
                 };
                 _dbContext.DBInviteLog.Add(log);
             }
+            return owner;
           
+        }
+        #endregion
+
+        #region 邀请奖励
+      
+        public bool CreateRewardTrans(long inviteLogId,string ownOpenId, AmountTransType TransType,out EUserAccount UserAccount)
+        {
+            int c = _dbContext.DBInviteRewardTrans.Where(a => a.InviteLogId == inviteLogId && a.TransType == TransType).Count();
+            UserAccount = null;
+            if (c==0)
+            {
+                var reward = new EInviteRewardTrans()
+                {
+                    Amount = GlobalSrv.GetRewardAmount(TransType),
+                    Direction = AmountTransDirection.In,
+                    InviteLogId = inviteLogId,
+                    TransDateTime = DateTime.Now,
+                    TransType = TransType,
+                    UserOpenId = ownOpenId,
+                    TransStatus = AmountTransStatus.Created
+                };
+                _dbContext.DBInviteRewardTrans.Add(reward);
+                UserAccount = _dbContext.DBUserAccount.Where(a => a.UserOpenId == ownOpenId).FirstOrDefault();
+                if (UserAccount != null)
+                {
+                    UserAccount.InviteRewards += reward.Amount;
+                    UserAccount.RemainRewards += reward.Amount;
+                }
+                _dbContext.SaveChanges();
+                return true;
+            }
+            return false;
+          
+
+          
+
         }
         #endregion
     }

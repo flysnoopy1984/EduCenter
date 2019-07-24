@@ -49,9 +49,9 @@ namespace EduCenterModel.User
         /// </summary>
         public double VIPPrice1 { get; set; }
 
-        public double RewardsTime { get; set; }
+        public double InviteRewards { get; set; }
 
-       
+        public double RemainRewards { get; set; }
 
 
 

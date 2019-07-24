@@ -246,6 +246,8 @@ namespace EduCenterSrv
             var times = StaticDataSrv.TrialTime;
             var sql = from tl in _dbContext.DBTrialLog
                       join ui in _dbContext.DBUserInfo on tl.OpenId equals ui.OpenId
+                      join sales in _dbContext.DBUserInfo on ui.SalesOpenId equals sales.OpenId into salesUser
+                      from sui in salesUser.DefaultIfEmpty()
                       where tl.Id == Id
                       select new RTrialLog
                       {
@@ -259,12 +261,15 @@ namespace EduCenterSrv
                           OpenId = ui.OpenId,
                           CourseType = tl.CourseType,
                           WXName = ui.Name,
-                          UserRealName = ui.RealName,
+                          UserRealName = ui.ChildName,
                           Lesson =tl.Lesson,
                           UserPhone = ui.Phone,
                           TrialLogStatus = tl.TrialLogStatus,
                           TrialLogStatusName = BaseEnumSrv.GetTrialLogStatusName(tl.TrialLogStatus),
                           TrialTimeStr = times[tl.Lesson].TimeRange,
+                          SalesOpenId = sui==null?"":sui.OpenId,
+                          SalesName = sui == null ? "自助完成" : sui.RealName,
+
                       };
             return sql.FirstOrDefault();
         }
@@ -294,8 +299,18 @@ namespace EduCenterSrv
             var times = StaticDataSrv.TrialTime;
             var sql = from tl in _dbContext.DBTrialLog
                       join ui in _dbContext.DBUserInfo on tl.OpenId equals ui.OpenId
+                      //获取接待人
                       join sales in _dbContext.DBUserInfo on ui.SalesOpenId equals sales.OpenId into salesUser
                       from sui in salesUser.DefaultIfEmpty()
+                          //获取邀请人
+                      join invite in _dbContext.DBInviteLog on ui.OpenId equals invite.InvitedOpenId into InvitedLog
+                      from iui in InvitedLog.DefaultIfEmpty()
+                          //查看奖励是否发送
+                      join trans in _dbContext.DBInviteRewardTrans.Where(a=>a.TransType == AmountTransType.Invited_TrialReward) 
+                      on iui.Id equals trans.InviteLogId into invitetrans
+                   
+                      from itr in invitetrans.DefaultIfEmpty()
+
                       where tl.TrialDateTime >= DateTime.Parse(fromDate) &&
                       tl.TrialDateTime <= DateTime.Parse(toDate)
                       select new RTrialLog
@@ -308,16 +323,21 @@ namespace EduCenterSrv
                           TecCode = tl.TecCode,
                           TecName = tl.TecName,
                           OpenId = ui.OpenId,
-                        
-                          SalesName = sui == null? "自助完成":sui.RealName,
+
+                          SalesName = sui == null ? "自助完成" : sui.RealName,
                           WxRemindCount = tl.WxRemindCount,
                           WXName = ui.Name,
                           UserRealName = ui.ChildName,
-                         
-                          UserPhone =ui.Phone,
+
+                          UserPhone = ui.Phone,
                           TrialLogStatus = tl.TrialLogStatus,
                           TrialLogStatusName = BaseEnumSrv.GetTrialLogStatusName(tl.TrialLogStatus),
                           TrialTimeStr = times[tl.Lesson].TimeRange,
+
+                          InviteOwnId = iui == null ? "" : iui.OwnOpenId,
+                          InviteOwnName = iui == null ? "" : iui.OwnName,
+                          InviteLogId = iui == null?0:iui.Id,
+                          HasRewarded = itr == null ? false : true,
                       };
 
 

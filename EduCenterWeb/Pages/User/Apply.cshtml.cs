@@ -91,7 +91,7 @@ namespace EduCenterWeb.Pages.User
                 var us = base.GetUserSession(false);
                 if(us!=null)
                 {
-                    var needRecharge = UserSession.NeedRecharge(us, StaticDataSrv.CurrentScheduleType);
+                    var needRecharge = UserSession.NeedRecharge(us, CourseScheduleType.Standard);
                     if (needRecharge < 0)
                     {
                         string errorMsg = $"您的余额不足，请去充值";

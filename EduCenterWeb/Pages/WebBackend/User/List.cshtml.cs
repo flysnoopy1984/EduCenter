@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
+using EduCenterModel.User;
 using EduCenterModel.User.In;
 using EduCenterModel.User.Result;
 using EduCenterSrv;
@@ -16,13 +17,15 @@ namespace EduCenterWeb.Pages.WebBackend.User
     public class ListModel : EduBasePageModel
     {
         private UserSrv _UserSrv;
+
+        public List<EUserInfo> SalesUserList { get; set; }
         public ListModel(UserSrv userSrv)
         {
             _UserSrv = userSrv;
         }
         public void OnGet()
         {
-
+            SalesUserList = _UserSrv.GetSalesUserList();
         }
 
         private List<SiKsV> _MemberTypeList;

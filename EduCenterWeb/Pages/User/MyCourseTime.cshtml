@@ -110,57 +110,94 @@
         margin-top:0px;
         margin-bottom:0px;
     }
+    #GetMoneyArea {
+    display: none;
+    height: 50px;
+    line-height: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 100%;
+    justify-content: space-between;
+}
+
+    #GetMoneyArea div {
+        border-bottom: none;
+    }
+
+#GetMoney_Amt {
+    width: 120px;
+    font-size: 12px;
+}
 </style>
 <div class="MainContainer">
-    <div class="Title">课时查询</div>
+    <div class="Title">我的账户</div>
 
     @if (Model.UserAccount != null)
     {
-        <div class="CouseTimeInfo">
-            <div class="Info_Line">
-                <div>【标准版】</div>
-                <div class="text-warning text">剩余:<span>@Model.UserAccount.RemainCourseTime</span></div>
-                <div class="text-danger text">有效期:<span>@Model.UserAccount.DeadLine.ToString("yyyy-MM-dd")</span></div>
-            </div>
-            <div class="Info_Line">
-                <div>【暑假班】</div>
-                <div class="text-warning text">剩余:<span>@Model.UserAccount.RemainSummerTime</span></div>
-                <div class="text-danger text">有效期:<span>@Model.UserAccount.SummerDeadLine.ToString("yyyy-MM-dd")</span></div>
-            </div>
-            <div class="Info_Line">
-                <div>【寒假班】</div>
-                <div class="text-warning text">剩余:<span>@Model.UserAccount.RemainWinterTime</span></div>
-                <div class="text-danger text">有效期:<span>@Model.UserAccount.WinterDeadLine.ToString("yyyy-MM-dd")</span></div>
-            </div>
-        </div>
-    }
     <div class="BtnArea">
-        <button id="btnToBuy" class="btn btn-info btn-xs">
+        <button id="btnToBuy" class="btn btn-primary btn-xs">
             我要续费
         </button>
     </div>
+    <div class="CouseTimeInfo">
+        <div class="Info_Line">
+            <div>【标准版】</div>
+            <div class="text-warning text">剩余:<span>@Model.UserAccount.RemainCourseTime</span></div>
+            <div class="text-danger text">有效期:<span>@Model.UserAccount.DeadLine.ToString("yyyy-MM-dd")</span></div>
+        </div>
+        <div class="Info_Line">
+            <div>【暑假班】</div>
+            <div class="text-warning text">剩余:<span>@Model.UserAccount.RemainSummerTime</span></div>
+            <div class="text-danger text">有效期:<span>@Model.UserAccount.SummerDeadLine.ToString("yyyy-MM-dd")</span></div>
+        </div>
+        <div class="Info_Line">
+            <div>【寒假班】</div>
+            <div class="text-warning text">剩余:<span>@Model.UserAccount.RemainWinterTime</span></div>
+            <div class="text-danger text">有效期:<span>@Model.UserAccount.WinterDeadLine.ToString("yyyy-MM-dd")</span></div>
+        </div>
+        <hr />
+        <div class="Info_Line">
+            <div>【奖励金额】</div>
+            <div class="text-warning text">总金额:<span>@Model.UserAccount.InviteRewards</span></div>
+            <div class="text-warning text">未提取:<span class="RemainReward">@Model.UserAccount.RemainRewards</span></div>
+            <div>
+                <button id="btnGetReword" class="btn btn-success btn-xs">
+                    提取奖金
+                </button>
+            </div>
+        </div>
+        @*<div id="GetMoneyArea">
+            <div><label for="GetMoney_Amt">输入提现金额:</label></div>
+            <div><input type="tel" id="GetMoney_Amt" class="form-control" onchange="CheckAmtValue(this);" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" /></div>
+            <div><button type="button" onclick="SureGetMoney();" class="btn btn-warning" id="btnSureGetMoney">确定</button></div>
+        </div>*@
+    </div>
 
-    <div class="ReChargeList">
-        <div class="subTitle bg-success" id="ReChargeBar">
-            <div class="subTitleName">
-                充值记录(最近10条)
+
+        }
+
+
+        <div class="ReChargeList">
+            <div class="subTitle bg-success" id="ReChargeBar">
+                <div class="subTitleName">
+                    充值记录(最近10条)
+                </div>
+                <i class="fa fa-caret-left"></i>
             </div>
-            <i class="fa fa-caret-left"></i>
+            <div class="DataList">
+            </div>
         </div>
-        <div class="DataList">  
+        <div class="ConsumeList">
+            <div class="subTitle bg-primary" id="ComsumeBar">
+                <div class="subTitleName">
+                    消费记录(最近20条)
+                </div>
+                <i class="fa fa-caret-left"></i>
+            </div>
+            <div class="DataList">
+            </div>
         </div>
     </div>
-    <div class="ConsumeList">
-        <div class="subTitle bg-primary" id="ComsumeBar">
-            <div class="subTitleName">
-                消费记录(最近20条)
-            </div>
-            <i class="fa fa-caret-left"></i>
-        </div>
-        <div class="DataList">
-        </div>
-    </div>
-</div>
 <div id="HideData" style="display:none;">
     <div class="NoData">没有数据</div>
     <div class="ReChargeOneRow">

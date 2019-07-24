@@ -31,6 +31,13 @@ namespace EduCenterModel.Course.Result
         public string SalesOpenId { get; set; }
         public string SalesName { get; set; }
 
+        public string InviteOwnId { get; set; }
+        public string InviteOwnName { get; set; }
+
+        public bool HasRewarded { get; set; }
+
+        public long InviteLogId { get; set; }
+
         public void InitFromETrialLog(ETrialLog obj)
         {
             this.TecCode = obj.TecCode;

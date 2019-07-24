@@ -1,10 +1,12 @@
 ﻿using EduCenterCore.Common.Helper;
+using EduCenterCore.WX;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.User;
 using EduCenterModel.User.In;
 using EduCenterModel.User.Result;
 using EduCenterModel.WX;
+using EduCenterModel.WX.MessageTemplate;
 using EduCenterSrv.Common;
 using EduCenterSrv.DataBase;
 using Microsoft.EntityFrameworkCore;
@@ -86,11 +88,23 @@ namespace EduCenterSrv
         }
 
        
+        public void WXNewUserNotification(WXUserInfo wxUser, EUserInfo owner)
+        {
+            NewUserJoinWXTemplate wxMessage = new NewUserJoinWXTemplate();
+            string ownName = owner == null ? "" : owner.Name;
+            foreach(var receiverOpenId in GlobalSrv.GetNewUserReceiverList())
+            {
+             //   NLogHelper.InfoTxt($"WXNotify to {receiverOpenId}");
+                wxMessage.data = wxMessage.GenerateData(receiverOpenId, wxUser.nickname, DateTime.Now, ownName);
+                WXApi.SendTemplateMessage<NewUserJoinWXTemplate>(wxMessage);
+            }
+          
+        }
         /// <summary>
         /// 添加或更新微信用户，微信相关字段总是更新
         /// </summary>
         /// <param name="wxUser"></param>
-        public EUserInfo AddOrUpdateFromWXUser(WXUserInfo wxUser,bool isSave = true)
+        public EUserInfo AddOrUpdateFromWXUser(WXUserInfo wxUser,EUserInfo owner = null,bool isSave = true)
         {
 
             EUserInfo user = _dbContext.DBUserInfo
@@ -99,6 +113,9 @@ namespace EduCenterSrv
             if(user == null)
             {
                 user = CreateNewUserFromWXUser(wxUser);
+            //    NLogHelper.InfoTxt("WXNotification Start");
+                //微信提醒
+                WXNewUserNotification(wxUser, owner);
             }
             user.wx_Name = wxUser.nickname;
             user.wx_city = wxUser.city;
@@ -189,6 +206,7 @@ namespace EduCenterSrv
                             UserCourseLogStatus = ucul == null? UserCourseLogStatus.PreNext:ucul.UserCourseLogStatus,
                             UserCourseLogStatusName = ucul==null?"无":BaseEnumSrv.GetUserCourseLogStatusNameForTec(ucul.UserCourseLogStatus),
                             UserName = ui.Name,
+                            MemberType = ui.MemberType,
                         };
             return efSql.ToList();
                                  
@@ -996,7 +1014,9 @@ namespace EduCenterSrv
                           AllChooseWS = ua.CanSelectSummerWinterCourse,
                           VipPrice = ua.VIPPrice1,
                           WXJoinDateTime = ui.CreatedDateTime.ToString("yyyy-MM-dd"),
-                          SalesName = sui == null ? "自助完成" : sui.Name
+                          SalesName = sui == null ? "自助完成" : sui.RealName,
+                          SalesOpenId = sui == null?"":sui.OpenId,
+                          UserPhone = ui.Phone
                       }
                       ;
             if(!string.IsNullOrEmpty(userOpenId))
@@ -1043,6 +1063,8 @@ namespace EduCenterSrv
             {
                 ui.UserRole = UserRole.Member;
             }
+            ui.SalesOpenId = userData.SalesOpenId;
+
             var ua = GetUserAccount(userData.OpenId);
             ua.VIPPrice1 = userData.VipPrice;
             ua.RemainCourseTime = userData.RemainTimeStd;
@@ -1051,6 +1073,7 @@ namespace EduCenterSrv
 
             if(userData.DeadLineStd != "1900-01-01")
                 ua.DeadLine = DateTime.Parse(userData.DeadLineStd);
+            
 
             _dbContext.SaveChanges();
 

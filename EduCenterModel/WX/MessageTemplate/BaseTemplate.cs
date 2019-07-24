@@ -5,13 +5,16 @@ using System.Web;
 
 namespace EduCenterModel.WX.MessageTemplate
 {
-    public class BaseTemplate<T> where T: BaseTemplate<T>, new()
+    public class BaseTemplate<T> where T : BaseTemplate<T>, new()
     {
-        public string WebUrl = "http://edu.iqianba.cn/User/Login?handler=LoginTransfer";
+       
+        protected string WebUrl = "http://edu.iqianba.cn/User/Login?handler=LoginTransfer";
         public string touser { get; set; }
         public string template_id { get; set; }
         public string url { get; set; }
         public string topcolor { get; set; }
+
+        public object data { get; set; }
 
         protected T InitObject(string touser,string url,string template_id)
         {

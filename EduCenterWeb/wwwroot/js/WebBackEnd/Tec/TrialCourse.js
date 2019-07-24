@@ -2,6 +2,7 @@
     var QueryTrialLogUrl = "TrialCourse?handler=QueryTrialLog";
     var UpdateTrialLogStatusUrl = "TrialCourse?handler=ConfirmTrialStatus";
     var WxRemindUrl = "TrialCourse?handler=WxRemind";
+    var SendRewardUrl = "TrialCourse?handler=SendReward";
     var table;
     Init = function () {
         var sysDate = new Date();
@@ -104,7 +105,8 @@
                     { field: 'TrialDateStr', title: '试听课日期', width: 120,},
                     { field: 'TrialTimeStr', title: '时间', width: 120,},
                     { field: 'TecName', title: '课程老师', width: 90, },
-                    { field: 'SalesName', title: '接待人',width: 90,},
+                    { field: 'SalesName', title: '接待人', width: 90, },
+                    { field: 'InviteOwnName', title: '邀请人', width: 90, },
                     {
                         field: 'TrialLogStatusName',
                         title: '状态',
@@ -118,8 +120,8 @@
                         }, width: 90
                     },
               
-                    { field: 'ApplyDateTimeStr', title: '申请时间', width: 150, },
-                    { fixed: 'right', width: 180, align: 'center', toolbar: '#TableToolBar' },
+                    { field: 'ApplyDateTimeStr', title: '申请时间', width: 140, },
+                    { fixed: 'right', width:220, align: 'left', toolbar: '#TableToolBar' },
                    
                 ]]
                
@@ -129,9 +131,7 @@
                 var data = obj.data; //获得当前行数据
                 var layEvent = obj.event; //获得 lay-event 对应的值
                 if (layEvent == "confirm") {
-
-                    UpdateLogStatus(data.Id);
-                  
+                  //  UpdateLogStatus(data.Id);
                 }
                 else if (layEvent == "edit") {
                     EditTrialCourse(data.Id);
@@ -139,8 +139,24 @@
                 else if (layEvent == "wxRemind") {
                     wxRemind(data.Id);
                 }
+                else if (layEvent == "sendReward") {
+                    SendReward(data.InviteLogId, data.InviteOwnId, data.OpenId);
+                }
             });
         });
+    }
+
+    SendReward = function (inviteLogId, ownOpenId,inviteOpenId) {
+        var data = {
+            "invitelogId": inviteLogId,
+            "invitedOpenId": inviteOpenId,
+            "ownOpenId": ownOpenId
+        }
+        callAjax_Query(SendRewardUrl, data, function () {
+            layer.alert('奖励金已发送成功', { icon: 1 });
+            table.reload("tableCourseList");
+           // ShowInfo("", null, null, 1);
+        })
     }
 
     toUserInfo = function (OpenId) {

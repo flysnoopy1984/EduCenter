@@ -46,5 +46,9 @@ namespace EduCenterModel.User.Result
         public string WXJoinDateTime { get; set; }
 
         public string SalesName { get; set; }
+
+        public string SalesOpenId { get; set; }
+
+        public string UserPhone { get; set; }
     }
 }

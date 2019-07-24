@@ -1,6 +1,7 @@
 ﻿$(function () {
     var QueryTecDayCourseUrl = "DayCourse?handler=QueryTecDayCourse";
     var QueryUserCourseUrl = "DayCourse?handler=QueryUserCourse";
+    var SignForUserUrl = "DayCourse?handler=SignForUser";
 
     Init = function () {
         laydate.render({
@@ -16,6 +17,7 @@
         var date = $(".DateInput").text();
         QueryTecDayCourse(date);
 
+        $(".btnRefresh").on("click", RefreshUserData);
     }
 
     QueryTecDayCourse = function (date) {
@@ -63,21 +65,38 @@
                 var data = res.List;
                 $.each(data, function (i) {
                     var html = $("#HideData .OneUser").clone();
-                    html.find(".UserName").text("学生:"+data[i].UserName);
+                    html.find(".UserName").text("学生:" + data[i].UserName);
+
+                    html.find(".RemainTime").text("剩余课时:[" + data[i].UserName+"]小时");
+
                     var userStatus = html.find(".UserStatus");
                     userStatus.text("状态:" + data[i].UserCourseLogStatusName);
 
                     if (data[i].UserCourseLogStatus == 1) userStatus.addClass("text-danger");
-                    if (data[i].UserCourseLogStatus == 10) userStatus.addClass("text-success");
-                    if (data[i].UserCourseLogStatus == 1 || data[i].UserCourseLogStatus == 3)
+                    if (data[i].UserCourseLogStatus == 10) userStatus.addClass("text-success"); //已签到
+
+                    if (data[i].UserCourseLogStatus == 2 || data[i].UserCourseLogStatus == 3)
                         userStatus.addClass("text-warning");
+
+                    var btnSign = html.find("#btnSignForUser");
+                    if (data[i].UserCourseLogStatus == 1) {
+                       
+                        btnSign.on("click", {
+                            "openId": data[i].UserOpenId,
+                            "memberType": data[i].MemberType,
+                            "lessonCode": data[i].LessonCode
+                        }, SignForUser);
+                    }
+                    else {
+                        btnSign.hide();
+                    }
+                 
+                  
                     
                     userList.append(html);
                 });
 
-                var btn = $("#HideData .btnRefresh").clone();
-                btn.on("click", RefreshUserData);
-                userList.append(btn); 
+            
             });
         }
         else {
@@ -92,7 +111,34 @@
     }
 
     RefreshUserData = function () {
-        ShowInfo("还没开发好，您可选择日期再次查询！");
+        var date = $(".DateInput").text();
+        QueryTecDayCourse(date);
+    }
+
+    SignForUser = function (e) {
+        var date = $(".DateInput").text();
+        var openId = e.data.openId;
+        var memberType = e.data.memberType;
+        var lessonCode = e.data.lessonCode;
+
+        aq(SignForUserUrl,
+            {
+                "openId": openId,
+                "lessonCode": lessonCode,
+                "memberType": memberType,
+                "date": date,
+            },
+            function (res) {
+                var OneUser = $(e.currentTarget).closest(".OneUser");
+                var userStatus = OneUser.find(".UserStatus");
+                var btnSign = OneUser.find("#btnSignForUser");
+                btnSign.hide();
+                userStatus.text("状态:" + res.SuccessMsg);
+                userStatus.addClass("text-success");
+
+                ShowInfo("签到完成", null, null, 1);
+            },
+          )
     }
 
     Init();

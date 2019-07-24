@@ -56,7 +56,9 @@ namespace EduCenterWeb.Pages.User
 
         /// <summary>
         /// 自定登陆，并跳转
-        /// WX试听课提醒，直接跳转
+        /// WX试听课提醒，
+        /// WX奖励金提醒
+        /// 直接跳转
         /// </summary>
         /// <param name="openId"></param>
         /// <param name="toPage"></param>
@@ -78,7 +80,7 @@ namespace EduCenterWeb.Pages.User
             }
         }
 
-        public void OnGetLoginTransfer2(string toPage)
+        public void OnGetLoginTransfer2()
         {
             //if (!string.IsNullOrEmpty(HttpContext.Request.Query["code"]))
             //{
@@ -117,7 +119,7 @@ namespace EduCenterWeb.Pages.User
             //    HttpContext.Response.Redirect(url);
             //}
 
-            LoginWX(toPage);
+            LoginWX();
         }
 
         /// <summary>
@@ -140,8 +142,10 @@ namespace EduCenterWeb.Pages.User
                 }
                 else
                 {
+                    //oh6cV1dh0hjoGEizCoKH1KU70UwQ 童老师
                     //oh6cV1ZcN2GzbZpaYELK8Uv3a2rU
-                    var ui = _UserSrv.GetUserInfo("oh6cV1QhPLj6XPesheYUQ4XtuGTs");
+                    //oh6cV1QhPLj6XPesheYUQ4XtuGTs jacky
+                    var ui = _UserSrv.GetUserInfo("oh6cV1UUH2cg1p3--SPVnJdDpgbM");
                     WXLoginCallBack(ui);
                     userSession = GetUserSession(false);
                 }
@@ -189,13 +193,13 @@ namespace EduCenterWeb.Pages.User
             return ui;
         }
 
-        private void LoginWX(string toPage=null)
+        private void LoginWX()
         {
             if (!string.IsNullOrEmpty(HttpContext.Request.Query["code"]))
             {
                 //获取code码，以获取openid和access_token
                 string code = HttpContext.Request.Query["code"];
-              //  NLogHelper.InfoTxt($"LoginWX-Query:{HttpContext.Request.QueryString}");
+            //    NLogHelper.InfoTxt($"LoginWX-Query:{HttpContext.Request.QueryString}");
                 var accessToken = WXApi.GetOAuth2AccessTokenFromCode(code);
                 if (!string.IsNullOrEmpty(accessToken.openid))
                 {
@@ -210,10 +214,20 @@ namespace EduCenterWeb.Pages.User
 
                     WXLoginCallBack(ui);
 
+                    string toPage = HttpContext.Request.Query["toPage"];
                     if (!string.IsNullOrEmpty(toPage))
                     {
+                        //微信QR支付页面
+                        string amt = HttpContext.Request.Query["amt"];
+                        if(!string.IsNullOrEmpty(amt))
+                        {
+                            var ct = HttpContext.Request.Query["ct"];
+                            toPage += $"?amt={amt}&ct={ct}";
+                        }
+                           
                         HttpContext.Response.Redirect(toPage);
                     }
+                   
 
                 }
             }
@@ -222,6 +236,7 @@ namespace EduCenterWeb.Pages.User
                 try
                 {
                     var reUrl = $"http://edu.iqianba.cn/User/Login{Request.QueryString}";
+                 //   NLogHelper.InfoTxt($"Login-reUrl:{reUrl}");
                     var redirect_uri = System.Web.HttpUtility.UrlEncode(reUrl, System.Text.Encoding.UTF8);
                     WxPayData data = new WxPayData();
                     data.SetValue("appid", WxConfig.APPID);

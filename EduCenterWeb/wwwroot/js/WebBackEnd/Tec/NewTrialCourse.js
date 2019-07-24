@@ -33,10 +33,11 @@
             $(".Content .bUserPhone").val(data.UserPhone);
             $(".Content #selCourseCode").val(data.CourseCode);
             $(".Content .bTrialDate").val(data.TrialDateStr);
-            $(".Content #selSalesName").val(data.SalesName);
+            $(".Content #selSalesName").val(data.SalesOpenId);
             $(".Content #selCourseTime").val(data.Lesson);
           
             $(".Content .bStatus").text(data.TrialLogStatusName);
+          
             $("#TrialId").val(Id);
             $("#UserOpenId").val(data.OpenId);
         })

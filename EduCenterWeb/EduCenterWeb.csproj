@@ -32,15 +32,15 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.6" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
-    <PackageReference Include="NLog" Version="4.6.3" />
-    <PackageReference Include="NLog.Config" Version="4.6.3" />
+    <PackageReference Include="NLog" Version="4.6.6" />
+    <PackageReference Include="NLog.Config" Version="4.6.6" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Activity\" />
     <Folder Include="WebAPI\" />
     <Folder Include="wwwroot\Files\QR\InviteTec\" />
     <Folder Include="wwwroot\css\Pages\" />
+    <Folder Include="wwwroot\Files\QR\Pay\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
@@ -56,11 +56,9 @@
     <None Include="wwwroot\lib\bootstrap\dist\js\npm.js" />
     <None Include="wwwroot\lib\bootstrap\LICENSE" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\EduCenterCore\EduCenterCore.csproj" />
     <ProjectReference Include="..\EduCenterModel\EduCenterModel.csproj" />
     <ProjectReference Include="..\EduCenterSrv\EduCenterSrv.csproj" />
   </ItemGroup>
-
 </Project>

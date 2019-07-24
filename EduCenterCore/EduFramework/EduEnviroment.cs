@@ -32,7 +32,18 @@ namespace EduCenterCore.EduFramework
         {
             get { return _Enviroment.WebRootPath + @"\Files\QR\"; }
         }
-       
+
+        #region 支付码
+        public static string VirPath_QRPay
+        {
+            get { return "/Files/QR/Pay/"; }
+        }
+
+        public static string DicPath_QRPay
+        {
+            get { return _Enviroment.WebRootPath + @"\Files\QR\Pay\"; }
+        }
+        #endregion
 
         public static string DicPath_StaticData
         {

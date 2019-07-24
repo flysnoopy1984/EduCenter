@@ -1,0 +1,95 @@
+﻿@page
+@model EduCenterWeb.Pages.Sales.InviteRewardModel
+@{
+    ViewData["Title"] = "InviteReward";
+    Layout = "~/Pages/Shared/_EduMainAppTec.cshtml";
+}
+@Html.AntiForgeryToken()
+
+<link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
+<script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
+<script src="~/js/EduLib/EditHelper.js?v=@Model.jsVersion"></script>
+<script src="~/js/Wap/Sales/InviteReward.js?v=@Model.jsVersion"></script>
+<Style type="text/css">
+    .MainContainer{
+        padding:10px;
+        display:flex;
+        flex-direction:column;
+    }
+    .Title{
+         padding:10px;
+         text-align:left;
+    }
+    .UserInfo{
+        height:60px;
+        display:flex;
+        flex-direction:column;
+        justify-content:space-between;
+    }
+    .InvitedStatus{font-weight:bold;}
+    .RewardStepInfo{
+        display:flex;
+        height:70px;
+         flex-direction:column;
+        justify-content:space-between;
+        font-size:14px;
+        font-weight:bold;
+    }
+    .btnList{
+        display:flex;
+        justify-content:center;
+        margin-top:40px;
+    }
+    .RewardStepInfo .RewardLine{
+        display:flex;
+        justify-content:space-between;
+    }
+    .RewardStepInfo .RewardLine input[type=button]{
+        width:150px;
+    }
+</Style>
+
+<div class="Title">领奖中心</div>
+<div class="MainContainer">
+    @if(Model.InviteLog!=null)
+    {
+    <div class="UserInfo">
+        <div class="text-info">邀请用户：@Model.InviteLog.InvitedWxName</div>
+        <div class="text-warning InvitedStatus">邀请状态：@Model.InviteLog.InviteStatusName</div>
+    </div>
+    <hr />
+    <div class="RewardStepInfo">
+        <div class="RewardLine text-success">
+            @if (Model.InviteLog.InviteStatus >= EduCenterModel.BaseEnum.InviteStatus.ApplyTrial)
+            {
+                <span style="margin-right:20px;">用户已报名试听</span><input type="button" id="btnGetTrailReward" class="btn btn-sm btn-success" value="点击获取10元金额" />
+            }
+            else
+            {
+                <span>当用户报名试听后,您将获得10元</span>
+            }
+
+        </div>
+        <div class="RewardLine text-danger">
+            @if (Model.InviteLog.InviteStatus >= EduCenterModel.BaseEnum.InviteStatus.Paied)
+            {
+                <span style="margin-right:20px;">用户已正式报名入学</span><input type="button" id="btnGetPaiedReward" class="btn btn-sm btn-danger" value="点击获取300元金额" />
+            }
+            else
+            {
+
+                <span>当用户正式报名入学,您再将获得300元</span>
+
+            }
+        </div>
+
+        </div>
+  
+    }
+    <div class="btnList">
+        <input type="button" id="btnBack" class="btn btn-info" value="返回" />
+    </div>
+
+</div>
+

@@ -1,6 +1,7 @@
 ﻿using EduCenterCore.Common.Helper;
 using EduCenterModel.Common;
 using EduCenterModel.WX;
+using EduCenterModel.WX.MessageTemplate;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -135,18 +136,20 @@ namespace EduCenterCore.WX
             return wxUser;
         }
 
-        
+
 
         #region 发送模板消息
 
-        public static ResultNormal SendTemplateMessage<T>(T data) where T:class
+        public static ResultNormal SendTemplateMessage<T>(T obj) where T:BaseTemplate<T>,new()
         {
             ResultNormal result = new ResultNormal();
             try
             {
                 string accessToken = getAccessToken().access_token;
                 string strUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + accessToken;
-                string template = JsonConvert.SerializeObject(data);
+                
+                string template = JsonConvert.SerializeObject(obj.data);
+              
                 result.SuccessMsg = HttpHelper.RequestUrlSendMsg(strUrl, HttpHelper.HttpMethod.Post, template, "application/json");
 
             }
@@ -200,8 +203,8 @@ namespace EduCenterCore.WX
 
             string signStr = $@"jsapi_ticket={ticket.ticket}&noncestr={result.nonceStr}&timestamp={result.timestamp}&url={url}";
             result.signature = signStr.Sha1();
-            NLogHelper.InfoTxt($"SignStr:{signStr}");
-            NLogHelper.InfoTxt($"signature:{result.signature}");
+            //NLogHelper.InfoTxt($"SignStr:{signStr}");
+            //NLogHelper.InfoTxt($"signature:{result.signature}");
             return result;
         }
 

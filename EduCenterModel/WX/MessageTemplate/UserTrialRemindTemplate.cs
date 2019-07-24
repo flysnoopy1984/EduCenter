@@ -17,7 +17,7 @@ namespace EduCenterModel.WX.MessageTemplate
     */
     public class UserTrialRemindTemplate : BaseTemplate<UserTrialRemindTemplate>
     {
-        public object data { get; set; }
+      
         public UserTrialRemindTemplate GenerateData(string toUserOpenId,RTrialLog eTrialLog)
         {
             string first = $"尊敬的{eTrialLog.UserRealName},您预约的试听课请不要忘记参加.";

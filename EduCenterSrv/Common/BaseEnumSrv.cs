@@ -408,11 +408,13 @@ namespace EduCenterSrv.Common
             switch (inviteStatus)
             {
                 case InviteStatus.BindPhone:
-                    return "手机已绑定";
+                    return "手机绑定";
+                case InviteStatus.ApplyTrial:
+                    return "报名试听";
                 case InviteStatus.Invited:
                     return "邀请加入";
                 case InviteStatus.Paied:
-                    return "已支付";
+                    return "正式入学";
             }
             return "";
         }

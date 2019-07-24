@@ -32,5 +32,9 @@ namespace EduCenterModel.User
         public DateTime UserLeaveDateTime { get; set; }
 
         public DateTime UserSignDateTime { get; set; }
+
+        public bool IsFixedByAuto { get; set; }
+
+        public DateTime AutoFixedDatetime { get; set; }
     }
 }

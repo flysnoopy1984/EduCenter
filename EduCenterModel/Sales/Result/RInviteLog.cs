@@ -8,9 +8,17 @@ namespace EduCenterModel.Sales.Result
     {
         public string InvitedWxName { get; set; }
 
-        public string InvitedDateTimeStr {
+        public string InvitedDateStr {
             get {
                 return InvitedDateTime.ToString("yyyy-MM-dd");
+            }
+        }
+
+        public string InvitedDateTimeStr
+        {
+            get
+            {
+                return InvitedDateTime.ToString("yyyy-MM-dd hh:mm:ss");
             }
         }
         public string InviteStatusName

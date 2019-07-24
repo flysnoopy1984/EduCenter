@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EduCenterCore.Common.Helper;
 using EduCenterCore.WX;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
 using EduCenterModel.Course.Result;
 using EduCenterModel.Teacher;
+using EduCenterModel.User;
 using EduCenterModel.User.Result;
 using EduCenterModel.WX.MessageTemplate;
 using EduCenterSrv;
@@ -23,12 +25,16 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
 
         private TecSrv _TecSrv;
         private CourseSrv _CourseSrv;
+        private SalesSrv _SalesSrv;
+        private UserSrv _UserSrv;
 
 
-        public TrialCourseModel(TecSrv tecSrv, CourseSrv courseSrv)
+        public TrialCourseModel(TecSrv tecSrv, CourseSrv courseSrv, SalesSrv salesSrv, UserSrv userSrv)
         {
             _TecSrv = tecSrv;
             _CourseSrv = courseSrv;
+            _SalesSrv = salesSrv;
+            _UserSrv = userSrv;
         }
         public void OnGet()
         {
@@ -68,6 +74,7 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
             return new JsonResult(result);
         }
 
+        //用户试听课微信提醒
         public IActionResult OnPostWxRemind(long Id)
         {
             ResultNormal result = new ResultNormal();
@@ -85,6 +92,45 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
                     _CourseSrv.AddTrialRemindCount(Id);
                 }
 
+            }
+            catch (Exception ex)
+            {
+                result.ErrorMsg = ex.Message;
+            }
+
+            return new JsonResult(result);
+        }
+
+        /// <summary>
+        /// 发送奖励金
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public IActionResult OnPostSendReward(long invitelogId,string invitedOpenId,string ownOpenId)
+        {
+            ResultNormal result = new ResultNormal();
+            try
+            {
+               AmountTransType amountTransType = AmountTransType.Invited_TrialReward;
+               EUserAccount ownAccount;
+               bool needWx =  _SalesSrv.CreateRewardTrans(invitelogId, ownOpenId, amountTransType, out ownAccount);
+
+                if(ownAccount !=null)
+                {
+                    var ui = _UserSrv.GetUserInfo(invitedOpenId);
+                    NLogHelper.InfoTxt($"wxMessage:OpenId-{ownOpenId}");
+                   //微信提醒
+                   UserAccountChangeTemplate wxMessage = new UserAccountChangeTemplate();
+                    wxMessage = wxMessage.GenerateData(ownOpenId,
+                        ui.Name,
+                        amountTransType,
+                        DateTime.Now,
+                        ownAccount.InviteRewards,
+                         GlobalSrv.GetRewardAmount(amountTransType)
+                        );
+                    WXApi.SendTemplateMessage<UserAccountChangeTemplate>(wxMessage);
+                }
+            
             }
             catch (Exception ex)
             {

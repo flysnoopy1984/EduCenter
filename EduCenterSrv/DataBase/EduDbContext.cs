@@ -62,6 +62,8 @@ namespace EduCenterSrv.DataBase
 
         public DbSet<EInviteLog> DBInviteLog { get; set; }
 
+        public DbSet<EInviteRewardTrans> DBInviteRewardTrans { get; set; }
+
         //SMS Begin
         public DbSet<ESMSLog> DBSMSLog { get; set; }
 

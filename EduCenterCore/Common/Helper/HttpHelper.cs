@@ -92,6 +92,7 @@ namespace EduCenterCore.Common.Helper
             StreamReader sr = new StreamReader(responseStream, Encoding.UTF8);
             //返回结果网页（html）代码
             string content = sr.ReadToEnd();
+          //  NLogHelper.InfoTxt(content);
             return content;
         }
 

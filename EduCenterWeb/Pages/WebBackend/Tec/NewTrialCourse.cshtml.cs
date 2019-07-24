@@ -21,7 +21,8 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
         private UserSrv _UserSrv;
         private CourseSrv _CourseSrv;
         private TecSrv _TecSrv;
-     
+    
+        
         public Dictionary<int, List<ECourseInfo>> CourseDic { get; set; }
 
         public Dictionary<int, ECourseTime> TrialTime { get; set; }
@@ -31,6 +32,7 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
             _TecSrv = tecSrv;
             _UserSrv = userSrv;
             _CourseSrv = courseSrv;
+         
         }
         public List<EUserInfo> SalesUserList { get; set; }
 
@@ -103,7 +105,7 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
                     origTrial.CourseName = cls.CourseName;
 
                     var ui = _UserSrv.GetUserInfo(updateTrial.OpenId);
-                  //  ui. = updateTrial.UserRealName;
+                 
                     ui.Phone = updateTrial.UserPhone;
                     ui.SalesOpenId = updateTrial.SalesOpenId;
                    
@@ -111,6 +113,7 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
                     {
                         needWX = true;
                         origTrial.TrialLogStatus = TrialLogStatus.TecConfirm;
+                        //返佣
                     }
                     _CourseSrv.SaveChanges();
 

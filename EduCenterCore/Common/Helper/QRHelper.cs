@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EduCenterCore.EduFramework;
+using QRCoder;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -23,7 +25,8 @@ namespace EduCenterCore.Common.Helper
             qrImg.Dispose();
         }
 
-        public static void AddLogoForQR(string logoUrl,Bitmap qrBitmap,string saveFilePath,int width=132,int height= 132)
+        //为QR添加Logo
+        public static void AddLogoForQR(string logoUrl, Bitmap qrBitmap, string saveFilePath, int width = 132, int height = 132)
         {
             var LogoImg = ImgHelper.GetImgFromUrl(logoUrl);
             LogoImg = ImgHelper.resizeImage(LogoImg, new Size(width, height));
@@ -32,7 +35,9 @@ namespace EduCenterCore.Common.Helper
             LogoImg = ImgHelper.DrawTransparentRoundCornerImage(LogoImg, 20);
             Bitmap finImg = ImgHelper.CombineImageToCenter(qrBitmap, LogoImg);
 
-            finImg = AddStringUnderQR(finImg, "您的朋友邀请您加入云艺书院");
+            List<string> text = new List<string>();
+            text.Add("您的朋友邀请您加入云艺书院");
+            finImg = AddStringUnderQR(finImg, text);
 
             finImg.Save(saveFilePath);
             finImg.Dispose();
@@ -41,22 +46,58 @@ namespace EduCenterCore.Common.Helper
         }
 
         //二维码下面+文字
-        public static Bitmap AddStringUnderQR(Image qrImg,string text)
+        public static Bitmap AddStringUnderQR(Image qrImg,List<string> textList,int leftOffset=0)
         {
-            Bitmap bkImg = new Bitmap(qrImg.Width,qrImg.Height+50);
+            Bitmap bkImg = new Bitmap(qrImg.Width,qrImg.Height+50* textList.Count);
             bkImg = ImgHelper.CombineImageToTop(bkImg, qrImg);
             //添加文字
             using (Graphics g = Graphics.FromImage(bkImg))
             {
-                string s = text;
-                Font font = new Font("微软雅黑", 32,GraphicsUnit.Pixel);
+                int height = qrImg.Height;
+                foreach (string s in textList)
+                {
+                  
+                    Font font = new Font("微软雅黑", 32, GraphicsUnit.Pixel);
 
-                SolidBrush b = new SolidBrush(Color.Black);
+                    SolidBrush b = new SolidBrush(Color.Black);
 
-                g.DrawString(s, font, b, new PointF(2, qrImg.Height+2));
+                    g.DrawString(s, font, b, new PointF(2 + leftOffset, height + 2));
+
+                    height += font.Height + 2;
+                }
+             
             }
 
             return bkImg;
+        }
+
+        //自定义二维码生成
+        public static void GenQR(string url,string savefilePath,List<string> desc = null)
+        {
+            QRCodeGenerator generator = new QRCodeGenerator();
+
+            QRCodeData codeData = generator.CreateQrCode(url, QRCodeGenerator.ECCLevel.M, true);
+
+            QRCode qrcode = new QRCode(codeData);
+        
+            Bitmap qrImage = qrcode.GetGraphic(17, Color.Black, Color.White, true);
+            if(desc!=null && desc.Count>0)
+            {
+                qrImage = AddStringUnderQR(qrImage, desc,20);
+            }
+
+            qrImage.Save(savefilePath);
+            qrImage.Dispose();
+           // string savePath = EduEnviroment.DicPath_QRPay+fil
+           // MemoryStream ms = new MemoryStream();
+
+            //qrImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+
+            //byte[] bytes = ms.GetBuffer();
+
+            //ms.Close();
+
+            //  return File(bytes, "image/Png");
         }
     }
 }

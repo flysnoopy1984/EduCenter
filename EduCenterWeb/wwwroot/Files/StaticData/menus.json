@@ -3,43 +3,39 @@
     {
       "name":"云艺大厅",
       "sub_button": [
-        {
-          "type": "view",
-          "name": "我要试听",
-          "url": "http://edu.iqianba.cn/User/Login?handler=LoginTransfer2&toPage=/User/ApplyTrial"
-        },
+        
         {
           "type": "view",
           "name": "云艺介绍",
           "url": "http://mp.weixin.qq.com/s?__biz=MzU3NDk2NjE1MQ==&mid=100000013&idx=1&sn=1b9b19525f6a60329e1e4315f5c40ec5&chksm=7d2b11e54a5c98f3485c9a6ff1394b9397f90b06c72e41d919473cba592d8cb05e6832d3b233#rd"
-        }
-      ]
-    },
-    {
-      "name": "云艺书院",
-      "sub_button": [
-        {
-          "type": "view",
-          "name": "进入书院",
-          "url": "http://edu.iqianba.cn/User/MyCourse"
         },
         {
           "type": "view",
           "name": "用户手册",
           "url": "http://mp.weixin.qq.com/s?__biz=MzU3NDk2NjE1MQ==&mid=100000028&idx=1&sn=4146ed60a3d7d93038b1499bb53926ee&chksm=7d2b11f44a5c98e278a2cf6604b6b703d30f7ad1a06a9a45507b3c912128df49723c9f35646c#"
-        }
-      ]
-    },
-    {
-      "name": "我的云艺",
-      "sub_button": [
+        },
         {
           "type": "view",
           "name": "邀请码",
           "url": "http://edu.iqianba.cn/User/Login?handler=LoginTransfer2&toPage=/Sales/Invite"
+        },
+        {
+          "type": "view",
+          "name": "支付设置",
+          "url": "http://edu.iqianba.cn/User/Login?handler=LoginTransfer2&toPage=/WX/PayQRSetting"
         }
-       
+
       ]
+    },
+    {
+      "name": "我的课程",
+      "type": "view",
+      "url": "http://edu.iqianba.cn/User/Login?handler=LoginTransfer2&toPage=/User/MyCourse"
+    },
+    {
+      "name": "试听预约",
+      "type": "view",
+      "url": "http://edu.iqianba.cn/User/Login?handler=LoginTransfer2&toPage=/User/ApplyTrial"
     }
   ]
 }

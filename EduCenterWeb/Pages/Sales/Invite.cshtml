@@ -2,7 +2,7 @@
 @model EduCenterWeb.Pages.Sales.InviteModel
 @{
     ViewData["Title"] = "Invite";
-    Layout = "~/Pages/Shared/_EduMainApp.cshtml";
+    Layout = "~/Pages/Shared/_EduMainAppNoMenus.cshtml";
 }
 @Html.AntiForgeryToken()
 <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
@@ -27,7 +27,7 @@
     /* Login Area */
     .QRArea {
         /*flex-grow: 3;*/
-     height: 60%;
+     height: 50%;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -39,6 +39,7 @@
         flex-grow: 6;
         text-align: center;
         width:95%;
+        font-size:11px;
      /*background-color:#ff6a00;*/
     }
 
@@ -49,6 +50,8 @@
     }
     table tr td{
         border:solid 1px #808080;
+        height:28px;
+        line-height:28px;
     }
     table tr th{
         text-align:center;
@@ -77,9 +80,20 @@
         width:80%;
         margin-bottom:10px;
     }
+    .Title{
+        display:flex;
+        justify-content:space-between;
+        width:90%;
+        height:50px;
+        line-height:50px;
+    }
 </style>
 <div class="MainContent">
-    <div class="QRArea">
+    <div class="Title">
+        <div style="color:#808080" onclick="BackToHome();"><i class="fa fa-2x fa-home" aria-hidden="true"></i>返回主页</div>
+        <div style="color:#0094ff"><i class="fa fa-2x fa-hand-o-up" aria-hidden="true"></i> </div>
+    </div>
+    <div class="QRArea">    
         @if (Model.QRInvite == null)
         {
             <input id="btnGenQR" type="button" class="btn btn-danger" value="生成邀请码" />
@@ -88,7 +102,6 @@
         {
             <label class="text-primary">我的邀请码</label>
             <img class="QRImg" src="@Model.QRInvite.FileWithLogoPath" />
-
 
         }
 
@@ -115,14 +128,16 @@
                     <th>邀请用户</th>
                     <th>邀请时间</th>
                     <th>状态</th>
+                    <th></th>
                 </tr>
                 @foreach (var log in Model.InviteLog)
                 {
-                    <tr>
-                        <td><div class="TextNoWrap2" style="width:120px;">@log.InvitedWxName</div></td>
-                        <td width="30%">@log.InvitedDateTimeStr</td>
-                        <td width="30%">@log.InviteStatusName</td>
-                    </tr>
+            <tr>
+                <td><div class="TextNoWrap2" style="width:120px;">@log.InvitedWxName</div></td>
+                <td width="22%">@log.InvitedDateStr</td>
+                <td width="22%">@log.InviteStatusName</td>
+                <td width=""><a onclick="ToReward('@log.Id')">查看奖励</a></td>
+            </tr>
                 }
             </table>
         </div>

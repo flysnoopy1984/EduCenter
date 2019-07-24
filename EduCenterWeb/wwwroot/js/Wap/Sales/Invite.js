@@ -79,9 +79,16 @@
             3)
     }
     ShowLogDetail = function () {
-        ShowInfo("开发中，敬请期待！", null, null, 1);
+        window.location.href = "/Sales/InviteList";
     }
 
+    BackToHome = function () {
+        window.location.href = "/User/Home";
+    }
+
+    ToReward = function (Id) {
+        window.location.href = "/Sales/InviteReward?Id="+Id;
+    }
     Init();
 
 })

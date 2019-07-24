@@ -56,9 +56,9 @@
 
   
     <div class="Content">
-        <div class="TopButtonList">
+        @*<div class="TopButtonList">
             <input id="btn_Save" type="button" class="btn btn-warning btn-sm" value="保存" />
-        </div>
+        </div>*@
         <div class="oneRow">
             <label class="layui-field-title">接待人：</label>
             <div class="bSalesName">
@@ -72,8 +72,8 @@
             </div>
         </div>
         <div class="oneRow">
-            <label>用户称呼：</label>
-            <div><input type="text" class="bUserName" /></div>
+            <label>宝贝：</label>
+            <div><input type="text" class="bUserName" readonly /></div>
         </div>
         <div class="oneRow">
             <label>联系方式：</label>
@@ -123,10 +123,12 @@
         <div class="oneRow">
             <label class="layui-field-title">状态：</label>
             <div class="bStatus"></div>
+            @*<div style="margin-left:20px;"><input type="button" id="btnCloseTrial" class="btn btn-xs btn-danger" value="取消试听" /></div>*@
         </div>
     </div>
     <div class="btnList">
         <input id="btn_Close" type="button" class="btn btn-primary btn-sm" value="关闭" />
+        <input id="btn_Save" type="button" class="btn btn-warning btn-sm" value="保存" />
     </div>
     
 </div>

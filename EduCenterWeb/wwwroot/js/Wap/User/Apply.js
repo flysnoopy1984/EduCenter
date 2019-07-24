@@ -77,7 +77,7 @@
                         $(".CourseSelect").find("input[type=radio]:checked").each(function () {
                             var checkedNo = $(this).val();
                             var checkeditem = csList[checkedNo];
-                            CreateSelectCourseInfo(checkeditem, checkedNo);
+                            CreateSelectCourseInfo(checkeditem, checkedNo, cell);
 
                         })
                     }
@@ -130,7 +130,7 @@
 
 
     //主页面的课程信息
-    CreateSelectCourseInfo = function (data, selectNo) {
+    CreateSelectCourseInfo = function (data, selectNo, cell) {
 
         if (selectNo == -1) {
             if (selCode != null && selCode != "") {
@@ -139,9 +139,12 @@
             return;
         };
         //Grid TD 信息
-        var gridRoot = null;
-        if (data.Day >= 1 && data.Day <= 5) gridRoot =$("#GridNormal");
-        else gridRoot = $("#GridWeek"); 
+      
+        var gridRoot = $(cell).closest("#GridWeek");
+
+        //var gridRoot = null;
+        //if (data.Day >= 1 && data.Day <= 5) gridRoot =$("#GridNormal");
+        //else gridRoot = $("#GridWeek"); 
 
         var td = gridRoot.find(".CellContainer[day=" + data.Day + "][lesson=" + data.Lesson + "]");
         td.find(".CellCourseData").hide();
@@ -214,8 +217,9 @@
 
     RestoreCellData = function (day,lesson) {
         var gridRoot = null;
-        if (day >= 1 && day <= 5) gridRoot = $("#GridNormal");
-        else gridRoot = $("#GridWeek");
+        var gridRoot = $(".CourseGrid[day=" + day + "]");
+        //if (day >= 1 && day <= 5) gridRoot = $("#GridNormal");
+        //else gridRoot = $("#GridWeek");
 
         var td = gridRoot.find(".CellContainer[day=" + day + "][lesson=" + lesson + "]");
         td.find(".CellCourseData").show();

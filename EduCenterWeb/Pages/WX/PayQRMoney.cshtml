@@ -1,0 +1,72 @@
+﻿@page
+@model EduCenterWeb.Pages.WX.PayQRMoneyModel
+@{
+
+    Layout = "~/Pages/Shared/_EduMainAppNoMenus.cshtml";
+}
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
+<script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
+<script src="~/js/EduLib/Common.js?v=@Model.jsVersion"></script>
+<script src="~/js/EduLib/EditHelper.js?v=@Model.jsVersion"></script>
+<script src="~/js/Wap/WX/PayQRMoney.js?v=@Model.jsVersion"></script>
+<style type="text/css">
+    .MainContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 400px;
+        flex-direction: column;
+    }
+
+    .oneLine {
+        width: 80%;
+        display: flex;
+        margin:10px;
+        align-items: baseline;
+    }
+    .courseTime{
+         font-weight:bold;
+         font-size:24px;
+         color:#0094ff;
+    }
+    .payAmount{
+        font-weight:bold;
+        font-size:26px;
+        color:#ff6a00;
+    }
+     .Title {
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        width: 100%;
+        font-size: 18px;
+        font-weight: bold;
+        color: #671A02;
+    }
+
+</style>
+<div class="MainContainer">
+    <div class="Title">
+        扫码支付
+    </div>
+    <div class="oneLine">
+        <label>课时：</label>
+        <div class="courseTime"></div>
+    </div>
+    <div class="oneLine">
+        <label>支付金额：</label>
+        <div class="payAmount"></div>
+    </div>
+    <div style="margin-top:15px;">
+        <input type="button" class="btn btn-primary" value="确认支付" onclick="SurePay();" />
+    </div>
+
+</div>
+<div style="text-align:center;">
+    <input type="button" class="btn btn-warning" value="返回主页" onclick="BackToHome();" />
+</div>
+
+

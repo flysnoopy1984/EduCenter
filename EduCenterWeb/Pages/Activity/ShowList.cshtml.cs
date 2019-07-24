@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace EduCenterWeb.Pages.WebBackend.User
+namespace EduCenterWeb.Pages.Activity
 {
-    public class AdjustUserCourseModel : PageModel
+    public class ShowListModel : EduBaseAppPageModel
     {
         public void OnGet()
         {

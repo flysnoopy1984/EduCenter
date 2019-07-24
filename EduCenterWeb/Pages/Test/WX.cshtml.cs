@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using EduCenterCore.Common.Helper;
 using EduCenterCore.EduFramework;
 using EduCenterCore.WX;
+using EduCenterModel.Course.Result;
 using EduCenterModel.WX;
 using EduCenterModel.WX.Media;
+using EduCenterModel.WX.MessageTemplate;
 using EduCenterSrv;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -19,10 +21,12 @@ namespace EduCenterWeb.Pages.Test
     {
         private TecSrv _TecSrv;
         private UserSrv _UserSrv;
-        public WXModel(TecSrv TecSrv, UserSrv userSrv)
+        private CourseSrv _CourseSrv;
+        public WXModel(TecSrv TecSrv, UserSrv userSrv, CourseSrv courseSrv)
         {
             _TecSrv = TecSrv;
             _UserSrv = userSrv;
+            _CourseSrv = courseSrv;
         }
         public string Msg;
 
@@ -63,6 +67,23 @@ namespace EduCenterWeb.Pages.Test
                     _TecSrv.NewTecFromUser(user);
                 }
 
+
+            }
+            catch (Exception ex)
+            {
+                Msg = ex.Message;
+            }
+        }
+
+        public void OnPostNewInvite()
+        {
+            Msg = "创建成功！";
+            try
+            {
+
+                NewUserJoinWXTemplate wxMessage = new NewUserJoinWXTemplate();
+                wxMessage.data = wxMessage.GenerateData("oh6cV1QhPLj6XPesheYUQ4XtuGTs", "Jacky", DateTime.Now, "Test");
+                WXApi.SendTemplateMessage<NewUserJoinWXTemplate>(wxMessage);
 
             }
             catch (Exception ex)

@@ -17,6 +17,9 @@ namespace EduCenterModel.Sales
         [MaxLength(32)]
         public string OwnOpenId { get; set; }
 
+        [MaxLength(40)]
+        public string OwnName { get; set; }
+
         [MaxLength(32)]
         public string InvitedOpenId { get; set; }
 

@@ -6,6 +6,7 @@ using EduCenterCore.Common.Helper;
 using EduCenterCore.EduFramework;
 using EduCenterCore.WX;
 using EduCenterModel.Common;
+using EduCenterModel.Course;
 using EduCenterModel.Session;
 using EduCenterModel.User;
 using EduCenterModel.WX;
@@ -28,7 +29,73 @@ namespace EduCenterWeb.Pages.WX
             _BusinessSrv = businessSrv;
             _CourseSrv = courseSrv;
         }
-      
+
+        [HttpPost]
+        public WxPayOrder JSPay(int feeAmt,int courseTime)
+        {
+            WxPayOrder wxOrder = null;
+            var us = GetUserSession(false);
+            try
+            {
+                if (us != null)
+                {
+                    string notifyUrl = "http://edu.iqiban.cn/api/wxPay/Notify";
+                    JsApiPay jsApiPay = new JsApiPay();
+                    jsApiPay.openid = us.OpenId;
+                     jsApiPay.total_fee = feeAmt * 100;
+                  
+
+                    string OrderNo = WxPayApi.GenerateOutTradeNo();
+                    var desc = "扫码支付学费";
+                    if(courseTime>0)
+                    {
+                        desc += $"[{courseTime}]课时";
+                    }
+                    /* 生成 系统订单 */
+                    ECoursePrice eCoursePrice = _CourseSrv.GetCoursePrice("VIP");
+                    eCoursePrice.Qty = courseTime;
+                    eCoursePrice.Price = feeAmt;
+                    var order = _BusinessSrv.PayCourseOrder(us.OpenId, eCoursePrice);
+
+                    WxPayData unifiedOrderResult = jsApiPay.GetUnifiedOrderResult(desc, notifyUrl, OrderNo);
+                    WxPayData wxJsApiParam = jsApiPay.GetJsApiParameters();
+
+                    wxOrder = new WxPayOrder()
+                    {
+                        appId = wxJsApiParam.GetValue("appId").ToString(),
+                        nonceStr = wxJsApiParam.GetValue("nonceStr").ToString(),
+                        package = wxJsApiParam.GetValue("package").ToString(),
+                        paySign = wxJsApiParam.GetValue("paySign").ToString(),
+                        signType = "MD5",
+                        timeStamp = wxJsApiParam.GetValue("timeStamp").ToString(),
+                        OrderNo = OrderNo,
+                        EduOrderNo = order.OrderId
+
+                    };
+                }
+                else
+                {
+                    wxOrder = new WxPayOrder()
+                    {
+                        IntMsg = -1,
+                        IsSuccess = false,
+                        ErrorMsg = "请重新登陆",
+                    };
+                }
+            }
+            catch(Exception ex)
+            {
+                NLogHelper.ErrorTxt($"JSPay:{ex.Message}");
+                wxOrder = new WxPayOrder()
+                {
+                    IsSuccess = false,
+                    ErrorMsg = ex.Message,
+                };
+            }
+         
+            return wxOrder;
+        }
+
 
         [HttpPost]
         public WxPayOrder Pay(WxPayInfo wxPayInfo)
@@ -56,7 +123,7 @@ namespace EduCenterWeb.Pages.WX
                     jsApiPay.openid = us.OpenId;
                     jsApiPay.total_fee = (int)eCoursePrice.Price * 100;
 
-                    //jsApiPay.total_fee = 1;
+                   
 
                     string OrderNo = WxPayApi.GenerateOutTradeNo();
                     var order = _BusinessSrv.PayCourseOrder(us.OpenId, eCoursePrice);
@@ -76,8 +143,7 @@ namespace EduCenterWeb.Pages.WX
                         EduOrderNo = order.OrderId
 
                     };
-                  
-                   
+                                     
                 }
                 else
                 {
@@ -109,7 +175,8 @@ namespace EduCenterWeb.Pages.WX
             ResultNormal result = new ResultNormal();
             try
             {
-                EUserAccount eUserAccount = _BusinessSrv.PayCourseSuccess(paySuccess.OrderId);
+               
+                EUserAccount eUserAccount = _BusinessSrv.PayCourseSuccess(paySuccess);
                 if (eUserAccount != null)
                 {
                     var us = GetUserSession(false);

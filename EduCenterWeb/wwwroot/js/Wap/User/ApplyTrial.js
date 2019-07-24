@@ -5,7 +5,7 @@
 
         var phone = $("#hUserPhone");
         if (phone.val() == "" || phone.val() == null) {
-            ShowInfo("请先留下您的联系方式，便于工作人员联系您，谢谢！", null, null, 5, function () {
+            ShowInfo("请先留下您的联系方式，便于工作人员联系您，谢谢！", null, null, -1, function () {
                 window.location.href = "/Independent/RegPhone?rurl=/User/ApplyTrial";
             });
         }

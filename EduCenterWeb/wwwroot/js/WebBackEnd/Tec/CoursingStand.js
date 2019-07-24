@@ -8,6 +8,8 @@
    
     var firstDate = new Date(year, month-1, 1);
     var dayofweek = firstDate.getDay();
+    if (dayofweek == 0)
+        dayofweek = 7;
 
     var nextDate = new Date(year, month, 1);
     nextDate.setDate(0);
@@ -153,6 +155,9 @@
 
         firstDate = new Date(year, month-1, 1);
         dayofweek = firstDate.getDay();
+        if (dayofweek == 0)
+            dayofweek = 7;
+            
         nextDate = new Date(year, month, 1);
         nextDate.setDate(0);
         MaxDay = nextDate.getDate();

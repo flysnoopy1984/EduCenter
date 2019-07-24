@@ -329,12 +329,41 @@ namespace EduCenterWeb.Migrations
                     b.Property<string>("InvitedOpenId")
                         .HasMaxLength(32);
 
+                    b.Property<string>("OwnName")
+                        .HasMaxLength(40);
+
                     b.Property<string>("OwnOpenId")
                         .HasMaxLength(32);
 
                     b.HasKey("Id");
 
                     b.ToTable("InviteLog");
+                });
+
+            modelBuilder.Entity("EduCenterModel.Sales.EInviteRewardTrans", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("Amount");
+
+                    b.Property<int>("Direction");
+
+                    b.Property<long>("InviteLogId");
+
+                    b.Property<DateTime>("TransDateTime");
+
+                    b.Property<int>("TransStatus");
+
+                    b.Property<int>("TransType");
+
+                    b.Property<string>("UserOpenId")
+                        .HasMaxLength(32);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InviteRewardTrans");
                 });
 
             modelBuilder.Entity("EduCenterModel.Teacher.ETecCourse", b =>
@@ -470,13 +499,15 @@ namespace EduCenterWeb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<double>("InviteRewards");
+
                     b.Property<double>("RemainCourseTime");
+
+                    b.Property<double>("RemainRewards");
 
                     b.Property<double>("RemainSummerTime");
 
                     b.Property<double>("RemainWinterTime");
-
-                    b.Property<double>("RewardsTime");
 
                     b.Property<DateTime>("SummerBuyDate");
 
@@ -548,12 +579,16 @@ namespace EduCenterWeb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("AutoFixedDatetime");
+
                     b.Property<string>("CourseDateTime")
                         .HasMaxLength(10);
 
                     b.Property<int>("CourseScheduleType");
 
                     b.Property<DateTime>("CreatedDateTime");
+
+                    b.Property<bool>("IsFixedByAuto");
 
                     b.Property<string>("LessonCode")
                         .HasMaxLength(50);

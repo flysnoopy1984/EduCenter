@@ -34,8 +34,8 @@ namespace EduCenterWeb.Pages.Sales
 
                 if (QRInvite!=null)
                 {
-                    int totalcount;
-                    InviteLog = _SalesSrv.QueryInviteLog(us.OpenId, out totalcount, 1, 5);
+                    int totalPages;
+                    InviteLog = _SalesSrv.QueryInviteLog(us.OpenId, out totalPages, 1, 5);
 
                  //   InitWxConfig();
                 }

@@ -24,6 +24,7 @@ namespace EduCenterModel.User.In
 
         public string RealName { get; set; }
 
+        public string SalesOpenId { get; set; }
 
     }
 }

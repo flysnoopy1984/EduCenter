@@ -58,6 +58,7 @@ namespace EduCenterWeb.Pages.User
             {
                 CourseTimes = StaticDataSrv.CourseTime.Values.ToList();
                 CourseScheduleList = _CourseSrv.GetSWCourseScheduleByYear(DateTime.Now.Year);
+
             }
         }
 
@@ -83,16 +84,16 @@ namespace EduCenterWeb.Pages.User
         public IActionResult OnPostSubmit(List<string> lessonCodeList,bool useRightNow = false)
         {
             ResultNormal result = new ResultNormal();
-            CourseScheduleType courseScheduleType = StaticDataSrv.CurrentScheduleType;
+            CourseScheduleType courseScheduleType = CourseScheduleType.Summer;
             try
             {
                 var us = base.GetUserSession(false);
                 if (us != null)
                 {
-                    var needRecharge = UserSession.NeedRecharge(us, StaticDataSrv.CurrentScheduleType);
+                    var needRecharge = UserSession.NeedRecharge(us, courseScheduleType);
                     if (needRecharge < 0)
                     {
-                        var csTypeName = BaseEnumSrv.GetCourseScheduleTypeName(StaticDataSrv.CurrentScheduleType);
+                        var csTypeName = BaseEnumSrv.GetCourseScheduleTypeName(courseScheduleType);
                         string errorMsg = $"您的{csTypeName}余额不足，请先去充值";
                         if (needRecharge == -2) errorMsg = $"您的余额不足，请先去充值";
                         result.ErrorMsg = errorMsg;

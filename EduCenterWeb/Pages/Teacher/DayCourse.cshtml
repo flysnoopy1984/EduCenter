@@ -29,7 +29,7 @@
     .DateArea {
         width: 100%;
         display: flex;
-        justify-content: center;
+        justify-content: space-around;
         height: 40px;
         margin-bottom: 20px;
     }
@@ -37,6 +37,7 @@
         .DateArea .CalendarPicker {
             display: flex;
             color: #9da09b;
+            align-items:center;
         }
 
         .DateArea .DateLabel {
@@ -46,7 +47,7 @@
 
         .DateArea .CalendarPicker .DateInput {
             border-bottom: solid 1px #808080;
-            width: 150px;
+            width: 120px;
             line-height: 40px;
             padding-left: 15px;
             color: #12aa21;
@@ -69,7 +70,7 @@
     }
 
     .UserInfoList {
-        margin-top: 10px;
+        margin-top: 5px;
         display:flex;
         flex-direction:column;
         width:95%;
@@ -82,9 +83,19 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: 4px;
+        flex-direction:column;
     }
 
     .UserName {
+    }
+    .tecOperation
+    {
+        display:flex;
+        justify-content:flex-end;   
+        width:100%;
+    }
+    .OneUserInfo{
+        margin-bottom:5px;
     }
 </style>
 <div class="MainContainer">
@@ -95,17 +106,19 @@
             <div class="DateInput">@DateTime.Now.ToString("yyyy-MM-dd")</div>
             <div class="fa fa-calendar fa-2x" id="btn_DatePick"></div>
         </div>
+        <div class="btnRefresh"><input type="button" class="btn btn-warning btn-sm" value="刷新" /></div>
     </div>
+  
     <div class="AllCourse">
-       
+
 
 
     </div>
 </div>
 <div id="HideData" style="display:none;">
     <div class="OneCourseData">
-        <div class="CourseTitle bg-primary">
-            <div class="CouseInfo">【美术课】 12:30开始</div>
+        <div class="CourseTitle bg-info">
+            <div class="CouseInfo"></div>
             <div class="SwitchDetail" lCode="">学生详情<i class="fa fa-caret-left" style="margin-left:5px;"></i></div>
         </div>
         <div class="UserInfoList">
@@ -116,11 +129,20 @@
 
 
     <div class="OneUser">
-        <div class="UserName">学生姓名:xxx</div>
-        <div class="UserStatus ">已签到</div>
+        <div class="OneUserInfo">
+            <div class="UserName">学生姓名:xxx</div>
+
+            @*<div class="RemainTime">剩余课时:4小时</div>*@
+            <div class="UserStatus ">已签到</div>
+        </div>
+        <div class="tecOperation">
+            @*<input type="button" class="btn btn-warning btn-xs" value="请假" />*@
+            <input type="button" id="btnSignForUser" class="btn btn-primary btn-xs" value="帮忙代签" />
+
+        </div>
     </div>
 
-    <div class="btnRefresh"><input type="button" class="btn btn-warning btn-sm" value="刷新" /></div>
+    
 
 </div>
 

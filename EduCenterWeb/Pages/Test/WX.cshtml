@@ -37,6 +37,9 @@
         <form method="post">
             <input type="submit" value="测试老师邀请" asp-page-handler="InviteTec" />
         </form>
+        <form method="post">
+            <input type="submit" value="测试邀请通知" asp-page-handler="NewInvite" />
+        </form>
         <div style="margin-top:20px;">
             <form method="post">
                 <input type="submit" value="获取永久图文列表" asp-page-handler="GetNewsMeterial" />
@@ -71,12 +74,12 @@
 
                         @foreach (var item in Model.PicMedia.item)
                         {
-                        <tr>
-                            <td>@item.media_id</td>
-                            <td title="@item.url">@item.url</td>
-                            <td><img src="@item.url" class="WXImg" /></td>
+                            <tr>
+                                <td>@item.media_id</td>
+                                <td title="@item.url">@item.url</td>
+                                <td><img src="@item.url" class="WXImg" /></td>
 
-                        </tr>
+                            </tr>
 
                         }
                     </table>

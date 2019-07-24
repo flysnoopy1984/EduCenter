@@ -10,6 +10,8 @@ namespace EduCenterModel.BaseEnum
 
         BindPhone =1,
 
+        ApplyTrial = 2,
+
         Paied = 10,
     }
 }

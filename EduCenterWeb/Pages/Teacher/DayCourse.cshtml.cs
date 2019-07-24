@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EduCenterCore.Common.Helper;
+using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Teacher.Result;
 using EduCenterModel.User.Result;
 using EduCenterSrv;
+using EduCenterSrv.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -16,10 +18,12 @@ namespace EduCenterWeb.Pages.Teacher
     {
         private TecSrv _TecSrv;
         private UserSrv _UserSrv;
-        public DayCourseModel(TecSrv tecSrv,UserSrv userSrv)
+        private BusinessSrv _BusinessSrv;
+        public DayCourseModel(TecSrv tecSrv,UserSrv userSrv, BusinessSrv businessSrv)
         {
             _UserSrv = userSrv;
             _TecSrv = tecSrv;
+            _BusinessSrv = businessSrv;
         }
         public void OnGet()
         {
@@ -58,6 +62,24 @@ namespace EduCenterWeb.Pages.Teacher
                 result.ErrorMsg = ex.Message;
             }
 
+            return new JsonResult(result);
+        }
+
+        public IActionResult OnPostSignForUser(string openId,string lessonCode,MemberType memberType,string date)
+        {
+            ResultNormal result = new ResultNormal();
+            try
+            {
+               var csType =  _UserSrv.GetCurrentCourseScheduleType(openId, memberType);
+                DateTime signDate = DateTime.Parse(date);
+               _BusinessSrv.UpdateCourseLogToSigned(openId, memberType, csType, lessonCode, signDate, true);
+
+                result.SuccessMsg = BaseEnumSrv.GetUserCourseLogStatusNameForTec(UserCourseLogStatus.SignIn);
+            }
+            catch(Exception ex)
+            {
+                result.ErrorMsg = ex.Message;
+            }
             return new JsonResult(result);
         }
     }

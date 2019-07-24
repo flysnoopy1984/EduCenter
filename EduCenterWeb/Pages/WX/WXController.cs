@@ -66,7 +66,7 @@ namespace EduCenterWeb.Pages.WX
                var memoryStream = new MemoryStream();
                Request.Body.CopyTo(memoryStream);
                string strXml = System.Text.Encoding.Default.GetString(memoryStream.ToArray());
-               NLogHelper.InfoTxt($"WXEntry Message:{strXml}");
+        //       NLogHelper.InfoTxt($"WXEntry Message:{strXml}");
 
                 if (!string.IsNullOrEmpty(strXml))
                 {

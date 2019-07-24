@@ -92,7 +92,9 @@
             tr.find(".UserRole").val(data.UserRole);
             tr.find(".wxJoinDateTime").text(data.WXJoinDateTime);
 
-            tr.find(".SalesName").text(data.SalesName);
+            tr.find(".selSalesName").val(data.SalesOpenId);
+          
+            tr.find(".Contract").text(data.UserPhone);
 
             var DeadLineStd = tr.find(".DeadLineStd");
             DeadLineStd.attr("id", "showDate" + i);
@@ -145,7 +147,11 @@
     }
     //课程调整
     AdjustCourse = function (e) {
-        ShowInfo("开发中!");
+        var obj = $(e.currentTarget);
+        var tr = obj.closest("tr");
+        var openId = tr.attr("openId");
+        window.location.href = "/WebBackend/User/AdjustCourse?openId="+openId;
+
     }
     //保存
     SaveUser = function (e) {
@@ -162,7 +168,8 @@
             "RemainTimeWinter": tr.find(".RemainTimeWinter").val(),
             "RemainTimeWinter": tr.find(".RemainTimeWinter").val(),
             "DeadLineStd": tr.find(".DeadLineStd").val(),
-            "RealName":tr.find(".RealName").val(),
+            "RealName": tr.find(".RealName").val(),
+            "SalesOpenId": tr.find(".selSalesName").val(),
         }
 
         callAjax_Query(UpdateUserUrl, data, SaveUserCallBack);

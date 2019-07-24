@@ -83,7 +83,10 @@ namespace EduCenterWeb.Pages.User
                 var us = base.GetUserSession(false);
                 if (us != null)
                 {
-                    _BusinessSrv.UpdateCourseLogToSigned(us.OpenId, us.MemeberType, us.CurrentScheduleType, LessonCode);
+                    _BusinessSrv.UpdateCourseLogToSigned(us.OpenId, 
+                        us.MemeberType, 
+                        us.CurrentScheduleType, 
+                        LessonCode,DateTime.Now);
                
                 }
                 else

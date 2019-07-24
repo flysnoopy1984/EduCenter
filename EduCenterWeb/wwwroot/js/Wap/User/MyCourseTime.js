@@ -13,7 +13,14 @@
 
         $("#ComsumeBar").on("click", SwitchQueryConsumeList);
 
+        $("#btnGetReword").on("click", GetReward);
+
     }
+    //奖金Begin
+    GetReward = function () {
+        ShowInfo("暂时无法提现，如有提现需求请到店联系客服");
+    }
+    //奖金End
 
     SwitchQueryReChargeList =function(e){
         var btnI = $(e.currentTarget).children("i");

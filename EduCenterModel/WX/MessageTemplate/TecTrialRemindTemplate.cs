@@ -16,7 +16,7 @@ namespace EduCenterModel.WX.MessageTemplate
          */
     public class TecTrialRemindTemplate: BaseTemplate<TecTrialRemindTemplate>
     {
-        public object data { get; set; }
+      
         public TecTrialRemindTemplate GenerateData(string toUserOpenId, RTrialLog eTrialLog)
         {
             string first = $"有用户预约了您的试听课.";
