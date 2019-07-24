@@ -122,7 +122,7 @@ namespace EduCenterWeb.Pages.WX
                     SubscribeHandler();
                     break;
                 default:
-                    _ResultMsg = _wxMessage.toText(WXReplyContent.DefaultMsessage());
+                    _ResultMsg = "";//_wxMessage.toText(WXReplyContent.DefaultMsessage());
                     break;
               
                       

@@ -11,7 +11,8 @@ namespace EduCenterCore.WX
     {
         public static string DefaultMsessage()
         {
-            return "有问题请留言，我们会尽快回复！您可点击<a href='http://mp.weixin.qq.com/s?__biz=MzU3NDk2NjE1MQ==&mid=100000028&idx=1&sn=4146ed60a3d7d93038b1499bb53926ee&chksm=7d2b11f44a5c98e278a2cf6604b6b703d30f7ad1a06a9a45507b3c912128df49723c9f35646c#'>用户手册查看书院使用说明</a>";
+            return "";
+           // return "有问题请留言，我们会尽快回复！您可点击<a href='http://mp.weixin.qq.com/s?__biz=MzU3NDk2NjE1MQ==&mid=100000028&idx=1&sn=4146ed60a3d7d93038b1499bb53926ee&chksm=7d2b11f44a5c98e278a2cf6604b6b703d30f7ad1a06a9a45507b3c912128df49723c9f35646c#'>用户手册查看书院使用说明</a>";
         }
         public static string NewTec(string Name)
         {

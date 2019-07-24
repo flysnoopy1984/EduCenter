@@ -145,7 +145,7 @@ namespace EduCenterWeb.Pages.User
                     //oh6cV1dh0hjoGEizCoKH1KU70UwQ 童老师
                     //oh6cV1ZcN2GzbZpaYELK8Uv3a2rU
                     //oh6cV1QhPLj6XPesheYUQ4XtuGTs jacky
-                    var ui = _UserSrv.GetUserInfo("oh6cV1UUH2cg1p3--SPVnJdDpgbM");
+                    var ui = _UserSrv.GetUserInfo("oh6cV1djEwlU7Hup1KynlnyFrmdA");
                     WXLoginCallBack(ui);
                     userSession = GetUserSession(false);
                 }

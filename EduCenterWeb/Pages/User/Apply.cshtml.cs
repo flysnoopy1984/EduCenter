@@ -25,7 +25,7 @@ namespace EduCenterWeb.Pages.User
         public List<ECourseTime> CourseTimes { get; set; }
 
        
-        public List<ECourseSchedule> CourseScheduleList;
+       public List<ECourseSchedule> CourseScheduleList;
         public ApplyModel(CourseSrv courseSrv,BusinessSrv businessSrv)
         {
             _CourseSrv = courseSrv;
@@ -98,7 +98,6 @@ namespace EduCenterWeb.Pages.User
                         result.ErrorMsg = errorMsg;
                         result.IntMsg = -2;
                         return new JsonResult(result);
-
                     }
                     List<EUserCourse> ucList = new List<EUserCourse>();
                     foreach(var lc in lessonCodeList)

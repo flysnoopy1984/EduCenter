@@ -246,12 +246,17 @@ namespace EduCenterSrv.Common
                     case CourseScheduleType.Winter:
                         v = "寒假班";
                         break;
+                   
                 }
-                r.Add(new SiKsV
+                if(v!="")
                 {
-                    Key = (int)ct,
-                    Value = v,
-                });
+                    r.Add(new SiKsV
+                    {
+                        Key = (int)ct,
+                        Value = v,
+                    });
+                }
+              
             }
             return r;
         }

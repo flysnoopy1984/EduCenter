@@ -57,7 +57,9 @@ namespace EduCenterWeb.Pages.User
             if (us != null)
             {
                 CourseTimes = StaticDataSrv.CourseTime.Values.ToList();
-                CourseScheduleList = _CourseSrv.GetSWCourseScheduleByYear(DateTime.Now.Year);
+                // CourseScheduleList = _CourseSrv.GetSWCourseScheduleByYear(DateTime.Now.Year);
+               
+                 CourseScheduleList = _CourseSrv.GetCourseScheduleByYearType(DateTime.Now.Year, StaticDataSrv.CurrentScheduleType);
 
             }
         }

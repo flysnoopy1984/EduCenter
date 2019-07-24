@@ -64,18 +64,19 @@
                         <li><a href="/WebBackEnd/Tec/Leave"><i class="fa fa-users"></i>教师请假</a></li>
                     </ul>
                 </li>
+
+                <li class="sub open">
+                    <a href="javascript:;" onclick="SwitchMenu(this);">
+                        <i class="fa fa-database"></i> 主数据 <div class="pull-right"><span class="caret"></span></div>
+                    </a>
+                    <ul class="templatemo-submenu">
+                        <li><a href="/WebBackEnd/MasterData/Tec"><i class="fa fa-users"></i>教师管理</a></li>
+                        <li><a href="/WebBackEnd/MasterData/Course"><i class="fa fa-users"></i>课程管理</a></li>
+                        <li><a href="/WebBackEnd/MasterData/GlobalConfig"><i class="fa fa-users"></i>全局设置</a></li>
+                    </ul>
+                </li>
                 @if (Convert.ToInt32(ViewData["UserRole"]) == 100)
                 {
-                    <li class="sub open">
-                        <a href="javascript:;" onclick="SwitchMenu(this);">
-                            <i class="fa fa-database"></i> 主数据 <div class="pull-right"><span class="caret"></span></div>
-                        </a>
-                        <ul class="templatemo-submenu">
-                            <li><a href="/WebBackEnd/MasterData/Tec"><i class="fa fa-users"></i>教师管理</a></li>
-                            <li><a href="/WebBackEnd/MasterData/Course"><i class="fa fa-users"></i>课程管理</a></li>
-                            <li><a href="/WebBackEnd/MasterData/GlobalConfig"><i class="fa fa-users"></i>全局设置</a></li>
-                        </ul>
-                    </li>
                     <li class="sub open ">
                         <a href="javascript:;" onclick="SwitchMenu(this);">
                             <i class="fa fa-database"></i> 报名排课 <div class="pull-right"><span class="caret"></span></div>

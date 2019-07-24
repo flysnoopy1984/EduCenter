@@ -4,9 +4,9 @@ using System.Text;
 
 namespace EduCenterModel.User.Result
 {
-    public class RUserCourse: EUserCourse
+    public class RUserCourse : EUserCourse
     {
-       
+
 
         public int Day { get; set; }
 
@@ -15,6 +15,8 @@ namespace EduCenterModel.User.Result
         public string Time { get; set; }
 
         public string CourseName { get; set; }
+
+       
 
 
         public double StartTime { get; set; }

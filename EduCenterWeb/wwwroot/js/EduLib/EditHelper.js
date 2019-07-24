@@ -205,7 +205,7 @@
                 else {
                     if (AfterError) {
                         if (errorShowSec == undefined)
-                            errorShowSec = 1;
+                            errorShowSec = 5;
                         ShowInfo(res.ErrorMsg, null, "red", errorShowSec, function () {
                             AfterError(res);
                         });

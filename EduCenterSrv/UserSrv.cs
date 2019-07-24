@@ -131,25 +131,16 @@ namespace EduCenterSrv
             return user;
         }
 
-        ///// <summary>
-        ///// 用户手机注册，留下电话和宝贝姓名
-        ///// </summary>
-        ///// <param name="openId"></param>
-        ///// <param name="phone"></param>
-        ///// <param name="babyName"></param>
-        ///// <returns></returns>
-        //public bool UserRegisterByPhone(string openId,string phone,string babyName)
-        //{
-        //    var sql = sql_UpdateUserPhone(openId, phone);
-        //    _dbContext.Database.ExecuteSqlCommand(sql);
-
-        //  //  SaveChild()
-        //    return true;
-        //}
-
+     
         public EUserInfo GetUserInfo(string openId)
         {
             return _dbContext.DBUserInfo.Where(a => a.OpenId == openId).FirstOrDefault();
+        }
+
+        public List<EUserInfo> GetAllMemberList()
+        {
+            //  MemberType mt = 
+            return _dbContext.DBUserInfo.Where(a => a.UserRole == UserRole.Member).ToList();
         }
 
         public bool IsExistUser(string openId)
@@ -190,7 +181,33 @@ namespace EduCenterSrv
  
        }
 
- 
+        public List<RUserCourse> GetUserAllCourse(string OpenId)
+        {
+
+            var time = StaticDataSrv.CourseTime;
+            //按Day，Lesson排序获取用户所有课程
+            var sql = from uc in _dbContext.DBUserCoures
+                      join cs in _dbContext.DbCourseSchedule on uc.LessonCode equals cs.LessonCode
+                      where uc.UserOpenId == OpenId 
+                      orderby cs.Day, cs.Lesson
+                      select new RUserCourse
+                      {
+                          Day = cs.Day,
+                          Lesson = cs.Lesson,
+                          LessonCode = cs.LessonCode,
+                          CourseName = cs.CourseName,
+                          StartTime = time[cs.Lesson].StartTime,
+                          EndTime = time[cs.Lesson].EndTime,
+                          UserOpenId = uc.UserOpenId,
+                          Time = time[cs.Lesson].TimeRange,
+                          CourseScheduleType = uc.CourseScheduleType,
+                      };
+
+            return sql.ToList();
+
+        }
+
+
         public List<RUserCurrentCourse> GetUserCouseLogByLessonCode(string lessonCode,string date)
         {
           
@@ -813,17 +830,13 @@ namespace EduCenterSrv
             foreach (var log in logList)
             {
                 log.UserOpenId = openId;
+                log.UserCourseLogStatus = UserCourseLogStatus.Leave;
+
                 var data = _dbContext.DBUserCourseLog.Where(a => a.UserOpenId == log.UserOpenId &&
                                                      a.LessonCode == log.LessonCode &&
                                                      a.CourseDateTime == log.CourseDateTime &&
                                                      a.CourseScheduleType == log.CourseScheduleType).FirstOrDefault();
-                if (data.UserCourseLogStatus == UserCourseLogStatus.SignIn)
-                    throw new EduException("您已签到,不能请假！");
-                if (data.UserCourseLogStatus == UserCourseLogStatus.Absent)
-                    throw new EduException("您已缺席,不能请假！");
-
-
-                log.UserCourseLogStatus = UserCourseLogStatus.Leave;
+            
                 if (data == null)
                 {
                     log.CreatedDateTime = DateTime.Now;
@@ -832,8 +845,13 @@ namespace EduCenterSrv
                 }
                 else
                 {
+                    if (data.UserCourseLogStatus == UserCourseLogStatus.SignIn)
+                        throw new EduException("您已签到,不能请假！");
+                    if (data.UserCourseLogStatus == UserCourseLogStatus.Absent)
+                        throw new EduException("您已缺席,不能请假！");
+
                     data.UserLeaveDateTime = DateTime.Now;
-                    data.UserCourseLogStatus = UserCourseLogStatus.Leave;
+                   
                 }
                     
             }
