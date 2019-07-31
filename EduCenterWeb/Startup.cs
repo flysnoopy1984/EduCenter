@@ -52,8 +52,8 @@ namespace EduCenterWeb
 
             services.AddSession(options => 
             {
-                options.IdleTimeout = TimeSpan.FromDays(30);
-            
+                  options.IdleTimeout = TimeSpan.FromDays(1);
+              //  options.IdleTimeout = TimeSpan.FromSeconds(15);
             });
 
 
@@ -86,7 +86,8 @@ namespace EduCenterWeb
             services.AddScoped<BackendSrv>();
             services.AddScoped<EduCenterSrv.SMS.SMSSrv>();
             services.AddScoped<SalesSrv>();
-           
+            services.AddScoped<AliPaySrv>();
+
         }
 
         public static void InitGlobalData(IApplicationBuilder applicationBuilder)

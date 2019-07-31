@@ -86,7 +86,10 @@ namespace EduCenterWeb.Pages.User
                     _BusinessSrv.UpdateCourseLogToSigned(us.OpenId, 
                         us.MemeberType, 
                         us.CurrentScheduleType, 
-                        LessonCode,DateTime.Now);
+                        LessonCode,DateTime.Now,
+                        us.OpenId,
+                        true,
+                        true);
                
                 }
                 else

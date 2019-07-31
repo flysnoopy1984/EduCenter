@@ -1,4 +1,5 @@
 ﻿using EduCenterCore.EduFramework;
+using EduCenterModel.AliPay;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Course;
@@ -22,7 +23,11 @@ namespace EduCenterSrv.Common
         private static Dictionary<int, int> _CourseMaxApplyNum;
 
         private static List<ECourseDateRange> _CourseDateRange;
-     
+
+        private static EAliPayApplication _AliPayApplication;
+
+
+
         public static void Init()
         {
             _CourseTime = CourseTime;
@@ -38,9 +43,14 @@ namespace EduCenterSrv.Common
         {
             GlobalSrv srv = new GlobalSrv(db);
 
-
+            _AliPayApplication = srv.GetAliPayApplication();
             _CourseDateRange = srv.GetCourseDateRangeList();
           
+        }
+
+        public static EAliPayApplication GetAliPayApplication()
+        {
+            return _AliPayApplication;
         }
 
         public static List<ECourseDateRange> CourseDateRange
@@ -115,10 +125,12 @@ namespace EduCenterSrv.Common
                     _TrialTime.Add(3, new ECourseTime { Lesson = 3, TimeRange = "11:00-11:45", StartTime = 11, EndTime = 11.45 });
                     _TrialTime.Add(4, new ECourseTime { Lesson = 4, TimeRange = "12:00-12:45", StartTime = 12, EndTime = 12.45 });
                     _TrialTime.Add(5, new ECourseTime { Lesson = 5, TimeRange = "13:00-13:45", StartTime = 13, EndTime = 13.45 });
-                    _TrialTime.Add(6, new ECourseTime { Lesson = 5, TimeRange = "14:00-14:45", StartTime = 14, EndTime = 14.45 });
-                    _TrialTime.Add(7, new ECourseTime { Lesson = 5, TimeRange = "15:00-15:45", StartTime = 15, EndTime = 15.45 });
-
-
+                    _TrialTime.Add(6, new ECourseTime { Lesson = 6, TimeRange = "14:00-14:45", StartTime = 14, EndTime = 14.45 });
+                    _TrialTime.Add(7, new ECourseTime { Lesson = 7, TimeRange = "15:00-15:45", StartTime = 15, EndTime = 15.45 });
+                    _TrialTime.Add(8, new ECourseTime { Lesson = 8, TimeRange = "16:00-16:45", StartTime = 16, EndTime = 16.45 });
+                    _TrialTime.Add(9, new ECourseTime { Lesson = 9, TimeRange = "17:00-17:45", StartTime = 17, EndTime = 17.45 });
+                    _TrialTime.Add(10, new ECourseTime { Lesson = 10, TimeRange = "18:00-18:45", StartTime = 18, EndTime = 18.45 });
+                    _TrialTime.Add(11, new ECourseTime { Lesson = 11, TimeRange = "19:00-19:45", StartTime = 19, EndTime = 19.45 });
                 }
 
                 return _TrialTime;
@@ -188,6 +200,15 @@ namespace EduCenterSrv.Common
            
         }
 
-      
+        public static CourseScheduleType GetSysCurrentCourseScheduleType(DateTime date)
+        {
+            ECourseDateRange dr = CourseDateRange.Where(a => a.StartDate <= date &&
+         a.EndDate >= date).FirstOrDefault();
+            if (dr != null)
+                return dr.CourseScheduleType;
+            else
+                return CourseScheduleType.Standard;
+
+        }
     }
 }

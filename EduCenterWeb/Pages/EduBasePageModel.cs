@@ -44,9 +44,18 @@ namespace EduCenterWeb.Pages
         {
             base.OnPageHandlerExecuting(context);
             string json = HttpContext.Session.GetString(EduConstant.BackendSessionKey);
+
+            var hasAjaxHeader = Request.Headers["X-Requested-With"];
+           // var b = Request.Headers["EduAJax"];
             if (string.IsNullOrEmpty(json))
             {
-                context.HttpContext.Response.Redirect("/WebBackend/Login");
+                if(!string.IsNullOrEmpty(hasAjaxHeader))
+                {
+                    context.HttpContext.Response.Headers.Add("eduAjaxError", "timeout");
+                    return;
+                }
+                else 
+                    context.HttpContext.Response.Redirect("/WebBackend/Login");
             }
             else
             {

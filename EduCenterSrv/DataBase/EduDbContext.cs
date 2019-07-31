@@ -7,6 +7,7 @@ using EduCenterModel.User;
 using EduCenterSrv.SMS;
 using Microsoft.EntityFrameworkCore;
 using EduCenterModel.Sales;
+using EduCenterModel.AliPay;
 
 namespace EduCenterSrv.DataBase
 {
@@ -23,6 +24,8 @@ namespace EduCenterSrv.DataBase
         public DbSet<EUserChild> DBUserChild { get; set; }
 
         public DbSet<EUserAccount> DBUserAccount { get; set; }
+
+        public DbSet<EUserNote> DBUserNote { get; set; }
 
         public DbSet<EUserInfoBackEnd> DBUserInfoBackEnd { get; set; }
 
@@ -71,7 +74,10 @@ namespace EduCenterSrv.DataBase
 
         //SMS End
 
-        
+        public DbSet<EAliPayApplication> DBAliPayApplication { get; set; }
+
+
+
 
 
     }

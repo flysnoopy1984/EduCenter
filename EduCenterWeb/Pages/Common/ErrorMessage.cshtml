@@ -1,0 +1,33 @@
+﻿@page
+@model EduCenterWeb.Pages.Common.ErrorMessageModel
+@{
+    ViewData["Title"] = "ErrorMessage";
+    Layout = "~/Pages/Shared/_EduMainAppNoMenus.cshtml";
+}
+<style type="text/css">
+    .MainContainer
+    {
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        width:100%;
+        height:100vh;
+        color:#ff6a00;
+        font-size:18px;
+        font-weight:bold;
+       
+    }
+    .info{
+        width:60%;
+        display:flex;
+        height:400px;
+
+    }
+</style>
+<div class="MainContainer">
+    <div class="info">
+        @Model.ErrorMessage
+    </div>
+    
+</div>
+

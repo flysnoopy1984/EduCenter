@@ -1,0 +1,141 @@
+﻿@page
+@model EduCenterWeb.Pages.WebBackend.User.NoteModel
+@{
+    ViewData["Title"] = "Note";
+    Layout = "~/Pages/Shared/_EduWebDialog.cshtml";
+}
+
+<link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
+<script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
+<script src="~/lib/laydate/laydate.js"></script>
+<script src="~/lib/layer-v3.1.1/layer/layer.js"></script>
+<script src="~/js/EduLib/Common.js?v=@Model.jsVersion"></script>
+<script src="~/js/WebBackEnd/User/Note.js?v=@Model.jsVersion"></script>
+<style type="text/css">
+    .MainContainer {
+        display: flex;
+        margin: 15px;
+        flex-direction: column;
+    }
+
+    .UserInfo {
+        /*height:40px;
+        line-height:40px;*/
+        margin-bottom: 20px;
+        /*width:90%;*/
+        display: flex;
+        justify-content: space-between
+    }
+
+    hr {
+        width: 100%;
+    }
+
+    .OneNote {
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+    }
+    .NoteInfo{
+        display:flex;
+       
+    
+    }
+      .NoteInfo > .BtnList {
+          margin-left:20px;
+              display: flex;
+    align-items: flex-end;
+        }
+    .NoteEdit {
+        display: flex;
+        align-items: flex-end; 
+    }
+      
+
+        .NoteEdit > textarea {
+            width: 380px;
+            height: 100px;
+            margin-right: 20px;
+             padding:10px;
+        }
+
+        .NoteEdit > .BtnList {
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+    .NoteAtt {
+        width: 100%;
+        display: flex;
+        font-size: 11px;
+        color: #808080;
+        margin-top: 4px;
+    }
+
+        .NoteAtt > div {
+            margin-right: 10px;
+        }
+        .NoteContent{
+            width:380px;
+            height:100px;
+            border:solid 1px #f6f5f5;
+             padding:10px;
+        }
+</style>
+
+<div class="MainContainer">
+    <div class="UserInfo">
+        <div>
+            <div>
+                宝贝名：<label class="BabyName"></label>
+            </div>
+            <div>
+                微信号：<label class="UserWxName"></label>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="OneNote">
+        <div class="NoteEdit">
+            <textarea id="EditContent"></textarea>
+            <div class="BtnList">
+                <input id="btnNewNote" class="btn btn-primary btn-sm" type="button" value="创建新的备注" />
+                @*<input class="btn btn-danger btn-sm" type="button" value="删除" />*@
+            </div>
+        </div>
+        @*<div class="NoteAtt">
+            创建时间:<div class="CreatedDateTime">@DateTime.Now.ToString("yyyy-MM-dd hh:mm")</div>
+            创建人:<div class="CreatedBy">@Model.CurrentUserName</div>
+        </div>*@
+    </div>
+    <hr />
+
+    <div class="NoteList">
+     
+      
+    </div>
+</div>
+<div id="HideData" style="display:none;">
+    <div class="OneNote" rId="">
+        <div class="NoteInfo">
+            <div class="NoteContent"></div>
+            <div class="BtnList">
+                <input class="btn btn-danger btn-sm" type="button" value="删除" onclick="DelNote(this);" />
+            </div>
+        </div>
+        <div class="NoteAtt">
+            创建时间:<div class="CreatedDateTime">@DateTime.Now.ToString("yyyy-MM-dd hh:mm")</div>
+            创建人:<div class="CreatedBy">@Model.CurrentUserName</div>
+        </div>
+    </div>
+    @*<div class="NoteAtt ModifyInfo">
+        修改时间:<div class="UpdatedDateTime">2019-09-03 09:03</div>
+        修改人:<div class="UpdatedBy">xxxx</div>
+    </div>*@
+</div>
+
+

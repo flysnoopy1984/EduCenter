@@ -6,6 +6,7 @@ namespace EduCenterModel.BaseEnum
 {
     public enum UserRole
     {
+        BlackList = -1,
         Visitor = 0,
         /// <summary>
         /// 有上过正式课程的用户

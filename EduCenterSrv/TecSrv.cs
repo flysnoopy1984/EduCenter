@@ -42,6 +42,12 @@ namespace EduCenterSrv
             string sql = $"update TecCourse set CoursingStatus = 1,ApplyLeaveDateTime='{DateTime.Now}' where Id in ({ids})";
             return sql;
         }
+
+        public static string sql_DeleteTecCourse(string LessonCode)
+        {
+            string sql = $"delete from TecCourse where LessonCode='{LessonCode}'";
+            return sql;
+        }
         #endregion
 
 
@@ -78,6 +84,26 @@ namespace EduCenterSrv
         public ETecInfo Get(string code)
         {
             return _dbContext.DBTecInfo.Where<ETecInfo>(a => a.Code == code).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 仅返回OpenId
+        /// </summary>
+        /// <param name="lessonCode"></param>
+        /// <param name="courseDateTime"></param>
+        /// <returns></returns>
+        public ETecInfo GetOpenIdByLessonCode(string lessonCode,string courseDateTime)
+        {
+            var sql = from tc in _dbContext.DBTecCourse
+                      join t in _dbContext.DBTecInfo on tc.TecCode equals t.Code
+
+                      where tc.LessonCode == lessonCode && tc.CourseDateTime.ToString("yyyy-MM-dd") == courseDateTime
+
+                      select new ETecInfo
+                      {
+                          UserOpenId = t.UserOpenId
+                      };
+            return sql.FirstOrDefault();
         }
 
         public ETecInfo GetByOpenId(string openId)
@@ -195,13 +221,11 @@ namespace EduCenterSrv
                 LessonCode = a.LessonCode
             })
             .OrderBy(a=>a.Lesson)
-            .Where(a => a.TecCode == tecCode &&
-                        a.CourseDateTime.Date.ToString("yyyy-MM-dd") == date
-                       );
+            .Where(a=>a.CourseDateTime.Date.ToString("yyyy-MM-dd") == date);
             if (StaticDataSrv.CurrentScheduleType == CourseScheduleType.Standard)
-            {
                 linq =linq.Where(a => a.CourseScheduleType == CourseScheduleType.Standard);
-            }
+            if (!string.IsNullOrEmpty(tecCode))
+                linq = linq.Where(a => a.TecCode == tecCode);
 
             var result = linq.ToList();
 
@@ -302,6 +326,12 @@ namespace EduCenterSrv
             }
         }
 
+
+        public void DeleteTecCourse(string lessonCode)
+        {
+            string sql = sql_DeleteTecCourse(lessonCode);
+            _dbContext.Database.ExecuteSqlCommand(sql);
+        }
         #endregion
 
         #region TecLeave

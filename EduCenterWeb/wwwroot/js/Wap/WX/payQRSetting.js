@@ -3,13 +3,13 @@
     Init = function () {
         $("#payQRGen").on("click", genQR);
 
-        var UserRole = $("#UserRole").val();
-        if (UserRole != 100 && UserRole != 20) {
-            ShowInfo("没有权限，即将跳转...", null, null, 3, function () {
-                window.location.href = "/User/Home";
-            });
-            return;
-        }
+        //var UserRole = $("#UserRole").val();
+        //if (UserRole != 100 && UserRole != 20) {
+        //    ShowInfo("没有权限，即将跳转...", null, null, 3, function () {
+        //        window.location.href = "/User/Home";
+        //    });
+        //    return;
+        //}
     }
 
     genQR = function () {

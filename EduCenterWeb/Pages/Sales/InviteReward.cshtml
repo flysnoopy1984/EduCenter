@@ -61,9 +61,9 @@
     <hr />
     <div class="RewardStepInfo">
         <div class="RewardLine text-success">
-            @if (Model.InviteLog.InviteStatus >= EduCenterModel.BaseEnum.InviteStatus.ApplyTrial)
+            @if (Model.TrialReward!=null)
             {
-                <span style="margin-right:20px;">用户已报名试听</span><input type="button" id="btnGetTrailReward" class="btn btn-sm btn-success" value="点击获取10元金额" />
+                <span style="margin-right:20px;">用户已报名试听</span><input type="button" id="btnGetTrailReward" class="btn btn-sm btn-success" value="10元金额已打入您的账户" />
             }
             else
             {
@@ -72,9 +72,9 @@
 
         </div>
         <div class="RewardLine text-danger">
-            @if (Model.InviteLog.InviteStatus >= EduCenterModel.BaseEnum.InviteStatus.Paied)
+            @if (Model.PaidReward != null)
             {
-                <span style="margin-right:20px;">用户已正式报名入学</span><input type="button" id="btnGetPaiedReward" class="btn btn-sm btn-danger" value="点击获取300元金额" />
+                <span style="margin-right:20px;">用户已正式报名入学</span><input type="button" id="btnGetPaiedReward" class="btn btn-sm btn-danger" value="300元金额已打入您的账户" />
             }
             else
             {

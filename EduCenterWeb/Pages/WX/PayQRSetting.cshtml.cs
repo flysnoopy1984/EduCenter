@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using EduCenterCore.Common.Helper;
 using EduCenterCore.EduFramework;
@@ -18,7 +20,10 @@ namespace EduCenterWeb.Pages.WX
             var us = GetUserSession();
             if(us!=null)
             {
-                UserRole = (int)us.UserRole;
+                var msg = System.Web.HttpUtility.UrlEncode("您没有权限，请到店联系工作人员!");
+                if ((int)us.UserRole < 10)
+                    HttpContext.Response.Redirect($"/Common/ErrorMessage?msg={msg}");
+
             }
         }
 

@@ -85,8 +85,18 @@ namespace EduCenterWeb.Pages.User
                         return new JsonResult(result);
                     }
 
-                    //获取用户课程
-                    result.Entity.UserCourseList = _UserSrv.GetUserCourseAvaliable(us.OpenId, courseScheduleType);
+                    //VIP用户课程(不管暑假寒假)
+                    if(us.MemeberType == MemberType.VIP)
+                        result.Entity.UserCourseList = _UserSrv.GetUserCourseAvaliable(us.OpenId);
+                    else
+                    {
+                        //普通用户 先看是否有标准课，如果有标准课，全部放开。
+                        if(us.UserAccount.RemainCourseTime>0)
+                            result.Entity.UserCourseList = _UserSrv.GetUserCourseAvaliable(us.OpenId);
+                        else
+                            //如果无标准课，则显示暑假，寒假课
+                            result.Entity.UserCourseList = _UserSrv.GetUserCourseAvaliable(us.OpenId,(int)courseScheduleType);
+                    }
                     result.IntMsg = (int)courseScheduleType;
                     //获取用户最近课程
                     if (result.Entity.UserCourseList.Count > 0)

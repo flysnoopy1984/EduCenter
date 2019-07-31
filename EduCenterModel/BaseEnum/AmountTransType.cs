@@ -16,5 +16,10 @@ namespace EduCenterModel.BaseEnum
        /// </summary>
        Invited_Paied  = 102,
 
+       /// <summary>
+       /// 用户提现
+       /// </summary>
+       TransferToUser = 200,
+
     }
 }

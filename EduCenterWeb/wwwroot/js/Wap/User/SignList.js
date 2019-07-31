@@ -22,7 +22,7 @@
                             var item = $("#HideData .OneRecord").clone();
                             item.find(".courseName").text(d.CourseName);
                             item.find(".courseStatus").text(d.UserCourseLogStatusName);
-                            item.find(".courseScheduleType").text(d.CourseScheduleTypeName);
+                          // item.find(".courseScheduleType").text(d.CourseScheduleTypeName);
                             item.find(".couseTime").text(d.SignDateTimeStr);
 
                             html += item.prop("outerHTML");

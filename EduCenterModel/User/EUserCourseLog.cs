@@ -33,6 +33,11 @@ namespace EduCenterModel.User
 
         public DateTime UserSignDateTime { get; set; }
 
+        [MaxLength(32)]
+        public string SignOpenId { get; set; }
+        [MaxLength(20)]
+        public string SignName { get; set; }
+
         public bool IsFixedByAuto { get; set; }
 
         public DateTime AutoFixedDatetime { get; set; }

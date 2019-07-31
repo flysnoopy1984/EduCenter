@@ -7,8 +7,6 @@
    
     Init = function () {
 
-       
-
         layui.use('laypage', function () {
             glaypage = layui.laypage;
         });
@@ -180,6 +178,23 @@
 
         ShowInfo("保存成功");
 
+    }
+
+    //用户Note
+    OpenUserNote = function (obj) {
+        var tr = $(obj).closest("tr");
+        var babyName = tr.find(".BabyName").text();
+        var wxName = tr.find(".WxName").text();
+        var url = "Note?openId=" + tr.attr("openId") + "&babyName=" + babyName + "&wxName=" + wxName;
+
+        layer.open({
+            type: 2,
+            title: '用户备注',
+            shadeClose: false,
+            shade: 0.8,
+            area: ['600px', '80%'],
+            content: url //iframe的url
+        });
     }
 
     //宝贝信息

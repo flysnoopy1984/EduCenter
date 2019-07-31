@@ -5,6 +5,7 @@ using System.Text;
 using System.Linq;
 using EduCenterModel.Common;
 using EduCenterModel.BaseEnum;
+using EduCenterModel.AliPay;
 
 namespace EduCenterSrv
 {
@@ -14,6 +15,11 @@ namespace EduCenterSrv
         {
 
         }
+        public EAliPayApplication GetAliPayApplication()
+        {
+            return _dbContext.DBAliPayApplication.FirstOrDefault();
+        }
+
 
         public List<ECourseDateRange> GetCourseDateRangeList()
         {

@@ -82,7 +82,10 @@
         .MemberLine{
             background-color:#faf18d;
         }
-         
+         .Note{
+            text-decoration:underline;
+            cursor:pointer; 
+         }
 </style>
 
 <div class="MainContainer">
@@ -124,8 +127,6 @@
                 </select>
             </div>
         </div>
-        
-
         <div>
             <input id="btnQuery" type="button" class="btn btn-primary btn-sm" value="查询" />
             <input id="btnQueryReset" type="button" class="btn btn-danger btn-sm" value="重置" />
@@ -135,19 +136,20 @@
         <table id="UserListTable" border="0" cellpadding="0" cellspacing="0">
             <tr id="Header">
                 <th width="100px">操作</th>
+                <th width="80px">备注</th>
                 <th width="150px">用户微信名</th>
                 <th width="90px">联系方式</th>
                 <th width="80px">家长姓名</th>
                 <th width="100px">宝贝姓名</th>
-                <th>用户身份</th>
-                <th>会员类型</th>
+                <th width="90px">用户身份</th>
+                <th width="90px">会员类型</th>
                 <th width="70px">特殊价格</th>
                 <th width="65px">【标】课时</th>
                 <th width="65px">【暑】课时</th>
                 <th width="65px">【寒】课时</th>
-                <th>关注时间</th>
+                <th width="80px">关注时间</th>
                 <th width="122px">标准班有效期</th>
-                <th width="122px">接待人</th>
+                <th width="80px">接待人</th>
                 @*<th>暑假班有效期</th>
         <th>寒假班有效期</th>*@
                 @*<th>允许选择标准课</th>
@@ -165,25 +167,24 @@
             <td>
                 <div class="RowOption">
                     <div>
-                    <input type="button" class="btn btn-danger btn-xs" value="课程详情" id="btn_AdjustCourse" />
-                </div>
+                        <input type="button" class="btn btn-danger btn-xs" value="课程详情" id="btn_AdjustCourse" />
+                    </div>
                     <div>
                         <input type="button" class="btn btn-warning btn-xs" value="保存" id="btn_Save" />
                     </div>
                 </div>
             </td>
+            <td onclick="OpenUserNote(this)"><label class="Note"><i class="fa fa-sticky-note-o" aria-hidden="true"></i>备注信息</label></td>
             <td><label class="WxName TextNoWrap2"></label></td>
             <td><label class="Contract"></label></td>
             <td><input class="RealName" type="text" /></td>
             <td onclick="CreateBabyInfoForm(this);"><label class="BabyName text-info TextNoWrap2">暂无</label></td>
             <td>
-
                 <select class="UserRole">
                     @foreach (var ur in Model.UserRoleList)
                     {
                         <option value="@ur.Key">@ur.Value</option>
                     }
-
                 </select>
             </td>
             <td>

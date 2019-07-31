@@ -268,13 +268,13 @@ namespace EduCenterSrv
 
         #endregion
 
-        #region 选择课程
+        #region 用户课程
 
         /// <summary>
         /// 用户选择课程
         /// </summary>
         /// <param name="courseList"></param>
-        public void UserSelectNewCourses(string openId,List<EUserCourse> courseList, CourseScheduleType courseScheduleType,bool useRightNow = false)
+        public void UserSelectNewCourses(string openId,List<EUserCourse> courseList, CourseScheduleType courseScheduleType,bool useRightNow = false,bool isAdmin =false)
         {
             try
             {
@@ -283,8 +283,8 @@ namespace EduCenterSrv
                 {
                     UserSrv userSrv = new UserSrv(_dbContext);
                     TecSrv tecSrv = new TecSrv(_dbContext);
-                  //  CourseScheduleType courseScheduleType = courseList[0].CourseScheduleType;
-                    if (!userSrv.CheckUserCanSelectCourse(openId, courseScheduleType))
+                    //不是后台选择，且选择已满
+                    if (!isAdmin && !userSrv.CheckUserCanSelectCourse(openId, courseScheduleType))
                         throw new EduException("无法选择，您已经选择过此类课程!，如果疑问，请联系客服");
                     else
                     {
@@ -292,9 +292,14 @@ namespace EduCenterSrv
                         foreach (var c in courseList)
                         {
                             if (userSrv.CheckUserHasThisCourse(openId, c.LessonCode))
+                            {
+                                c.CourseScheduleType = courseScheduleType;
                                 continue;
+                            }
+                               
 
                             c.UserOpenId = openId;
+                            c.UseRightNow = useRightNow;
 
                             //更新课程总人数
                             var cs = _dbContext.DbCourseSchedule.Where(a => a.LessonCode == c.LessonCode).FirstOrDefault();
@@ -334,30 +339,116 @@ namespace EduCenterSrv
             
         }
 
+        public void UserSelectNewCourses(string openId, string lessonCode, CourseScheduleType courseScheduleType, bool useRightNow = false,bool isAdmin=false)
+        {
+            var list = CreateNewCourse(openId, lessonCode, courseScheduleType);
+            UserSelectNewCourses(openId, list, courseScheduleType, useRightNow, isAdmin);
+        }
 
+        //删除用户一门课程
+        public bool DeleteUserCourse(string openId, string LessonCode)
+        {
+            try
+            {
+                _dbContext.Database.BeginTransaction();
+                //删除用户课程表
+                UserSrv userSrv = new UserSrv(_dbContext);
+                userSrv.DeleteUserCourse(openId, LessonCode);
+
+                //更新课程报名数
+                var cs = _dbContext.DbCourseSchedule.Where(a => a.LessonCode == LessonCode).FirstOrDefault();
+                cs.ApplyNum--;
+                if(cs.ApplyNum == 0)
+                {
+                    TecSrv tecSrv = new TecSrv(_dbContext);
+                    //删除老师课程
+                    tecSrv.DeleteTecCourse(LessonCode);
+
+                }
+                _dbContext.SaveChanges();
+                _dbContext.Database.CommitTransaction();
+            }
+            catch(Exception ex)
+            {
+                _dbContext.Database.RollbackTransaction();
+                throw ex;
+            }
+            return true;
+
+        }
+
+        public List<EUserCourse> CreateNewCourse(string openId, string lessonCode, CourseScheduleType courseScheduleType)
+        {
+            EUserCourse eUserCourse = new EUserCourse
+            {
+                CourseScheduleType = courseScheduleType,
+                CreateDateTime = DateTime.Now,
+                LessonCode = lessonCode,
+                UserOpenId = openId,
+                UseRightNow = false,
+            };
+            List<EUserCourse> list = new List<EUserCourse>();
+            list.Add(eUserCourse);
+
+            return list;
+        }
+
+        //删除用户课程，并创建新课程
+        public void AdjustUserCourse(string openId,string fromLessonCode,string toLessonCode, CourseScheduleType courseScheduleType,bool isAdmin= false)
+        {
+            try
+            {
+                bool isDelete = false; 
+                try
+                {
+                    isDelete = DeleteUserCourse(openId, fromLessonCode);
+                }
+                catch(Exception ex)
+                {
+                    throw ex;
+                }
+                if(isDelete)
+                    UserSelectNewCourses(openId, toLessonCode, courseScheduleType,true,true);
+              
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+           
+
+
+        }
         #endregion
 
         #region 用户课时消耗
+        /// <summary>
+        /// VIP 扣减课时，根据传入的班类，如果假期班，有假期班课时，则扣，不然扣标准版
+        /// 
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <param name="memberType"></param>
+        /// <param name="courseScheduleType"></param>
+        /// <param name="lessonCode"></param>
+        /// <param name="signDate"></param>
+        /// <param name="needSave"></param>
+        /// <returns></returns>
         public EUserCourseLog UpdateCourseLogToSigned(string openId,
             MemberType memberType, 
             CourseScheduleType courseScheduleType, 
             string lessonCode,
             DateTime signDate,
+            string signOpenId = "",
+            bool skipLeave = true, //不管是否请假都签到
             bool needSave = true)
         {
             var date = signDate.ToString("yyyy-MM-dd");
 
-            int result = UpdateUserCourseTimeOnce(openId, memberType, courseScheduleType);
-            if(result == -1)
-            {
-                string courseScheduleTypeName = BaseEnumSrv.GetCourseScheduleTypeName(courseScheduleType);
-                throw new EduException($"您的[{courseScheduleTypeName}]课时已用完，请先充值！",EduErrorMessage.NoCourseTime);
-            }
+           
 
             var log = _dbContext.DBUserCourseLog.Where(a => a.UserOpenId == openId &&
                                               a.LessonCode == lessonCode &&
-                                              a.CourseDateTime == date &&
-                                              a.CourseScheduleType == courseScheduleType).FirstOrDefault();
+                                              a.CourseDateTime == date).FirstOrDefault();
             if (log == null)
             {
                 log = new EUserCourseLog
@@ -366,76 +457,123 @@ namespace EduCenterSrv
                     CourseScheduleType = courseScheduleType,
                     CreatedDateTime = DateTime.Now,
                     LessonCode = lessonCode,
-                    UserCourseLogStatus = UserCourseLogStatus.SignIn,
                     UserSignDateTime = DateTime.Now,
                     UserOpenId = openId
                 };
+                
                 _dbContext.DBUserCourseLog.Add(log);
             }
             else
             {
-                log.UserCourseLogStatus = UserCourseLogStatus.SignIn;
-                log.UserSignDateTime = DateTime.Now;
+                if(log.UserCourseLogStatus != UserCourseLogStatus.PreNext)
+                {
+                    if (log.UserCourseLogStatus == UserCourseLogStatus.Leave && !skipLeave)
+                        return log;
+                   
+                }
             }
-            if(needSave)
+            //更新用户课时
+            if((int)log.UserCourseLogStatus <10)
+            {
+                int result = UpdateUserCourseTimeOnce(openId, memberType, courseScheduleType);
+                if (result == -1)
+                {
+                    string courseScheduleTypeName = BaseEnumSrv.GetCourseScheduleTypeName(courseScheduleType);
+                    throw new EduException($"您的[{courseScheduleTypeName}]课时已用完，请先充值！", EduErrorMessage.NoCourseTime);
+                }
+            }
+          
+
+
+            EUserInfo signUser = null;
+            if (string.IsNullOrEmpty(signOpenId))
+                signUser = _dbContext.DBUserInfo.Where(a => a.OpenId == signOpenId).FirstOrDefault();
+
+            if (signUser != null)
+            {
+                log.SignOpenId = signUser.OpenId;
+
+                if (signUser.UserRole == UserRole.Member)
+                    log.SignName = signUser.ChildName;
+                else if (signUser.UserRole == UserRole.Teacher)
+                    log.SignName = signUser.RealName;
+            }
+            else
+                log.SignName = "系统签到";
+
+            log.UserCourseLogStatus = UserCourseLogStatus.SignIn;
+            log.UserSignDateTime = DateTime.Now;
+
+            if (needSave)
              _dbContext.SaveChanges();
             return log;
         }
 
-        //返回-1 用户余额不足
+        /// <summary>
+        ///根据传入的班类，如果是假期班，有假期班课时则扣减假期班，没则扣标准班
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <param name="memberType"></param>
+        /// <param name="courseScheduleType"></param>
+        /// <returns>返回-1 用户余额不足</returns>
         public int UpdateUserCourseTimeOnce(string openId,MemberType memberType, CourseScheduleType courseScheduleType)
         {
             EUserAccount result = _dbContext.DBUserAccount.Where(a => a.UserOpenId == openId).FirstOrDefault();
+            double reduceTime = 2;
+            if (result.ReduceTime > 0)
+                reduceTime = result.ReduceTime;
 
-            if(memberType == MemberType.Normal)
+            switch (courseScheduleType)
             {
-                switch (courseScheduleType)
-                {
-                    case CourseScheduleType.Summer:
-                        if (result.RemainSummerTime == 0) return -1;
-                        else result.RemainSummerTime -= 2;
-                        break;
-                    case CourseScheduleType.Winter:
-                        if (result.RemainWinterTime == 0) return -1;
-                        else result.RemainWinterTime -= 2;
-                        break;
-                    default:
+                case CourseScheduleType.Summer:
+                    if (result.RemainSummerTime == 0)
+                    {
                         if (result.RemainCourseTime == 0) return -1;
-                        else result.RemainCourseTime -= 2;
-                        break;
-
-                }
-            }
-            else
-            {
-                switch (courseScheduleType)
-                {
-                    case CourseScheduleType.Summer:
-                        if (result.RemainSummerTime == 0)
-                        {
-                            if (result.RemainCourseTime == 0) return -1;
-                            else result.RemainCourseTime -= 2;
-                        }
-                        else
-                            result.RemainSummerTime -= 2;
-                        break;
-                    case CourseScheduleType.Winter:
-                        if (result.RemainWinterTime == 0)
-                        {
-                            if (result.RemainCourseTime == 0) return -1;
-                            else result.RemainCourseTime -= 2;
-                        } 
-                        else
-                            result.RemainWinterTime -= 2;
-                        break;
-                    default:
+                        else result.RemainCourseTime -= reduceTime;
+                    }
+                    else
+                        result.RemainSummerTime -= reduceTime;
+                    break;
+                case CourseScheduleType.Winter:
+                    if (result.RemainWinterTime == 0)
+                    {
                         if (result.RemainCourseTime == 0) return -1;
-                        else result.RemainCourseTime -= 2;
-                        break;
+                        else result.RemainCourseTime -= reduceTime;
+                    }
+                    else
+                        result.RemainWinterTime -= reduceTime;
+                    break;
+                default:
+                    if (result.RemainCourseTime == 0) return -1;
+                    else result.RemainCourseTime -= reduceTime;
+                    break;
 
-                }
             }
-          
+
+            //if(memberType == MemberType.Normal)
+            //{
+            //    switch (courseScheduleType)
+            //    {
+            //        case CourseScheduleType.Summer:
+            //            if (result.RemainSummerTime == 0) return -1;
+            //            else result.RemainSummerTime -= 2;
+            //            break;
+            //        case CourseScheduleType.Winter:
+            //            if (result.RemainWinterTime == 0) return -1;
+            //            else result.RemainWinterTime -= 2;
+            //            break;
+            //        default:
+            //            if (result.RemainCourseTime == 0) return -1;
+            //            else result.RemainCourseTime -= 2;
+            //            break;
+
+            //    }
+            //}
+            //else
+            //{
+
+            //}
+
             return 0;
 
         }

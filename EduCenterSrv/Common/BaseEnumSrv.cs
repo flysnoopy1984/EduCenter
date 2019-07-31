@@ -392,6 +392,8 @@ namespace EduCenterSrv.Common
         {
             switch(userRole)
             {
+                case UserRole.BlackList:
+                    return "黑名单";
                 case UserRole.Admin:
                     return "管理员";
                 case UserRole.Assist:
@@ -420,6 +422,21 @@ namespace EduCenterSrv.Common
                     return "邀请加入";
                 case InviteStatus.Paied:
                     return "正式入学";
+            }
+            return "";
+        }
+
+        public static string GetAmountTransTypeName(AmountTransType amountTransType)
+        {
+            switch (amountTransType)
+            {
+                case AmountTransType.Invited_Paied:
+                    return "支付邀请奖励";
+                case AmountTransType.Invited_TrialReward:
+                    return "试听邀请奖励";
+               
+                case AmountTransType.TransferToUser:
+                    return "提现";
             }
             return "";
         }

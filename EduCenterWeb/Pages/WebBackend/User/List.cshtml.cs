@@ -19,6 +19,8 @@ namespace EduCenterWeb.Pages.WebBackend.User
         private UserSrv _UserSrv;
 
         public List<EUserInfo> SalesUserList { get; set; }
+
+
         public ListModel(UserSrv userSrv)
         {
             _UserSrv = userSrv;

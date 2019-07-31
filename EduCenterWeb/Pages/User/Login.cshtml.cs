@@ -82,43 +82,6 @@ namespace EduCenterWeb.Pages.User
 
         public void OnGetLoginTransfer2()
         {
-            //if (!string.IsNullOrEmpty(HttpContext.Request.Query["code"]))
-            //{
-            //    string code = HttpContext.Request.Query["code"];
-            //    var accessToken = WXApi.GetOAuth2AccessTokenFromCode(code);
-
-            //    if (!string.IsNullOrEmpty(accessToken.openid))
-            //    {
-            //        var ui = _UserSrv.GetUserInfo(accessToken.openid);
-
-            //        if (ui != null)
-            //        {
-            //            WXLoginCallBack(ui);
-            //            if (!string.IsNullOrEmpty(toPage))
-            //            {
-            //                HttpContext.Response.Redirect(toPage);
-            //            }
-            //        }
-            //        else
-            //        {
-            //            HttpContext.Response.Redirect("/User/Login");
-            //        }
-            //    }    
-            //}
-            //else
-            //{
-            //    var redirect_uri = System.Web.HttpUtility.UrlEncode($"http://edu.iqianba.cn/User/Login?handler=LoginTransfer2&toPage={toPage}", System.Text.Encoding.UTF8);
-            //    WxPayData data = new WxPayData();
-            //    data.SetValue("appid", WxConfig.APPID);
-            //    data.SetValue("redirect_uri", redirect_uri);
-            //    data.SetValue("response_type", "code");
-            //    data.SetValue("scope", "snsapi_base");
-            //    data.SetValue("state", "1" + "#wechat_redirect");
-            //    string url = "https://open.weixin.qq.com/connect/oauth2/authorize?" + data.ToUrl();
-
-            //    HttpContext.Response.Redirect(url);
-            //}
-
             LoginWX();
         }
 
@@ -138,16 +101,16 @@ namespace EduCenterWeb.Pages.User
                     userSession = GetUserSession(false);
                     if (userSession == null)
                         result.ErrorMsg = "登陆失败,请联系客服";
-                    
                 }
                 else
                 {
                     //oh6cV1dh0hjoGEizCoKH1KU70UwQ 童老师
-                    //oh6cV1ZcN2GzbZpaYELK8Uv3a2rU
+                    //oh6cV1UUH2cg1p3--SPVnJdDpgbM 电子商务
                     //oh6cV1QhPLj6XPesheYUQ4XtuGTs jacky
-                    var ui = _UserSrv.GetUserInfo("oh6cV1djEwlU7Hup1KynlnyFrmdA");
+                    var ui = _UserSrv.GetUserInfo("oh6cV1QhPLj6XPesheYUQ4XtuGTs");
                     WXLoginCallBack(ui);
                     userSession = GetUserSession(false);
+                    result.IntMsg = (int)ui.UserRole;
                 }
               
                 if (result.IsSuccess)
@@ -159,7 +122,7 @@ namespace EduCenterWeb.Pages.User
                         {
                             userSession.TecCode = tec.Code;
                             SetUserSesion(userSession);
-                            result.IntMsg = 10;
+                            result.IntMsg = (int)UserRole.Teacher;
 
                         }
                     }
@@ -217,18 +180,20 @@ namespace EduCenterWeb.Pages.User
                     string toPage = HttpContext.Request.Query["toPage"];
                     if (!string.IsNullOrEmpty(toPage))
                     {
+                        if(toPage.Contains("/User/MyCourse") && ui.UserRole == UserRole.Teacher)
+                        {
+                            HttpContext.Response.Redirect("/Teacher/DayCourse");
+                            return;
+                        }
                         //微信QR支付页面
                         string amt = HttpContext.Request.Query["amt"];
                         if(!string.IsNullOrEmpty(amt))
                         {
                             var ct = HttpContext.Request.Query["ct"];
                             toPage += $"?amt={amt}&ct={ct}";
-                        }
-                           
+                        }  
                         HttpContext.Response.Redirect(toPage);
-                    }
-                   
-
+                    }                  
                 }
             }
             else

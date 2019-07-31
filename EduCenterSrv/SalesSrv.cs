@@ -16,6 +16,7 @@ using EduCenterModel.Sales.Result;
 using EduCenterSrv.Common;
 using EduCenterModel.Sales;
 using EduCenterModel.User;
+using EduCenterModel.Order.Result;
 
 namespace EduCenterSrv
 {
@@ -158,6 +159,47 @@ namespace EduCenterSrv
         #endregion
 
         #region 邀请奖励
+
+        public List<EInviteRewardTrans> GetRewardTransByInvitedId(long inviteLogId)
+        {
+            return _dbContext.DBInviteRewardTrans.Where(a => a.InviteLogId == inviteLogId).ToList();
+        }
+
+        public List<RAmountTrans> QueryUserAmountTrans(string openId)
+        {
+           var sql = _dbContext.DBInviteRewardTrans.Where(a => a.UserOpenId == openId)
+                .OrderByDescending(a=>a.TransDateTime)
+                .Select(a => new RAmountTrans
+            {
+                Amount = a.Amount.ToString("0.00"),
+                TransDate = a.TransDateTime.ToString("yyyy-MM-dd hh:mm"),
+                UserOpenId = openId,
+                TransTypeName = BaseEnumSrv.GetAmountTransTypeName(a.TransType),
+
+                transDirection = a.Direction,
+                
+            });
+            return sql.ToList();
+
+        }
+
+        public void CreateTransfer(double amount,string userOpenId,string transferId,bool needSave=true)
+        {
+            var transfer = new EInviteRewardTrans()
+            {
+                Amount = amount,
+                Direction = AmountTransDirection.Out,
+                InviteLogId = -1,
+                TransDateTime = DateTime.Now,
+                TransType = AmountTransType.TransferToUser,
+                TransStatus = AmountTransStatus.Settled,
+                UserOpenId = userOpenId,
+                TransferId = transferId
+            };
+            _dbContext.DBInviteRewardTrans.Add(transfer);
+            if(needSave)
+            _dbContext.SaveChanges();
+        }
       
         public bool CreateRewardTrans(long inviteLogId,string ownOpenId, AmountTransType TransType,out EUserAccount UserAccount)
         {
@@ -182,14 +224,21 @@ namespace EduCenterSrv
                     UserAccount.InviteRewards += reward.Amount;
                     UserAccount.RemainRewards += reward.Amount;
                 }
+
+                var inviteLog = _dbContext.DBInviteLog.Where(a => a.Id == inviteLogId).FirstOrDefault();
+                if(inviteLog!=null)
+                {
+                    if (TransType == AmountTransType.Invited_TrialReward)
+                        inviteLog.InviteStatus = InviteStatus.ApplyTrial;
+                    else if (TransType == AmountTransType.Invited_Paied)
+                        inviteLog.InviteStatus = InviteStatus.Paied;
+                }
+              
+
                 _dbContext.SaveChanges();
                 return true;
             }
             return false;
-          
-
-          
-
         }
         #endregion
     }

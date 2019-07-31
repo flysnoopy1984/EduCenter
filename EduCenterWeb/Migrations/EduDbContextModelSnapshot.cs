@@ -19,6 +19,55 @@ namespace EduCenterWeb.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("EduCenterModel.AliPay.EAliPayApplication", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AccountForSub")
+                        .HasMaxLength(32);
+
+                    b.Property<string>("AppId")
+                        .HasMaxLength(32);
+
+                    b.Property<string>("AppName")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("AuthUrl_Store")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("Charset")
+                        .HasMaxLength(10);
+
+                    b.Property<bool>("IsCurrent");
+
+                    b.Property<bool>("IsSubAccount");
+
+                    b.Property<string>("Merchant_Private_Key");
+
+                    b.Property<string>("Merchant_Public_key");
+
+                    b.Property<int>("RecordStatus");
+
+                    b.Property<string>("ServerUrl")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("SignType")
+                        .HasMaxLength(10);
+
+                    b.Property<bool>("SupportHuaBei");
+
+                    b.Property<bool>("SupportTransfer");
+
+                    b.Property<string>("Version")
+                        .HasMaxLength(10);
+
+                    b.HasKey("ID");
+
+                    b.ToTable("AliPayApplication");
+                });
+
             modelBuilder.Entity("EduCenterModel.Common.ECourseDateRange", b =>
                 {
                     b.Property<int>("Id")
@@ -358,6 +407,9 @@ namespace EduCenterWeb.Migrations
 
                     b.Property<int>("TransType");
 
+                    b.Property<string>("TransferId")
+                        .HasMaxLength(64);
+
                     b.Property<string>("UserOpenId")
                         .HasMaxLength(32);
 
@@ -487,6 +539,9 @@ namespace EduCenterWeb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(32);
 
+                    b.Property<string>("AliPayAccount")
+                        .HasMaxLength(100);
+
                     b.Property<DateTime>("BuyDate");
 
                     b.Property<bool>("CanSelectCourse");
@@ -500,6 +555,8 @@ namespace EduCenterWeb.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<double>("InviteRewards");
+
+                    b.Property<int>("ReduceTime");
 
                     b.Property<double>("RemainCourseTime");
 
@@ -593,6 +650,12 @@ namespace EduCenterWeb.Migrations
                     b.Property<string>("LessonCode")
                         .HasMaxLength(50);
 
+                    b.Property<string>("SignName")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("SignOpenId")
+                        .HasMaxLength(32);
+
                     b.Property<int>("UserCourseLogStatus");
 
                     b.Property<DateTime>("UserLeaveDateTime");
@@ -622,6 +685,8 @@ namespace EduCenterWeb.Migrations
 
                     b.Property<string>("Name")
                         .HasMaxLength(40);
+
+                    b.Property<long>("NoteId");
 
                     b.Property<string>("OpenId")
                         .HasMaxLength(32);
@@ -684,6 +749,28 @@ namespace EduCenterWeb.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserInfoBackEnd");
+                });
+
+            modelBuilder.Entity("EduCenterModel.User.EUserNote", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Content")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("CreateBy")
+                        .HasMaxLength(40);
+
+                    b.Property<DateTime>("CreateDateTime");
+
+                    b.Property<string>("UserOpenId")
+                        .HasMaxLength(32);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserNote");
                 });
 
             modelBuilder.Entity("EduCenterSrv.SMS.ESMSLog", b =>

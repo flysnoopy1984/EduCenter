@@ -5,6 +5,7 @@ using EduCenterModel.User;
 using EduCenterSrv;
 using EduCenterSrv.Common;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System;
@@ -92,8 +93,39 @@ namespace EduCenterWeb.Pages
             HttpContext.Session.SetString(EduConstant.UserSessionKey, json);
         }
 
-        
+        public override void OnPageHandlerExecuting(PageHandlerExecutingContext context)
+        {
+            base.OnPageHandlerExecuting(context);
+            var vs = GetUserSession(false);
+            if(vs !=null)
+            {
+                if(vs.UserRole == UserRole.BlackList)
+                {
+                    var msg = System.Web.HttpUtility.UrlEncode("您没有权限，请到店联系工作人员!");
+                    context.HttpContext.Response.Redirect($"/Common/ErrorMessage?msg={msg}");
+                }
+            }
+            //string json = HttpContext.Session.GetString(EduConstant.BackendSessionKey);
+            //if (string.IsNullOrEmpty(json))
+            //{
+            //    context.HttpContext.Response.Redirect("/WebBackend/Login");
+            //}
+            //else
+            //{
+            //    var session = JsonConvert.DeserializeObject<BackendSession>(json);
+            //    if ((int)session.UserRole < 30)
+            //        context.HttpContext.Response.Redirect("/WebBackend/Login");
+            //}
 
-       
+            //var us = GetBackendSession(false);
+            //if (us != null)
+            //{
+            //    this.ViewData["UserRole"] = (int)us.UserRole;
+            //}
+        }
+
+
+
+
     }
 }

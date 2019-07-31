@@ -122,7 +122,7 @@
                         <optgroup label="@typeName">
                             @foreach (var c in cl.Value)
                             {
-                                <option value="@c.Code">@c.Name</option>
+                                <option value="@c.Code" cType="@c.CourseType">@c.Name</option>
                             }
                         </optgroup>
                     }

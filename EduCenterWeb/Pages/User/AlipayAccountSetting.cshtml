@@ -1,0 +1,36 @@
+﻿@page
+@model EduCenterWeb.Pages.User.AlipayAccountSettingModel
+@{
+    ViewData["Title"] = "AlipayAccountSetting";
+    Layout = "~/Pages/Shared/_EduMainAppNoMenus.cshtml";
+}
+@Html.AntiForgeryToken()
+<link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
+<script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
+<script src="~/js/EduLib/EditHelper.js?v=@Model.jsVersion"></script>
+<script src="~/js/EduLib/Common.js?v=@Model.jsVersion"></script>
+<script src="~/js/Wap/User/AlipayAccountSetting.js?v=@Model.jsVersion"></script>
+
+<style type="text/css">
+    .MainContainer{
+        display:flex;
+        flex-direction:column;
+        height:200px;
+        width:100%;
+        justify-content:space-around;
+        align-items:center;
+    }
+</style>
+<h2 style="margin:20px;"><i class="IconBack fa fa-arrow-circle-o-left" aria-hidden="true" style="margin-right:20px;" onclick="Back();"></i>支付宝账户设置</h2>
+<div class="MainContainer">
+   
+    <div style="width:80%">
+        <input id="AliPayAccount" type="text" class="form-control" placeholder="请输入支付宝账户" value="@Model.AliPayAccount" />
+    </div>
+    <div>
+        <input id="btnSave" type="button" class="btn btn-primary" value="保存支付宝账户" />
+    </div>
+
+</div>
+

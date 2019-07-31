@@ -24,7 +24,6 @@
           "name": "支付设置",
           "url": "http://edu.iqianba.cn/User/Login?handler=LoginTransfer2&toPage=/WX/PayQRSetting"
         }
-
       ]
     },
     {

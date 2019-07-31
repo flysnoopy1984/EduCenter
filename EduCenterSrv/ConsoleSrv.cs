@@ -7,6 +7,7 @@ using EduCenterSrv.Common;
 using EduCenterModel.User.Result;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Job;
+using EduCenterCore.Common.Helper;
 
 namespace EduCenterSrv
 {
@@ -23,7 +24,7 @@ namespace EduCenterSrv
         {
             //Job第二天凌晨运行，所以-1;
             var signDate = DateTime.Now.AddDays(-1);
-            signDate = DateTime.Parse("2019-07-22");
+       //     signDate = DateTime.Parse("2019-07-27");
 
             UserSrv userSrv = new UserSrv(_dbContext);
             BusinessSrv businessSrv = new BusinessSrv(_dbContext);
@@ -50,12 +51,20 @@ namespace EduCenterSrv
             {
                 if(!userSrv.IsSkipTodayUserCourse(uc.UserOpenId))
                 {
-                   
+            
                     uc.CurrentCourseSchedule = userSrv.GetCurrentCourseScheduleType(uc.UserOpenId, uc.MemberType);
-                   
-                    var log = businessSrv.UpdateCourseLogToSigned(uc.UserOpenId, uc.MemberType, uc.CurrentCourseSchedule, uc.LessonCode, signDate,false);
+                  
+                    var log = businessSrv.UpdateCourseLogToSigned(uc.UserOpenId, uc.MemberType, 
+                        uc.CurrentCourseSchedule,
+                        uc.LessonCode, 
+                        signDate,
+                        "",
+                        false,
+                        false);
+                    log.SignName = "系统签到";
                     log.IsFixedByAuto = true;
                     log.AutoFixedDatetime = DateTime.Now;
+                    NLogHelper.InfoTxt($"修复用户：{uc.UserName}[OpenId]{uc.UserOpenId},课程:{log.LessonCode}");
                     _dbContext.SaveChanges();
                 }
             }

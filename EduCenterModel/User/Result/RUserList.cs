@@ -50,5 +50,9 @@ namespace EduCenterModel.User.Result
         public string SalesOpenId { get; set; }
 
         public string UserPhone { get; set; }
+
+    
+
+
     }
 }

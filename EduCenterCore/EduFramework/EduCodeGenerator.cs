@@ -22,6 +22,11 @@ namespace EduCenterCore.EduFramework
             return "UserCourse_" + DateTime.Now.ToString("yyyyMMddhhmmss") + GetRnd(2, true, true, false, false, "");
         }
 
+        public static string TransferOrderNo()
+        {
+            return "UserTransfer_" + DateTime.Now.ToString("yyyyMMddhhmmss") + GetRnd(2, true, true, false, false, "");
+        }
+
         public static string GetRnd(int length, bool useNum, bool useLow, bool useUpp, bool useSpe, string custom)
         {
             byte[] b = new byte[4];

@@ -33,6 +33,7 @@
         layui.use('form', function () {
             var form = layui.form;
             form.on('select(selCourseCode)', function (data) {
+
                 GetTrialList();
             });
         });
@@ -49,7 +50,6 @@
     LoadingDone = function () {
         $(".buttonArea").show();
         $(".TimeFilter").slideDown();
-
     }
 
     TimeSelectedEvent = function (e) {
@@ -70,13 +70,23 @@
 
         var dateStr = $(".DateInput").text();
         var courseCode = $("#selCourseCode").val();
-
+        var option = $("#selCourseCode option:selected");
+        var ctype = option.attr("cType");
         var date = new Date(dateStr);
         var day = date.getDay();
-        if (day == 1 || day == 2) {
-            ShowInfo("周一，周二没有试听课",null,null,2);
+        if (day == 2) {
+            ShowInfo("周二没有试听课");
             return;
         }
+        if (day == 1 && ctype != "WQ") {
+            ShowInfo("周一只有围棋试听课");
+            return;
+        }
+        if (ctype == "WQ" && (day == 4 || day == 6)) {
+            ShowInfo("围棋试听课只有周一，周三，周五，周日，谢谢！");
+            return;
+        }
+      //  if(day == 1 && )
         if (dateStr != "" && courseCode != "-1") {
             LoadingDone();
         }

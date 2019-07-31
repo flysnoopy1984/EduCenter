@@ -121,12 +121,12 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
                     NLogHelper.InfoTxt($"wxMessage:OpenId-{ownOpenId}");
                    //微信提醒
                    UserAccountChangeTemplate wxMessage = new UserAccountChangeTemplate();
-                    wxMessage = wxMessage.GenerateData(ownOpenId,
+                    wxMessage.data = wxMessage.GenerateData(ownOpenId,
                         ui.Name,
                         amountTransType,
                         DateTime.Now,
                         ownAccount.InviteRewards,
-                         GlobalSrv.GetRewardAmount(amountTransType)
+                        GlobalSrv.GetRewardAmount(amountTransType)
                         );
                     WXApi.SendTemplateMessage<UserAccountChangeTemplate>(wxMessage);
                 }

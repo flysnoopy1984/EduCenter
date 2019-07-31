@@ -191,12 +191,21 @@
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("XSRF-TOKEN",
                     $('input:hidden[name="__RequestVerificationToken"]').val());
+                //xhr.setRequestHeader("EduAJax",
+                //    "yunyi");
             },
             data: data,
 
-            success: function (res) {
-
+            success: function (res, r,xhr) {
                 CloseBlock();
+                var timeout = xhr.getResponseHeader("eduAjaxError");
+                if (timeout == "timeout") {
+                    if (window.location.href.indexOf("WebBackEnd")>-1)
+                        ShowInfo("登陆超时", null, null, 2, function () {
+                            window.location.href = "/WebBackEnd/Login";
+                        })
+                }
+
                 if (res.IsSuccess) {
                     if (handler != null)
                         handler(res);

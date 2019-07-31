@@ -140,6 +140,7 @@
         <div>
             <label>老师：</label>
             <select id="selTecCode" class="form-control">
+                <option value="">全部</option>
                 @foreach (var tec in Model.TecList)
                 {
                     <option value="@tec.Code">@tec.Name</option>

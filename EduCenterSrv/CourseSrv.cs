@@ -194,7 +194,7 @@ namespace EduCenterSrv
         }
 
         public List<SCourseSchedule> GetCourseSchedule_ForSelection(int year, 
-            CourseScheduleType courseScheduleType,
+            //CourseScheduleType courseScheduleType,
             int day,
             int lesson,
             int cls=1)
@@ -202,8 +202,9 @@ namespace EduCenterSrv
             return _dbContext.DbCourseSchedule.Where(a => a.Year == year && 
             a.Day == day && 
             a.Lesson == lesson && 
-            a.LessonNo ==cls &&
-            a.CourseScheduleType == courseScheduleType)
+            a.LessonNo ==cls 
+           // && a.CourseScheduleType == courseScheduleType
+            )
             .Select(a => new SCourseSchedule
             {
                 CourseName = a.CourseName,

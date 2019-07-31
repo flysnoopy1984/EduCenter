@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EduCenterCore.Common.Helper;
+using EduCenterCore.WX;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
 using EduCenterModel.Teacher.Result;
 using EduCenterModel.User.Result;
+using EduCenterModel.WX.MessageTemplate;
 using EduCenterSrv;
 using EduCenterSrv.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +20,13 @@ namespace EduCenterWeb.Pages.Teacher
     {
         private TecSrv _TecSrv;
         private UserSrv _UserSrv;
+        private CourseSrv _CourseSrv;
         private BusinessSrv _BusinessSrv;
-        public DayCourseModel(TecSrv tecSrv,UserSrv userSrv, BusinessSrv businessSrv)
+        public DayCourseModel(TecSrv tecSrv,UserSrv userSrv, BusinessSrv businessSrv, CourseSrv courseSrv)
         {
             _UserSrv = userSrv;
             _TecSrv = tecSrv;
+            _CourseSrv = courseSrv;
             _BusinessSrv = businessSrv;
         }
         public void OnGet()
@@ -40,6 +44,11 @@ namespace EduCenterWeb.Pages.Teacher
                 if(us != null)
                 {
                     result.List = _TecSrv.GetOneDayCourse(us.TecCode, date);
+                }
+                else
+                {
+                    result.IntMsg = -1;
+                    result.ErrorMsg = "请重新登陆";
                 }
             }
             catch (Exception ex)
@@ -70,9 +79,44 @@ namespace EduCenterWeb.Pages.Teacher
             ResultNormal result = new ResultNormal();
             try
             {
-               var csType =  _UserSrv.GetCurrentCourseScheduleType(openId, memberType);
-                DateTime signDate = DateTime.Parse(date);
-               _BusinessSrv.UpdateCourseLogToSigned(openId, memberType, csType, lessonCode, signDate, true);
+                var csType =  _UserSrv.GetCurrentCourseScheduleType(openId, memberType);
+                var us = GetUserSession(false);
+                if(us != null)
+                {
+                    DateTime signDate = DateTime.Parse(date);
+                    var log = _BusinessSrv.UpdateCourseLogToSigned(openId, memberType, csType, lessonCode, signDate, us.OpenId);
+
+
+                    //wx通知 --Begin
+                    var course = _CourseSrv.GetCourseSchedule(log.LessonCode);
+                    if(course == null)
+                    {
+                        result.ErrorMsg = "已签到，但未发送消息通知，请告知管理员！";
+                        return new JsonResult(result);
+                    }
+                    var userAccount = _UserSrv.GetUserAccount(openId);
+
+                    if (userAccount.ReduceTime == 0)
+                        userAccount.ReduceTime = 2;
+                    var time = StaticDataSrv.CourseTime; 
+                   
+                    UserSignTemplate wxMessage = new UserSignTemplate();
+                    wxMessage.data = wxMessage.GenerateData(openId, log.SignName,
+                        $"{log.CourseDateTime} | {time[course.Lesson].TimeRange}", 
+                        course.CourseName,
+                        userAccount.ReduceTime,
+                        userAccount.RemainCourseTime,
+                        userAccount.RemainSummerTime,
+                        userAccount.RemainWinterTime);
+                    WXApi.SendTemplateMessage<UserSignTemplate>(wxMessage);
+                    //wx通知 --End
+
+                }
+                else
+                {
+                    result.IntMsg = -1;
+                    result.ErrorMsg = "请重新登陆";
+                }
 
                 result.SuccessMsg = BaseEnumSrv.GetUserCourseLogStatusNameForTec(UserCourseLogStatus.SignIn);
             }

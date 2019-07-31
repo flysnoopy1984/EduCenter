@@ -91,8 +91,6 @@ namespace EduCenterWeb.Pages.User
                         };
                         _CourseSrv.AddTrial(log);
                         _CourseSrv.SaveChanges();
-
-                    
                        
                     }
                    

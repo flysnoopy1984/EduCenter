@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EduCenterCore.Common.Helper;
 using EduCenterCore.EduFramework;
 using EduCenterCore.WX;
+using EduCenterModel.BaseEnum;
 using EduCenterModel.Course.Result;
 using EduCenterModel.WX;
 using EduCenterModel.WX.Media;
@@ -81,9 +82,19 @@ namespace EduCenterWeb.Pages.Test
             try
             {
 
-                NewUserJoinWXTemplate wxMessage = new NewUserJoinWXTemplate();
-                wxMessage.data = wxMessage.GenerateData("oh6cV1QhPLj6XPesheYUQ4XtuGTs", "Jacky", DateTime.Now, "Test");
-                WXApi.SendTemplateMessage<NewUserJoinWXTemplate>(wxMessage);
+                //UserSignTemplate wxMessage = new UserSignTemplate();
+                //wxMessage.data = wxMessage.GenerateData("oh6cV1QhPLj6XPesheYUQ4XtuGTs", "Jacky", DateTime.Now.ToString("yyyy-MM-dd"), "Test",0,12,0,33);
+                //WXApi.SendTemplateMessage<UserSignTemplate>(wxMessage);
+
+                UserAccountChangeTemplate wxMessage = new UserAccountChangeTemplate();
+                wxMessage.data = wxMessage.GenerateData("oh6cV1QhPLj6XPesheYUQ4XtuGTs",
+                   "jacky",
+                    AmountTransType.Invited_TrialReward,
+                    DateTime.Now,
+                    10,
+                     GlobalSrv.GetRewardAmount(AmountTransType.Invited_TrialReward)
+                    );
+                WXApi.SendTemplateMessage<UserAccountChangeTemplate>(wxMessage);
 
             }
             catch (Exception ex)

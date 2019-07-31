@@ -15,6 +15,14 @@
             }
         });
         var date = $(".DateInput").text();
+
+        //用户请假微信消息
+        var queryDate = GetUrlParam("date");
+        if (queryDate != undefined) {
+            date = queryDate;
+            $(".DateInput").text(date);
+        }
+        
         QueryTecDayCourse(date);
 
         $(".btnRefresh").on("click", RefreshUserData);

@@ -29,6 +29,9 @@ namespace EduCenterModel.Sales
 
         public AmountTransStatus TransStatus { get; set; }
 
+        [MaxLength(64)]
+        public string TransferId { get; set; }
+
 
     }
 }
