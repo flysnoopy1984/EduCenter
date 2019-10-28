@@ -63,8 +63,9 @@ namespace EduCenterWeb.Pages.WebBackend.User
             {
                 int recordTotal;
 
-                result.List = _UserSrv.QueryUserList(userName,babyName,userRole, memberType, userOpenId,
+                result.List = _UserSrv.QueryUserList_FromStore(userName,babyName,userRole, memberType, userOpenId,
                     out recordTotal, pageIndex,pageSize);
+
                 result.RecordTotal = recordTotal;
             }
             catch (Exception ex)

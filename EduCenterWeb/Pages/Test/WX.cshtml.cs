@@ -81,20 +81,24 @@ namespace EduCenterWeb.Pages.Test
             Msg = "创建成功！";
             try
             {
+                var trial = _CourseSrv.GetTrialLogById(172);
+                UserTrialRemindTemplate wxMessage = new UserTrialRemindTemplate();
+                wxMessage.data = wxMessage.GenerateData(trial.OpenId, trial);
+                WXApi.SendTemplateMessage<UserTrialRemindTemplate>(wxMessage);
 
                 //UserSignTemplate wxMessage = new UserSignTemplate();
-                //wxMessage.data = wxMessage.GenerateData("oh6cV1QhPLj6XPesheYUQ4XtuGTs", "Jacky", DateTime.Now.ToString("yyyy-MM-dd"), "Test",0,12,0,33);
+                //wxMessage.data = wxMessage.GenerateData("oh6cV1QhPLj6XPesheYUQ4XtuGTs", "Jacky", DateTime.Now.ToString("yyyy-MM-dd"), "Test", 0, 12, 0, 33);
                 //WXApi.SendTemplateMessage<UserSignTemplate>(wxMessage);
 
-                UserAccountChangeTemplate wxMessage = new UserAccountChangeTemplate();
-                wxMessage.data = wxMessage.GenerateData("oh6cV1QhPLj6XPesheYUQ4XtuGTs",
-                   "jacky",
-                    AmountTransType.Invited_TrialReward,
-                    DateTime.Now,
-                    10,
-                     GlobalSrv.GetRewardAmount(AmountTransType.Invited_TrialReward)
-                    );
-                WXApi.SendTemplateMessage<UserAccountChangeTemplate>(wxMessage);
+                //UserAccountChangeTemplate wxMessage = new UserAccountChangeTemplate();
+                //wxMessage.data = wxMessage.GenerateData("oh6cV1QhPLj6XPesheYUQ4XtuGTs",
+                //   "jacky",
+                //    AmountTransType.Invited_TrialReward,
+                //    DateTime.Now,
+                //    10,
+                //     GlobalSrv.GetRewardAmount(AmountTransType.Invited_TrialReward)
+                //    );
+                //WXApi.SendTemplateMessage<UserAccountChangeTemplate>(wxMessage);
 
             }
             catch (Exception ex)
@@ -116,7 +120,7 @@ namespace EduCenterWeb.Pages.Test
                     count = 20,
                 };
                 var json = JsonConvert.SerializeObject(paremeter);
-                 string data = HttpHelper.RequestUrlSendMsg(wxUrl, HttpHelper.HttpMethod.Post, json);
+                string data = HttpHelper.RequestUrlSendMsg(wxUrl, HttpHelper.HttpMethod.Post, json);
 
                
                 JOMedia = JsonConvert.DeserializeObject<JOMedia>(data);

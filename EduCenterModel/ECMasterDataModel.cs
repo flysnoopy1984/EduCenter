@@ -24,7 +24,7 @@ namespace EduCenterModel
         public string CreatedDateTimeStr
         {
             get {
-                return CreatedDateTime.ToString("yyyy-MM-dd hh:mm:ss");
+                return CreatedDateTime.ToString("yyyy-MM-dd HH:mm:ss");
             }
         }
 
@@ -33,7 +33,7 @@ namespace EduCenterModel
         {
             get
             {
-                return UpdatedDateTime.ToString("yyyy-MM-dd hh:mm:ss");
+                return UpdatedDateTime.ToString("yyyy-MM-dd HH:mm:ss");
             }
         }
     }

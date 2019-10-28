@@ -14,5 +14,9 @@ namespace EduCenterModel.WX
         public string errmsg { get; set; }
 
         public string openid { get; set; }
+
+        public string unionid { get; set; }
+
+        public DateTime expire_DateTime { get; set; }
     }
 }

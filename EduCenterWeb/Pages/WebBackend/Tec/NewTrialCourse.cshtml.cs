@@ -120,7 +120,7 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
                     //微信发送
                     if(needWX)
                     {
-                        TecTrialRemindTemplate data = new TecTrialRemindTemplate();
+                        TecTrialRemindTemplate wxMessage = new TecTrialRemindTemplate();
                         RTrialLog rTrialLog = new RTrialLog();
                         rTrialLog.InitFromETrialLog(origTrial);
                         rTrialLog.SalesOpenId = updateTrial.SalesOpenId;
@@ -130,9 +130,9 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
                         var teacher = _TecSrv.Get(origTrial.TecCode);
                         if (teacher != null)
                         {
-                           // teacher.UserOpenId = "oh6cV1QhPLj6XPesheYUQ4XtuGTs";
-                            data = data.GenerateData(teacher.UserOpenId, rTrialLog);
-                            result = WXApi.SendTemplateMessage<TecTrialRemindTemplate>(data);
+                          //  teacher.UserOpenId = "oh6cV1QhPLj6XPesheYUQ4XtuGTs";
+                            wxMessage.data = wxMessage.GenerateData(teacher.UserOpenId, rTrialLog);
+                            result = WXApi.SendTemplateMessage<TecTrialRemindTemplate>(wxMessage);
                             result.IntMsg = 10;
                         }
                     }

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
-
+using System.Threading;
 
 namespace EduCenterConsole
 {
@@ -18,7 +18,15 @@ namespace EduCenterConsole
         private static IConfigurationRoot _configuration;
         private static EduDbContext _dbContext;//数据库访问的DBContext
         private static ConsoleSrv _ConsoleSrv;
-       
+        
+
+        private void TestTime()
+        {
+            var date = DateTime.Now;
+            Thread.Sleep(2000);
+            Console.WriteLine(DateSrv.DateTimeForClient(date));
+            Console.Read();
+        }
         static void Main(string[] args)
         {
             // Console.WriteLine("Hello World!");
@@ -29,9 +37,14 @@ namespace EduCenterConsole
                 NLogHelper.ConsoleInfo($"初始化完成.");
                 _ConsoleSrv = new ConsoleSrv(_dbContext);
                 _ConsoleSrv.RunJob_FixUserCourse();
-
                 NLogHelper.ConsoleInfo($"[修复完成]");
 
+                NLogHelper.ConsoleInfo($"同步公众号文章.");
+                SyncWXNews syncWXNews = new SyncWXNews(_dbContext);
+                syncWXNews.Run();
+
+                NLogHelper.ConsoleInfo($"同步了{syncWXNews.SyncCount}条文章，已完成！");
+            
 
             }
             catch(Exception ex)

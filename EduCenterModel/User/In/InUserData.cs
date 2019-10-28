@@ -26,5 +26,9 @@ namespace EduCenterModel.User.In
 
         public string SalesOpenId { get; set; }
 
+        public string Phone { get; set; }
+
+        public int UserScore { get; set; }
+
     }
 }

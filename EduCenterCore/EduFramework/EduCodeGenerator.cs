@@ -27,6 +27,16 @@ namespace EduCenterCore.EduFramework
             return "UserTransfer_" + DateTime.Now.ToString("yyyyMMddhhmmss") + GetRnd(2, true, true, false, false, "");
         }
 
+        public static string UserLoginToken()
+        {
+            return Guid.NewGuid().ToString("N");
+        }
+
+        public static string Tool_LessonQRCode()
+        {
+            return "LesQR_" + DateTime.Now.ToString("yyMMddhhmmss") + GetRnd(2, true, true, false, false, "");
+        }
+
         public static string GetRnd(int length, bool useNum, bool useLow, bool useUpp, bool useSpe, string custom)
         {
             byte[] b = new byte[4];

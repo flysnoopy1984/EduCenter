@@ -21,9 +21,10 @@ namespace EduCenterCore.EduFramework
             EduConfig.EduOrg = _Configuration["EduConfig:EduOrg"];
             EduConfig.AppMainSite = _Configuration["EduConfig:AppMainSite"];
             EduConfig.IsTest = Convert.ToBoolean(_Configuration["EduConfig:IsTest"]);
+            EduConfig.UploadArtRoot = _Configuration["EduConfig:UploadArtRoot"];
 
-            //EduConfig.WXAppId = _Configuration["EduConfig:WXAppId"];
-            //EduConfig.WXSecret = _Configuration["EduConfig:WXSecret"];
+            EduConfig.WXAppId = _Configuration["EduConfig:WXAppId"];
+            EduConfig.WXSecret = _Configuration["EduConfig:WXSecret"];
         }
        
     }

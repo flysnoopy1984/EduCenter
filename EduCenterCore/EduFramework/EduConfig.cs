@@ -15,8 +15,10 @@ namespace EduCenterCore.EduFramework
 
         public static bool IsTest { get; set; }
 
-        //public static string WXAppId { get; set; }
+        public static string UploadArtRoot { get; set; }
 
-        //public static string WXSecret { get; set; }
+        public static string WXAppId { get; set; }
+
+        public static string WXSecret { get; set; }
     }
 }

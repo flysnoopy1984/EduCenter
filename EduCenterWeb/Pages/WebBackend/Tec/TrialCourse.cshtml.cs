@@ -84,10 +84,11 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
                 var trial = _CourseSrv.GetTrialLogById(Id);
 
                 //微信发送
-                UserTrialRemindTemplate data = new UserTrialRemindTemplate();
-                data = data.GenerateData(trial.OpenId, trial);
-                result = WXApi.SendTemplateMessage<UserTrialRemindTemplate>(data);
-                if(result.IsSuccess)
+                UserTrialRemindTemplate wxMessage = new UserTrialRemindTemplate();
+                wxMessage.data = wxMessage.GenerateData(trial.OpenId, trial);
+                WXApi.SendTemplateMessage<UserTrialRemindTemplate>(wxMessage);
+
+                if (result.IsSuccess)
                 {
                     _CourseSrv.AddTrialRemindCount(Id);
                 }

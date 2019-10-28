@@ -77,9 +77,9 @@
         $.each(data, function (i) {
             var item = data[i];
             var html = $("#HideData .UserTableRow").clone();
-            html.children(".UserName").text(item.UserName);
-            html.children(".CourseStatus").text(item.UserCourseLogStatusName);
-            html.children(".SignDate").text(item.SignDateTime);
+            html.children(".UserName").text(item.ChildName);
+     //       html.children(".CourseStatus").text(item.UserCourseLogStatusName);
+       //     html.children(".SignDate").text(item.SignDateTime);
             root.append(html);
         });
     }

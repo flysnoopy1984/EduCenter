@@ -61,7 +61,9 @@ namespace EduCenterSrv
             WXApi.DownLoadWXQR(result.ticket, qrDownFilePath);
 
             //添加Logo ,且添加文字
-            QRHelper.AddLogoForQR(headerUrl, new Bitmap(qrDownFilePath), qrWithLogoFilePath);
+            List<string> text = new List<string>();
+            text.Add("您的朋友邀请您加入云艺书院");
+            QRHelper.AddLogoForQR(headerUrl, new Bitmap(qrDownFilePath), qrWithLogoFilePath, text);
 
      
             //添加背景
@@ -172,7 +174,7 @@ namespace EduCenterSrv
                 .Select(a => new RAmountTrans
             {
                 Amount = a.Amount.ToString("0.00"),
-                TransDate = a.TransDateTime.ToString("yyyy-MM-dd hh:mm"),
+                TransDate = a.TransDateTime.ToString("yyyy-MM-dd HH:mm"),
                 UserOpenId = openId,
                 TransTypeName = BaseEnumSrv.GetAmountTransTypeName(a.TransType),
 
@@ -201,7 +203,7 @@ namespace EduCenterSrv
             _dbContext.SaveChanges();
         }
       
-        public bool CreateRewardTrans(long inviteLogId,string ownOpenId, AmountTransType TransType,out EUserAccount UserAccount)
+        public bool CreateRewardTrans(long inviteLogId,string ownOpenId, AmountTransType TransType,out EUserAccount UserAccount,bool needSave=true)
         {
             int c = _dbContext.DBInviteRewardTrans.Where(a => a.InviteLogId == inviteLogId && a.TransType == TransType).Count();
             UserAccount = null;
@@ -234,8 +236,8 @@ namespace EduCenterSrv
                         inviteLog.InviteStatus = InviteStatus.Paied;
                 }
               
-
-                _dbContext.SaveChanges();
+                if(needSave)
+                    _dbContext.SaveChanges();
                 return true;
             }
             return false;

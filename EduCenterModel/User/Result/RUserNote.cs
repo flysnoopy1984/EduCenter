@@ -11,7 +11,7 @@ namespace EduCenterModel.User.Result
         public string CreatedDateTimeStr {
             get
             {
-                return CreateDateTime.ToString("yyyy-MM-dd hh:mm");
+                return CreateDateTime.ToString("yyyy-MM-dd HH:mm");
             }
         }
     }

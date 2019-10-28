@@ -28,6 +28,7 @@ namespace EduCenterModel.WX
         [MaxLength(256)]
         public string headimgurl { get; set; }
 
+        [MaxLength(32)]
         public string unionid { get; set; }
 
 

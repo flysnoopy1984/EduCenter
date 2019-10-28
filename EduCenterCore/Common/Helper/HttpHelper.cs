@@ -63,6 +63,15 @@ namespace EduCenterCore.Common.Helper
             return JsonConvert.DeserializeObject<T>(result);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="method"></param>
+        /// <param name="JSONData"></param>
+        /// <param name="ContentType">application/json,application/x-www-form-urlencoded</param>
+        /// <param name="charset"></param>
+        /// <returns></returns>
         public static string RequestUrlSendMsg(string url, HttpMethod method, string JSONData, String ContentType = "text/html", string charset = "UTF-8")
         {
             byte[] bytes = Encoding.UTF8.GetBytes(JSONData);

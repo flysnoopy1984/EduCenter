@@ -11,6 +11,7 @@ namespace EduCenterModel.User.Result
 
         public MemberType MemberType { get; set; }
         public string UserName { get; set; }
+        public string ChildName { get; set; }
 
         public string LessonCode { get; set; }
 

@@ -7,7 +7,9 @@
         $("#btnLogin").on("click", UserLogin);
 
 
-      
+       // wx.miniProgram.postMessage({ data: 'miniLoginDone' });
+        wx.miniProgram.navigateTo({ url: '../index/GetUnionId?login=done' })
+
     }
 
     UserLogin = function () {

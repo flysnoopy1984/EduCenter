@@ -55,10 +55,11 @@ namespace EduCenterSrv
         public List<STec> GetSimpleList()
         {
 
-            return _dbContext.DBTecInfo.Select(a => new STec
+            return _dbContext.DBTecInfo.Where(a=>a.RecordStatus == RecordStatus.Normal).Select(a => new STec
             {
                 Code = a.Code,
                 Name = a.Name,
+               
               
 
             }).ToList();
@@ -131,7 +132,10 @@ namespace EduCenterSrv
             int count =  _dbContext.DBTecInfo.Count(t => t.UserOpenId == user.OpenId);
             if(count ==0)
             {
-                int No = _dbContext.DBTecInfo.Count();
+                int No = 0;
+                var lastTec = _dbContext.DBTecInfo.OrderByDescending(a => a.Id).FirstOrDefault();
+                if (lastTec != null)
+                    No = (int)lastTec.Id;
                 No++;
                 //教师信息
                 ETecInfo tec = new ETecInfo
@@ -207,7 +211,7 @@ namespace EduCenterSrv
 
         public List<RTecCourse> GetOneDayCourse(string tecCode, string date)
         {
-         
+          
             var times = StaticDataSrv.CourseTime;
             var linq = _dbContext.DBTecCourse.Select(a => new RTecCourse
             {

@@ -68,6 +68,85 @@ namespace EduCenterWeb.Migrations
                     b.ToTable("AliPayApplication");
                 });
 
+            modelBuilder.Entity("EduCenterModel.ArtShow.EArtComment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("ArtId");
+
+                    b.Property<string>("Content")
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("CreateDateTime");
+
+                    b.Property<int>("Praize");
+
+                    b.Property<long>("RefId");
+
+                    b.Property<string>("UnionId")
+                        .HasMaxLength(32);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("miniArtComment");
+                });
+
+            modelBuilder.Entity("EduCenterModel.ArtShow.EArtDetail", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("ArtId");
+
+                    b.Property<string>("FilePath")
+                        .HasMaxLength(120);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("miniArtDetail");
+                });
+
+            modelBuilder.Entity("EduCenterModel.ArtShow.EArtInfo", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ArtMediaType");
+
+                    b.Property<int>("Comments");
+
+                    b.Property<int>("CourseType");
+
+                    b.Property<string>("CoverFilePath")
+                        .HasMaxLength(120);
+
+                    b.Property<string>("Desc")
+                        .HasMaxLength(100);
+
+                    b.Property<int>("Praize");
+
+                    b.Property<int>("RecordStatus");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("UnionId")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTime>("UploadDateTime");
+
+                    b.Property<string>("UploadUser")
+                        .HasMaxLength(40);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("miniArtInfo");
+                });
+
             modelBuilder.Entity("EduCenterModel.Common.ECourseDateRange", b =>
                 {
                     b.Property<int>("Id")
@@ -282,6 +361,40 @@ namespace EduCenterWeb.Migrations
                     b.ToTable("TrialLog");
                 });
 
+            modelBuilder.Entity("EduCenterModel.News.ENewsInfo", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Auther")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("CoverImgUrl")
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("CreateDateTime");
+
+                    b.Property<int>("NewsSource");
+
+                    b.Property<string>("PageUrl")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("PublishStatus");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(100);
+
+                    b.Property<DateTime>("UpdateDateTime");
+
+                    b.Property<string>("wxMediaID")
+                        .HasMaxLength(100);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("miniNewsInfo");
+                });
+
             modelBuilder.Entity("EduCenterModel.Order.EOrder", b =>
                 {
                     b.Property<string>("OrderId")
@@ -363,6 +476,85 @@ namespace EduCenterWeb.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("QRInvite");
+                });
+
+            modelBuilder.Entity("EduCenterModel.Res.EAppBanner", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("BannerImg")
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("CreateDateTime");
+
+                    b.Property<int>("Position");
+
+                    b.Property<int>("RecordStatus");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("appBanner");
+                });
+
+            modelBuilder.Entity("EduCenterModel.Res.EAppIcons", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreateDateTime");
+
+                    b.Property<string>("IconFilePath")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("Position");
+
+                    b.Property<int>("RecordStatus");
+
+                    b.Property<string>("ShowName")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("TargetAppPageName")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("appIcons");
+                });
+
+            modelBuilder.Entity("EduCenterModel.Res.EAppNavigation", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreateDateTime");
+
+                    b.Property<string>("IconFilePath")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("Level");
+
+                    b.Property<int>("Module");
+
+                    b.Property<int>("Position");
+
+                    b.Property<int>("RecordStatus");
+
+                    b.Property<string>("ShowName")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("TargetAppPageName")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("appNavigation");
                 });
 
             modelBuilder.Entity("EduCenterModel.Sales.EInviteLog", b =>
@@ -533,6 +725,34 @@ namespace EduCenterWeb.Migrations
                     b.ToTable("TecSkill");
                 });
 
+            modelBuilder.Entity("EduCenterModel.Tools.ELessonQR", b =>
+                {
+                    b.Property<string>("Code")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(20);
+
+                    b.Property<DateTime>("CreateDateTime");
+
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("QRFilePath")
+                        .HasMaxLength(128);
+
+                    b.Property<int>("RecordStatus");
+
+                    b.Property<string>("Url")
+                        .HasMaxLength(500);
+
+                    b.HasKey("Code");
+
+                    b.ToTable("tool_LessonQR");
+                });
+
             modelBuilder.Entity("EduCenterModel.User.EUserAccount", b =>
                 {
                     b.Property<string>("UserOpenId")
@@ -569,6 +789,8 @@ namespace EduCenterWeb.Migrations
                     b.Property<DateTime>("SummerBuyDate");
 
                     b.Property<DateTime>("SummerDeadLine");
+
+                    b.Property<int>("UserScore");
 
                     b.Property<double>("VIPPrice1");
 
@@ -722,6 +944,9 @@ namespace EduCenterWeb.Migrations
                     b.Property<string>("wx_province")
                         .HasMaxLength(20);
 
+                    b.Property<string>("wx_unionid")
+                        .HasMaxLength(32);
+
                     b.HasKey("Id");
 
                     b.ToTable("UserInfo");
@@ -751,6 +976,33 @@ namespace EduCenterWeb.Migrations
                     b.ToTable("UserInfoBackEnd");
                 });
 
+            modelBuilder.Entity("EduCenterModel.User.EUserLogin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AppSystem");
+
+                    b.Property<DateTime>("EffectDate");
+
+                    b.Property<string>("LoginKey")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("Pwd")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("Token")
+                        .HasMaxLength(32);
+
+                    b.Property<string>("WxOpenId")
+                        .HasMaxLength(32);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserLogin");
+                });
+
             modelBuilder.Entity("EduCenterModel.User.EUserNote", b =>
                 {
                     b.Property<long>("Id")
@@ -771,6 +1023,26 @@ namespace EduCenterWeb.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserNote");
+                });
+
+            modelBuilder.Entity("EduCenterModel.User.EUserPraize", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("PraizeDateTime");
+
+                    b.Property<int>("PraizeTarget");
+
+                    b.Property<long>("RefId");
+
+                    b.Property<string>("UnionId")
+                        .HasMaxLength(32);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("miniUserPraize");
                 });
 
             modelBuilder.Entity("EduCenterSrv.SMS.ESMSLog", b =>

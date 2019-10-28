@@ -75,7 +75,7 @@
     NewTec = function () {
        
         var html = '<div id="InviteTecQR" style="text-align:center;">'
-            html += '<img src="/Files/QR/InviteTec/WXInvite.png" />'
+            html += '<img src="/Files/QR/InviteTec/WXInvite.png?v=1.0.0" />'
         html += '</div>';
 
         $.confirm({

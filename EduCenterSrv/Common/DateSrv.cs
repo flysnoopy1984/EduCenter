@@ -6,6 +6,10 @@ namespace EduCenterSrv.Common
 {
     public class DateSrv
     {
+        public static string toNormalDate(DateTime date)
+        {
+            return date.ToString("yyyy-MM-dd hh:mm:ss");
+        }
         public static int GetDayOfWeek(DateTime date)
         {
             int curDay = (int)date.DayOfWeek;
@@ -40,28 +44,7 @@ namespace EduCenterSrv.Common
 
             return courseDate;
         }
-        //public static DateTime GetLastCourseDate(int day)
-        //{
-        //    DateTime result = DateTime.Now;
-        //    int curDay = GetDayOfWeek(result);
-
-        //    if (curDay > day)
-        //        result = result.AddDays(day - curDay);
-        //    else
-        //    {
-        //        int diff = 7-(day - curDay);
-        //        result= result.AddDays(-diff);
-        //    }
-        //    //考虑是否节假日
-        //    while(IsHoliday(result))
-        //    {
-        //        result = result.AddDays(-7);
-        //    }
-        //    //考虑老师是否请假
-
-        //    return result;
-        //}
-
+     
         public static bool IsHoliday(DateTime date)
         {
             try
@@ -90,6 +73,45 @@ namespace EduCenterSrv.Common
             int day = (int)date.DayOfWeek;
             if (day == 0) day = 7;
             return day;
+        }
+
+        /// <summary>
+        /// 给前端查看的时间(和当前时间比，如果一分钟内，则显示刚刚，1天内的都显示24小时内)
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static string DateTimeForClient(DateTime date)
+        {
+            //dt2 - dt1的差额
+            int sec = GetTimeDiff(date);
+
+
+            if (sec < 60)
+                return "刚刚";
+            else if (sec > 60 && sec < 60 * 60)
+                return $"{ sec / 60} 分钟前";
+            else if (sec > 60 * 60 && sec < 60 * 60 * 24)
+                return $"{sec / 3600} 小时前";
+
+            return date.ToString("MM月dd日 hh:mm");
+        }
+
+        public static int GetTimeDiff(DateTime date)
+        {
+            TimeSpan ts1 = new TimeSpan(DateTime.Now.Ticks);
+            TimeSpan ts2 = new TimeSpan(date.Ticks);
+            TimeSpan ts3 = ts1.Subtract(ts2).Duration();
+            int sec = Convert.ToInt32(ts3.TotalSeconds);
+            return sec;
+        }
+
+        public static DateTime ConverTimeStamp(long timeStamp)
+        {
+            DateTime dtStart = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(1970, 1, 1),TimeZoneInfo.Local);
+            long lTime = long.Parse(timeStamp + "0000000");
+            TimeSpan toNow = new TimeSpan(lTime);
+            return dtStart.Add(toNow);
+
         }
     }
 }

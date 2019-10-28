@@ -70,6 +70,11 @@ namespace EduCenterModel.User
         [MaxLength(100)]
         public string AliPayAccount { get; set; }
 
+        /// <summary>
+        /// 用户积分
+        /// </summary>
+        public int UserScore { get; set; }
+
 
     }
 }

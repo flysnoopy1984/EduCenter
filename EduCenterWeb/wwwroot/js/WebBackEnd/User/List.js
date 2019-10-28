@@ -76,9 +76,17 @@
             if (data.UserRole == 1) {
                 tr.addClass("MemberLine");
             }
+            if (data.UserRole != 1 && data.HasTrial) {
+                tr.addClass("TrialLine");
+            }
            
             tr.attr("openId", data.userOpenId);
             tr.find(".WxName").text(data.WxName);
+            tr.find(".HasTrial").val(data.UserScore);
+
+            //if (data.HasTrial)
+            //    tr.find(".HasTrial").text("是");
+
             tr.find(".RealName").val(data.RealName);
             if (data.BabyName)
                 tr.find(".BabyName").text(data.BabyName);
@@ -92,7 +100,7 @@
 
             tr.find(".selSalesName").val(data.SalesOpenId);
           
-            tr.find(".Contract").text(data.UserPhone);
+            tr.find(".Contract").val(data.UserPhone);
 
             var DeadLineStd = tr.find(".DeadLineStd");
             DeadLineStd.attr("id", "showDate" + i);
@@ -168,6 +176,8 @@
             "DeadLineStd": tr.find(".DeadLineStd").val(),
             "RealName": tr.find(".RealName").val(),
             "SalesOpenId": tr.find(".selSalesName").val(),
+            "Phone": tr.find(".Contract").val(),
+            "UserScore": tr.find(".HasTrial").val(),
         }
 
         callAjax_Query(UpdateUserUrl, data, SaveUserCallBack);

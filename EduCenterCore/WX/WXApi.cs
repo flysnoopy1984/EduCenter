@@ -1,7 +1,9 @@
 ﻿using EduCenterCore.Common.Helper;
+using EduCenterCore.EduFramework;
 using EduCenterModel.Common;
 using EduCenterModel.WX;
 using EduCenterModel.WX.MessageTemplate;
+using EduCenterModel.WX.Mini;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -67,13 +69,41 @@ namespace EduCenterCore.WX
             return resObj;
         }
 
-        public static AccessToken getAccessToken()
+        public static AccessToken getAccessToken(string appId= WxConfig.APPID,string appSecret = WxConfig.APPSECRET)
         {
             string tokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={0}&secret={1}";
-            tokenUrl = string.Format(tokenUrl, WxConfig.APPID, WxConfig.APPSECRET);
+            tokenUrl = string.Format(tokenUrl, appId, appSecret);
             AccessToken token = HttpHelper.Get<AccessToken>(tokenUrl);
 
             return token;
+        }
+
+       
+
+        public static MiniCode2Session GetOpenIdForWxMini(string code)
+        {
+            try
+            {
+                //构造获取openid及access_token的url
+                WxPayData data = new WxPayData();
+            
+                data.SetValue("appid", EduConfig.WXAppId);
+                data.SetValue("secret", EduConfig.WXSecret);
+
+                data.SetValue("js_code", code);
+                data.SetValue("grant_type", "authorization_code");
+                string url = "https://api.weixin.qq.com/sns/jscode2session?" + data.ToUrl();
+
+                MiniCode2Session result = HttpHelper.Get<MiniCode2Session>(url);
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                NLogHelper.ErrorTxt("GetOAuth2AccessTokenFromCode:" + ex.Message);
+                throw new WxPayException(ex.ToString());
+            }
         }
 
         public static AccessToken GetOAuth2AccessTokenFromCode(string code)
@@ -84,6 +114,10 @@ namespace EduCenterCore.WX
                 WxPayData data = new WxPayData();
                 data.SetValue("appid", WxConfig.APPID);
                 data.SetValue("secret", WxConfig.APPSECRET);
+
+                //data.SetValue("appid", EduConfig.WXAppId);
+                //data.SetValue("secret", EduConfig.WXSecret);
+
                 data.SetValue("code", code);
                 data.SetValue("grant_type", "authorization_code");
                 string url = "https://api.weixin.qq.com/sns/oauth2/access_token?" + data.ToUrl();
@@ -129,8 +163,10 @@ namespace EduCenterCore.WX
             if(accessToken == null)
                 accessToken = getAccessToken();
 
+            NLogHelper.InfoTxt($"[WXApi]GetWXUserInfo -- accesstoken:{accessToken}.openid:{OpenId}");
             string url_userInfo = string.Format("https://api.weixin.qq.com/cgi-bin/user/info?access_token={0}&openid={1}",
             accessToken.access_token, OpenId);
+
           
             WXUserInfo wxUser = HttpHelper.Get<WXUserInfo>(url_userInfo);
             return wxUser;
@@ -220,6 +256,27 @@ namespace EduCenterCore.WX
             }
 
             return sb.ToString();
+        }
+        #endregion
+
+        #region Mini
+        public static wxErrorResult CheckContentSec(string content,string atStr = null)
+        {
+            AccessToken accessToken = new AccessToken();
+            if(string.IsNullOrEmpty(atStr))
+            {
+                accessToken =  WXApi.getAccessToken(EduConfig.WXAppId, EduConfig.WXSecret);
+                atStr = accessToken.access_token;
+            }
+          
+
+            string postUrl = $"https://api.weixin.qq.com/wxa/msg_sec_check?access_token={atStr}";
+            string json = "{\"content\":\"" + content + "\"}";
+            
+            string r = HttpHelper.RequestUrlSendMsg(postUrl, HttpHelper.HttpMethod.Post, json, "application/json");
+
+            wxErrorResult result = JsonConvert.DeserializeObject<wxErrorResult>(r);
+            return result;
         }
         #endregion
     }

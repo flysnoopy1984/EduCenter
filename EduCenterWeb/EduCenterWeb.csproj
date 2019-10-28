@@ -27,7 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Alipay.AopSdk.Core" Version="2.4.2" />
+    <PackageReference Include="Alipay.AopSdk.Core" Version="2.4.3" />
+    <PackageReference Include="CsvHelper" Version="12.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
@@ -38,11 +39,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="WebAPI\" />
     <Folder Include="wwwroot\Files\QR\InviteTec\" />
     <Folder Include="wwwroot\css\Pages\" />
     <Folder Include="wwwroot\Files\QR\Pay\" />
-    <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\Files\QR\Tools\LessonQR\" />
+    <Folder Include="wwwroot\images\Icons\" />
   </ItemGroup>
 
   <ItemGroup>

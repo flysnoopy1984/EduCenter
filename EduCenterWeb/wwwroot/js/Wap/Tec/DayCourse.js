@@ -73,9 +73,9 @@
                 var data = res.List;
                 $.each(data, function (i) {
                     var html = $("#HideData .OneUser").clone();
-                    html.find(".UserName").text("学生:" + data[i].UserName);
+                    html.find(".UserName").text("学生:" + data[i].ChildName);
 
-                    html.find(".RemainTime").text("剩余课时:[" + data[i].UserName+"]小时");
+                //    html.find(".RemainTime").text("剩余课时:[" + data[i].UserName+"]小时");
 
                     var userStatus = html.find(".UserStatus");
                     userStatus.text("状态:" + data[i].UserCourseLogStatusName);
@@ -88,7 +88,6 @@
 
                     var btnSign = html.find("#btnSignForUser");
                     if (data[i].UserCourseLogStatus == 1) {
-                       
                         btnSign.on("click", {
                             "openId": data[i].UserOpenId,
                             "memberType": data[i].MemberType,

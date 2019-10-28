@@ -26,7 +26,7 @@ namespace EduCenterCore.Common.Helper
         }
 
         //为QR添加Logo
-        public static void AddLogoForQR(string logoUrl, Bitmap qrBitmap, string saveFilePath, int width = 132, int height = 132)
+        public static void AddLogoForQR(string logoUrl, Bitmap qrBitmap, string saveFilePath,List<string> text = null, int width = 132, int height = 132)
         {
             var LogoImg = ImgHelper.GetImgFromUrl(logoUrl);
             LogoImg = ImgHelper.resizeImage(LogoImg, new Size(width, height));
@@ -35,9 +35,8 @@ namespace EduCenterCore.Common.Helper
             LogoImg = ImgHelper.DrawTransparentRoundCornerImage(LogoImg, 20);
             Bitmap finImg = ImgHelper.CombineImageToCenter(qrBitmap, LogoImg);
 
-            List<string> text = new List<string>();
-            text.Add("您的朋友邀请您加入云艺书院");
-            finImg = AddStringUnderQR(finImg, text);
+            if(text!=null)
+                finImg = AddStringUnderQR(finImg, text);
 
             finImg.Save(saveFilePath);
             finImg.Dispose();
@@ -48,6 +47,8 @@ namespace EduCenterCore.Common.Helper
         //二维码下面+文字
         public static Bitmap AddStringUnderQR(Image qrImg,List<string> textList,int leftOffset=0)
         {
+            if (textList == null) return new Bitmap(qrImg);
+
             Bitmap bkImg = new Bitmap(qrImg.Width,qrImg.Height+50* textList.Count);
             bkImg = ImgHelper.CombineImageToTop(bkImg, qrImg);
             //添加文字

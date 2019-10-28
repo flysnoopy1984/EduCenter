@@ -1,12 +1,15 @@
 ﻿using EduCenterModel.BaseEnum;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace EduCenterModel.User.Result
 {
     public class RUserList
     {
+       
         public string userOpenId { get; set; }
 
         public string WxName { get; set; }
@@ -50,6 +53,10 @@ namespace EduCenterModel.User.Result
         public string SalesOpenId { get; set; }
 
         public string UserPhone { get; set; }
+
+        public bool HasTrial { get; set; }
+
+        public string UserScore { get; set; }
 
     
 

@@ -188,6 +188,8 @@ namespace EduCenterSrv.Common
             return r;
         }
 
+
+
         public static string GetCourseTypeName(int key)
         {
             return GetCourseTypeName((CourseType)key);
@@ -213,7 +215,7 @@ namespace EduCenterSrv.Common
             }
         }
 
-        private static List<SiKsV> GetCourseType()
+        public static List<SiKsV> GetCourseType()
         {
             List<SiKsV> r = new List<SiKsV>();
             foreach (CourseType ct in Enum.GetValues(typeof(CourseType)))

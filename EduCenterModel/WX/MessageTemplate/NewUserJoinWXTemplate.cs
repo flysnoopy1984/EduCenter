@@ -36,7 +36,7 @@ namespace EduCenterModel.WX.MessageTemplate
             {
                 first = new TemplateField() { value = first, color = "#EB6B13" },
                 keyword1 = new TemplateField() { value = userName },
-                keyword2 = new TemplateField() { value = JoinDate.ToString("yyyy-MM-dd hh:mm:ss"), color = "#81D842" },
+                keyword2 = new TemplateField() { value = JoinDate.ToString("yyyy-MM-dd HH:mm:ss"), color = "#81D842" },
                 remark = new TemplateField { value = remark, color = "#FFC753" },
             };
       

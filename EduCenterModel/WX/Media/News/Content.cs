@@ -15,10 +15,10 @@ namespace EduCenterModel.WX.Media
         /// <summary>
         /// 
         /// </summary>
-        public int create_time { get; set; }
+        public long create_time { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int update_time { get; set; }
+        public long update_time { get; set; }
     }
 }

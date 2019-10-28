@@ -74,24 +74,38 @@
         var ctype = option.attr("cType");
         var date = new Date(dateStr);
         var day = date.getDay();
-        if (day == 2) {
-            ShowInfo("周二没有试听课");
+      
+        if ((day == 3 || day == 4) && ctype == "WQ") {
+            ShowInfo("周三周四没有围棋试听课");
             return;
         }
-        if (day == 1 && ctype != "WQ") {
-            ShowInfo("周一只有围棋试听课");
+        if (ctype == "MS" && (day == 1 || day == 2)) {
+            ShowInfo("周一周二没有国画试听课");
             return;
         }
-        if (ctype == "WQ" && (day == 4 || day == 6)) {
-            ShowInfo("围棋试听课只有周一，周三，周五，周日，谢谢！");
-            return;
-        }
-      //  if(day == 1 && )
+    
         if (dateStr != "" && courseCode != "-1") {
+
+            FilterLesson(day);
+
             LoadingDone();
         }
+    }
 
-   
+    FilterLesson = function (day) {
+        $(".TimeFilter .TimeFilterTableTr").show();
+        $(".TimeFilter .TimeFilterTableTr").each(function () {
+            var lesson = parseInt($(this).children(":first").attr("lesson"));
+            if (day >= 1 && day <= 5) {
+                if (lesson >= 1 && lesson <= 3)
+                    $(this).hide();
+            }
+            else {
+                if (lesson >= 10 && lesson <= 11)
+                    $(this).hide();
+            }
+        });
+       
     }
 
     SubmitTrial = function () {

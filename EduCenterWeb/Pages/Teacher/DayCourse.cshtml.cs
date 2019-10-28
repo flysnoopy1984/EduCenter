@@ -43,6 +43,7 @@ namespace EduCenterWeb.Pages.Teacher
                 var us = GetUserSession(false);
                 if(us != null)
                 {
+                    NLogHelper.InfoTxt($"QueryTecDayCourse TecCode:{us.TecCode}");
                     result.List = _TecSrv.GetOneDayCourse(us.TecCode, date);
                 }
                 else

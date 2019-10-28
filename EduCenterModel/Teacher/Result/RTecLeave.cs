@@ -15,7 +15,7 @@ namespace EduCenterModel.Teacher.Result
         {
             get
             {
-                return ApplyDateTime.ToString("yyyy-MM-dd hh:mm:dd");
+                return ApplyDateTime.ToString("yyyy-MM-dd HH:mm:dd");
             }    
         }
 

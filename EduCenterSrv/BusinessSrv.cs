@@ -174,10 +174,15 @@ namespace EduCenterSrv
                 {
                     ui.MemberType = MemberType.VIP;
                     eUserAccount.VIPPrice1 = Math.Round(line.Price/line.Qty, 2);
-
-
                 }
-               
+                //查看用户是否有邀请人
+
+                SalesSrv salesSrv = new SalesSrv(_dbContext);
+                var inviteLog = salesSrv.GetInviteLogByInvitedOpenId(ui.OpenId);
+                if(inviteLog!=null)
+                {
+                    salesSrv.CreateRewardTrans(inviteLog.Id, inviteLog.OwnOpenId, AmountTransType.Invited_Paied, out eUserAccount,false);
+                }               
 
                 _dbContext.SaveChanges();
                 CommitTrans();
@@ -591,16 +596,43 @@ namespace EduCenterSrv
         {
             UserSrv userSrv = new UserSrv(_dbContext);
             SalesSrv salesSrv = new SalesSrv(_dbContext);
-            if (wxUser == null)
-                wxUser = WXApi.GetWXUserInfo(InvitedOpenId);
+            EUserInfo user = null;
+            try
+            {
+                if (wxUser == null)
+                    wxUser = WXApi.GetWXUserInfo(InvitedOpenId);
+
+            }
+            catch(Exception ex)
+            {
+                NLogHelper.ErrorTxt($"businessSrv-[InvitedUserComing] -GetWXUserInfo Error:{ex.Message}");
+                throw ex;
+            }
+
 
             EUserInfo owner = null;
-            //如果是老用户，不能绑定邀请
-            if (!userSrv.IsExistUser(InvitedOpenId))
-                owner = salesSrv.BindUser(ownOpenId, InvitedOpenId);
+            try
+            {
+                //如果是老用户，不能绑定邀请
+                if (!userSrv.IsExistUser(InvitedOpenId))
+                    owner = salesSrv.BindUser(ownOpenId, InvitedOpenId);
+            }
+            catch (Exception ex)
+            {
+                NLogHelper.ErrorTxt($"businessSrv-[InvitedUserComing] -BindUser Error:{ex.Message}");
+                throw ex;
+            }
 
-          
-            EUserInfo user = userSrv.AddOrUpdateFromWXUser(wxUser, owner, false);
+            try
+            {
+               user = userSrv.AddOrUpdateFromWXUser(wxUser, owner, false);
+            }
+            catch (Exception ex)
+            {
+                NLogHelper.ErrorTxt($"businessSrv-[InvitedUserComing] -AddOrUpdateFromWXUser Error:{ex.Message}");
+                throw ex;
+            }
+           
 
             _dbContext.SaveChanges();
             return user;

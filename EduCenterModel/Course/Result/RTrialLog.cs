@@ -18,7 +18,7 @@ namespace EduCenterModel.Course.Result
 
         public string ApplyDateTimeStr
         {
-            get { return this.ApplyDateTime.ToString("yyyy-MM-dd hh:mm"); }
+            get { return this.ApplyDateTime.ToString("yyyy-MM-dd HH:mm"); }
         }
 
         public string TrialLogStatusName { get; set; }

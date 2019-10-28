@@ -8,6 +8,10 @@ using EduCenterSrv.SMS;
 using Microsoft.EntityFrameworkCore;
 using EduCenterModel.Sales;
 using EduCenterModel.AliPay;
+using EduCenterModel.ArtShow;
+using EduCenterModel.News;
+using EduCenterModel.Res;
+using EduCenterModel.Tools;
 
 namespace EduCenterSrv.DataBase
 {
@@ -76,9 +80,28 @@ namespace EduCenterSrv.DataBase
 
         public DbSet<EAliPayApplication> DBAliPayApplication { get; set; }
 
+        public DbSet<EArtInfo> DbArtInfo { get; set; }
 
+        public DbSet<EArtDetail> DbArtDetail { get; set; }
 
+        public DbSet<EArtComment> DbArtComment { get; set; }
 
+        public DbSet<EUserPraize> DbUserPraize { get; set; }
+
+        public DbSet<ENewsInfo> DbNewsInfo { get; set; }
+
+        public DbSet<EUserLogin> DbUserLogin { get; set; }
+
+        #region Tools
+        public DbSet<ELessonQR> DbLessonQR { get; set; }
+        #endregion
+
+        #region app
+        public DbSet<EAppBanner> DbBanner { get; set; }
+        public DbSet<EAppIcons> DbAppIcons { get; set; }
+
+        public DbSet<EAppNavigation> DbAppNavigation { get; set; }
+        #endregion
 
     }
 }

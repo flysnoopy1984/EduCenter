@@ -147,6 +147,7 @@ namespace EduCenterWeb.Pages.WX
                 else if (_EventKey.StartsWith(WxConfig.QR_Invite_User))
                 {
                     var ownOpenId = _EventKey.Split("_")[2];
+                    
                     var user = _BusinessSrv.InvitedUserComing(_wxMessage.FromUserName, ownOpenId);
                  
                     _ResultMsg = _wxMessage.toText(WXReplyContent.NewUserAdd(user.Name));
@@ -155,7 +156,7 @@ namespace EduCenterWeb.Pages.WX
             }
             catch(Exception ex)
             {
-                NLogHelper.ErrorTxt($"[InviteQRHandler]:{ex.Message}");
+                NLogHelper.ErrorTxt($"[InviteQRHandler]-FromUserName:{_wxMessage.FromUserName}| 信息：{ex.Message}");
             } 
         }
 

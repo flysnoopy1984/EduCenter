@@ -32,7 +32,7 @@ namespace EduCenterModel.User.Result
         {
             get
             {
-                return UserLeaveDateTime.ToString("yyyy-MM-dd hh:mm");
+                return UserLeaveDateTime.ToString("yyyy-MM-dd HH:mm");
             }
         }
 
@@ -40,7 +40,7 @@ namespace EduCenterModel.User.Result
         {
             get
             {
-                return UserSignDateTime.ToString("yyyy-MM-dd hh:mm");
+                return UserSignDateTime.ToString("yyyy-MM-dd HH:mm");
             }
         }
 

@@ -28,6 +28,8 @@ namespace EduCenterCore.EduFramework
             get { return "/files/QR/InviteUser/"; }
         }
 
+       
+
         public static string DicPath_QR
         {
             get { return _Enviroment.WebRootPath + @"\Files\QR\"; }
@@ -69,5 +71,25 @@ namespace EduCenterCore.EduFramework
             return DicPath_QR + fileName;
         }
 
+        #region 作品上传
+        public static string VirPath_ArtRoot
+        {
+            get { return "/Files/Art/"; }
+        }
+        #endregion
+
+        #region Tools 
+        public static string DicPath_Tools_LessonQR
+        {
+            get { return _Enviroment.WebRootPath + @"\Files\QR\Tools\LessonQR\"; }
+        }
+
+
+        public static string VirPath_Tools_LessonQR
+        {
+            get { return "/Files/QR/Tools/LessonQR/"; }
+        }
+
+        #endregion 
     }
 }

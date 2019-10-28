@@ -18,7 +18,7 @@ namespace EduCenterModel.Sales.Result
         {
             get
             {
-                return InvitedDateTime.ToString("yyyy-MM-dd hh:mm:ss");
+                return InvitedDateTime.ToString("yyyy-MM-dd HH:mm:ss");
             }
         }
         public string InviteStatusName

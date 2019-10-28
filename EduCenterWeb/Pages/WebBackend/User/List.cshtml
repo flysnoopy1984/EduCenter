@@ -7,6 +7,7 @@
 @section navBar{
     <li><a href="/WebBackend/Home">主页</a></li>
 }
+
 <script src="~/lib/laydate/laydate.js"></script>
 <script src="~/lib/layer-v3.1.1/layer/layer.js"></script>
 
@@ -14,6 +15,7 @@
 <script src="~/lib/layui/layui.js"></script>
 <script src="~/lib/layui/lay/modules/laypage.js"></script>
 <script src="~/js/WebBackEnd/User/List.js?v=@Model.jsVersion"></script>
+
 <style type="text/css">
     .MainContainer{
         overflow-y:auto;
@@ -24,7 +26,7 @@
     }
 
     #UserListTable {
-      /*width:100%;*/
+      width:100%;
         font-size: 11px;
     }
 
@@ -47,7 +49,7 @@
         .OneField{
             display:flex;
             margin-right:20px;
-            align-items: baseline;
+            align-items: center;
         }
         .OneField input{
             height:28px;
@@ -64,7 +66,7 @@
         }
          .RowOption{
               display: flex;
-    width: 120px;
+    width: 100px;
     justify-content: space-between;
          }
          .DeadLineStd{width:80px;}
@@ -73,18 +75,37 @@
          }
          input[type=number]
          {
-             width:55px;
+             width:50px;
          }
         .RealName{width:60px;}
         .BabyName{
             cursor:pointer;
+            width:100px;
         }
         .MemberLine{
             background-color:#faf18d;
         }
+        .TrialLine{
+            background-color:#99d8fd;
+        }
          .Note{
             text-decoration:underline;
             cursor:pointer; 
+         }
+         .Contract{
+             border-bottom: solid 1px #999999 !important;
+             width:100%;
+         }
+         .eduCheckBox{
+             width:20px;
+             height:20px;
+         }
+         .label_HasTrial{
+             line-height:32px; margin-left:5px;
+             margin-bottom:auto ;
+         }
+         .HasTrial{
+             width:55px !important;
          }
 </style>
 
@@ -132,21 +153,28 @@
             <input id="btnQueryReset" type="button" class="btn btn-danger btn-sm" value="重置" />
         </div>
     </div>
+    @*<div class="OptionArea">
+        <div class="OneField">
+            <input type="checkbox" id="cb_HasTrial" class="eduCheckBox" onclick="FilterTriedUser">
+            <label for="cb_HasTrial" class="text-danger label_HasTrial" >已试听非会员</label>
+        </div>
+    </div>*@
     <div class="DataArea">
         <table id="UserListTable" border="0" cellpadding="0" cellspacing="0">
             <tr id="Header">
-                <th width="100px">操作</th>
+                <th width="120px">操作</th>
                 <th width="80px">备注</th>
-                <th width="150px">用户微信名</th>
+                <th width="70">积分</th>
+                <th style="min-width:150px;">用户微信名</th>
                 <th width="90px">联系方式</th>
-                <th width="80px">家长姓名</th>
+                @*<th width="80px">家长姓名</th>*@
                 <th width="100px">宝贝姓名</th>
                 <th width="90px">用户身份</th>
                 <th width="90px">会员类型</th>
                 <th width="70px">特殊价格</th>
-                <th width="65px">【标】课时</th>
-                <th width="65px">【暑】课时</th>
-                <th width="65px">【寒】课时</th>
+                <th width="60px">【标】课时</th>
+                <th width="60px">【暑】课时</th>
+                <th width="60px">【寒】课时</th>
                 <th width="80px">关注时间</th>
                 <th width="122px">标准班有效期</th>
                 <th width="80px">接待人</th>
@@ -175,10 +203,11 @@
                 </div>
             </td>
             <td onclick="OpenUserNote(this)"><label class="Note"><i class="fa fa-sticky-note-o" aria-hidden="true"></i>备注信息</label></td>
-            <td><label class="WxName TextNoWrap2"></label></td>
-            <td><label class="Contract"></label></td>
-            <td><input class="RealName" type="text" /></td>
-            <td onclick="CreateBabyInfoForm(this);"><label class="BabyName text-info TextNoWrap2">暂无</label></td>
+            <td><input type="number" class="HasTrial"></td>
+            <td><label class="WxName TextNoWrap" style="width:150px;"></label></td>
+            <td><input type="text" class="Contract" /></td>
+            @*<td><input class="RealName" type="text" /></td>*@
+            <td onclick="CreateBabyInfoForm(this);"><label class="BabyName text-info TextNoWrap">暂无</label></td>
             <td>
                 <select class="UserRole">
                     @foreach (var ur in Model.UserRoleList)

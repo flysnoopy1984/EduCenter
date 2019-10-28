@@ -1,0 +1,86 @@
+﻿@page
+@model EduCenterWeb.Pages.Tools.LessonQRModel
+@{
+    Layout = null;
+}
+@Html.AntiForgeryToken()
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
+    <script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+    <script src="~/lib/jquery.blockUI/jquery.blockUI.min.js"></script>
+    <script src="~/js/EduLib/EditHelper.js"></script>
+    <script src="~/js/EduLib/Common.js"></script>
+    <title>二维码</title>
+    <style type="text/css">
+        .MainContainer {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .TargetUrl {
+            margin: 20px;
+            display: flex;
+        }
+
+        .Desc {
+            margin: 20px;
+            display: flex;
+        }
+
+        .QRArea {
+            margin: 20px;
+        }
+        #qrImg{
+            width:200px;
+            height:200px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            Init = function () {
+
+            };
+
+            CreateQR = function () {
+                $("#qrImg").removeAttr("src");
+                var url = "LessonQR?handler=CreateLessonQR";
+                var Name = $("#qrName").val();
+                var targetUrl = $("#qrUrl").val();
+                callAjax_Query(url, { "Name": Name, "Url": targetUrl }, function (res) {
+
+                    $("#qrImg").attr("src", res.SuccessMsg);
+                });
+            };
+
+            Init();
+
+
+        });
+
+/**/</script>
+</head>
+<body>
+    <div class="MainContainer">
+        <div class="TargetUrl">
+            <div>Url:</div><input type="text" id="qrUrl" style="width:350px;" />
+        </div>
+        <div class="Desc">
+            <div>
+                Name:
+            </div><input id="qrName" type="text" />
+        </div>
+        <div class="QRArea">
+            <img Id="qrImg" />
+        </div>
+        <div style="text-align:center;">
+            <input type="button" value="创建二维码" class="btn btn-primary" onclick="CreateQR();" />
+        </div>
+    </div>
+</body>
+</html>

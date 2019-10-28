@@ -1,4 +1,5 @@
 ﻿using EduCenterCore.Common.Helper;
+using EduCenterCore.EduFramework;
 using EduCenterCore.WX;
 using EduCenterModel.BaseEnum;
 using EduCenterModel.Common;
@@ -12,6 +13,7 @@ using EduCenterSrv.DataBase;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
@@ -104,7 +106,7 @@ namespace EduCenterSrv
         /// 添加或更新微信用户，微信相关字段总是更新
         /// </summary>
         /// <param name="wxUser"></param>
-        public EUserInfo AddOrUpdateFromWXUser(WXUserInfo wxUser,EUserInfo owner = null,bool isSave = true)
+        public EUserInfo AddOrUpdateFromWXUser(WXUserInfo wxUser,EUserInfo owner = null,bool isSave = true,string fromChannel="")
         {
 
             EUserInfo user = _dbContext.DBUserInfo
@@ -112,16 +114,21 @@ namespace EduCenterSrv
                              .FirstOrDefault();
             if(user == null)
             {
+               
                 user = CreateNewUserFromWXUser(wxUser);
-            //    NLogHelper.InfoTxt("WXNotification Start");
+                //    NLogHelper.InfoTxt("WXNotification Start");
                 //微信提醒
+                if (!string.IsNullOrEmpty(fromChannel) && owner == null)
+                    owner = new EUserInfo { Name = fromChannel };
                 WXNewUserNotification(wxUser, owner);
             }
             user.wx_Name = wxUser.nickname;
             user.wx_city = wxUser.city;
             user.wx_country = wxUser.country;
             user.wx_headimgurl = wxUser.headimgurl;
+            user.wx_unionid = wxUser.unionid;
             user.wx_province = wxUser.province;
+            user.wx_unionid = wxUser.unionid;
             if(user.Id>0)
                 _dbContext.DBUserInfo.Update(user);
         
@@ -135,6 +142,16 @@ namespace EduCenterSrv
         public EUserInfo GetUserInfo(string openId)
         {
             return _dbContext.DBUserInfo.Where(a => a.OpenId == openId).FirstOrDefault();
+        }
+     
+        public EUserInfo GetUserInfoByUninonId(string unionId)
+        {
+            return _dbContext.DBUserInfo.Where(a => a.wx_unionid == unionId).FirstOrDefault();
+        }
+
+        public bool ExistUnionId(string unionId)
+        {
+            return _dbContext.DBUserInfo.Where(a => a.wx_unionid == unionId).Count() > 0;
         }
 
         public List<EUserInfo> GetAllMemberList()
@@ -167,7 +184,7 @@ namespace EduCenterSrv
 
         }
 
-
+ 
         #endregion
 
         #region UserCourese
@@ -239,18 +256,19 @@ namespace EduCenterSrv
         {
           
             var efSql = from uc in _dbContext.DBUserCoures.Where(a => a.LessonCode == lessonCode)
-                        join ul in _dbContext.DBUserCourseLog.Where(a=>a.CourseDateTime == date) on uc.LessonCode equals ul.LessonCode into uc_ul
-                        from ucul in uc_ul.DefaultIfEmpty()
+                        //join ul in _dbContext.DBUserCourseLog.Where(a=>a.CourseDateTime == date) on uc.LessonCode equals ul.LessonCode into uc_ul
+                        //from ucul in uc_ul.DefaultIfEmpty()
                         join ui in _dbContext.DBUserInfo on uc.UserOpenId equals ui.OpenId
                         select new RUserCurrentCourse
                         {
                             UserOpenId = ui.OpenId,
                             LessonCode = uc.LessonCode,
-                            SignDateTime =ucul==null? "":ucul.UserSignDateTime.ToString("yyyy-MM-dd hh:mm"),
-                            UserCourseLogStatus = ucul == null? UserCourseLogStatus.PreNext:ucul.UserCourseLogStatus,
-                            UserCourseLogStatusName = ucul==null?"无":BaseEnumSrv.GetUserCourseLogStatusNameForTec(ucul.UserCourseLogStatus),
+                       //     SignDateTime =ucul==null? "":ucul.UserSignDateTime.ToString("yyyy-MM-dd HH:mm"),
+                       //     UserCourseLogStatus = ucul == null? UserCourseLogStatus.PreNext:ucul.UserCourseLogStatus,
+                       //     UserCourseLogStatusName = ucul==null?"无":BaseEnumSrv.GetUserCourseLogStatusNameForTec(ucul.UserCourseLogStatus),
                             UserName = ui.Name,
                             MemberType = ui.MemberType,
+                            ChildName = ui.ChildName,
                         };
             return efSql.ToList();
                                  
@@ -1102,10 +1120,9 @@ namespace EduCenterSrv
                           WXJoinDateTime = ui.CreatedDateTime.ToString("yyyy-MM-dd"),
                           SalesName = sui == null ? "自助完成" : sui.RealName,
                           SalesOpenId = sui == null?"":sui.OpenId,
-                          
                           UserPhone = ui.Phone
-                      }
-                      ;
+                      };
+
             if(!string.IsNullOrEmpty(userOpenId))
             {
                 sql = sql.Where(a => a.userOpenId == userOpenId);
@@ -1136,9 +1153,62 @@ namespace EduCenterSrv
 
             return sql.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
 
-
-
         }
+
+        public List<RUserList> QueryUserList_FromStore(string userName,
+          string babyName,
+          int userRole,
+          int memberType,
+          string userOpenId,
+          out int recordTotal,
+          int pageIndex = 1,
+          int pageSize = 20)
+        {
+            List<RUserList> result = new List<RUserList>();
+            List<SqlParameter> spList = new List<SqlParameter>();
+            spList.Add(new SqlParameter { Value = pageIndex-1, ParameterName = "@pageIndex" });
+            spList.Add(new SqlParameter { Value = pageSize, ParameterName = "@pageSize" });
+            spList.Add(new SqlParameter { Value = userName, ParameterName = "@userName" });
+            spList.Add(new SqlParameter { Value = babyName, ParameterName = "@babyName" });
+            spList.Add(new SqlParameter { Value = userRole, ParameterName = "@userRole" });
+            spList.Add(new SqlParameter { Value = memberType, ParameterName = "@memberType" });
+            spList.Add(new SqlParameter { Value = userOpenId, ParameterName = "@userOpenId" });
+            //存储过程Count先输出，其他数据再输出 2张表
+            var arrayList =  SpExecForPage<RUserList>("Edu_QueryUserInfo", spList.ToArray());  
+            recordTotal = (int)arrayList[0]["TotalCount"];
+            for(int i=1;i< arrayList.Count;i++)
+            {
+                RUserList rUserList = new RUserList()
+                {
+                    WxName = Convert.ToString(arrayList[i]["Name"]),
+                    BabyName = Convert.ToString(arrayList[i]["ChildName"]),
+                    userOpenId = Convert.ToString(arrayList[i]["OpenId"]),
+                    RealName = Convert.ToString(arrayList[i]["RealName"]),
+                    MemberType = (MemberType)(arrayList[i]["MemberType"]),
+                    DeadLineStd = Convert.ToDateTime(arrayList[i]["DeadLine"]).ToString("yyyy-MM-dd"),
+                    DeadLineSummer = Convert.ToDateTime(arrayList[i]["SummerDeadLine"]).ToString("yyyy-MM-dd"),
+                    DeadLineWinter = Convert.ToDateTime(arrayList[i]["WinterDeadLine"]).ToString("yyyy-MM-dd"),
+                    RemainTimeStd = Convert.ToDouble(arrayList[i]["RemainCourseTime"]),
+                    RemainTimeSummer = Convert.ToDouble(arrayList[i]["RemainSummerTime"]),
+                    RemainTimeWinter = Convert.ToDouble(arrayList[i]["RemainWinterTime"]),
+                    UserRole = (UserRole)(arrayList[i]["UserRole"]),
+                    AllowChooseStd = Convert.ToBoolean(arrayList[i]["CanSelectCourse"]),
+                    AllChooseWS = Convert.ToBoolean(arrayList[i]["CanSelectSummerWinterCourse"]),
+                    VipPrice = Convert.ToDouble(arrayList[i]["VIPPrice1"]),
+                    WXJoinDateTime = Convert.ToDateTime(arrayList[i]["CreatedDateTime"]).ToString("yyyy-MM-dd"),
+                    SalesName = Convert.ToString(arrayList[i]["salesName"]),
+                    SalesOpenId = Convert.ToString(arrayList[i]["SalesOpenId"]),
+                    UserPhone = Convert.ToString(arrayList[i]["Phone"]),
+                    HasTrial = !string.IsNullOrEmpty(Convert.ToString(arrayList[i]["HasTrial"])),
+                    UserScore = arrayList[i]["UserScore"]==null?"0":Convert.ToString(arrayList[i]["UserScore"])
+
+                };
+                rUserList.UserRoleName = BaseEnumSrv.GetUserRoleName(rUserList.UserRole);
+                result.Add(rUserList);
+            }
+            return result;
+        }
+
 
         public bool UpdateUserData(InUserData userData)
         {
@@ -1146,6 +1216,9 @@ namespace EduCenterSrv
             ui.MemberType = userData.MemberType;
             ui.RealName = userData.RealName;
             ui.UserRole = userData.UserRole;
+            if (!string.IsNullOrEmpty(userData.Phone))
+                ui.Phone = userData.Phone;
+
             if(ui.MemberType == MemberType.VIP && ui.UserRole == UserRole.Visitor)
             {
                 ui.UserRole = UserRole.Member;
@@ -1157,7 +1230,7 @@ namespace EduCenterSrv
             ua.RemainCourseTime = userData.RemainTimeStd;
             ua.RemainSummerTime = userData.RemainTimeSummer;
             ua.RemainWinterTime = userData.RemainTimeWinter;
-
+            ua.UserScore = userData.UserScore;
             if(userData.DeadLineStd != "1900-01-01")
                 ua.DeadLine = DateTime.Parse(userData.DeadLineStd);
             
@@ -1204,7 +1277,43 @@ namespace EduCenterSrv
         #endregion
 
 
+        #region API
+        public RUserLogin ApiUserLoginByPhone(EUserLogin eUserLogin)
+        {
 
+            var userLogin = _dbContext.DbUserLogin.Where(a => a.LoginKey == eUserLogin.LoginKey.Trim() &&
+            a.Pwd == eUserLogin.Pwd.Trim() &&
+            a.AppSystem == eUserLogin.AppSystem
+            ).FirstOrDefault();
+
+            if (userLogin == null)
+                return null;
+
+            //从用户信息表获取数据
+            var result = _dbContext.DBUserInfo.Where(a => a.Phone == eUserLogin.LoginKey).Select(a => new RUserLogin
+            {
+                Name = a.Name,
+                UserRole = a.UserRole,
+                HeaderUrl = a.wx_headimgurl,
+                WxOpenId = a.OpenId,
+      
+            }).FirstOrDefault();
+
+            result.Token = EduCodeGenerator.UserLoginToken();
+            result.EffectDate = DateTime.Now.AddHours(2);
+            result.LoginKey = eUserLogin.LoginKey;
+
+            //反写信息到用户登录表
+            userLogin.Token = result.Token;
+            userLogin.EffectDate = result.EffectDate;
+            userLogin.WxOpenId = result.WxOpenId;
+          
+            _dbContext.SaveChanges();
+
+            return result;
+
+        }
+        #endregion 
 
     }
 }

@@ -17,10 +17,11 @@ using EduCenterSrv;
 using EduCenterModel.Course;
 using Newtonsoft.Json;
 using EduCenterModel.BaseEnum;
+using CsvHelper;
 
 namespace EduCenterWeb.Pages.Test
 {
-    public class DemoModel : EduBasePageModel
+    public class DemoModel : PageModel
     {
         private OrderSrv  _orderSrv;
         private UserSrv _userSrv;
@@ -53,10 +54,12 @@ namespace EduCenterWeb.Pages.Test
 
         public void OnPostTestDb()
         {
-            DbTest = "Done";
-            DbTest =  EduCodeGenerator.GetTecCode(1);
-           // _context.DBCourseInfo.Count(a=>a.RecordStatus=1)
-        //    DbTest =  $"{_context.DBCourseInfo("select count(1) from CourseInfo")}";
+            //// DbTest = "Done";
+            //// DbTest =  EduCodeGenerator.GetTecCode(1);
+            ////// _context.DBCourseInfo.Count(a=>a.RecordStatus=1)
+            //    DbTest =  $"{_context.DBCourseInfo("select count(1) from CourseInfo")}";
+
+            WXApi.getAccessToken();
         }
 
         public void OnPostCreateTecQR()
@@ -132,6 +135,22 @@ namespace EduCenterWeb.Pages.Test
            // var list = _userSrv.GetHolidayJson();
            //var json =  JsonConvert.SerializeObject(list);
            // Msg = json;
+        }
+
+        public IActionResult OnPostCSVTest()
+        {
+            MemoryStream ms = new MemoryStream();
+            StreamWriter sw = new StreamWriter(ms);
+
+           var list =  _userSrv.GetAllMemberList();
+
+            var csv = new CsvWriter(sw);
+            csv.WriteRecords<EUserInfo>(list);
+            csv.Flush();
+
+            ms.Position = 0;
+            return File(ms, "application/octet-stream", "Reports.csv");
+          
         }
 
 

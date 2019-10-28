@@ -60,6 +60,9 @@ namespace EduCenterModel.User
         [MaxLength(256)]
         public string wx_headimgurl { get; set; }
 
+        [MaxLength(32)]
+        public string wx_unionid { get; set; }
+
 
     }
 }
