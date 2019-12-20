@@ -20,8 +20,7 @@ namespace EduCenterSrv
         {
             AppInitData initData = new AppInitData();
             initData.BannerList =  resSrv.GetBannerList();
-      //      initData.AppIconsList = resSrv.GetAppNavGridIcons();
-
+   
             initData.AppNavList = NavsList();
             return initData;
 
@@ -31,6 +30,11 @@ namespace EduCenterSrv
         {
             return _dbContext.DbAppNavigation.Where(a => a.RecordStatus == RecordStatus.Normal)
                 .OrderBy(a => a.Position).ToList();
+        }
+
+        public List<EAppContentInfo> GetAppContentByNavId(long NavId)
+        {
+            return null;
         }
 
 

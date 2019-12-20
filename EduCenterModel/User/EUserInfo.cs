@@ -63,6 +63,10 @@ namespace EduCenterModel.User
         [MaxLength(32)]
         public string wx_unionid { get; set; }
 
+        /* App */
+        [MaxLength(256)]
+        public string app_headerUrl { get; set; }
+
 
     }
 }

@@ -1294,8 +1294,11 @@ namespace EduCenterSrv
             {
                 Name = a.Name,
                 UserRole = a.UserRole,
-                HeaderUrl = a.wx_headimgurl,
+                HeaderUrl = string.IsNullOrEmpty(a.app_headerUrl) ? a.wx_headimgurl : a.app_headerUrl,
                 WxOpenId = a.OpenId,
+                Sex = a.Sex,
+                Phone = a.Phone,
+
       
             }).FirstOrDefault();
 
@@ -1312,6 +1315,14 @@ namespace EduCenterSrv
 
             return result;
 
+        }
+        
+        public int updateUserHeader(string userOpenId,string appHeaderUrl)
+        {
+            string sql = $"update UserInfo set app_headerUrl = '{appHeaderUrl}' where OpenId='{userOpenId}'";
+            int result = _dbContext.Database.ExecuteSqlCommand(sql);
+            return result;
+          //  return sql;
         }
         #endregion 
 

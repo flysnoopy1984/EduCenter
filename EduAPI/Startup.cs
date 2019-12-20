@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EduCenterCore.AppFramework;
 using EduCenterCore.EduFramework;
 using EduCenterSrv;
 using EduCenterSrv.Common;
@@ -79,6 +80,8 @@ namespace EduAPI
             }
 
             EduConfigReader.SetConfiguration(Configuration);
+            XYAppConfigReader.SetConfiguration(Configuration);
+
             EduEnviroment.SetEnviroment(env);
 
             app.UseStaticFiles();

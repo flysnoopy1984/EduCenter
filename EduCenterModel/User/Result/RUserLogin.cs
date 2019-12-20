@@ -13,6 +13,10 @@ namespace EduCenterModel.User.Result
 
         public UserRole UserRole { get; set; }
 
+        public int Sex { get; set; }
+
+        public string Phone { get; set; }
+
         public string EffectDateStr
         {
             get { return EffectDate.ToString("yyyy-MM-dd hh:mm:ss"); }

@@ -26,6 +26,7 @@ namespace WxPayAPI
 
         public static string Post(string xml, string url, bool isUseCert, int timeout)
         {
+        
             System.GC.Collect();//垃圾回收，回收没有正常关闭的http连接
 
             string result = "";//返回结果

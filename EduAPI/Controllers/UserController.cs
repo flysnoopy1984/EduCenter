@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using EduCenterCore.AppFramework;
+using EduCenterCore.Common.Helper;
+using EduCenterCore.EduFramework;
 using EduCenterModel.BaseEnum.API;
 using EduCenterModel.Common;
 using EduCenterModel.User;
@@ -63,6 +67,74 @@ namespace EduAPI.Controllers
             return result;
         }
 
+        [HttpPost]
+        public ResultNormal UploadHeader(string userOpenId)
+        {
+            ResultNormal result = new ResultNormal();
+            //  List<EArtDetail> detailList = new List<EArtDetail>(); 
+            try
+            {
+                if (string.IsNullOrEmpty(userOpenId))
+                {
+                    result.ErrorMsg = "没有获取用户编号";
+                    return result;
+                }
+                if (Request.Form != null && Request.Form.Files.Count > 0)
+                {
+                   
+                    var file = Request.Form.Files[0];
 
+                    var ext = Path.GetExtension(file.FileName).ToLower();
+                    var fileName = $"{userOpenId}{ext}";
+
+                    //  var fileName = $"art_{artId}_{no}_{DateTime.Now.ToString("hhmmss")}{ext}";
+
+                 //   var date = DateTime.Now.ToString("yyyy_MM_dd");
+                    DirectoryInfo di = new DirectoryInfo(XYAppConfig.UserHeaderImagePath);
+                    if (!di.Exists)
+                        di.Create();
+
+                    var filepath = di.FullName + "\\" + fileName;
+                    using (FileStream fs = new FileStream(filepath, FileMode.Create))
+                    {
+                        file.CopyTo(fs);
+                        fs.Flush();
+                    }
+                    string headerUrl = XYAppConfig.ResSite + fileName;
+                    _UserSrv.updateUserHeader(userOpenId, headerUrl);
+                  
+                    //EArtDetail detail = new EArtDetail
+                    //{
+                    //    ArtId = artId,
+                    //    FilePath = EduEnviroment.VirPath_ArtRoot + date + "/" + fileName,
+                    //};
+                    //_WxMiniSrv.AddArtDetail(detail);
+                    //if (isLast)
+                    //{
+                    //    var art = _WxMiniSrv.GetArtInfo(artId);
+                    //    art.RecordStatus = RecordStatus.Normal;
+                    //    art.CoverFilePath = detail.FilePath;
+                    //}
+                    //_WxMiniSrv.SaveChanges();
+
+                }
+                else
+                {
+                    throw new EduException("没有上传的头像");
+                }
+
+            }
+            catch (EduException eex)
+            {
+                result.ErrorMsg = eex.Message;
+            }
+            catch (Exception ex)
+            {
+                result.ErrorMsg = "上传头像失败";
+                NLogHelper.ErrorTxt($"UploadUserHeader:{ex.Message}");
+                NLogHelper.ErrorTxt($"UploadUserHeader:{ex.InnerException.Message}");
+            }
+            return result;
+        }
     }
 }
