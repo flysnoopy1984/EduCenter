@@ -18,7 +18,7 @@ namespace EduCenterSrv.DataBase
     public class EduDbContext: DbContext
     {
 
-        public EduDbContext(DbContextOptions options):base(options)
+        public EduDbContext(DbContextOptions<EduDbContext> options) :base(options)
         {
             
         }

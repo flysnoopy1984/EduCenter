@@ -101,7 +101,7 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
                     var cls = _CourseSrv.GetCourseInfoClass(origTrial.CourseCode);
                     origTrial.TecCode = cls.TecCode;
                     origTrial.TecName = cls.TecName;
-                    origTrial.CourseType = cls.CourseType;
+                    origTrial.CourseType = (int)cls.CourseType;
                     origTrial.CourseName = cls.CourseName;
 
                     var ui = _UserSrv.GetUserInfo(updateTrial.OpenId);
@@ -109,10 +109,10 @@ namespace EduCenterWeb.Pages.WebBackend.Tec
                     ui.Phone = updateTrial.UserPhone;
                     ui.SalesOpenId = updateTrial.SalesOpenId;
                    
-                    if(origTrial.TrialLogStatus == TrialLogStatus.UserApply)
+                    if(origTrial.TrialLogStatus == (int)TrialLogStatus.UserApply)
                     {
                         needWX = true;
-                        origTrial.TrialLogStatus = TrialLogStatus.TecConfirm;
+                        origTrial.TrialLogStatus = (int)TrialLogStatus.TecConfirm;
                         //返佣
                     }
                     _CourseSrv.SaveChanges();

@@ -13,7 +13,8 @@ using EduCenterSrv.DataBase;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
@@ -143,6 +144,8 @@ namespace EduCenterSrv
         {
             return _dbContext.DBUserInfo.Where(a => a.OpenId == openId).FirstOrDefault();
         }
+
+
      
         public EUserInfo GetUserInfoByUninonId(string unionId)
         {
@@ -304,7 +307,8 @@ namespace EduCenterSrv
         public bool IsSkipTodayUserCourse(string openId)
         {
             int c =_dbContext.DBUserCoures.Where(a => a.UserOpenId == openId &&
-            a.CreateDateTime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd") &&
+         //   a.CreateDateTime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd") &&
+            a.CreateDateTime == DateTime.Today &&
             a.UseRightNow == false).Count();
 
             return c > 0;
@@ -335,7 +339,7 @@ namespace EduCenterSrv
             string sql = $@"update UserCourse set coursescheduletype = {(int)courseScheduleType} 
                             where UserOpenId='{openId}' and LessonCode='{lessonCode}'";
 
-           return _dbContext.Database.ExecuteSqlCommand(sql);
+           return _dbContext.Database.ExecuteSqlRaw(sql);
         }
 
         public void DeleteUserCourse(string openId,string LessonCode)
@@ -704,6 +708,8 @@ namespace EduCenterSrv
 
                      UserCourseLogStatusName = BaseEnumSrv.UserCourseLogStatusList[(int)uc.UserCourseLogStatus],
 
+                     Id = uc.Id,
+
                 })
                 .OrderByDescending(a=>a.CreatedDateTime)
                 .Where(a => a.UserOpenId == OpenId && 
@@ -812,7 +818,7 @@ namespace EduCenterSrv
         public void UpdateUserCourseLogStatus(string lessonCode,string openId, CourseScheduleType courseScheduleType, UserCourseLogStatus userCourseLogStatus)
         {
             string sql = sql_UpdateUserCourseLogStatus(lessonCode, openId, courseScheduleType, userCourseLogStatus);
-            _dbContext.Database.ExecuteSqlCommand(sql);
+            _dbContext.Database.ExecuteSqlRaw(sql);
         }
 
 
@@ -926,7 +932,7 @@ namespace EduCenterSrv
                         throw new EduException("您已签到,不能请假！");
                     if (data.UserCourseLogStatus == UserCourseLogStatus.Absent)
                         throw new EduException("您已缺席,不能请假！");
-
+                    data.UserCourseLogStatus = UserCourseLogStatus.Leave;
                     data.UserLeaveDateTime = DateTime.Now;
                    
                 }
@@ -1027,7 +1033,7 @@ namespace EduCenterSrv
             //新孩子+到list中，计算ShowName
             list.Add(child);
             var sqlChild = GetSQL_ShowUserChildName(list);
-            _dbContext.Database.ExecuteSqlCommand(sqlChild);
+            _dbContext.Database.ExecuteSqlRaw(sqlChild);
         }
 
         public string GetSQL_ShowUserChildName(List<EUserChild> list)
@@ -1061,10 +1067,10 @@ namespace EduCenterSrv
                 var sqlChild = GetSQL_ShowUserChildName(list);
                 _dbContext.Database.BeginTransaction();
 
-                _dbContext.Database.ExecuteSqlCommand(sql);
+                _dbContext.Database.ExecuteSqlRaw(sql);
                 _dbContext.DBUserChild.AddRange(list);
 
-                _dbContext.Database.ExecuteSqlCommand(sqlChild);
+                _dbContext.Database.ExecuteSqlRaw(sqlChild);
 
                 _dbContext.SaveChanges();
                 _dbContext.Database.CommitTransaction();
@@ -1168,12 +1174,13 @@ namespace EduCenterSrv
             List<SqlParameter> spList = new List<SqlParameter>();
             spList.Add(new SqlParameter { Value = pageIndex-1, ParameterName = "@pageIndex" });
             spList.Add(new SqlParameter { Value = pageSize, ParameterName = "@pageSize" });
-            spList.Add(new SqlParameter { Value = userName, ParameterName = "@userName" });
-            spList.Add(new SqlParameter { Value = babyName, ParameterName = "@babyName" });
+            spList.Add(new SqlParameter { Value = userName== null?"":userName, ParameterName = "@userName" });
+            spList.Add(new SqlParameter { Value = babyName == null ? "" : babyName, ParameterName = "@babyName" });
             spList.Add(new SqlParameter { Value = userRole, ParameterName = "@userRole" });
             spList.Add(new SqlParameter { Value = memberType, ParameterName = "@memberType" });
-            spList.Add(new SqlParameter { Value = userOpenId, ParameterName = "@userOpenId" });
+            spList.Add(new SqlParameter { Value = userOpenId == null ? "" : userOpenId, ParameterName = "@userOpenId" });
             //存储过程Count先输出，其他数据再输出 2张表
+     
             var arrayList =  SpExecForPage<RUserList>("Edu_QueryUserInfo", spList.ToArray());  
             recordTotal = (int)arrayList[0]["TotalCount"];
             for(int i=1;i< arrayList.Count;i++)
@@ -1256,7 +1263,8 @@ namespace EduCenterSrv
         public void DeleteUserNote(long Id)
         {
             string sql = $"delete from UserNote where Id={Id}";
-            _dbContext.Database.ExecuteSqlCommand(sql);
+            _dbContext.Database.ExecuteSqlRaw(sql);
+      
         }
 
         public List<RUserNote> QueryUserNote(string userOpenId)
@@ -1320,7 +1328,7 @@ namespace EduCenterSrv
         public int updateUserHeader(string userOpenId,string appHeaderUrl)
         {
             string sql = $"update UserInfo set app_headerUrl = '{appHeaderUrl}' where OpenId='{userOpenId}'";
-            int result = _dbContext.Database.ExecuteSqlCommand(sql);
+            int result = _dbContext.Database.ExecuteSqlRaw(sql);
             return result;
           //  return sql;
         }

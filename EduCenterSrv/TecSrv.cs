@@ -98,7 +98,7 @@ namespace EduCenterSrv
             var sql = from tc in _dbContext.DBTecCourse
                       join t in _dbContext.DBTecInfo on tc.TecCode equals t.Code
 
-                      where tc.LessonCode == lessonCode && tc.CourseDateTime.ToString("yyyy-MM-dd") == courseDateTime
+                      where tc.LessonCode == lessonCode && tc.CourseDateTime.Date == DateTime.Parse(courseDateTime)
 
                       select new ETecInfo
                       {
@@ -151,7 +151,7 @@ namespace EduCenterSrv
                 };
 
                 //教师技能
-                _dbContext.Database.ExecuteSqlCommand(TecSrv.sql_DeleteALLTecSkill(tec.Code));
+                _dbContext.Database.ExecuteSqlRaw(TecSrv.sql_DeleteALLTecSkill(tec.Code));
 
                 CourseSrv courseSrv = new CourseSrv(this._dbContext);
                 var courseList =  courseSrv.GetCourseType();
@@ -168,7 +168,7 @@ namespace EduCenterSrv
                 }
 
                 _dbContext.DBTecInfo.Add(tec);
-                _dbContext.Database.ExecuteSqlCommand(UserSrv.sql_UpdateUserRole(UserRole.Teacher, user.OpenId));
+                _dbContext.Database.ExecuteSqlRaw(UserSrv.sql_UpdateUserRole(UserRole.Teacher, user.OpenId));
                 _dbContext.SaveChanges();
                
             }
@@ -219,18 +219,19 @@ namespace EduCenterSrv
                 CourseName = a.CourseName,
                 TecCode = a.TecCode,
                 CourseDateTime = a.CourseDateTime,
-                //CourseScheduleType = a.CourseScheduleType,
+                CourseScheduleType = a.CourseScheduleType,
                 Lesson = a.Lesson,
                 CoursingStatus = a.CoursingStatus,
                 LessonCode = a.LessonCode
             })
-            .OrderBy(a=>a.Lesson)
-            .Where(a=>a.CourseDateTime.Date.ToString("yyyy-MM-dd") == date);
+           
+            .Where(a=>a.CourseDateTime.Date == DateTime.Parse(date));
             if (StaticDataSrv.CurrentScheduleType == CourseScheduleType.Standard)
                 linq =linq.Where(a => a.CourseScheduleType == CourseScheduleType.Standard);
             if (!string.IsNullOrEmpty(tecCode))
                 linq = linq.Where(a => a.TecCode == tecCode);
 
+            linq = linq.OrderBy(a => a.Lesson);
             var result = linq.ToList();
 
 
@@ -251,24 +252,27 @@ namespace EduCenterSrv
                 CourseName = tc.CourseName,
                 CourseDateTime = tc.CourseDateTime,
                 CoursingStatus = tc.CoursingStatus,
-                //CourseScheduleType = tc.CourseScheduleType,
+                CourseScheduleType = tc.CourseScheduleType,
                 TecCode = tc.TecCode,
                 Lesson = tc.Lesson,
                 TimeRange = times[tc.Lesson].TimeRange,
-               
+
                 ApplyNum = cs.ApplyNum,
                 LessonCode = cs.LessonCode,
                 CoursingStatusName = BaseEnumSrv.GetCoursingStatusName(tc.CoursingStatus),
             })
-            .OrderBy(a => a.Lesson)
+           
             .Where(a => a.CourseDateTime.Year == year &&
                     a.CourseDateTime.Month == month &&
-                    a.TecCode == tecCode
+                    a.TecCode == tecCode 
+                    //a.CourseScheduleType == CourseScheduleType.Standard
                    );
+
             if (StaticDataSrv.CurrentScheduleType == CourseScheduleType.Standard)
             {
                 linq = linq.Where(a => a.CourseScheduleType == CourseScheduleType.Standard);
             }
+            linq =  linq.OrderBy(a => a.Lesson);
             var result = linq.ToList();
             return result;
         }
@@ -334,7 +338,7 @@ namespace EduCenterSrv
         public void DeleteTecCourse(string lessonCode)
         {
             string sql = sql_DeleteTecCourse(lessonCode);
-            _dbContext.Database.ExecuteSqlCommand(sql);
+            _dbContext.Database.ExecuteSqlRaw(sql);
         }
         #endregion
 
@@ -368,7 +372,7 @@ namespace EduCenterSrv
 
                 _dbContext.Database.BeginTransaction();
                 var sql = sql_UpdateTecCourseLeaveBatch(list);
-                _dbContext.Database.ExecuteSqlCommand(sql);
+                _dbContext.Database.ExecuteSqlRaw(sql);
                 var dbleave = _dbContext.DBTecLeave.Where(a => a.TecCode == tecLeave.TecCode &&
                                             a.LeaveDate.ToString("yyyy-MM-dd") == tecLeave.LeaveDate.ToString("yyyy-MM-dd")).FirstOrDefault();
                 if(dbleave == null)
@@ -402,9 +406,9 @@ namespace EduCenterSrv
             if (!string.IsNullOrEmpty(leaveDate))
             {
                 if (sql != null)
-                    sql = sql.Where(a => a.LeaveDate.ToString("yyyy-MM") == leaveDate);
+                    sql = sql.Where(a => a.LeaveDate == DateTime.Parse(leaveDate));
                 else
-                    sql = _dbContext.DBTecLeave.Where(a => a.LeaveDate.ToString("yyyy-MM") == leaveDate);
+                    sql = _dbContext.DBTecLeave.Where(a => a.LeaveDate == DateTime.Parse(leaveDate));
             }
             if (sql == null)
             {

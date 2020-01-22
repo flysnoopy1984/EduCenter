@@ -81,9 +81,9 @@ namespace EduCenterSrv
 
         public void DelByType(CourseType courseType)
         {
-            _dbContext.Database.ExecuteSqlCommand(sql_DeleteCourseByType(courseType));
+            _dbContext.Database.ExecuteSqlRaw(sql_DeleteCourseByType(courseType));
 
-            _dbContext.Database.ExecuteSqlCommand(sql_DeleteCourseClassByType(courseType));
+            _dbContext.Database.ExecuteSqlRaw(sql_DeleteCourseClassByType(courseType));
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace EduCenterSrv
 
         public void DeleteCourseSchduleByYear(int year)
         {
-            _dbContext.Database.ExecuteSqlCommand(sql_DeleteCourseSchedule(year));
+            _dbContext.Database.ExecuteSqlRaw(sql_DeleteCourseSchedule(year));
         }
 
         public void AddRange(List<ECourseSchedule> list)
@@ -383,13 +383,13 @@ namespace EduCenterSrv
         public void AddTrialRemindCount(long Id)
         {
             var sql = sql_AddTrialLogWXRemindCount(Id);
-            _dbContext.Database.ExecuteSqlCommand(sql);
+            _dbContext.Database.ExecuteSqlRaw(sql);
         }
 
         public void UpdateTrialStatus(long Id,TrialLogStatus status)
         {
             var sql = sql_UpdateTrialLogStatus(Id, status);
-            _dbContext.Database.ExecuteSqlCommand(sql);
+            _dbContext.Database.ExecuteSqlRaw(sql);
         }
 
 
@@ -404,7 +404,7 @@ namespace EduCenterSrv
         {
             if(courseType == -1)
             {
-                int c = _dbContext.DBTrialLog.Where(a => a.OpenId == openId && (int)a.TrialLogStatus >= 10).Count();
+                int c = _dbContext.DBTrialLog.Where(a => a.OpenId == openId && a.TrialLogStatus >= 10).Count();
                 //获取所有类型，每个类型试听2次
                 var bl = Enum.GetValues(typeof(CourseType)).Length;
                 if (c >= bl * 2)
@@ -413,21 +413,23 @@ namespace EduCenterSrv
             else if(courseType>0)
             {
                 int c = _dbContext.DBTrialLog.Where(a => a.OpenId == openId &&
-                                            (int)a.TrialLogStatus >= 10 &&
-                                               (int)a.CourseType == courseType).Count();
+               
+                                             a.TrialLogStatus >= 10 &&
+                                              a.CourseType == courseType).Count();
                 if (c >= 2) return EduErrorMessage.ApplyTrial_OverSingleLimit;
             }
           
             if(date!=null)
             {
                  var list = _dbContext.DBTrialLog.
-                 Where(a => a.TrialDateTime.ToString("yyyy-MM-dd") == date &&
+                 Where(a => a.TrialDateTime.Date == DateTime.Parse(date) &&
                      a.Lesson == lesson &&
-                     a.OpenId == openId).GroupBy(a=>a.Lesson).ToList();
+                     a.OpenId == openId).GroupBy(a=>a.Lesson)
+                     .Select(x => new { x.Key, Count = x.Count() }).ToList();
                
                 foreach ( var l in list)
                 {
-                    if(l.Count()>0)
+                    if(l.Count>0)
                      return EduErrorMessage.ApplyTrial_SameTypeExist;
                 }
                

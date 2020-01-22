@@ -41,13 +41,13 @@ namespace EduCenterWeb.Pages.User
 
                     //将用户没有来的设置状态
                     var checkList = TrialLogList.Where(a => a.TrialDateTime < DateTime.Today && 
-                                                       (a.TrialLogStatus == TrialLogStatus.UserApply ||
-                                                       a.TrialLogStatus == TrialLogStatus.TecConfirm)).ToList();
+                                                       (a.TrialLogStatus == (int)TrialLogStatus.UserApply ||
+                                                       a.TrialLogStatus == (int)TrialLogStatus.TecConfirm)).ToList();
                     if (checkList.Count>0)
                     {
                         foreach (var log in checkList)
                         {
-                            log.TrialLogStatus = EduCenterModel.BaseEnum.TrialLogStatus.UserNotCome;
+                            log.TrialLogStatus =(int) EduCenterModel.BaseEnum.TrialLogStatus.UserNotCome;
                             _CourseSrv.UpdateTrialStatus(log);
                         }
 

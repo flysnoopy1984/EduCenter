@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿
+using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,8 +8,8 @@ namespace EduCenterCore.EduFramework
 {
     public static class EduEnviroment
     {
-        public  static IHostingEnvironment _Enviroment;
-        public static void SetEnviroment(IHostingEnvironment Enviroment)
+        public  static IWebHostEnvironment _Enviroment;
+        public static void SetEnviroment(IWebHostEnvironment Enviroment)
         {
             _Enviroment = Enviroment;
         }

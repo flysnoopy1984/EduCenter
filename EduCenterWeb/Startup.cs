@@ -6,7 +6,6 @@ using EduCenterCore.EduFramework;
 using EduCenterSrv;
 using EduCenterSrv.Common;
 using EduCenterSrv.DataBase;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace EduCenterWeb
 {
@@ -56,10 +56,8 @@ namespace EduCenterWeb
               //  options.IdleTimeout = TimeSpan.FromSeconds(15);
             });
 
-
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                 .AddJsonOptions(opt => {
+            services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Latest)
+                 .AddNewtonsoftJson(opt => {
                      /*DefaultContractResolver 是原样输出，后台属性怎么写的，返回的 json 就是怎样的。
                        CamelCasePropertyNamesContractResolver ：驼峰命名法，首字母小写。如果变量全为大写，比如：NAME，返回的是 name */
                      opt.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
@@ -77,6 +75,8 @@ namespace EduCenterWeb
                 op => op.UseSqlServer(Configuration.GetConnectionString("EduCenterDB"),
                 c => c.MigrationsAssembly("EduCenterWeb")
                 ));
+
+          
 
             services.AddScoped<CourseSrv>();
             services.AddScoped<TecSrv>();
@@ -104,8 +104,9 @@ namespace EduCenterWeb
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+           
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -118,7 +119,7 @@ namespace EduCenterWeb
 
         //    app.UseCors("any");
 
-
+            
             EduConfigReader.SetConfiguration(Configuration);
             EduEnviroment.SetEnviroment(env);
 
@@ -135,10 +136,6 @@ namespace EduCenterWeb
             StaticDataSrv.Init();
             InitGlobalData(app);
           
-
-
-        
-
         }
     }
 }

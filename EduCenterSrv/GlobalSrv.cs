@@ -56,6 +56,7 @@ namespace EduCenterSrv
 
                 _NewUserReceiverList.Add("oh6cV1dh0hjoGEizCoKH1KU70UwQ"); //童
                 _NewUserReceiverList.Add("oh6cV1YaZFskTyZ3PXZ1g0VfSQjE"); //占
+                _NewUserReceiverList.Add("oh6cV1VyTdgr3e0n-tH_XkxG1F6I"); //zhu
                 _NewUserReceiverList.Add("oh6cV1XoVcMUmYztiXfOTbSnVpj8"); //marcus
                 _NewUserReceiverList.Add("oh6cV1a4FW_x5u6yM86dafOY2Vgc"); //李老师
             }

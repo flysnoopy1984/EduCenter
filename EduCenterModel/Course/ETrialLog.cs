@@ -26,7 +26,7 @@ namespace EduCenterModel.Course
         [MaxLength(20)]
         public string TecName { get; set; }
 
-        public CourseType CourseType { get; set; }
+        public int CourseType { get; set; }
 
         [MaxLength(20)]
         public string CourseCode { get; set; }
@@ -44,7 +44,7 @@ namespace EduCenterModel.Course
 
         public DateTime ApplyDateTime { get; set; }
 
-        public TrialLogStatus TrialLogStatus { get; set; }
+        public int TrialLogStatus { get; set; }
 
         //[MaxLength(32)]
         //public string SalesOpenId { get; set; }

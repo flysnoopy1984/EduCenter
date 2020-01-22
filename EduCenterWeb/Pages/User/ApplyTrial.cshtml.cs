@@ -82,11 +82,11 @@ namespace EduCenterWeb.Pages.User
                             TecName = cls.TecName,
                             CourseCode = cls.CourseCode,
                             CourseName = cls.CourseName,
-                            CourseType = cls.CourseType,
+                            CourseType = (int)cls.CourseType,
                             ApplyDateTime = DateTime.Now,
                             Lesson = Lesson,
                             TrialDateTime = DateTime.Parse(date),
-                            TrialLogStatus = TrialLogStatus.UserApply,
+                            TrialLogStatus = (int)TrialLogStatus.UserApply,
 
                         };
                         _CourseSrv.AddTrial(log);

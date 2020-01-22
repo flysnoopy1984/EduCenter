@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using EduCenterCore.AppFramework;
+using EduCenterCore.AppFramework.Oss;
 using EduCenterCore.Common.Helper;
 using EduCenterCore.EduFramework;
 using EduCenterModel.BaseEnum.API;
@@ -21,15 +22,18 @@ namespace EduAPI.Controllers
     public class UserController : BaseAPI
     {
         private UserSrv _UserSrv;
-        public UserController(UserSrv userSrv)
+        private OssSrv _ossSrv;
+        public UserController(UserSrv userSrv,OssSrv ossSrv)
         {
             _UserSrv = userSrv;
+            _ossSrv = ossSrv;
         }
 
         [HttpPost]
-        public EUserInfo Test(string openId)
+        public string Test(string openId)
         {
-            return _UserSrv.GetUserInfo(openId);
+            return _ossSrv.GetFileUrl("CG0A1838.JPG");
+          //  return _UserSrv.GetUserInfo(openId);
         }
 
         [HttpPost]
@@ -87,36 +91,11 @@ namespace EduAPI.Controllers
                     var ext = Path.GetExtension(file.FileName).ToLower();
                     var fileName = $"{userOpenId}{ext}";
 
-                    //  var fileName = $"art_{artId}_{no}_{DateTime.Now.ToString("hhmmss")}{ext}";
 
-                 //   var date = DateTime.Now.ToString("yyyy_MM_dd");
-                    DirectoryInfo di = new DirectoryInfo(XYAppConfig.UserHeaderImagePath);
-                    if (!di.Exists)
-                        di.Create();
-
-                    var filepath = di.FullName + "\\" + fileName;
-                    using (FileStream fs = new FileStream(filepath, FileMode.Create))
-                    {
-                        file.CopyTo(fs);
-                        fs.Flush();
-                    }
-                    string headerUrl = XYAppConfig.ResSite + fileName;
+                   string headerUrl = _ossSrv.UploadRequestFile(file, "UsersHeader", fileName); 
+                    
                     _UserSrv.updateUserHeader(userOpenId, headerUrl);
-                  
-                    //EArtDetail detail = new EArtDetail
-                    //{
-                    //    ArtId = artId,
-                    //    FilePath = EduEnviroment.VirPath_ArtRoot + date + "/" + fileName,
-                    //};
-                    //_WxMiniSrv.AddArtDetail(detail);
-                    //if (isLast)
-                    //{
-                    //    var art = _WxMiniSrv.GetArtInfo(artId);
-                    //    art.RecordStatus = RecordStatus.Normal;
-                    //    art.CoverFilePath = detail.FilePath;
-                    //}
-                    //_WxMiniSrv.SaveChanges();
-
+                    result.SuccessMsg = headerUrl;
                 }
                 else
                 {

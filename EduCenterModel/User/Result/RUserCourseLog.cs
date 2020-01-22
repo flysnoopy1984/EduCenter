@@ -12,7 +12,7 @@ namespace EduCenterModel.User.Result
             UserLeaveDateTime = DateTime.MinValue;
             UserSignDateTime = DateTime.MinValue;
         }
-
+       
         public string CourseName { get; set; }
 
         public string CourseTime { get; set; }

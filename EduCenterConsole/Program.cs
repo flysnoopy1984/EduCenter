@@ -81,6 +81,7 @@ namespace EduCenterConsole
                 })
                 .AddTransient<EduDbContext>()
                 .AddOptions();
+
             var provider = serviceCollection.BuildServiceProvider();
             _dbContext = provider.GetService<EduDbContext>();
 

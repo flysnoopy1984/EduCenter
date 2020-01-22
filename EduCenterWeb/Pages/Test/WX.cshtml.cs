@@ -81,10 +81,16 @@ namespace EduCenterWeb.Pages.Test
             Msg = "创建成功！";
             try
             {
-                var trial = _CourseSrv.GetTrialLogById(172);
-                UserTrialRemindTemplate wxMessage = new UserTrialRemindTemplate();
-                wxMessage.data = wxMessage.GenerateData(trial.OpenId, trial);
-                WXApi.SendTemplateMessage<UserTrialRemindTemplate>(wxMessage);
+                //var trial = _CourseSrv.GetTrialLogById(172);
+                //UserTrialRemindTemplate wxMessage = new UserTrialRemindTemplate();
+                //wxMessage.data = wxMessage.GenerateData(trial.OpenId, trial);
+                //WXApi.SendTemplateMessage<UserTrialRemindTemplate>(wxMessage);
+
+                NewUserJoinWXTemplate wxMessage = new NewUserJoinWXTemplate();
+
+                wxMessage.data = wxMessage.GenerateData("oh6cV1QhPLj6XPesheYUQ4XtuGTs", "jacky", DateTime.Now);
+                WXApi.SendTemplateMessage<NewUserJoinWXTemplate>(wxMessage);
+
 
                 //UserSignTemplate wxMessage = new UserSignTemplate();
                 //wxMessage.data = wxMessage.GenerateData("oh6cV1QhPLj6XPesheYUQ4XtuGTs", "Jacky", DateTime.Now.ToString("yyyy-MM-dd"), "Test", 0, 12, 0, 33);

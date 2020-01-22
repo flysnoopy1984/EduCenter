@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Collections;
 using System.Data.Common;
 using System.Reflection;
@@ -60,7 +61,7 @@ namespace EduCenterSrv
             }
             return result;
         }
-        public List<Dictionary<string, object>> SpExecForPage<T>(string sql, SqlParameter[] sqlParams) where T:class,new()
+        public List<Dictionary<string, object>> SpExecForPage<T>(string sql, Microsoft.Data.SqlClient.SqlParameter[] sqlParams) where T:class,new()
         {
             var connection = _dbContext.Database.GetDbConnection();
             var result = new List<Dictionary<string, object>>();
@@ -70,6 +71,12 @@ namespace EduCenterSrv
                 cmd.CommandText = sql;
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddRange(sqlParams);
+                //foreach(Microsoft.Data.SqlClient.SqlParameter sp in sqlParams)
+                //{
+
+                //    cmd.Parameters.Add(sp);
+                //}
+
 
                 var dr = cmd.ExecuteReader();
                 result.AddRange(DataReaderSql(dr));

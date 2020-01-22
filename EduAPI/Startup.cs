@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CMSSrv;
+using CMSSrv.DataBase;
+using CMSSrv.Srv;
 using EduCenterCore.AppFramework;
+using EduCenterCore.AppFramework.Oss;
 using EduCenterCore.EduFramework;
 using EduCenterSrv;
 using EduCenterSrv.Common;
 using EduCenterSrv.DataBase;
+using EduCenterSrv.SMS;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -31,8 +37,8 @@ namespace EduAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-               .AddJsonOptions(opt =>
+            services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Latest)
+               .AddNewtonsoftJson(opt =>
                {
                    /*DefaultContractResolver 是原样输出，后台属性怎么写的，返回的 json 就是怎样的。
                      CamelCasePropertyNamesContractResolver ：驼峰命名法，首字母小写。如果变量全为大写，比如：NAME，返回的是 name */
@@ -45,12 +51,23 @@ namespace EduAPI
               c => c.MigrationsAssembly("EduCenterWeb")
               ));
 
+     
             services.AddScoped<CourseSrv>();
             services.AddScoped<TecSrv>();
             services.AddScoped<UserSrv>();
             services.AddScoped<WxMiniSrv>();
             services.AddScoped<ResSrv>();
             services.AddScoped<AppEduSrv>();
+            services.AddScoped<SMSSrv>();
+
+            services.AddScoped<OssSrv>();
+
+            services.AddDbContext<CmsDbContext>(
+               op => op.UseSqlServer(Configuration.GetConnectionString("CMSDB")
+            //  c => c.MigrationsAssembly("EduCenterWeb")
+            ));
+
+            services.AddScoped<cmsSrv>();
 
             services.AddMemoryCache();
         }
@@ -67,7 +84,7 @@ namespace EduAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
